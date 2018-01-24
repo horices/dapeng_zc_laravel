@@ -1,6 +1,3 @@
-@php
-print_R($this);
-@endphp
 @extends("admin.public.layout")
 @section("right_content")
 <div class="row search-row" style="padding:9px 0 15px 15px;">
