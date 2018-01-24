@@ -157,7 +157,7 @@ $(function(){
                     <li class="visible-lt-ie8"><a href="/Member/Order/index">工单管理</a></li>
                     -->
                     <li class="dropdown hidden-lt-ie8"> 
-                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{:session('member_auth.name')}（{:[13=>'学管师',12=>'课程推广', '11'=>'智能推广', 10=>'课程顾问', 5=>'数据员', 4=>'管理员'][session('member_auth.grade')]}）<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
+                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
                         <ul class="dp-dropdown-menu dropdown-menu">
                             <div class="border-top"></div>
                             <li><a href="{:U('accounts')}">个人中心</a></li>
