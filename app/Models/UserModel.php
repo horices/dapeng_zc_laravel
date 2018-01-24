@@ -17,7 +17,7 @@ class UserModel extends BaseModel
         return date('Y-m-d H:i:s',$v);
     }
     protected function getGradeAttribute($v){
-        return BaseController::USER_GRADE[$v];
+        return app(BaseController::class)->getUserGradeList()[$v];
     }
     /**
      * 检测用户名密码是否正确
