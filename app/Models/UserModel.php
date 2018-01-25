@@ -13,11 +13,20 @@ use App\Http\Controllers\BaseController;
 class UserModel extends BaseModel
 {
     protected $table = "user_headmaster";
+    
+    //该字段不显示
+    protected $hidden = [
+        'password'
+    ];
+    
     protected function getAddtimeAttribute($v){
         return date('Y-m-d H:i:s',$v);
     }
     protected function getGradeAttribute($v){
         return app(BaseController::class)->getUserGradeList()[$v];
+    }
+    protected function getStatusAttribute($v){
+        return $v==1?'正常':'暂停';
     }
     /**
      * 检测用户名密码是否正确
