@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Input;
 class UserController extends BaseController
 {
     function getList(){
-        echo $field_v;
-        exit();
         $field_k = Input::get("field_k");
         $field_v = Input::get("field_v");
         $status = Input::get("status");
