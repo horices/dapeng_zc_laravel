@@ -1,17 +1,5 @@
 @extends("admin.public.layout")
 @section("right_content")
-<script>
-var vm;
-function loadInit(){
-    vm = new Vue({
-    	el:'#w0',
-    	data:{
-    		userList:{!!$listJson!!}
-    	}
-    });
-	
-}
-</script>
 <div class="row search-row" style="padding:9px 0 15px 15px;">
     <form class="form-inline" role="form" action="">
     	<input type="hidden" name="page" value="1" />
@@ -66,14 +54,16 @@ function loadInit(){
         </thead>
         
         <tbody>
-            <tr v-for="user in userList.data" class="{:$v['status']==0 ? 'gray' : ''}">
-                <td>@{{user.uid}}</td>
-                <td>@{{user.name}}</td>
-                <td>@{{user.mobile}}</td>
-                <td>@{{user.status}}</td>
-                <td>@{{user.grade}}</td>
-                <td><a href="{{ url('/admin/user/edit',['uid'=>1])}}">修改帐号</a></td>
+        	@foreach($list as $user)
+            <tr for="user in userList.data" class="{:$v['status']==0 ? 'gray' : ''}">
+                <td>{{$user->uid}}</td>
+                <td>{{$user->name}}</td>
+                <td>{{$user->mobile}}</td>
+                <td>{{$user->status}}</td>
+                <td>{{$user->grade}}</td>
+                <td><a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a></td>
             </tr>
+            @endforeach
                 <tr>
                     <td colspan="8"><div class="pagenav"><ul>{{$list->appends(Request::input())->links()}}</ul></div></td>
                 </tr>

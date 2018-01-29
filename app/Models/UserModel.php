@@ -13,12 +13,30 @@ use App\Http\Controllers\BaseController;
 class UserModel extends BaseModel
 {
     protected $table = "user_headmaster";
-    
+    protected $primaryKey = "uid";
+    /* protected $fillable = [
+        'name','mobile','dapeng_user_mobile','per_max_num_qq','per_max_num_wx'
+    ]; */
+    protected $guarded = [
+        
+    ];
     //该字段不显示
     protected $hidden = [
         'password'
     ];
     
+    protected function getPerMaxNumWxAttribute($v){
+        return $v ?? 1;
+    }
+    protected function setPerMaxNumWxAttribute($v){
+        $this->attributes['per_max_num_wx'] = $v ?? 1;
+    }
+    protected function getPerMaxNumQqAttribute($v){
+        return $v ?? 1;
+    }
+    protected function setPerMaxNumQqAttribute($v){
+        $this->attributes['per_max_num_qq'] =  $v ?? 1;
+    }
     protected function getAddtimeAttribute($v){
         return date('Y-m-d H:i:s',$v);
     }

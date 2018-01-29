@@ -16,7 +16,7 @@ class BackendAuth
     public function handle($request, Closure $next)
     {
         if(!$request->session()->get("userToken")){
-            return redirect('/admin/auth/login');
+            return redirect(route("admin.auth.login"));
         }
         return $next($request);
     }

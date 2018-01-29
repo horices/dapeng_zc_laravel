@@ -20,16 +20,19 @@ Route::get('/',function(){
 });
 Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     //不需要登陆验证过滤的地址
-    Route::get("auth/login","AuthController@getLogin");
+    Route::get("auth/login","AuthController@getLogin")->name("admin.auth.login");
     Route::post("auth/login","AuthController@postLogin");
 });
 Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class]], function(){
     //include("admin.route.php");
-    Route::get("index/index","IndexController@getIndex");
-    Route::get("group/list","GroupController@getList");
-    Route::get("index/index","IndexController@getIndex");
+    Route::get("index/index","IndexController@getIndex")->name("admin.index.index");
+    Route::get("group/list","GroupController@getList")->name("admin.group.list");
+    Route::get("index/index","IndexController@getIndex")->name("admin.index.index");
     //用户管理
-    Route::get("user/list","UserController@getList");
+    Route::get("user/list","UserController@getList")->name("admin.user.list");
+    Route::get("user/add","UserController@getAdd")->name("admin.user.add");
+    Route::get("user/{uid}","UserController@getEdit")->name("admin.user.edit");
+    Route::post("user/save","UserController@postSave")->name("admin.user.save");
 });
 
 Auth::routes();
