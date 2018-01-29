@@ -1,6 +1,11 @@
 @extends("admin.public.layout")
 @section("right_content")
 <div class="row search-row" style="padding:9px 0 15px 15px;">
+	<div class="row">
+        <a href="{{ route('admin.user.add') }}" class="btn btn-info">添加新成员</a>
+    </div>
+    <div class="clearfix" style="margin-bottom: 10px;"></div><!-- 清除浮动 -->
+    <div class="row">
     <form class="form-inline" role="form" action="">
     	<input type="hidden" name="page" value="1" />
         <div class="form-group">
@@ -38,6 +43,7 @@
             </span>
         </div>
     </form>
+    </div>
 </div>
 
 <div id="w0" class="grid-view">
@@ -60,7 +66,7 @@
                 <td>{{$user->name}}</td>
                 <td>{{$user->mobile}}</td>
                 <td>{{$user->status}}</td>
-                <td>{{$user->grade}}</td>
+                <td>{{$user->grade_text}}</td>
                 <td><a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a></td>
             </tr>
             @endforeach

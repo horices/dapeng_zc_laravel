@@ -5,9 +5,7 @@
         课程顾问@if($user->uid)分量编辑@else添加@endif
     </h4>
 </div>
-
 <div class="row dp-member-body-2">
-
     <form role="form" id="regForm" class="form-horizontal" action="{{ route('admin.user.save')}}" method="post">
     <input type="hidden" name="_token" value="{{csrf_token()}}"/>
     @if($user->uid)
@@ -23,6 +21,17 @@
                 </div>
             </div>
             @endif
+			<div class="form-group">
+                <label class="col-md-2 control-label" for="input01">权限</label>
+                <div class="col-md-8 controls">
+                	<select name="grade" v-model="currentGrade">
+                		@foreach($userGradeList as $k=>$v)
+							<option value="{{$k}}" @if($user->uid && $k == $user->grade) selected @endif >{{$v}}</option>                			
+                		@endforeach
+                	</select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">姓名</label>
                 <div class="col-md-8 controls">
@@ -30,8 +39,6 @@
                     <p class="help-block"></p>
                 </div>
             </div>
-
-            
             <div class="form-group">
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">展翅系统账号</label>
@@ -40,7 +47,14 @@
                     <p class="help-block"></p>
                 </div>
             </div>
-            
+            <div class="form-group">
+                <!-- Text input-->
+                <label class="col-md-2 control-label" for="input01">展翅系统密码</label>
+                <div class="col-md-8 controls">
+                    <input type="text" name="mobile" class="form-control" style="width:200px" maxlength='11' placeholder="" value="{{$user->mobile}}">
+                    <p class="help-block"></p>
+                </div>
+            </div>
             <div class="form-group">
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">主站账号</label>
@@ -59,7 +73,6 @@
                     <p class="help-block"></p>
                 </div>
             </div>
-
             <div class="form-group">
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">默认分配微信数量</label>
@@ -68,8 +81,6 @@
                     <p class="help-block"></p>
                 </div>
             </div>
-            
-            
             <div class="form-group">
                 <label class="col-md-2 control-label"></label>
                 <div class="col-md-8 controls">
