@@ -2,7 +2,7 @@
 @section("right_content")
 <div class="row dp-member-title-2">
     <h4 class="col-md-4" style="padding-left:0">
-        课程顾问<notempty name="r.uid">分量编辑<else />添加</notempty>
+        课程顾问@if($user->uid)分量编辑@else添加@endif
     </h4>
 </div>
 
@@ -14,6 +14,7 @@
     <input type="hidden" name="uid" value="{{$user->uid}}" />
     @endif
         <fieldset>
+        	@if($user->uid)
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">ID</label>
                 <div class="col-md-8 controls">
@@ -21,6 +22,7 @@
                     <p class="help-block"></p>
                 </div>
             </div>
+            @endif
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">姓名</label>
                 <div class="col-md-8 controls">
