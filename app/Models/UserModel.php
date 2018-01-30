@@ -6,6 +6,8 @@ use Illuminate\Auth\AuthenticationException;
 use App\Http\Controllers\BaseController;
 
 /**
+ * @property-read string $grade_text 级别文字描述
+ * @property-read string $status_text 状态文字描述[正常，注销]
  * @method static checkLogin($username , $password) 
  * @author Administrator
  *
@@ -46,8 +48,8 @@ class UserModel extends BaseModel
     protected function getGradeTextAttribute(){
         return app(BaseController::class)->getUserGradeList()[$this->grade];
     }
-    protected function getStatusAttribute($v){
-        return $v==1?'正常':'暂停';
+    protected function getStatusTextAttribute($v){
+        return $this->status == 1 ? '正常':'暂停';
     }
     /**
      * 检测用户名密码是否正确
@@ -55,5 +57,9 @@ class UserModel extends BaseModel
     protected function checkLogin($username , $password){
         //throw new AuthenticationException("帐号密码错误");
         return $this->where("mobile","=",$username)->where("password","=",md5($password))->firstOrFail();
+    }
+    
+    protected function groups(){
+        return $this->hasMany(GroupModel::class,'leader_id','uid');
     }
 }

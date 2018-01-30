@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //列举所有的常量到模板中
         //用户级别
+        View::share("rosterType",$controller->getRosterType());
+        //用户级别
         View::share("userGradeList",$controller->getUserGradeList());
         //导航菜单
         View::share("navList",$controller->getLeftNavList());

@@ -2,6 +2,10 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Models\GroupModel;
+use App\Models\UserModel;
+use Illuminate\Support\Facades\Input;
+
 class GroupController extends BaseController
 {
     /**
@@ -9,7 +13,26 @@ class GroupController extends BaseController
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     function getList(){
-        return view("admin.group.list");
+        $type = Input::get("type");
+        $fieldK = Input::get("field_k");
+        $fieldV = Input::get("field_v");
+        $isOpen = Input::get("is_open"); 
+        $groupModel = GroupModel::whereHas('user' , function($query) use ($fieldK,$fieldV){
+            if($fieldK == "adviser_name" && $fieldV !== null){
+                $query->where("name","like","%".$fieldV."%");
+            }
+        });
+        if($type){
+            $groupModel->where("type","=",$type);
+        }
+        if($fieldK && $fieldK != 'adviser_name' &&  $fieldV !== null){
+            $groupModel->where($fieldK,"=",$fieldV);
+        }
+        if($isOpen !== null){
+            $groupModel->where("is_open","=",$isOpen);
+        }
+        $list = $groupModel->paginate(20);
+        return view("admin.group.list",compact("list"));
     }
 }
 
