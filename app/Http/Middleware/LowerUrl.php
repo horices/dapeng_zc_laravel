@@ -15,8 +15,12 @@ class LowerUrl
      */
     public function handle($request, Closure $next)
     {
-        if(preg_match('/[A-Z]/', $request->fullUrl())){
-            return redirect(strtolower($request->fullUrl()));            
+        if(preg_match('/[A-Z]/', $request->url())){
+            $url = strtolower($request->url());
+            if($request->getQueryString()){
+                $url.='?'.$request->getQueryString();
+            }
+            return redirect($url);            
         }
         return $next($request);
     }
