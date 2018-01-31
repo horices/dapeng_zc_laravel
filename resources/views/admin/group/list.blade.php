@@ -1,6 +1,10 @@
 @extends("admin.public.layout")
 @section("right_content")
        <div class="row search-row" style="padding:9px 0 15px 15px;">
+       <div class="">
+        <a href="{{ route('admin.group.add') }}" class="btn btn-info">添加新群</a>
+    	</div>
+    	<div class="clearfix" style="margin-bottom: 10px;"></div><!-- 清除浮动 -->
            <form class="form-inline" role="form">
                <div class="form-group">
                    <label class="control-label">来源类型</label>
@@ -63,7 +67,7 @@
                            <a href="" class="common-button combg1 ajaxLink" style="margin:0px;padding:4px 8px;" warning="确认要开启该群组么,开启后会自动关闭该课程顾问关联的其它群？">{{$l->status_text}}</a>
                            </td>
                            <td>
-                          <a href="">修改</a>
+                          <a href="{{ route("admin.group.edit",['id'=>$l->id]) }}">修改</a>
                            </td>
                        </tr>	
                        @endforeach

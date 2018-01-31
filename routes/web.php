@@ -24,17 +24,9 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     Route::post("auth/login","AuthController@postLogin");
 });
 Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class]], function(){
-    //include("admin.route.php");
-    Route::get("index/index","IndexController@getIndex")->name("admin.index.index");
-    Route::get("group/list","GroupController@getList")->name("admin.group.list");
-    Route::get("index/index","IndexController@getIndex")->name("admin.index.index");
-    //用户管理
-    Route::get("user/list","UserController@getList")->name("admin.user.list");
-    Route::get("user/add","UserController@getAdd")->name("admin.user.add");
-    Route::get("user/{uid}","UserController@getEdit")->name("admin.user.edit");
-    Route::post("user/save","UserController@postSave")->name("admin.user.save");
+    include("admin.route.php");
 });
 
-Auth::routes();
+//Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

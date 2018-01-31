@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\GroupModel;
-use App\Models\UserModel;
 use Illuminate\Support\Facades\Input;
 
 class GroupController extends BaseController
@@ -33,6 +32,16 @@ class GroupController extends BaseController
         }
         $list = $groupModel->paginate(20);
         return view("admin.group.list",compact("list"));
+    }
+    
+    /**
+     * 修改群
+     * @param unknown $id
+     */
+    function getEdit($id){
+        //查询群信息
+        $group = GroupModel::find($id);
+        return view("admin.group.add",compact("group"));
     }
 }
 

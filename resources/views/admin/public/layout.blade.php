@@ -35,6 +35,35 @@ a:hover{text-decoration:none;}
 	content:url(/admin/images/flag_icon_both.gif);
 }
 </style>
+
+<script>
+var currentUploadObj={};
+function openUpload(obj){
+	var url = "{{ route('admin.upload') }}?1";
+	obj.attr("href","javascript:;");
+	if(obj.attr("uploadTarget")){
+		url+='&target='+encodeURIComponent(obj.attr("uploadTarget"));
+	}
+	if(obj.attr("callback")){
+		url+='&callback='+encodeURIComponent(obj.attr("callback"));
+	}
+	if(obj.attr('data')){
+		json = eval('('+(obj.attr('data'))+')');
+		for(var i in json){
+			str = "json."+i;
+			url+='&'+i+"="+eval(str);
+		}
+	}
+	currentUploadObj = obj;
+	var title=obj.attr('title')?obj.attr('title'):'图片上传';
+	layer.open({
+		title:title,
+		type:2,
+		area:['400px','80px'],
+		content:url
+	});
+}
+</script>
 </head>
 
 <body class="" id="bodyColor" style="background-color:#f0f0f0;">
