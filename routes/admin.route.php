@@ -11,7 +11,7 @@ Route::post("upload","IndexController@postUpload");
 Route::get("group/list","GroupController@getList")->name("admin.group.list");
 Route::get("group/add","GroupController@getAdd")->name("admin.group.add");
 Route::get("group/{group_id}","GroupController@getEdit")->name("admin.group.edit");
-Route::get("group/save","GroupController@postSave")->name("admin.group.save");
+Route::post("group/save","GroupController@postSave")->name("admin.group.save");
 //用户管理
 Route::get("user/list","UserController@getList")->name("admin.user.list");
 Route::get("user/add","UserController@getAdd")->name("admin.user.add");

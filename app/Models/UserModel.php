@@ -19,9 +19,6 @@ class UserModel extends BaseModel
     /* protected $fillable = [
         'name','mobile','dapeng_user_mobile','per_max_num_qq','per_max_num_wx'
     ]; */
-    protected $guarded = [
-        
-    ];
     //该字段不显示
     protected $hidden = [
         'password'

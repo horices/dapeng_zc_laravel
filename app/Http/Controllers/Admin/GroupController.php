@@ -3,7 +3,9 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Models\GroupModel;
+use App\Utils\Util;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request;
 
 class GroupController extends BaseController
 {
@@ -42,6 +44,28 @@ class GroupController extends BaseController
         //查询群信息
         $group = GroupModel::find($id);
         return view("admin.group.add",compact("group"));
+    }
+    
+    function postSave(Request $request){
+        if($request->input("id")){
+            $group = GroupModel::find($request->input("id"));
+            if($group->update($request->input())){
+                $returnData['code'] = Util::SUCCESS ;
+                $returnData['msg'] = "修改成功";
+            }else{
+                $returnData['code'] = Util::FAIL ;
+                $returnData['msg'] = "修改失败".$user->errors;
+            }
+        } else {
+            if(GroupModel::create($request->input())){
+                $returnData['code'] = Util::SUCCESS;
+                $returnData['msg'] = "添加成功";
+            }else{
+                $returnData['code'] = Util::FAIL ;
+                $returnData['msg'] = "添加失败";
+            }
+        }
+        return response()->json($returnData);
     }
 }
 
