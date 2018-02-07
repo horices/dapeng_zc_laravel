@@ -27,12 +27,17 @@ class UserController extends BaseController
         //获取最新20条记录
         $list = $query->orderBy("uid","desc")->paginate(20);
         $listJson = $list->toJson();
-        return view("admin.user.list",compact("list",'listJson'));
+        return view("admin.user.list",[
+            'list'  => $list,
+            'listJson'  => $listJson
+        ]);
     }
     
     function getEdit($id){
         $user = UserModel::where("uid","=",$id)->first();
-        return view("admin.user.add",compact('user'));
+        return view("admin.user.add",[
+            'user'  =>  $user
+        ]);
     }
     function getAdd(UserModel $user){
         return view("admin.user.add",[
