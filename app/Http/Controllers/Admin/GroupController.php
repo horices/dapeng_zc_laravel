@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\GroupModel;
 use App\Utils\Util;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 
@@ -22,7 +24,7 @@ class GroupController extends BaseController
             if($fieldK == "adviser_name" && $fieldV !== null){
                 $query->where("name","like","%".$fieldV."%");
             }
-        });
+        })->with("user");
         if($type){
             $groupModel->where("type","=",$type);
         }

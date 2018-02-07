@@ -13,6 +13,14 @@ use App\Http\Controllers\BaseController;
 class GroupModel extends BaseModel
 {
     protected $table = "user_qqgroup";
+    protected $casts = [
+        'qrc_url' => "string",
+        'qrc_link' => "string",
+    ];
+    //禁止批量赋值的字段
+    protected $fillable = [
+        "type","group_name","qq_group","qrc_url","qrc_link","leader_id","is_open","mark"
+    ];
     
     protected function getStatusTextAttribute(){
         return $this->is_open == 1 ?'正常':'关闭';
