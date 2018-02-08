@@ -35,107 +35,34 @@ a:hover{text-decoration:none;}
 	content:url(/admin/images/flag_icon_both.gif);
 }
 </style>
+
 <script>
-$(function(){
-	$(".selectSeoer").click(function(){
-	    if($(this).attr("isqq") == 1)
-            var con = "{:U('Index/selectSeoer',['isqq'=>1])}";
-        else
-            var con = "{:U('Index/selectSeoer')}";
-		layer.open({
-			type:2,
-			title:"选择推广专员",
-			area:['745px','490px'],
-			content: con
-		});
-	});
-	$(".selectQQGroup").click(function(){
-        if($(this).attr("isqq") == 1){
-            con = "{:U('Index/selectQQGroup',['isqq'=>1])}";
-            layertitle = "选择QQ群";
-        }else{
-            con = "{:U('Index/selectQQGroup')}";
-            layertitle = "选择课程顾问微信号";
-        }
-
-		layer.open({
-			type:2,
-			title:layertitle,
-			area:['745px','490px'],
-			content: con
-		});
-	});
-	$(".selectAdviser").click(function(){
-		layer.open({
-			type:2,
-			title:"选择课程顾问",
-			area:['745px','490px'],
-			content: "{:U('Index/selectAdviser')}"
-		});
-	});
-	$(".datetime").each(function(){
-		var settings = {
-			lang:'zh',
-			format:'Y-m-d H:i:s',
-			defaultTime:"00:00",
-			//closeOnDateSelect:true,
-			timepicker:true,
-			step:1
-	    };
-		if($(this).attr("options")){
-			var option = (new Function("return " + $(this).attr("options")))();
-			$.extend(settings,option);
+var currentUploadObj={};
+function openUpload(obj){
+	var url = "{{ route('admin.upload') }}?1";
+	obj.attr("href","javascript:;");
+	if(obj.attr("uploadTarget")){
+		url+='&target='+encodeURIComponent(obj.attr("uploadTarget"));
+	}
+	if(obj.attr("callback")){
+		url+='&callback='+encodeURIComponent(obj.attr("callback"));
+	}
+	if(obj.attr('data')){
+		json = eval('('+(obj.attr('data'))+')');
+		for(var i in json){
+			str = "json."+i;
+			url+='&'+i+"="+eval(str);
 		}
-		$(this).datetimepicker(settings);
-	})
-	$(".date").each(function(){
-		var settings = {
-			lang:'zh',
-			format:'Y-m-d',
-			closeOnDateSelect:true,
-			timepicker:false,
-	    };
-		if($(this).attr("options")){
-			var option = (new Function("return " + $(this).attr("options")))();
-			$.extend(settings,option);
-		}
-		$(this).datetimepicker(settings);
-	})
-});
-
-function selectSeoerCallback(seoerId,seoerName){
-	$("input[name='inviter_id']").val(seoerId);	
-	$("input[name='inviter_name']").val(seoerName);	
-	layer.closeAll();
-}
-function selectQQGroupCallback(qq_group){
-	$("input[name='qq_group']").val(qq_group);	
-	layer.closeAll();
-}
-function selectAdviserCallback(adviserId,advisername,dapeng_user_mobile){
-	$("input[name='leader_id']").val(adviserId);	
-	$("input[name='leader_name']").val(advisername);
-	$("input[name='dapeng_user_mobile']").val(dapeng_user_mobile);
-	layer.closeAll();
-}
-
-
-//选中默认菜单 
-
-$(function(){
-	var action = "{$subnavAction}" || "{$Think.get.subnavAction|default=ACTION_NAME}";
-	$("#subnav").find("a[flag='"+action+"']").addClass("cur");
-	
-	<eq name="isShowUpdateLog" value="1">
+	}
+	currentUploadObj = obj;
+	var title=obj.attr('title')?obj.attr('title'):'图片上传';
 	layer.open({
+		title:title,
 		type:2,
-		title:"{:date('Y-m-d')}更新日志",
-		area:['745px','490px'],
-		content: "{:U('showUpdateLog')}"
+		area:['400px','80px'],
+		content:url
 	});
-	</eq>
-});
-
+}
 </script>
 </head>
 
@@ -157,7 +84,7 @@ $(function(){
                     <li class="visible-lt-ie8"><a href="/Member/Order/index">工单管理</a></li>
                     -->
                     <li class="dropdown hidden-lt-ie8"> 
-                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{:session('member_auth.name')}（{:[13=>'学管师',12=>'课程推广', '11'=>'智能推广', 10=>'课程顾问', 5=>'数据员', 4=>'管理员'][session('member_auth.grade')]}）<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
+                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
                         <ul class="dp-dropdown-menu dropdown-menu">
                             <div class="border-top"></div>
                             <li><a href="{:U('accounts')}">个人中心</a></li>

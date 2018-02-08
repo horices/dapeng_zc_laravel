@@ -5,6 +5,7 @@ class Util{
     const WARNING = 2;
     const FAIL = 0;
 
+
     /**
      * 输出各种类型的数据，调试程序时打印数据使用。
      * @param    mixed    参数：可以是一个或多个任意变量或值
@@ -90,7 +91,19 @@ class Util{
         }
         return $url;
     }
-
+    
+    /**
+     * 获取图片二维码解析后的内容
+     * @param unknown $image
+     */
+    static function getQrContent(String $image) : string {
+        $result = "";
+        if(file_exists($image)){
+            $QrReader = new \QrReader($image);
+            $result = $QrReader->text();
+        }
+        return $result;
+    }
 }
 
 ?>

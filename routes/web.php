@@ -20,7 +20,7 @@ Route::get('/',function(){
 });
 Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     //不需要登陆验证过滤的地址
-    Route::get("auth/login","AuthController@getLogin");
+    Route::get("auth/login","AuthController@getLogin")->name("admin.auth.login");
     Route::post("auth/login","AuthController@postLogin");
 });
 Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class]], function(){
@@ -32,8 +32,10 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth:
     Route::get("user/list","UserController@getList");
     //支付统计
     Route::get("registration/add","RegistrationController@add");
+    include("admin.route.php");
+
 });
 
-Auth::routes();
+//Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

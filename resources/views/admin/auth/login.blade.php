@@ -298,7 +298,7 @@ body { background: #f5f5f5 url("__IMG__/rebc.gif"); }
                         <!-- tab-group -->
                         <div class="tab-group" style="display:block;" id="step_1">
                             <!-- form -->
-                            <form class="passport-form passport-form-sign" action="" id="loginForm">
+                            <form class="passport-form passport-form-sign" action="{{ route('admin.auth.login')}}" id="loginForm">
                             {{ csrf_field() }}
                                 <div class="form-item">
                                     <div class="form-cont">

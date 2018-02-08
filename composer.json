@@ -12,7 +12,10 @@
 		"fideloper/proxy": "~3.3",
 		"laravel/framework": "5.5.*",
 		"laravel/tinker": "~1.0",
-		"curl/curl": "^1.5"
+		"curl/curl": "^1.5",
+		"khanamiryan/qrcode-detector-decoder": "^1.0",
+		"laravel/framework": "5.5.*",
+		"laravel/tinker": "~1.0"
 	},
 	"require-dev" : {
 		"filp/whoops" : "~2.0",

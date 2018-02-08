@@ -16,11 +16,19 @@ class BaseController extends Controller
      * 所有常量信息应该以方法调用方式返回
      * 
      ***********************/
-    
+    //量类型
+    private static $_ROSTER_TYPE = [
+        1   =>  'QQ',
+        '2' =>  '微信'
+    ];
     //用户身份级别
     private static $_USER_GRADE = [
-        '4' =>  "管理员",
-        '5' =>  "数据员",
+        '4'     =>  "管理员",
+        '5'     =>  "数据员",
+        '9'     =>  "课程顾问战队长",
+        '10'    =>  "课程顾问",
+        '11'    =>  "机器人推广专员",
+        '12'    =>  "推广专员",
     ];
     
     //左侧菜单导航
@@ -70,6 +78,9 @@ class BaseController extends Controller
     public function getLeftNavList(){
         return self::$_LEFT_NAV;
     } 
+    public function getRosterType(){
+        return self::$_ROSTER_TYPE;
+    }
     
     /**
      * 获取当前登陆的用户信息
