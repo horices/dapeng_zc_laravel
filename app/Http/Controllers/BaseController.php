@@ -36,22 +36,22 @@ class BaseController extends Controller
         'roster_add' =>   [
             'text'=> '添加新量',   //文字描述
             'url'=> "/admin/group/list",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'flag'=> 'admin.roster.add',  //默认选中标识
         ],
         'group_list' =>   [
             'text'=> 'QQ群管理',   //文字描述
             'url'=> "/admin/group/list",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'flag'=> 'admin.group.list',  //默认选中标识
         ],
         'user_list' =>   [
             'text'=> '成员管理',   //文字描述
             'url'=> "/admin/user/list",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'flag'=> 'admin.user.list',  //默认选中标识
         ],
         'roster_all' =>   [
             'text'=> '所有数据',   //文字描述
-            'url'=> "/admin/group/list",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'url'=> "/admin/roster/list",    //链接地址
+            'flag'=> 'admin.roster.list',  //默认选中标识
         ],
         'statistics' =>   [
             'text'=> '效率统计',   //文字描述

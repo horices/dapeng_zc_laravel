@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\GroupModel;
 use App\Utils\Util;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Route;
 
 class GroupController extends BaseController
 {
@@ -35,7 +34,9 @@ class GroupController extends BaseController
             $groupModel->where("is_open","=",$isOpen);
         }
         $list = $groupModel->paginate(20);
-        return view("admin.group.list",compact("list"));
+        return view("admin.group.list",[
+            'list' => $list,
+        ]);
     }
     
     /**
@@ -45,7 +46,9 @@ class GroupController extends BaseController
     function getEdit($id){
         //查询群信息
         $group = GroupModel::find($id);
-        return view("admin.group.add",compact("group"));
+        return view("admin.group.add",[
+            'group' => $group
+        ]);
     }
     
     function postSave(Request $request){
@@ -56,7 +59,7 @@ class GroupController extends BaseController
                 $returnData['msg'] = "修改成功";
             }else{
                 $returnData['code'] = Util::FAIL ;
-                $returnData['msg'] = "修改失败".$user->errors;
+                $returnData['msg'] = "修改失败".$group->errors;
             }
         } else {
             if(GroupModel::create($request->input())){

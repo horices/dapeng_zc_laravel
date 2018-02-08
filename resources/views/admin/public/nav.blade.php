@@ -11,6 +11,11 @@
 		</div>
 	</div>
 </div>
+<script>
+$(function(){
+	$("#subnav li").removeClass("cur").find("a[flag='{{ $leftNav ?? Route::currentRouteName() }}']").addClass("cur");
+});
+</script>
 <style>
 	@media (min-width: 992px){
 		.nav-left{padding-left: 0px; width: 15%}

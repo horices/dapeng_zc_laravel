@@ -77,13 +77,7 @@ function openUpload(obj){
             <div class="navbar-collapse collapse dp-collapse">
                 
                 <ul class="nav navbar-nav navbar-right dp-navbar">
-                	<!--
-                    <li><a href="/Member/Index/index">推广中心</a></li>
-                    <li style="color: #7E7E8C;font-size: 12px;">|</li>
-                    <li><a href="/Member/Trade/index" style="padding-right:10px;">交易中心</a></li>
-                    <li class="visible-lt-ie8"><a href="/Member/Order/index">工单管理</a></li>
-                    -->
-                    <li class="dropdown hidden-lt-ie8"> 
+                    <li class="dropdown hidden-lt-ie8">
                     	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
                         <ul class="dp-dropdown-menu dropdown-menu">
                             <div class="border-top"></div>
