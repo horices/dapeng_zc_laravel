@@ -6,7 +6,7 @@ use Illuminate\Auth\AuthenticationException;
 use App\Http\Controllers\BaseController;
 
 /**
- * @method static checkLogin($username , $password) 
+ * @method static $this->checkLogin($username , $password)
  * @author Administrator
  *
  */

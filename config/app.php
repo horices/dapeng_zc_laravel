@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -121,7 +121,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
@@ -226,6 +226,25 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+    ],
+    //正式站点地址
+    'master_host'   => [
+        'bzr.dapengjiaoyu.com','zc.dapengjiaoyu.com'
+    ],
+    //大鹏主站接口host地址
+    'dapeng_host'   =>  [
+        'test'  =>  'http://123.56.200.151',
+        'real'  =>  'http://www.dapengjiaoyu.com'
+    ],
+    //展翅系统正式站点接口host地址
+    'system_host'   =>  [
+        'sj'    =>  'http://bzr.dapengjiaoyu.com',
+        'ms'    =>  'http://ms.dapengjiaoyu.com',
+    ],
+    //展翅系统测试站点接口host地址
+    'system_host_test'  =>  [
+        'sj'    =>  'http://dev.bzr.dapengjiaoyu.com',
+        'ms'    =>  'http://test.ms.dapengjiaoyu.com',
     ],
 
 ];

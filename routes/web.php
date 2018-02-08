@@ -30,6 +30,8 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth:
     Route::get("index/index","IndexController@getIndex");
     //用户管理
     Route::get("user/list","UserController@getList");
+    //支付统计
+    Route::get("registration/add","RegistrationController@add");
 });
 
 Auth::routes();
