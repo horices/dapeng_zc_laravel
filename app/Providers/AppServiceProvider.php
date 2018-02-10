@@ -21,8 +21,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //列举所有的常量到模板中
-        //用户级别
+        //是否注册
+        View::share("registerStatus",app('status')->getRegisterStatus());
+        //开通课程状态
+        View::share("courseType",app('status')->getCourseType());
+        //提交量的类型
         View::share("rosterType",app('status')->getRosterType());
+        //群状态
+        View::share("groupStatus",app('status')->getGroupStatus());
         //用户级别
         View::share("userGradeList",app('status')->getUserGradeList());
         //导航菜单

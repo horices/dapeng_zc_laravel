@@ -21,181 +21,174 @@
 }
 </style>
 
-			<style>
-            .link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
-			.link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
-            </style>
+<style>
+.link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
+.link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
+</style>
             
             
-          <div class="row search-row" style="padding:9px 0 15px 15px;">
-                <form class="form-inline" role="form">
-                	<input type="hidden" name="subnavAction" value="{$Think.get.subnavAction}" />
-                    	<input type="hidden" name="adviser_id" value="{$Think.get.adviser_id}" />
-                    	<input type="hidden" name="seoer_id" value="{$Think.get.seoer_id}" />
-                        <input type="hidden" name="grade" value="{$Think.get.grade}" />
-                	<div class="form-group">
-                    	<select name="field_k" class="form-control">
-                        	<!--<option value="">请选择</option>-->
-                            <option value="account" selected>QQ/微信</option>
-                            <option value="g.group_name">班级代号</option>
-							<option value="ur.qq_group">群号/顾问微信号</option>
-                        </select>
-                    	<input type="text" name="field_v" class="form-control" id="name" placeholder="" value="{$_GET.field_v}">
-                        <if condition="$_GET['field_k']"><script>$('select[name=field_k]').val('{$_GET.field_k}');</script></if>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">来源类型</label>
-                        <select name="type" class="form-control">
-                            <option value="">不限</option>
-                            <option value="1" <eq name="_GET[type]" value="1">selected</eq> >QQ</option>
-                            <option value="2" <eq name="_GET[type]" value="2">selected</eq>>微信</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                    	<label class="control-label">是否注册</label>
-                    	<select name="is_reg" class="form-control">
-                        	<option value="">不限</option>
-                        	<option value="0">未注册</option>
-                        	<option value="1">已注册</option>
-                        </select>
-                        <if condition="is_numeric($_GET['status'])"><script>$('select[name=status]').val('{$_GET.status}');</script></if>
-                    </div>
-                    <div class="form-group">
-                    	<label class="control-label">开通课程</label>
-                    	<select name="course_type" class="form-control">
-                        	<option value="">不限</option>
-                        	<option value="0">未开通</option>
-                        	<option value="1">试学课</option>
-                        	<option value="2">正式课</option>
-                        </select>
-                        <if condition="is_numeric($_GET['status'])"><script>$('select[name=status]').val('{$_GET.status}');</script></if>
-                    </div>
-                    <div class="form-group">
-                    	<label class="control-label">进群状态</label>
-                    	<select name="group_status" class="form-control">
-                        	<option value="">请选择</option>
-                        	<volist name="groupStatus" id="gs">
-                            <option value="{$key}">{$gs}</option>
-                            </volist>
-                        </select>
-                        <if condition="is_numeric($_GET['status'])"><script>$('select[name=status]').val('{$_GET.status}');</script></if>
-                    </div>
-                    <div class="form-group">
-                    	<label class="control-label">新活状态</label>
-                    	<select name="flag" class="form-control">
-                        	<option value="">请选择</option>
-                        	<option value="1">新量</option>
-                        	<option value="2">活量</option>
-                        </select>
-                        <if condition="$_GET['flag'] gt 0 "><script>$('select[name=flag]').val('{$_GET.flag}');</script></if>
-                    </div>
-                    <div class="form-group">
-                    	<label class="control-label">提交时间</label>
-                    	<input type="text" id="startdate" name="startdate" class="form-control datetime" style="width:140px;" value="{$_GET.startdate}" /> 至 
-                        <input type="text" id="enddate" name="enddate" class="form-control datetime" style="width:140px;" value="{$_GET.enddate}" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="seoer_name" class="form-control" style="width:140px;" value="{$Think.get.seoer_name}" placeholder="推广专员名称" />
-                    	<input type="text"  name="adviser_name" class="form-control" style="width:140px;" value="{$Think.get.adviser_name}" placeholder="课程顾问名称" />
-                    </div>
-                    <div class="form-group">
-                		<a href="{:U('')}" class="common-button combg2 linkSubmit">搜索</a>
-                		<a class="common-button combg4 linkSubmit" href="{:U('exportResult')}">
-                            导出
-                        </a>
-
-                        <!--<a href="{:U('exportResult')}"  class="common-button combg4 ajaxSubmit">
-                            导出
-                        </a>-->
-
-
-                    </div>
-                </form>
+  <div class="row search-row" style="padding:9px 0 15px 15px;">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <select name="field_k" class="form-control">
+                    <option value="account" selected>QQ/微信</option>
+                    <option value="group_name" @if(Request::input('field_k') == 'group_name') selected @endif>班级代号</option>
+                </select>
+                <input type="text" name="field_v" class="form-control" id="name" placeholder="" value="{{ Request::input("field_v") }}">
             </div>
-            <style>
-                .table th,td{text-align: center}
-            </style>
-            <div id="w0" class="grid-view">
-                <table class="table">
-                    <thead>
-                        <tr>
-                        	<th width="50">序号</th>
-                        	<th width="50">类型</th>
-                            <th width="100">账号</th>
-                            <th width="80">班级代号</th>
-                            <th width="95">群号/微信号</th>
-                            <th width="80">推广专员</th>
-                            <th width="80">课程顾问</th>
-                            <th width="80">提交时间</th>
-                            <th width="80">是否注册</th>
-                            <th width="80">开通课程</th>
-                            <th width="80">进群状态</th>
-                            <th width="80">进群时间</th>
-                            <th width="80">销售数据</th>
-                            <th width="90">操作</th>
+            <div class="form-group">
+                <label class="control-label">来源类型</label>
+                <select name="type" class="form-control">
+                    <option value="">不限</option>
+                    @foreach($rosterType  as $k=>$v)
+                    <option value="{{ $k }}"  @if(Request::input("type") == $k) selected @endif>{{ $v }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-                            <!-- <th style="padding-left:19px" width="80">操作</th> -->
+            <div class="form-group">
+                <label class="control-label">是否注册</label>
+                <select name="is_reg" class="form-control">
+                    <option value="">全部</option>
+                    @foreach($registerStatus  as $k=>$v)
+                        <option value="{{ $k }}"  @if(Request::input("is_reg") === strval($k)) selected @endif>{{ $v }}</option>
+                    @endforeach
+                </select>
+                <if condition="is_numeric($_GET['status'])"><script>$('select[name=status]').val('{$_GET.status}');</script></if>
+            </div>
+            <div class="form-group">
+                <label class="control-label">开通课程</label>
+                <select name="course_type" class="form-control">
+                    <option value="">全部</option>
+                    @foreach($courseType as $k=>$v)
+                    <option value="{{ $k }}" @if(Request::input('course_type') === strval($k)) selected @endif>{{ $v }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">进群状态</label>
+                <select name="group_status" class="form-control">
+                    <option value="">全部</option>
+                    @foreach($groupStatus as $k=>$v)
+                    <option value="{{ $k }}" @if(Request::input('group_status') === strval($k)) selected @endif>{{ $v }}</option>
+                    @endforeach
+                </select>
+                <if condition="is_numeric($_GET['status'])"><script>$('select[name=status]').val('{$_GET.status}');</script></if>
+            </div>
+            <div class="form-group">
+                <label class="control-label">新活状态</label>
+                <select name="flag" class="form-control">
+                    <option value="">请选择</option>
+                    <option value="1">新量</option>
+                    <option value="2">活量</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">提交时间</label>
+                <input type="text" id="startdate" name="startdate" class="form-control datetime" style="width:140px;" value="{{ Request::input("startdate") }}" /> 至
+                <input type="text" id="enddate" name="enddate" class="form-control datetime" style="width:140px;" value="{{ Request::input("enddate") }}" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="seoer_name" class="form-control" style="width:140px;" value="{{ Request::input("seoer_name") }}" placeholder="推广专员名称" />
+                <input type="text"  name="adviser_name" class="form-control" style="width:140px;" value="{{ Request::input("adviser_name") }}" placeholder="课程顾问名称" />
+            </div>
+            <div class="form-group">
+                <a href="" class="common-button combg2 linkSubmit">搜索</a>
+                <a class="common-button combg4 linkSubmit" href="">
+                    导出
+                </a>
+
+                <!--<a href="{:U('exportResult')}"  class="common-button combg4 ajaxSubmit">
+                    导出
+                </a>-->
+
+
+            </div>
+        </form>
+    </div>
+    <style>
+        .table th,td{text-align: center}
+    </style>
+    <div id="w0" class="grid-view">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="50">类型</th>
+                    <th width="100">账号</th>
+                    <th width="80">班级代号</th>
+                    <th width="95">群号/微信号</th>
+                    <th width="80">推广专员</th>
+                    <th width="80">课程顾问</th>
+                    <th width="80">提交时间</th>
+                    <th width="80">是否注册</th>
+                    <th width="80">开通课程</th>
+                    <th width="80">进群状态</th>
+                    <th width="80">进群时间</th>
+                    <th width="80">销售数据</th>
+                    <th width="90">操作</th>
+
+                    <!-- <th style="padding-left:19px" width="80">操作</th> -->
+                </tr>
+            </thead>
+
+            <tbody>
+                <if condition="$list">
+                    <foreach name="list" item="v">
+                        @foreach($list as $roster)
+                        <tr title="{$v.qq_nickname}" style="<eq name='v.is_old' value='1'>opacity:0.5;</eq>">
+                        <td class="flag_icon flag_icon_{$v.flag_type}">{{ $roster->id }}
+                        </td>
+                            <td>{{ $roster->roster_type_text }}</td>
+                            <td>
+                                {{ $roster->roster_no }}
+                            </td>
+                            <td>{{ $roster->group->group_name }}</td>
+                            <td>{{ $roster->inviter_name }}</td>
+                            <td>{{ $roster->adviser_name }}</td>
+                            <td>{{ $roster->adviser_name }}</td>
+                            <td>{{ $roster->addtime_text }}</td>
+                            <td>{{ $roster->is_reg_text }}</td>
+                            <td title="{$v.course_name}" onclick="openCourseList(this);" roster_id="{$v.id}" qq="{$v.account}" style="cursor:pointer;">
+                                {{ $roster->course_type_text }}</td>
+                            <td>
+                                <span class="group_0{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
+                            </td>
+                            <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{$v.account}" type="{$v.type}" style="cursor:pointer;">
+                            {{ $roster->last_group_time ? $roster->last_group_time->addtime_text : '无' }}
+                            </td>
+                            <td>
+                            @if( $roster->is_old == 0)
+                            <a class="link_3" href="{:U('RosterInfo/add?grade='.$_GET['grade'].'&roster_id='.$v['id'])}" data="{id:{$v.id},model:'UserRoster',is_del:0}" warning="确认要恢复该量么？">点击添加</a>
+                            @endif
+                            </td>
+                            <td>
+                                <empty name="v.dapeng_user_mobile">
+                                    <a href="javascript:;" onclick="alertOpenCourse('{$v.id}')">
+                                        开通
+                                    </a>
+                                    <else/>
+                                    <a class="ajaxLink" method="get" callback="reFun" data="{'phone':}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
+                                </empty>
+                                <a href="javascript:;" url="{$v[userRegUrl]}" wx="{$v[wx]}" qq="{$v[qq]}" class="link_4" >链接</a>
+
+                            </td>
                         </tr>
-                    </thead>
-                    
-                    <tbody>
-                    	<if condition="$list">
-                            <foreach name="list" item="v">
-                                @foreach($list as $roster)
-                                <tr title="{$v.qq_nickname}" style="<eq name='v.is_old' value='1'>opacity:0.5;</eq>">
-                                <td class="flag_icon flag_icon_{$v.flag_type}">{{ $roster->id }}
-                                </td>
-                                    <td>{{ $roster->roster_type_text }}</td>
-                                    <td>
-                                        {{ $roster->roster_no }}
-                                    </td>
-                                    <td>{{ $roster->group->group_name }}</td>
-									<td>{{ $roster->inviter_name }}</td>
-									<td>{{ $roster->adviser_name }}</td>
-									<td>{{ $roster->adviser_name }}</td>
-                                    <td>{{ $roster->addtime_text }}</td>
-                                    <td>{{ $roster->is_reg_text }}</td>
-                                    <td title="{$v.course_name}" onclick="openCourseList(this);" roster_id="{$v.id}" qq="{$v.account}" style="cursor:pointer;">
-                                        {{ $roster->course_type_text }}</td>
-                                    <td>
-                                        <span class="group_0{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
-                                    </td>
-                                    <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{$v.account}" type="{$v.type}" style="cursor:pointer;">
-                                    {{ $roster->last_group_time ? $roster->last_group_time->addtime_text : '无' }}
-                                    </td>
-                                    <td>
-                                    @if( $roster->is_old == 0)
-                                    <a class="link_3" href="{:U('RosterInfo/add?grade='.$_GET['grade'].'&roster_id='.$v['id'])}" data="{id:{$v.id},model:'UserRoster',is_del:0}" warning="确认要恢复该量么？">点击添加</a>
-                                    @endif
-                                    </td>
-                                    <td>
-                                        <empty name="v.dapeng_user_mobile">
-                                            <a href="javascript:;" onclick="alertOpenCourse('{$v.id}')">
-                                                开通
-                                            </a>
-                                            <else/>
-                                            <a class="ajaxLink" method="get" callback="reFun" data="{'phone':}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
-                                        </empty>
-                                        <a href="javascript:;" url="{$v[userRegUrl]}" wx="{$v[wx]}" qq="{$v[qq]}" class="link_4" >链接</a>
+                        @endforeach
 
-                                    </td>
-                                </tr>
-                                @endforeach
+                    <tr>
 
-                            <tr>
-                      
-                                <td colspan="14" ></td>
-                            </tr>
-                        <else />
-                            <tr>
-                                <th colspan="14">暂无信息</th>
-                            </tr>
-                        </if>
-                    </tbody>
-                </table>
-        </div>
-        <div class="pagenav"> <ul>{{ $list->links() }} </ul></div>
+                        <td colspan="14" ></td>
+                    </tr>
+                <else />
+                    <tr>
+                        <th colspan="14">暂无信息</th>
+                    </tr>
+                </if>
+            </tbody>
+        </table>
+</div>
+<div class="pagenav"> <ul>{{ $list->links() }} </ul></div>
 <style>
     #open-course{width: 300px; height: 100px; padding-top: 30px;display: none;padding-left: 10px;}
     #open-course input{width: 200px; float: left}
