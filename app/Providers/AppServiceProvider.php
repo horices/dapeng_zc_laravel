@@ -18,17 +18,18 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(BaseController $controller)
+    public function boot()
     {
         //列举所有的常量到模板中
         //用户级别
-        View::share("rosterType",$controller->getRosterType());
+        View::share("rosterType",app('status')->getRosterType());
         //用户级别
-        View::share("userGradeList",$controller->getUserGradeList());
+        View::share("userGradeList",app('status')->getUserGradeList());
         //导航菜单
-        View::share("navList",$controller->getLeftNavList());
+        View::share("navList",app('status')->getLeftNavList());
         //监听用户用事件 
         UserModel::observe(UserObserver::class);
+
 
         //记录SQL日志
         DB::listen(function($query){
@@ -37,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
                 $sql = Str::replaceFirst('?',array_shift($query->bindings),$sql);
             }
             $sql = "耗时: ".$query->time ." ".$sql;
+            Log::info("\r\n\r\n===================================================================\r\n");
             Log::info($sql);
         });
     }
@@ -49,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        $this->app->singleton(BaseController::class,function(){
+        $this->app->singleton("status",function(){
             return new \App\Http\Controllers\Admin\BaseController();
         });
     }

@@ -16,10 +16,30 @@ class BaseController extends Controller
      * 所有常量信息应该以方法调用方式返回
      * 
      ***********************/
-    //量类型
+    //学生量类型
     private static $_ROSTER_TYPE = [
         1   =>  'QQ',
         '2' =>  '微信'
+    ];
+    //注册类型
+    private static $_REGISTER_STATUS = [
+        0   =>  '未注册',
+        '1' =>  '已注册'
+    ];
+    //开课状态
+    private static $_COURSE_TYPE = [
+        0   =>  '未开通',
+        '1' =>  '试学课',
+        '2' =>  '正式课'
+    ];
+    //开课状态
+    private static $_GROUP_STATUS = [
+        0   =>  '无',
+        '1' =>  '等待进群',
+        '2' =>  '已进群',
+        '3' =>  '已退群',
+        4   =>  '已拒绝',
+        5   =>  '已被踢'
     ];
     //用户身份级别
     private static $_USER_GRADE = [
@@ -70,13 +90,40 @@ class BaseController extends Controller
      * 获取左侧菜单导航
      * @return string[][]
      */
-    public function getLeftNavList(){
-        return self::$_LEFT_NAV;
-    } 
-    public function getRosterType(){
-        return self::$_ROSTER_TYPE;
+    public function getLeftNavList($key = ''){
+        return $key ? self::$_LEFT_NAV[$key] : self::$_LEFT_NAV;
     }
-    
+
+    /**
+     * 获取量的类型[QQ,微信]
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getRosterType($key = ''){
+        return $key ? self::$_ROSTER_TYPE[$key] : self::$_ROSTER_TYPE;
+    }
+
+    /**
+     * 获取注册状态
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getRegisterStatus($key = ''){
+        return $key ? self::$_REGISTER_STATUS[$key] : self::$_REGISTER_STATUS;
+    }
+
+    /**
+     * 获取开课状态
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getCourseType($key = ''){
+        return $key ? self::$_COURSE_TYPE[$key] : self::$_COURSE_TYPE;
+    }
+
+    public function getGroupStatus($key = ''){
+        return $key ? self::$_GROUP_STATUS[$key]: self::$_GROUP_STATUS;
+    }
     /**
      * 获取当前登陆的用户信息
      * @param Request $request
