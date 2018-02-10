@@ -24,7 +24,16 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     Route::post("auth/login","AuthController@postLogin");
 });
 Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class]], function(){
+    //include("admin.route.php");
+    Route::get("index/index","IndexController@getIndex");
+    Route::get("group/list","GroupController@getList");
+    Route::get("index/index","IndexController@getIndex");
+    //用户管理
+    Route::get("user/list","UserController@getList");
+    //支付统计
+    Route::get("registration/add","RegistrationController@add");
     include("admin.route.php");
+
 });
 
 //Auth::routes();
