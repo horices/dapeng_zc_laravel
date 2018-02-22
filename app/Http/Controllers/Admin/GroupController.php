@@ -47,7 +47,8 @@ class GroupController extends BaseController
         //查询群信息
         $group = GroupModel::find($id);
         return view("admin.group.add",[
-            'group' => $group
+            'group' => $group,
+            'leftNav' => "admin.group.list"
         ]);
     }
     

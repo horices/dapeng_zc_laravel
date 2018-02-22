@@ -38,7 +38,7 @@ class UserModel extends BaseModel
     protected function setPerMaxNumQqAttribute($v){
         $this->attributes['per_max_num_qq'] =  $v ?? 1;
     }
-    protected function getAddtimeAttribute($v){
+    protected function getAddtimeTextAttribute($v){
         return date('Y-m-d H:i:s',$v);
     }
     protected function getGradeAttribute($v){

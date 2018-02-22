@@ -65,14 +65,14 @@
                 <td>{{$user->uid}}</td>
                 <td>{{$user->name}}</td>
                 <td>{{$user->mobile}}</td>
-                <td>{{$user->status}}</td>
+                <td>{{$user->status_text}}</td>
                 <td>{{$user->grade_text}}</td>
                 <td><a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a></td>
             </tr>
             @endforeach
-                <tr>
-                    <td colspan="8"><div class="pagenav"><ul>{{$list->appends(Request::input())->links()}}</ul></div></td>
-                </tr>
+            <tr>
+                <td colspan="8"><div class="pagenav"><ul>{{$list->appends(Request::input())->links()}}</ul></div></td>
+            </tr>
         </tbody>
     </table>
 </div>

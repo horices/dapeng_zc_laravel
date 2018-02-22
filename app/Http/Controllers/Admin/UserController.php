@@ -36,12 +36,14 @@ class UserController extends BaseController
     function getEdit($id){
         $user = UserModel::where("uid","=",$id)->first();
         return view("admin.user.add",[
-            'user'  =>  $user
+            'user'  =>  $user,
+            'leftNav' => "admin.user.list"
         ]);
     }
     function getAdd(UserModel $user){
         return view("admin.user.add",[
-            'user'=>$user
+            'user'=>$user,
+            'leftNav' => "admin.user.list"
         ]);
     }
     /**
