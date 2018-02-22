@@ -133,58 +133,46 @@
             </thead>
 
             <tbody>
-                <if condition="$list">
-                    <foreach name="list" item="v">
-                        @foreach($list as $roster)
-                        <tr title="{$v.qq_nickname}" style="<eq name='v.is_old' value='1'>opacity:0.5;</eq>">
-                        <td class="flag_icon flag_icon_{$v.flag_type}">{{ $roster->id }}
-                        </td>
-                            <td>{{ $roster->roster_type_text }}</td>
-                            <td>
-                                {{ $roster->roster_no }}
-                            </td>
-                            <td>{{ $roster->group->group_name }}</td>
-                            <td>{{ $roster->inviter_name }}</td>
-                            <td>{{ $roster->adviser_name }}</td>
-                            <td>{{ $roster->adviser_name }}</td>
-                            <td>{{ $roster->addtime_text }}</td>
-                            <td>{{ $roster->is_reg_text }}</td>
-                            <td title="{$v.course_name}" onclick="openCourseList(this);" roster_id="{$v.id}" qq="{$v.account}" style="cursor:pointer;">
-                                {{ $roster->course_type_text }}</td>
-                            <td>
-                                <span class="group_0{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
-                            </td>
-                            <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{$v.account}" type="{$v.type}" style="cursor:pointer;">
-                            {{ $roster->last_group_time ? $roster->last_group_time->addtime_text : '无' }}
-                            </td>
-                            <td>
-                            @if( $roster->is_old == 0)
-                            <a class="link_3" href="{:U('RosterInfo/add?grade='.$_GET['grade'].'&roster_id='.$v['id'])}" data="{id:{$v.id},model:'UserRoster',is_del:0}" warning="确认要恢复该量么？">点击添加</a>
-                            @endif
-                            </td>
-                            <td>
-                                <empty name="v.dapeng_user_mobile">
-                                    <a href="javascript:;" onclick="alertOpenCourse('{$v.id}')">
-                                        开通
-                                    </a>
-                                    <else/>
-                                    <a class="ajaxLink" method="get" callback="reFun" data="{'phone':}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
-                                </empty>
-                                <a href="javascript:;" url="{$v[userRegUrl]}" wx="{$v[wx]}" qq="{$v[qq]}" class="link_4" >链接</a>
+                @foreach($list as $roster)
+                <tr title="{{ $roster->qq_nickname }}" style="@if($roster->is_old == 1) opacity:0.5; @endif">
+                    <td class="flag_icon flag_icon_{{ $roster->flag_type }}">{{ $roster->id }}</td>
+                    <td>{{ $roster->roster_type_text }}</td>
+                    <td>{{ $roster->roster_no }}</td>
+                    <td>{{ $roster->group_info->group_name }}</td>
+                    <td>{{ $roster->group_info->qq_group }}</td>
+                    <td>{{ $roster->inviter_name }}</td>
+                    <td>{{ $roster->last_adviser_name }}</td>
+                    <td>{{ $roster->addtime_text }}</td>
+                    <td>{{ $roster->is_reg_text }}</td>
+                    <td title="{{ $roster->course_name }}" onclick="openCourseList(this);" roster_id="{{ $roster->id }}" qq="{{ $roster->roster_no }}" style="cursor:pointer;">
+                        {{ $roster->course_type_text }}</td>
+                    <td>
+                        <span class="group_0{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
+                    </td>
+                    <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{{ $roster->roster_no }}" type="{{ $roster->roster_type }}" style="cursor:pointer;">
+                    {{ $roster->group_event_log ? $roster->group_event_log[0]->addtime_text : '无' }}
+                    </td>
+                    <td>
+                    @if( $roster->is_old == 0)
+                    <a class="link_3" href="{:U('RosterInfo/add?grade='.$_GET['grade'].'&roster_id='.$v['id'])}" data="{id:{$v.id},model:'UserRoster',is_del:0}" warning="确认要恢复该量么？">点击添加</a>
+                    @endif
+                    </td>
+                    <td>
+                        @if($roster->dapeng_user_mobile)
+                        <a class="ajaxLink" method="get" callback="reFun" data="{'phone':}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
+                        @else
+                        <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
+                        @endif
+                        <a href="javascript:;" url="{$v[userRegUrl]}" wx="{$v[wx]}" qq="{$v[qq]}" class="link_4" >链接</a>
 
-                            </td>
-                        </tr>
-                        @endforeach
-
-                    <tr>
-
-                        <td colspan="14" ></td>
-                    </tr>
-                <else />
+                    </td>
+                </tr>
+                @endforeach
+                @if(!$list->count())
                     <tr>
                         <th colspan="14">暂无信息</th>
                     </tr>
-                </if>
+                @endif
             </tbody>
         </table>
 </div>

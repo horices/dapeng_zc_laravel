@@ -31,7 +31,7 @@ class RosterModel extends BaseModel
     /**
      * 群信息
      */
-    function group(){
+    function group_info(){
         return $this->hasOne(GroupModel::class,'id','qq_group_id');
     }
     /**

@@ -2,14 +2,9 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Models\EventGroupLogModel;
 use App\Models\RosterModel;
-use App\Models\UserModel;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Http\Request;
-use App\Utils\Util;
 
 class RosterController extends BaseController
 {
@@ -17,8 +12,10 @@ class RosterController extends BaseController
         $field_k = Input::get("field_k");
         $field_v = Input::get("field_v");
         //查询所有列表
-        $query = RosterModel::query()->with(['group',"group_event_log"])->orderBy("id","desc");
-        if($field_k == "account"){
+        $query = RosterModel::query()->with(['group_info',"group_event_log"=>function($query){
+            $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
+        }])->orderBy("id","desc")->whereIn("id",['2144421','2013210','2045020']);
+        if($field_k == "account" && $field_v !== null){
             $query->where("qq","=",$field_v)->orWhere('wx','=',$field_v);
         }
         $list = $query->paginate(20);
