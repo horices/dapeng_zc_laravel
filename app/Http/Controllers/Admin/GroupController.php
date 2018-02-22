@@ -38,6 +38,12 @@ class GroupController extends BaseController
             'list' => $list,
         ]);
     }
+    function getAdd(GroupModel $group){
+        return view("admin.group.add",[
+            'group' => $group,
+            'leftNav' => "admin.group.list"
+        ]);
+    }
     
     /**
      * 修改群

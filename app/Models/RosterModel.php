@@ -25,7 +25,7 @@ class RosterModel extends BaseModel
         return app("status")->getGroupStatus()[$this->group_status];
     }
     function getAddtimeTextAttribute($v){
-        return date('Y-m-d H:i');
+        return date('m-d',$this->addtime)."<br />".date('H:i',$this->addtime);
     }
 
     /**

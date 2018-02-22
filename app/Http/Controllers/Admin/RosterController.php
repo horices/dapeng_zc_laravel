@@ -14,7 +14,7 @@ class RosterController extends BaseController
         //查询所有列表
         $query = RosterModel::query()->with(['group_info',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
-        }])->orderBy("id","desc")->whereIn("id",['2144421','2013210','2045020']);
+        }])->orderBy("id","desc");
         if($field_k == "account" && $field_v !== null){
             $query->where("qq","=",$field_v)->orWhere('wx','=',$field_v);
         }

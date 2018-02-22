@@ -113,7 +113,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th width="50">序号</th>
+                    {{--<th width="50">序号</th>--}}
                     <th width="50">类型</th>
                     <th width="100">账号</th>
                     <th width="80">班级代号</th>
@@ -135,14 +135,14 @@
             <tbody>
                 @foreach($list as $roster)
                 <tr title="{{ $roster->qq_nickname }}" style="@if($roster->is_old == 1) opacity:0.5; @endif">
-                    <td class="flag_icon flag_icon_{{ $roster->flag_type }}">{{ $roster->id }}</td>
+                    {{--<td class="flag_icon flag_icon_{{ $roster->flag_type }}">{{ $roster->id }}</td>--}}
                     <td>{{ $roster->roster_type_text }}</td>
                     <td>{{ $roster->roster_no }}</td>
                     <td>{{ $roster->group_info->group_name }}</td>
                     <td>{{ $roster->group_info->qq_group }}</td>
                     <td>{{ $roster->inviter_name }}</td>
                     <td>{{ $roster->last_adviser_name }}</td>
-                    <td>{{ $roster->addtime_text }}</td>
+                    <td>{!! $roster->addtime_text !!}</td>
                     <td>{{ $roster->is_reg_text }}</td>
                     <td title="{{ $roster->course_name }}" onclick="openCourseList(this);" roster_id="{{ $roster->id }}" qq="{{ $roster->roster_no }}" style="cursor:pointer;">
                         {{ $roster->course_type_text }}</td>
@@ -150,7 +150,7 @@
                         <span class="group_0{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
                     </td>
                     <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{{ $roster->roster_no }}" type="{{ $roster->roster_type }}" style="cursor:pointer;">
-                    {{ $roster->group_event_log ? $roster->group_event_log[0]->addtime_text : '无' }}
+                    {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}
                     </td>
                     <td>
                     @if( $roster->is_old == 0)

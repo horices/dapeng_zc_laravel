@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\AuthenticationException;
 use App\Http\Controllers\BaseController;
 
 /**
@@ -10,7 +9,7 @@ use App\Http\Controllers\BaseController;
  * @method static $this->checkLogin($username , $password)
  * @property-read string $grade_text 级别文字描述
  * @property-read string $status_text 状态文字描述[正常，注销]
- * @method static checkLogin($username , $password) 
+ * @method static checkLogin($username , $password)
  * @author Administrator
  *
  */
