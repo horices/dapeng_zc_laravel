@@ -63,6 +63,25 @@ function openUpload(obj){
 		content:url
 	});
 }
+$(function(){
+    $(".select_seoer").click(function(){
+        layer.open({
+            type:2,
+            title:"选择推广专员",
+            area:['750px','500px'],
+            content:"{{ route("admin.public.select_seoer") }}"
+        });
+    });
+    $(".select_adviser").click(function(){
+        layer.open({
+            type:2,
+            title:"选择课程顾问",
+            area:['750px','500px'],
+            content:"{{ route("admin.public.select_adviser") }}"
+        });
+    });
+});
+
 </script>
 </head>
 
@@ -78,7 +97,7 @@ function openUpload(obj){
                 
                 <ul class="nav navbar-nav navbar-right dp-navbar">
                     <li class="dropdown hidden-lt-ie8">
-                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
+                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade_text")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
                         <ul class="dp-dropdown-menu dropdown-menu">
                             <div class="border-top"></div>
                             <li><a href="{:U('accounts')}">个人中心</a></li>

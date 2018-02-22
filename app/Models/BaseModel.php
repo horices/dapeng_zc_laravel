@@ -18,6 +18,9 @@ class BaseModel extends Model
 
     ];
 
+    //允许转为数组的字段,自动调用 getColumnAttribute 方法
+    protected $appends = [];
+
     /**
      * 重写父类设置属性，防止通过中间件时，返回的NULL问题
      * @param string $key

@@ -21,3 +21,7 @@ Route::post("user/save","UserController@postSave")->name("admin.user.save");
 //学员量管理
 Route::get("roster/list","RosterController@getList")->name("admin.roster.list");
 Route::get("roster/add","RosterController@getAdd")->name("admin.roster.add");
+
+//公共操作
+Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
+Route::get("index/select_adviser","BaseController@getSelectAdviser")->name("admin.public.select_adviser");

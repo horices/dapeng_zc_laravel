@@ -24,7 +24,10 @@ class UserModel extends BaseModel
     protected $hidden = [
         'password'
     ];
-    
+
+    protected $appends = [
+        'grade_text',       //级别描述
+    ];
     protected function getPerMaxNumWxAttribute($v){
         return $v ?? 1;
     }
@@ -39,9 +42,6 @@ class UserModel extends BaseModel
     }
     protected function getAddtimeTextAttribute($v){
         return date('Y-m-d H:i:s',$v);
-    }
-    protected function getGradeAttribute($v){
-        return $v;
     }
     protected function getGradeTextAttribute(){
         return app(BaseController::class)->getUserGradeList()[$this->grade];

@@ -4,6 +4,9 @@
 function uploadCallback(url,obj,json){
 	$("input[name='qrc_link']").val(json.qr_link);
 }
+function selectAdviserCallback(){
+
+}
 </script>
 <div class="row dp-member-title-2">
     <h4 class="col-md-4" style="padding-left:0">@if($group->id)修改@else添加 @endif群信息</h4>
@@ -71,7 +74,7 @@ function uploadCallback(url,obj,json){
                 <div class="col-md-8 controls">
                     <input type="hidden" name="leader_id" value="{{ $group->leader_id}}" >
                     <input type="text" name="leader_name" value="{{ $group->leader_name}}" class="form-control fleft" maxlength="11" style="width:200px;" readonly="true" placeholder="请选择课程顾问">
-                <a class="common-button dblock fleft combg2 ml5 selectAdviser" href="javascript:;">选择</a>
+                <a class="common-button dblock fleft combg2 ml5 select_adviser" href="javascript:;">选择</a>
                     <p class="help-block"></p>
                 </div>
             </div>
