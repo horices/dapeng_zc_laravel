@@ -122,8 +122,8 @@ a:visited{ color:#fff;}
 </div>
 <script>
 function selectSeoer(user){
-    console.log(user);
 	parent.selectUserCallback(user);
+	parent.layer.closeAll();
 }
 </script>
 </body>

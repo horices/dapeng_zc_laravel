@@ -4,8 +4,12 @@
 function uploadCallback(url,obj,json){
 	$("input[name='qrc_link']").val(json.qr_link);
 }
-function selectAdviserCallback(){
-
+function selectUserCallback(user){
+    if(!user)
+        return ;
+    $("input[name='leader_name']").val(user.name);
+    $("input[name='leader_id']").val(user.uid);
+    $("input[name='dapeng_user_mobile']").val(user.dapeng_user_mobile);
 }
 </script>
 <div class="row dp-member-title-2">
@@ -73,15 +77,15 @@ function selectAdviserCallback(){
                 <label class="col-md-2 control-label" for="input01">所属课程顾问</label>
                 <div class="col-md-8 controls">
                     <input type="hidden" name="leader_id" value="{{ $group->leader_id}}" >
-                    <input type="text" name="leader_name" value="{{ $group->leader_name}}" class="form-control fleft" maxlength="11" style="width:200px;" readonly="true" placeholder="请选择课程顾问">
-                <a class="common-button dblock fleft combg2 ml5 select_adviser" href="javascript:;">选择</a>
+                    <input type="text" name="leader_name" value="{{ $group->user->name}}" class="form-control fleft" maxlength="11" style="width:200px;" readonly="true" placeholder="请选择课程顾问">
+                <a class="common-button dblock fleft combg2 ml5 select_adviser" href="javascript:;" callback="selectUserCallback">选择</a>
                     <p class="help-block"></p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">主站手机号</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="dapeng_user_mobile" class="form-control fleft" style="width:200px" value="{{ $group->dapeng_user_mobile}}" readonly="true" placeholder="主站账号">
+                    <input type="text" name="dapeng_user_mobile" class="form-control fleft" style="width:200px" value="{{ $group->user->dapeng_user_mobile}}" readonly="true" placeholder="主站账号">
                     <p class="help-block"></p>
                 </div>
             </div>

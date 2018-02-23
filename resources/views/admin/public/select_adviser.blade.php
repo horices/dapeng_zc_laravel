@@ -128,13 +128,8 @@ a:visited{ color:#fff;}
 </div>
 </div>
 <script>
-function selectAdviser(adviserId,adviserName,dapeng_user_mobile){
-	if(!adviserId){
-		adviserId = $("input[name='uid']:checked").val();
-		adviserName = $("input[name='uid']:checked").attr("data-name");
-		dapeng_user_mobile = $("input[name='uid']:checked").attr("dapeng_user_mobile");
-	}
-	parent.selectAdviserCallback(adviserId,adviserName,dapeng_user_mobile);
+function selectAdviser(user){
+	parent.selectUserCallback(user);
 }
 </script>
 </body>
