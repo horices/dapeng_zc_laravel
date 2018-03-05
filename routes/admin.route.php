@@ -25,3 +25,5 @@ Route::get("roster/add","RosterController@getAdd")->name("admin.roster.add");
 //公共操作
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
 Route::get("index/select_adviser","BaseController@getSelectAdviser")->name("admin.public.select_adviser");
+Route::get("index/seoer_statistics","IndexController@getSeoerStatistics")->name("admin.public.seoer_statistics");
+Route::get("index/adviser_statistics","IndexController@getAdviserStatistics")->name("admin.public.adviser_statistics");

@@ -49,6 +49,8 @@ class UserModel extends BaseModel
     protected function getStatusTextAttribute($v){
         return $this->status == 1 ? '正常':'暂停';
     }
+    protected function getStatisticsAttribute(){
+    }
     /**
      * 检测用户名密码是否正确
      */
@@ -56,8 +58,19 @@ class UserModel extends BaseModel
         //throw new AuthenticationException("帐号密码错误");
         return $this->where("mobile","=",$username)->where("password","=",md5($password))->firstOrFail();
     }
-    
+
+    /**
+     * 用户管理群信息
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     protected function groups(){
         return $this->hasMany(GroupModel::class,'leader_id','uid');
+    }
+
+    /**
+     *
+     */
+    protected function staticstic(){
+
     }
 }

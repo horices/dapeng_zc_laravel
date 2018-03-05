@@ -34,6 +34,22 @@ class RosterModel extends BaseModel
     function group_info(){
         return $this->hasOne(GroupModel::class,'id','qq_group_id');
     }
+
+    /**
+     * 推广专员信息
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function seoer(){
+        return $this->belongsTo(UserModel::class,'inviter_id','uid');
+    }
+
+    /**
+     * 课程顾问信息
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    function adviser(){
+        return $this->belongsTo(UserModel::class,'last_adviser_id','uid');
+    }
     /**
      * 群日志
      */
