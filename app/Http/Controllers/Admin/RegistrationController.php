@@ -1,0 +1,144 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2018/1/25 0025
+ * Time: 10:01
+ */
+
+namespace App\Http\Controllers\Admin;
+
+
+use App\Api\DapengUserApi;
+use App\Models\CoursePackageModel;
+use App\Models\RebateActivityModel;
+use App\Models\UserHeadMasterModel;
+use App\Models\UserRegistrationModel;
+use App\Utils\Util;
+use Faker\Provider\bn_BD\Utils;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class RegistrationController extends BaseController{
+    function add(){
+        //获取附加课程套餐列表
+        $CoursePackage = new CoursePackageModel();
+        //$packageAttachList = $CoursePackage->where(['type'=>1,'status'=>'USE'])->select();
+        $packageAttachList = DB::table("course_package")->where([
+            ['type','=',1],
+            ['status','=','USE'],
+        ])->get();
+        //优惠活动列表
+        $RebateActivity = new RebateActivityModel();
+        $rebateList = $RebateActivity->where(['status'=>'USE'])->select();
+
+        //分期支付方式列表
+        $UserRegistration = new UserRegistrationModel();
+        $fqTypeList = $UserRegistration->fqType;
+        return view("admin.registration.add",[
+            'packageAttachList'=>  json_encode($packageAttachList,JSON_UNESCAPED_UNICODE),
+            'giveList'      =>  json_encode(array_reverse($CoursePackage->give),JSON_UNESCAPED_UNICODE),//赠送课程
+            'fqTypeList'    =>  json_encode($fqTypeList,JSON_UNESCAPED_UNICODE),
+            'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE)
+        ]);
+    }
+
+    function addSubmit(Request $request){
+        $post = $request->post();
+        $UserRegistration = new UserRegistrationModel();
+        $UserHeadMaster = new UserHeadMasterModel();
+        $adviserId = 0;
+        $tmpMap = [];
+        if($post['client_submit'] == "WAP"){
+            if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile']){
+                return Util::ajaxReturn(Util::FAIL,'请填写课程顾问手机号');
+            }
+            $tmpMap = ['mobile'=>$post['adviser_mobile']];
+        }else if($post['client_submit'] == "PC"){
+            $tmpMap = ['uid'=>$this->getAdviserId()];
+            //$adviserId = $this->getAdviserId();
+        }else{
+            return Util::ajaxReturn(Util::FAIL,'信息来源错误!');
+        }
+
+
+        //判断手机号是否在主站注册过
+        $dpData = [
+            'type'      =>  'MOBILE',
+            'keyword'   =>  $post['mobile'],
+        ];
+        $hasDapengUser = DapengUserApi::getInfo($dpData);
+        if($hasDapengUser['code'] == FAIL){
+            $this->returnAjaxJson(FAIL,'该开课手机号未注册！');
+        }
+
+
+        //$post['is_open']    = 1;  //默认报名课程开启
+
+        //查询和判断课程顾问
+        $hasAdviser = $UserHeadMaster->where($tmpMap)->field(true)->find();
+        if(!$hasAdviser){
+            $this->returnAjaxJson(FAIL,'课程顾问不存在！');
+        }
+        $adviserId = $hasAdviser['uid'];
+        //获取当前课程顾问信息
+        $post['adviser_id'] = $adviserId;
+        $post['adviser_name'] = $hasAdviser['name'];
+        $post['adviser_qq'] = $hasAdviser['qq'] ?: '';
+        //$post['is_open']    = 1;  //默认报名课程开启
+        //该学员总的支付金额
+        if(!isset($post['pay_type_list']) || !isset($post['amount_list']) || empty($post['pay_type_list']) || empty($post['amount_list'])){
+            $this->returnAjaxJson(FAIL,'必须添加支付信息！');
+        }
+        $allAmount= array_sum($post['amount_list']);
+        if($allAmount<=0){
+            $this->returnAjaxJson(FAIL,'请填写正确的支付金额！');
+        }
+        $post['amount_submitted'] = $allAmount;
+//        if($post['amount_submitted'] > $post['package_total_price'])
+//            $this->returnAjaxJson(FAIL,'已提交金额不能大于总金额！');
+        //$post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
+        //$post['amount_submitted'] = $post['amount'];
+        $CoursePackage = new CoursePackageModel();
+        M()->startTrans(); //开启事务
+        //先添加课程套餐
+
+        //添加报名信息
+        setDefault($regId,0);
+        //必须选择赠送课程
+        if(!isset($post['give_id']) || $post['give_id'] == ''){
+            $this->returnAjaxJson(FAIL,'请选择赠送课程！');
+        }
+
+        if($UserRegistration->create($post) === false || ($regId = $UserRegistration->add()) === false){
+            M()->rollback();
+            $this->returnAjaxJson(FAIL,$UserRegistration->getError());
+        }
+        //添加用户支付信息
+        $UserPay = new UserPayModel();
+        $post['registration_id'] = $regId; //关联报名课程记录ID
+        if($UserPay->create($post) === false || ($payId = $UserPay->add()) === false){
+            M()->rollback();
+            $this->returnAjaxJson(FAIL,$UserPay->getError());
+        }
+        //循环添加多个支付方式记录
+        $UserPayLog = new UserPayLogModel();
+        $post['pay_id'] = $payId;
+
+        foreach ($post['pay_type_list'] as $key=>$val){
+            $post['amount'] = $post['amount_list'][$key];
+            $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
+            $post['pay_type'] = $val;
+            if($UserPayLog->create($post) === false || $UserPayLog->add() === false){
+                M()->rollback();
+                $this->returnAjaxJson(FAIL,$UserPayLog->getError());
+            }
+        }
+        $UserRegistration->setPackageAllTitle($regId);
+        //更新报名信息的最后一次提交支付记录时间
+        $UserRegistration->setLastPayTime($regId);
+        M()->commit();
+        $this->returnAjaxJson(SUCCESS,'信息提交成功！');
+        return view("admin.registration.add");
+    }
+}
