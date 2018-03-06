@@ -15,6 +15,7 @@ class AuthController extends  BaseController{
         return view("admin.auth.login");
     }
     function postLogin(LoginForm $request){
+
         $user = UserModel::checkLogin($request->input("username"), $request->input("password"));
         $this->login($user->toArray());
         //返回登陆成功的信息
