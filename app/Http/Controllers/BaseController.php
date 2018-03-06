@@ -75,8 +75,8 @@ class BaseController extends Controller
         ],
         'statistics' =>   [
             'text'=> '效率统计',   //文字描述
-            'url'=> "/admin/group/list",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'url'=> "/admin/index/seoer_statistics",    //链接地址
+            'flag'=> 'admin.index.seoer_statistics',  //默认选中标识
         ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
