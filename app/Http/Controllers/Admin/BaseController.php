@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController as Controller;
+use App\Models\GroupModel;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Input;
 
@@ -39,6 +40,30 @@ class BaseController extends Controller{
         $list = $query->paginate(5);
         return view("admin.public.select_seoer",[
             'list' => $list
+        ]);
+    }
+
+    /**
+     * 选择QQ群
+     */
+    function getSelectGroup(){
+        $group = Input::get("group");
+        $groupName = Input::get("group_name");
+        $adviserName = Input::get("adviser_name");
+        $query = GroupModel::with("user")->whereHas('user' ,function($query) use ($adviserName){
+            if($adviserName){
+                $query->where("name","like","%".$adviserName."%");
+            }
+        });
+        if($group){
+            $query->where("qq_group",$group);
+        }
+        if($groupName){
+            $query->where("group_name",$groupName);
+        }
+        $list = $query->paginate(5);
+        return view("admin.public.select_group",[
+            'list'  => $list
         ]);
     }
 }

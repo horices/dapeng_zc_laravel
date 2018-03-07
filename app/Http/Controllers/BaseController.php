@@ -57,7 +57,7 @@ class BaseController extends Controller
     private static $_LEFT_NAV = [
         'roster_add' =>   [
             'text'=> '添加新量',   //文字描述
-            'url'=> "/admin/group/list",    //链接地址
+            'url'=> "/admin/roster/add",    //链接地址
             'flag'=> 'admin.roster.add',  //默认选中标识
         ],
         'group_list' =>   [

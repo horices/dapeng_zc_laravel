@@ -71,12 +71,16 @@ margin-left:0px;
 <form role="form">
 <input type="hidden" name="p" value="1" />
 <div class="form-group">
-<input type="text" class="form-control" name="adviser_name" 
- placeholder="课程顾问名称" value="{$Think.get.adviser_name}">
+<input type="text" class="form-control" name="group" 
+ placeholder="群号" value="{{ Request::input('group') }}">
 </div>
 <div class="form-group">
-<input type="text" class="form-control" name="group" 
- placeholder="qq群号/微信号" value="{$Think.get.group}">
+	<input type="text" class="form-control" name="group_name"
+		   placeholder="群昵称" value="{{ Request::input('group_name') }}">
+</div>
+<div class="form-group">
+	<input type="text" class="form-control" name="adviser_name"
+		   placeholder="课程顾问名称" value="{{ Request::input('adviser_name') }}">
 </div>
 <div class="form-group main-top">
 <a class="common-button dblock combg1 linkSubmit" data="{p:1}"  style="padding:2px 8px;text-decoration:none;">搜索</a>
@@ -90,46 +94,47 @@ margin-left:0px;
 <table border="1" >
 	<thead>
 		<tr>
-			<th style="width:15%">选择</th>
-			<th style="width:25%"><eq name="_GET[isqq]" value="1">群号<else/>微信号</eq></th>
-			<th style="width:25%"><eq name="_GET[isqq]" value="1">群名<else/>微信昵称</eq></th>
+			{{--<th style="width:5%">选择</th>--}}
+			<th style="width:25%">群号</th>
+			<th style="width:25%">群昵称</th>
+			<th style="width:10%">开启状态</th>
 			<th style="width:20%">负责人</th>
             <th style="width:15%; text-align:center;">操作</th>
 		</tr>
 	</thead>
 	<tbody>
-	<volist name="list" id="l">
+	@foreach($list as $group)
 		<tr>
+			{{--<td>
+				<input tabindex="9" name="qq_group" value="{$l.qq_group}" type="radio" id="square-checkbox-1" class="square-checkbox-1" checked="checked">
+			</td>--}}
+			<td>{{ $group->qq_group }}</td>
+			<td>{{ $group->group_name }}</td>
+			<td>{{ $group->is_open_text }}</td>
+			<td>{{ $group->user->name }}</td>
 			<td>
-			<input tabindex="9" name="qq_group" value="{$l.qq_group}" type="radio" id="square-checkbox-1" class="square-checkbox-1" checked="checked"></td>
-			<td>{$l.qq_group}</td>
-			<td>{$l.group_name}</td>
-			<td>{$l.leader_name}</td>
-            <td>
-			<a class="common-button combg2" onclick="selectQQGroup('{$l.qq_group}');">选择</a>
+				<a class="common-button combg2" onclick="selectQQGroup({{ $group->toJson() }});">选择</a>
 			</td>
 		</tr>
-		</volist>
+	@endforeach
 	</tbody>
 </table>
 </div>
 <div class="main-bot">
-<div class="main-left">
+{{--<div class="main-left">
 <a class="common-button fleft dblock combg1" onclick="selectQQGroup();">确认</a>
-</div>
+</div>--}}
 <div class="pagenav">
   <ul>
-    {$pageNav}
+    {{ $list->appends(Request::input())->links() }}
   </ul>
 </div>
 </div>
 </div>
 <script>
 function selectQQGroup(qq_group){
-	if(!qq_group){
-		qq_group = $("input[name='qq_group']:checked").val();
-	}
-	parent.selectQQGroupCallback(qq_group);
+	parent.selectGroupCallback(qq_group);
+	parent.CustomDialog.closeDialog();
 }
 </script>
 </body>

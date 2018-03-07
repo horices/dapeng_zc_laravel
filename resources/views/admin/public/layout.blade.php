@@ -12,6 +12,7 @@
 <link href="/admin/css/member.css" rel="stylesheet">
 <link href="/admin/css/page.css" rel="stylesheet">
 <link href="/admin/css/btn.css" rel="stylesheet">
+<script src="/js/bootstrap.min.js"></script>
 @include("admin.public.js")
 <style>
 a{ text-decoration:none;}
@@ -78,6 +79,14 @@ $(function(){
             title:"选择课程顾问",
             area:['750px','500px'],
             content:"{{ route("admin.public.select_adviser") }}"
+        });
+    });
+    $(".select_group").click(function(){
+        layer.open({
+            type:2,
+            title:"选择群号",
+            area:['750px','500px'],
+            content:"{{ route("admin.public.select_group") }}"
         });
     });
 });

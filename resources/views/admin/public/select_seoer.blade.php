@@ -116,7 +116,7 @@ a:visited{ color:#fff;}
 <a class="common-button fleft dblock combg1" onclick="selectSeoer();">确认</a>
 </div> --}}
 <div class="pagenav">
-    {{ $list->links() }}
+    {{ $list->appends(Request::input())->links() }}
 </div>
 </div>
 </div>
