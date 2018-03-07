@@ -162,6 +162,7 @@ JS;
             $statistics['user_total_formal_course_percent'] = (round($statistics['user_total_course_num_2']/$statistics['user_total_join_group'],4)*100)."%";
         }
         return view("admin.statistics.statistics",[
+            'leftNav'   => "admin.index.seoer_statistics",
             'list'  => $list,
             'statistics'    => $statistics,
             'user_statistics'    => $user_statistics

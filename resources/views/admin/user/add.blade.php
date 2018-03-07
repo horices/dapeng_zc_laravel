@@ -1,8 +1,20 @@
 @extends("admin.public.layout")
 @section("right_content")
+<script>
+    function changeGrade(grade){
+        $(".grade").hide();
+        $(".grade"+grade).show();
+    }
+    $(function(){
+        $("select[name='grade']").change(function(){
+            changeGrade($(this).val());
+        });
+        changeGrade({{ $user->grade }});
+    });
+</script>
 <div class="row dp-member-title-2">
     <h4 class="col-md-4" style="padding-left:0">
-        课程顾问@if($user->uid)分量编辑@else添加@endif
+        @if($user->uid)编辑@else添加@endif用户
     </h4>
 </div>
 <div class="row dp-member-body-2">
@@ -24,7 +36,7 @@
 			<div class="form-group">
                 <label class="col-md-2 control-label" for="input01">权限</label>
                 <div class="col-md-8 controls">
-                	<select name="grade" v-model="currentGrade">
+                	<select name="grade">
                 		@foreach($userGradeList as $k=>$v)
 							<option value="{{$k}}" @if($user->uid && $k == $user->grade) selected @endif >{{$v}}</option>                			
                 		@endforeach
@@ -55,7 +67,7 @@
                     <p class="help-block"></p>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group grade grade9 grade10">
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">主站账号</label>
                 <div class="col-md-8 controls">
@@ -65,7 +77,7 @@
             </div>
             
             
-			<div class="form-group">
+			<div class="form-group grade grade9 grade10">
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">默认分配QQ数量</label>
                 <div class="col-md-8 controls">
@@ -73,7 +85,7 @@
                     <p class="help-block"></p>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group grade grade9 grade10">
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">默认分配微信数量</label>
                 <div class="col-md-8 controls">

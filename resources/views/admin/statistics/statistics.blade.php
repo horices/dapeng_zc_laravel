@@ -107,12 +107,11 @@
                             <tr>
                                 <td colspan="10"><div class="pagenav"><ul>{{ $list->links() }}</ul></div></td>
                             </tr>
-                            <empty name="list">
+                            @if(!$list->count())
                             <tr>
                                 <td colspan="8">暂无信息</td>
                             </tr>
-                            </empty>
-                        </if>
+                            @endif
                     </tbody>
                 </table>
             </div>

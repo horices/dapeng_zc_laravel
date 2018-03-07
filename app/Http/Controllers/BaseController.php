@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
  
+use App\Models\GroupModel;
+use App\Models\UserModel;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -75,8 +77,8 @@ class BaseController extends Controller
         ],
         'statistics' =>   [
             'text'=> '效率统计',   //文字描述
-            'url'=> "/admin/group/list",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'url'=> "/admin/index/seoer_statistics",    //链接地址
+            'flag'=> 'admin.index.seoer_statistics',  //默认选中标识
         ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
@@ -136,6 +138,112 @@ class BaseController extends Controller
      */
     public function getUserInfo(Request $request){
         return $request->session()->get("userInfo");
+    }
+
+    /**
+     * 获取下一次应该分配的QQ组信息，成功返回数组 重新修改分配方式
+     * 分配轮数分为小轮分配和大轮分配
+     *  小轮分配(circle)：每个课程顾问分配数量为1,不满足条件时跳过
+     *  大轮分配(round)：进行N次小轮分配后，若所有课程顾问都已达到分配数量，则表示一次大轮分配结束
+     *          重新开始一次新的大轮分配(重新进行N次小轮分配)
+     * @return Ambigous <mixed, boolean, NULL, string, unknown, multitype:, object>
+     */
+    function getNextGroupInfo($type = "qq"){
+        $arr = ['qq'=>1,'wx'=>2];
+        $filename = "./logData/advisersOrderNew/".$type."advisersOrderInfo_".date("Y_m_d").".txt";
+        if(!file_exists(dirname($filename))){
+            mkdir(dirname($filename),0777,true);
+        }
+        if(!file_exists($filename)){
+            $resource = fopen($filename, "w+");
+            flock($resource, LOCK_EX);
+            //获取所有可用的咨询师
+            $advisers = UserModel::whereIn('grade',[9,10])->where("status",1)->select('uid','grade','name','per_max_num_'.$type)->get()->toArray();
+            //设置最大分配数量
+            $maxCircle = 0;
+            //默认当前分配数量
+            foreach($advisers as $k=>$v){
+                $advisers[$k]['currentNum'] = 0;    //本轮已经分配的数量
+                $advisers[$k]['totalNum'] = 0;      //分配的总数量
+                $advisers[$k]['perMaxNum'] = $v['per_max_num_'.$type];        //最大分配数量
+                $maxCircle = max($maxCircle,$advisers[$k]['perMaxNum']);
+            }
+            shuffle($advisers);
+            $data['orderInfo'] = $advisers;
+            $data['totalAdviserNum'] = count($advisers);
+            $data['totalNum'] = 0; //默认分配总量
+            $data['currentKey'] =  0;//下一次应该被分配的咨询师的下标
+            $data['maxCircle'] = $maxCircle;    //每次大轮中最多进行的小轮分配次数
+            $data['currentRound'] = 1;    //当前总轮数
+            $data['currentCircle'] = 1;  //当前分配轮数
+            //file_put_contents($filename, json_encode($data,JSON_UNESCAPED_UNICODE));
+            fwrite($resource, json_encode($data,JSON_UNESCAPED_UNICODE));
+            flock($resource, LOCK_UN);
+            fclose($resource);
+        }
+        unset($data,$advisers);
+        $resource = fopen($filename, "a+");
+        flock($resource, LOCK_EX);  //排他锁，禁止别人访问
+        //获取排序规则
+        $json = fread($resource, filesize($filename));
+        $advisersOrderInfo = json_decode($json,true);
+        $orderInfo = $advisersOrderInfo['orderInfo'];
+        $currentKey = $advisersOrderInfo['currentKey'];
+        //最多进行指定次数的小轮循环，如果仍然没有找到合适的群，则退出，防止死循环
+        for($i=0;$i<=$advisersOrderInfo['maxCircle'];$i++){
+            //查询当前轮是否有合适的群
+            $currentCircle = $advisersOrderInfo['currentCircle']+$i;
+            //logData("当前正在进行 第 ".$currentCircle."小轮查询  当前轮:".($advisersOrderInfo['currentCircle']+$i)."===最大轮:".$advisersOrderInfo['maxCircle']);
+            if(($advisersOrderInfo['currentCircle']+$i)> $advisersOrderInfo['maxCircle']){
+                //说明本次大轮已经循环结束,开始下一大轮
+                $advisersOrderInfo['currentRound']++;
+                $currentCircle = $currentCircle%$advisersOrderInfo['maxCircle'];
+            }
+            //判断当前课程顾问是可以参与分量
+            for($m=$advisersOrderInfo['currentKey'];$m<$advisersOrderInfo['totalAdviserNum'];$m++){
+                //最后一圈时，只跑到 currentKey
+                if($i == $advisersOrderInfo['maxCircle'] && $m == $currentKey){
+                    $advisersOrderInfo['currentKey'] = $currentKey;
+                    break 2;
+                }
+                if( $currentCircle <= $orderInfo[$m]['perMaxNum']){
+                    //该课程顾问参与分量,记录下次起点
+                    $adviser = $orderInfo[$m]; //当前课程顾问
+                    //logData("第".$currentCircle."小轮参与人:".$adviser['name']);
+                    $tempWhere['leader_id'] = $adviser['uid'];
+                    $tempWhere['status'] = 1;
+                    $tempWhere['is_open'] = 1;
+                    $tempWhere['type'] = $arr[$type]; //判断是获取微信群还是qq群
+                    $row = GroupModel::where($tempWhere)->first();
+                    //$row = $UserQQGroup->where($tempWhere)->find();
+                    if(!$row){
+                        //如果当前课程顾问没有指定类型的群，跳过
+                        continue ;
+                    }
+                    $row = $row->toArray();
+                    $row['adviser_name'] = $adviser['name'];
+                    //当前课程顾问分配总数量+1
+                    $advisersOrderInfo['orderInfo'][$m]['totalNum']++;
+                    //如果已经匹配到课程顾问
+                    $advisersOrderInfo['totalNum']++;
+                    $advisersOrderInfo['currentCircle'] = $currentCircle+intval(($m+1)/$advisersOrderInfo['totalAdviserNum']);
+                    $advisersOrderInfo['currentKey'] = ($m+1)%$advisersOrderInfo['totalAdviserNum'];
+                    //logData("当前第".$advisersOrderInfo['currentRound']."大轮中的第". $advisersOrderInfo['currentCircle']."小轮   顾问:".$adviser['name']." 群: ".$row['qq_group'],'',false);
+                    //logData("当前键:".$advisersOrderInfo['currentKey'],null,false);
+                    break 2;
+                }
+            }
+            //如果当前小轮中没有找到分配人员，重置索引,进入下一轮
+            $advisersOrderInfo['currentKey'] = 0;
+        }
+        if($row){
+            ftruncate($resource, 0);    //清空文件内容
+            fwrite($resource, json_encode($advisersOrderInfo,JSON_UNESCAPED_UNICODE));
+            //找到QQ组，跳出
+        }
+        flock($resource, LOCK_UN);
+        fclose($resource);
+        return $row;
     }
 }
 

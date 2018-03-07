@@ -57,17 +57,21 @@
                    </tr>
                </thead>
                <tbody>
-           			@foreach ($list as $l)
+           			@foreach ($list as $group)
                        <tr>
-                           <td>{{$l->type_text}}</td>
-                           <td>{{$l->group_name}}</td>
-                           <td>{{$l->qq_group}}</td>
-                           <td>{{$l->user->name}}</td>
+                           <td>{{ $group->type_text }}</td>
+                           <td>{{ $group->group_name }}</td>
+                           <td>{{ $group->qq_group }}</td>
+                           <td>{{ $group->user->name }} {{ $group->status }}</td>
                            <td>
-                           <a href="" class="common-button combg1 ajaxLink" style="margin:0px;padding:4px 8px;" warning="确认要开启该群组么,开启后会自动关闭该课程顾问关联的其它群？">{{$l->status_text}}</a>
+                           @if($group->is_open)
+                           <a class="common-button combg1 ajaxLink" style="margin:0px;padding:4px 8px;" url="{{ route('admin.group.save') }}" data="{id:{{ $group->id }},is_open:0,_token:'{{ csrf_token() }}'}">{{$group->is_open_text}}</a>
+                           @else
+                           <a class="common-button combg3 ajaxLink" style="margin:0px;padding:4px 8px;" url="{{ route('admin.group.save') }}" data="{id:{{ $group->id }},is_open:1,_token:'{{ csrf_token() }}'}" warning="确认要开启该群组么,开启后会自动关闭该课程顾问关联的其它群？">{{$group->is_open_text}}</a>
+                           @endif
                            </td>
                            <td>
-                          <a href="{{ route("admin.group.edit",['id'=>$l->id]) }}">修改</a>
+                          <a href="{{ route("admin.group.edit",['id'=>$group->id]) }}">修改</a>
                            </td>
                        </tr>	
                        @endforeach
