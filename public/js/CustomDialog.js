@@ -66,21 +66,19 @@
 		/**
 		 * 确认信息
 		 */
-		this.confirmDialog = function(msg){
-			var confirmResult = '';
+		this.confirmDialog = function(options){
 			layer.open({
 				title:"确实进行操作么",
 				btn:['确认','取消'],
+				content:options.content,
 				skin:null,
 				yes:function(){
-					confirmResult = true;
+                    options.yes();
 				},
 				no:function(){
-					confirmResult = false;
+                    options.no();
 				}
 			});
-			return confirmResult === true;
-			//return this.dialog(options);
 		}
 		/**
 		 * 正在加载对话框

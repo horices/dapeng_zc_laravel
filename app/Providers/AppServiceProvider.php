@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\GroupModel;
+use App\Observers\GroupObserver;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -35,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
         View::share("navList",app('status')->getLeftNavList());
         //监听用户用事件 
         UserModel::observe(UserObserver::class);
+        //监听群事件
+        GroupModel::observe(GroupObserver::class);
 
 
         //记录SQL日志

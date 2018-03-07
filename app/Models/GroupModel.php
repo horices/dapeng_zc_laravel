@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\BaseController;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property-read string $type_text [QQ,微信]
@@ -22,7 +23,7 @@ class GroupModel extends BaseModel
         "type","group_name","qq_group","qrc_url","qrc_link","leader_id","is_open","mark"
     ];
     
-    protected function getStatusTextAttribute(){
+    protected function getIsOpenTextAttribute(){
         return $this->is_open == 1 ?'正常':'关闭';
     }
     protected function getTypeTextAttribute(){
