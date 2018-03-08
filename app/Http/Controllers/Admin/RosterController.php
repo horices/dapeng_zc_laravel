@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Input;
 
 class RosterController extends BaseController
 {
+    function getAdd(){
+        return view("admin.roster.add");
+    }
     function getList(){
         $field_k = Input::get("field_k");
         $field_v = Input::get("field_v");
