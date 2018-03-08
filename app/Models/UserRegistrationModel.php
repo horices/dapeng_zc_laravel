@@ -13,5 +13,10 @@ class UserRegistrationModel extends BaseModel{
     protected $table = "user_registration";
     const CREATED_AT = 'creation_time';
     const UPDATED_AT = 'update_time';
-
+    //报名分期付款方式
+    public $fqType = [
+        'CASH'      =>  '现金分期',
+        'HUABEI'    =>  '花呗分期',
+        'MYFQ'      =>  '蚂蚁分期',
+    ];
 }

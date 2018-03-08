@@ -24,13 +24,13 @@ class RegistrationController extends BaseController{
         //获取附加课程套餐列表
         $CoursePackage = new CoursePackageModel();
         //$packageAttachList = $CoursePackage->where(['type'=>1,'status'=>'USE'])->select();
-        $packageAttachList = DB::table("course_package")->where([
+        $packageAttachList = $CoursePackage::where([
             ['type','=',1],
             ['status','=','USE'],
         ])->get();
         //优惠活动列表
         $RebateActivity = new RebateActivityModel();
-        $rebateList = $RebateActivity->where(['status'=>'USE'])->select();
+        $rebateList = $RebateActivity::where('status','=','USE')->get();
 
         //分期支付方式列表
         $UserRegistration = new UserRegistrationModel();
@@ -42,7 +42,85 @@ class RegistrationController extends BaseController{
             'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE)
         ]);
     }
+    /**
+     * @note 检查学员是否已经报名
+     */
+    function hasRegistration(Request $request){
+        $post = $request->post();
+        $UserRegistration = new UserRegistrationModel();
+        if(!isset($post['mobile']) || !is_numeric($post['mobile']) || !Util::checkMobileFormat($post['mobile'])){
+            return response()->json(['code'=>Util::FAIL,"msg"=>"开课手机号有误请检查!"]);
+        }
+        //获取当前登录者信息
+        $adminInfo = $this->getUserInfo($request);
+        //初始化课程顾问ID
+        $adviserId = 0;
 
+        //如果是手机端提交则需要检查课程顾问
+        if($post['client_submit'] == "WAP"){
+            if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile'] || !Util::checkMobileFormat($post['adviser_mobile'])){
+                return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问手机号有误请检查!"]);
+            }
+            //查询和判断课程顾问
+            //$UserHeadMaster = new UserHeadMasterModel();
+            $hasAdviser = DB::table("user_headmaster")->where(['mobile','=',$post['adviser_mobile']])->first();
+            if(!$hasAdviser){
+                return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问不存在!"]);
+            }
+            $adviserId = $hasAdviser['uid'];
+        }elseif ($post['client_submit'] == "PC"){
+            $adviserId = $adminInfo['uid'];
+        }else{
+            return response()->json(['code'=>Util::FAIL,"msg"=>"数据来源有误!"]);
+        }
+        //根据手机号查询用户是否已在主站注册
+        $dpData = [
+            'type'      =>  'MOBILE',
+            'keyword'   =>  $post['mobile'],
+        ];
+
+        $hasDapengUser = DapengUserApi::getInfo($dpData);
+
+        if($hasDapengUser['code'] == Util::FAIL){
+            return response()->json(['code'=>Util::FAIL,"msg"=>"该开课手机号未注册!"]);
+        }
+
+        $map = [['mobile','=',$post['mobile']]];
+        $hasReg = $UserRegistration::where($map)->orderBy("id","desc")->first()->toArray();
+        if($hasReg){
+            $hasReg['isBelong'] = 0;
+            //获取课程套餐信息
+            $coursePackage = new CoursePackageModel();
+            $packageInfo = $coursePackage::where('id','=',$hasReg['package_id'])->first()->toArray();
+
+            $hasReg['package_title'] = $packageInfo['title'];
+            if($packageInfo['status'] == 'DEL'){
+                $hasReg['package_title'] = $hasReg['package_title']."(已删)";
+            }
+            $hasReg['package_price'] = $packageInfo['price'];
+            //获取附加套餐信息
+            $packageAttach = $coursePackage::where('id','=',$hasReg['package_attach_id'])
+                ->first()->toArray();
+            $hasReg['package_attach_title'] = $packageAttach['title'];
+            $hasReg['package_attach_price'] = $packageAttach['price'];
+            $hasReg['package_total_price'] = $packageAttach['price']+$packageInfo['price'];
+            //当前附加套餐信息
+            $hasReg['package_attach_current_data'] = $packageAttach;
+            //获取惠活动信息
+            $RebateActivity = new RebateActivityModel();
+            $rebateData = $RebateActivity::where('id','=',$hasReg['rebate_id'])
+                ->first()->toArray();
+            $hasReg['rebate_price'] = $hasReg['rebate'];
+            $hasReg['rebate_title'] = $rebateData['title'];
+            //检查该学员是否属于当前课程顾问
+//            if($hasReg['adviser_id'] == $adviserId)
+//                $hasReg['isBelong'] = 1;
+            $hasReg['isBelong'] = 1;
+            return response()->json(['code'=>Util::SUCCESS,"msg"=>"学员已报名!",'data'=>$hasReg]);
+        }else{
+            return response()->json(['code'=>Util::FAIL,"msg"=>"该学员未报名,请填写报名信息!"]);
+        }
+    }
     function addSubmit(Request $request){
         $post = $request->post();
         $UserRegistration = new UserRegistrationModel();
@@ -71,8 +149,6 @@ class RegistrationController extends BaseController{
         if($hasDapengUser['code'] == FAIL){
             $this->returnAjaxJson(FAIL,'该开课手机号未注册！');
         }
-
-
         //$post['is_open']    = 1;  //默认报名课程开启
 
         //查询和判断课程顾问
@@ -140,87 +216,6 @@ class RegistrationController extends BaseController{
         M()->commit();
         $this->returnAjaxJson(SUCCESS,'信息提交成功！');
         return view("admin.registration.add");
-    }
-
-    /**
-     * @note 检查学员是否已经报名
-     */
-    function hasRegistration(){
-        $post = I("post.");
-        $UserRegistration = new UserRegistrationModel();
-        if(!isset($post['mobile']) || !is_numeric($post['mobile']) || !checkMobileFormat($post['mobile'])){
-            $this->returnAjaxJson(-1,'开课手机号有误请检查！');
-        }
-        //初始化课程顾问ID
-        $adviserId = 0;
-        //如果是手机端提交则需要检查课程顾问
-        if($post['client_submit'] == "WAP"){
-            if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile'] || !checkMobileFormat($post['adviser_mobile'])){
-                $this->returnAjaxJson(-1,'课程顾问手机号有误请检查！');
-            }
-            //查询和判断课程顾问
-            $UserHeadMaster = new UserHeadMasterModel();
-            $hasAdviser = $UserHeadMaster->where(['mobile'=>$post['adviser_mobile']])->field(true)->find();
-            if(!$hasAdviser){
-                $this->returnAjaxJson(-1,'课程顾问不存在！');
-            }
-            $adviserId = $hasAdviser['uid'];
-        }elseif ($post['client_submit'] == "PC"){
-            $adviserId = $this->getAdviserId();
-        }else{
-            $this->returnAjaxJson(-1,'数据来源有误！');
-        }
-        //根据手机号查询用户是否已在主站注册
-        $dpData = [
-            'type'      =>  'MOBILE',
-            'keyword'   =>  $post['mobile'],
-        ];
-        $hasDapengUser = DapengUserModel::getInfo($dpData);
-        if($hasDapengUser['code'] == FAIL){
-            $this->returnAjaxJson(-1,'该开课手机号未注册！');
-        }
-        $map = [
-            'mobile'    =>  $post['mobile'],
-        ];
-        $hasReg = $UserRegistration->where($map)->order("id desc")->find();
-        if($hasReg){
-            $hasReg['isBelong'] = 0;
-            //获取课程套餐信息
-            $coursePackage = new CoursePackageModel();
-            $packageInfo = $coursePackage->field(true)
-                ->where(['id'=>$hasReg['package_id']])
-                ->find();
-            $hasReg['package_title'] = $packageInfo['title'];
-            if($packageInfo['status'] == 'DEL'){
-                $hasReg['package_title'] = $hasReg['package_title']."(已删)";
-            }
-            $hasReg['package_price'] = $packageInfo['price'];
-            //获取附加套餐信息
-            $packageAttach = $coursePackage
-                ->field(true)
-                ->where(['id'=>$hasReg['package_attach_id']])
-                ->find();
-            $hasReg['package_attach_title'] = $packageAttach['title'];
-            $hasReg['package_attach_price'] = $packageAttach['price'];
-            $hasReg['package_total_price'] = $packageAttach['price']+$packageInfo['price'];
-            //当前附加套餐信息
-            $hasReg['package_attach_current_data'] = $packageAttach;
-            //获取惠活动信息
-            $RebateActivity = new RebateActivityModel();
-            $rebateData = $RebateActivity
-                ->where(['id'=>$hasReg['rebate_id']])
-                ->find();
-            $hasReg['rebate_price'] = $hasReg['rebate'];
-            $hasReg['rebate_title'] = $rebateData['title'];
-            //检查该学员是否属于当前课程顾问
-//            if($hasReg['adviser_id'] == $adviserId)
-//                $hasReg['isBelong'] = 1;
-            $hasReg['isBelong'] = 1;
-
-            $this->returnAjaxJson(SUCCESS,'学员已报名!',$hasReg);
-        }else{
-            $this->returnAjaxJson(FAIL,'该学员未报名,请填写报名信息!');
-        }
     }
 
 }

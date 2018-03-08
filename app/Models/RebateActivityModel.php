@@ -10,5 +10,5 @@ namespace App\Models;
 
 
 class RebateActivityModel extends BaseModel {
-
+    protected $table = "rebate_activity";
 }

@@ -10,6 +10,7 @@ namespace App\Models;
 
 
 class CoursePackageModel extends BaseModel {
+    protected $table = "course_package";
     //赠送课程
     public $give = [
         0=>['id'=>0,'text'=>'无','checked'=>false],

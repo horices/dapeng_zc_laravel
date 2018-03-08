@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController as Controller;
 use App\Models\UserModel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 class BaseController extends Controller{
@@ -41,4 +43,5 @@ class BaseController extends Controller{
             'list' => $list
         ]);
     }
+
 }

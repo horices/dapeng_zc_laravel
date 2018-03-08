@@ -32,6 +32,8 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth:
     Route::get("user/list","UserController@getList");
     //支付统计
     Route::get("registration/add","RegistrationController@add");
+    //验证 支付 是否已存在 并且获取信息
+    Route::post("registration/has-registration","RegistrationController@hasRegistration");
     include("admin.route.php");
 
 });

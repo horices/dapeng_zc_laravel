@@ -99,6 +99,9 @@
 			var obj = $(obj);
 			var data = $.extend({},(new Function("return " + obj.attr("addData")))(),(new Function("return " + obj.attr("data")))());
 			var options = {
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
 				url:obj.attr('url') || location.pathname,
 		        type:obj.attr('method') || "post",
 		        data:data,
