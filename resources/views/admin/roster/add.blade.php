@@ -10,6 +10,7 @@
         }
     </script>
         <form method="post">
+            {{ csrf_field() }}
             <div class="form-group ">
                 <label for="">新量类型:</label>
                 <div class="row">
@@ -46,9 +47,9 @@
                 <label for="">填写群号:</label>
                 <div class="row">
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" name="group" placeholder="填写QQ号" readonly>
+                        <input type="text" class="form-control" name="group" placeholder="点击选择群号" readonly>
                     </div>
-                    <button type="button" class="btn btn-info select_group">选择QQ群</button>
+                    <button type="button" class="btn btn-info select_group">选择群号码</button>
                 </div>
             </div>
 
