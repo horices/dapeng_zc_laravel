@@ -30,3 +30,8 @@ Route::get("index/select_adviser","BaseController@getSelectAdviser")->name("admi
 Route::get("index/select_group","BaseController@getSelectGroup")->name("admin.public.select_group");
 Route::get("index/seoer_statistics","IndexController@getSeoerStatistics")->name("admin.public.seoer_statistics");
 Route::get("index/adviser_statistics","IndexController@getAdviserStatistics")->name("admin.public.adviser_statistics");
+
+//支付统计
+Route::get("registration/add","RegistrationController@add");
+//验证 支付 是否已存在 并且获取信息
+Route::post("registration/has-registration","RegistrationController@hasRegistration");
