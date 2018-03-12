@@ -42,7 +42,6 @@ class DapengApiBase {
 //        $monolog = Log::getMonolog();
 //        $monolog->popHandler();
 //        Log::useDailyFiles('logData/error.log');
-        Log::info("接口传参：",$data);
         if(strpos($url, "http") !== 0){
             $url = Util::getDapengHost().$url;
         }
@@ -74,7 +73,6 @@ class DapengApiBase {
             unset($result['errorMsg']);
             unset($result['result']);
         }
-        Log::info("返回数据:",$result);
         return $result;
     }
 }

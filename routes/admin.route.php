@@ -23,7 +23,6 @@ Route::post("user/save","UserController@postSave")->name("admin.user.save");
 //学员量管理
 Route::get("roster/list","RosterController@getList")->name("admin.roster.list");
 Route::get("roster/add","RosterController@getAdd")->name("admin.roster.add");
-Route::post("roster/add","RosterController@postAdd");
 
 //公共操作
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
@@ -33,6 +32,8 @@ Route::get("index/seoer_statistics","IndexController@getSeoerStatistics")->name(
 Route::get("index/adviser_statistics","IndexController@getAdviserStatistics")->name("admin.public.adviser_statistics");
 
 //支付统计
-Route::get("registration/add","RegistrationController@add");
+Route::get("registration/add","RegistrationController@getAdd");
 //验证 支付 是否已存在 并且获取信息
-Route::post("registration/has-registration","RegistrationController@hasRegistration");
+Route::post("registration/has-registration","RegistrationController@postHasRegistration");
+//写入支付记录
+Route::post("registration/add-registration","RegistrationController@postAddRegistration");

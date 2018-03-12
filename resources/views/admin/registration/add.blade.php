@@ -215,11 +215,11 @@
         }
         //判断用户是否已经报名
         function hasRegistration(jsonData,obj) {
-            if(jsonData.code == -1){
+            if(jsonData.code == 0){
                 layer.msg(jsonData.msg,{icon:0,time:2000});
                 return ;
             }
-            if(jsonData.code == 1){
+            if(jsonData.code == 1 && jsonData.data){
                 //获取用户支付的相关信息
                 vm.userPayInfo = jsonData.data;
                 vm.userPayInfo.package_tmp_title = jsonData.data.package_title;
@@ -499,7 +499,7 @@
                     <input type="hidden" name="rebate_id" v-model="userPayInfo.rebate_id" :disabled="!hasUser" />
                     <input type="hidden" name="registration_id" v-model="userPayInfo.id" :disabled="!hasUser" />
                     <input type="hidden" name="client_submit" value="PC" />
-                    <button class="btn btn-primary ajaxSubmit" type="button" href="{:U('addRegistration')}">确认提交</button>
+                    <button class="btn btn-primary ajaxSubmit" type="button" href="{:U('add-registration')}">确认提交</button>
                 </div>
             </div>
         </div>

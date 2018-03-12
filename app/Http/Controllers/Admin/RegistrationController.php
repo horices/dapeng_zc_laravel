@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class RegistrationController extends BaseController{
-    function add(){
+    function getAdd(){
         //获取附加课程套餐列表
         $CoursePackage = new CoursePackageModel();
         //$packageAttachList = $CoursePackage->where(['type'=>1,'status'=>'USE'])->select();
@@ -45,7 +45,7 @@ class RegistrationController extends BaseController{
     /**
      * @note 检查学员是否已经报名
      */
-    function hasRegistration(Request $request){
+    function postHasRegistration(Request $request){
         $post = $request->post();
         $UserRegistration = new UserRegistrationModel();
         if(!isset($post['mobile']) || !is_numeric($post['mobile']) || !Util::checkMobileFormat($post['mobile'])){
@@ -62,8 +62,8 @@ class RegistrationController extends BaseController{
                 return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问手机号有误请检查!"]);
             }
             //查询和判断课程顾问
-            //$UserHeadMaster = new UserHeadMasterModel();
-            $hasAdviser = DB::table("user_headmaster")->where(['mobile','=',$post['adviser_mobile']])->first();
+            $UserHeadMaster = new UserHeadMasterModel();
+            $hasAdviser = $UserHeadMaster::where(['mobile','=',$post['adviser_mobile']])->first();
             if(!$hasAdviser){
                 return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问不存在!"]);
             }
@@ -86,8 +86,9 @@ class RegistrationController extends BaseController{
         }
 
         $map = [['mobile','=',$post['mobile']]];
-        $hasReg = $UserRegistration::where($map)->orderBy("id","desc")->first()->toArray();
+        $hasReg = $UserRegistration::where($map)->orderBy("id","desc")->first();
         if($hasReg){
+            $hasReg = $hasReg->toArray();
             $hasReg['isBelong'] = 0;
             //获取课程套餐信息
             $coursePackage = new CoursePackageModel();
@@ -118,9 +119,112 @@ class RegistrationController extends BaseController{
             $hasReg['isBelong'] = 1;
             return response()->json(['code'=>Util::SUCCESS,"msg"=>"学员已报名!",'data'=>$hasReg]);
         }else{
-            return response()->json(['code'=>Util::FAIL,"msg"=>"该学员未报名,请填写报名信息!"]);
+            return response()->json(['code'=>Util::SUCCESS,"msg"=>"该学员未报名,请填写报名信息!",'data'=>'']);
         }
     }
+
+    /**
+     * @note 添加用户的支付信息和报名信息
+     */
+    function postAddRegistration(RegistrationForm $registration){
+        $post = $registration->post();
+        $UserRegistration = new UserRegistrationModel();
+        $UserHeadMaster = new UserHeadMasterModel();
+        //获取当前用户信息
+        $adminInfo = $this->getUserInfo();
+        $adviserId = 0;
+        $tmpMap = [];
+        if($post['client_submit'] == "WAP"){
+            if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile']){
+                return response()->json(['code'=>Util::FAIL,"msg"=>"请填写课程顾问手机号!"]);
+            }
+            $tmpMap = ['mobile'=>$post['adviser_mobile']];
+        }else if($post['client_submit'] == "PC"){
+            $tmpMap = ['uid'=>$adminInfo['uid']];
+            //$adviserId = $this->getAdviserId();
+        }else{
+            return response()->json(['code'=>Util::FAIL,"msg"=>"信息来源错误!"]);
+        }
+
+
+        //判断手机号是否在主站注册过
+        $dpData = [
+            'type'      =>  'MOBILE',
+            'keyword'   =>  $post['mobile'],
+        ];
+        $hasDapengUser = DapengUserApi::getInfo($dpData);
+        if($hasDapengUser['code'] == Util::FAIL){
+            return response()->json(['code'=>Util::FAIL,'msg'=>'该开课手机号未注册!']);
+        }
+        //$post['is_open']    = 1;  //默认报名课程开启
+
+        //查询和判断课程顾问
+        $hasAdviser = $UserHeadMaster::where([$tmpMap])->first();
+        if(!$hasAdviser){
+            return response()->json(['code'=>Util::FAIL,'msg'=>'课程顾问不存在!']);
+        }
+        $adviserId = $hasAdviser['uid'];
+        //获取当前课程顾问信息
+        $post['adviser_id'] = $adviserId;
+        $post['adviser_name'] = $hasAdviser['name'];
+        $post['adviser_qq'] = $hasAdviser['qq'] ?: '';
+        //$post['is_open']    = 1;  //默认报名课程开启
+        //该学员总的支付金额
+        if(!isset($post['pay_type_list']) || !isset($post['amount_list']) || empty($post['pay_type_list']) || empty($post['amount_list'])){
+            $this->returnAjaxJson(FAIL,'必须添加支付信息！');
+        }
+        $allAmount= array_sum($post['amount_list']);
+        if($allAmount<=0){
+            return response()->json(['code'=>Util::FAIL,'msg'=>'请填写正确的支付金额！']);
+        }
+        $post['amount_submitted'] = $allAmount;
+//        if($post['amount_submitted'] > $post['package_total_price'])
+//            $this->returnAjaxJson(FAIL,'已提交金额不能大于总金额！');
+        //$post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
+        //$post['amount_submitted'] = $post['amount'];
+        $CoursePackage = new CoursePackageModel();
+        //开启事务
+        DB::beginTransaction();
+        //先添加课程套餐
+
+        //添加报名信息
+        Util::setDefault($regId,0);
+        //必须选择赠送课程
+        if(!isset($post['give_id']) || $post['give_id'] == ''){
+            return response()->json(['code'=>Util::FAIL,'msg'=>'请选择赠送课程！']);
+        }
+
+        if($UserRegistration->create($post) === false || ($regId = $UserRegistration->add()) === false){
+            DB::rollBack();
+            $this->returnAjaxJson(FAIL,$UserRegistration->getError());
+        }
+        //添加用户支付信息
+        $UserPay = new UserPayModel();
+        $post['registration_id'] = $regId; //关联报名课程记录ID
+        if($UserPay->create($post) === false || ($payId = $UserPay->add()) === false){
+            DB::rollBack();
+            $this->returnAjaxJson(FAIL,$UserPay->getError());
+        }
+        //循环添加多个支付方式记录
+        $UserPayLog = new UserPayLogModel();
+        $post['pay_id'] = $payId;
+
+        foreach ($post['pay_type_list'] as $key=>$val){
+            $post['amount'] = $post['amount_list'][$key];
+            $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
+            $post['pay_type'] = $val;
+            if($UserPayLog->create($post) === false || $UserPayLog->add() === false){
+                DB::rollBack();
+                $this->returnAjaxJson(FAIL,$UserPayLog->getError());
+            }
+        }
+        $UserRegistration->setPackageAllTitle($regId);
+        //更新报名信息的最后一次提交支付记录时间
+        $UserRegistration->setLastPayTime($regId);
+        DB::commit();
+        $this->returnAjaxJson(SUCCESS,'信息提交成功！');
+    }
+
     function addSubmit(Request $request){
         $post = $request->post();
         $UserRegistration = new UserRegistrationModel();
