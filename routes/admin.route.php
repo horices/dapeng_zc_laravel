@@ -32,6 +32,8 @@ Route::get("index/seoer_statistics","IndexController@getSeoerStatistics")->name(
 Route::get("index/adviser_statistics","IndexController@getAdviserStatistics")->name("admin.public.adviser_statistics");
 
 //支付统计
-Route::get("registration/add","RegistrationController@add");
+Route::get("registration/add","RegistrationController@getAdd");
 //验证 支付 是否已存在 并且获取信息
-Route::post("registration/has-registration","RegistrationController@hasRegistration");
+Route::post("registration/has-registration","RegistrationController@postHasRegistration");
+//写入支付记录
+Route::post("registration/add-registration","RegistrationController@postAddRegistration");

@@ -19,4 +19,8 @@ class UserRegistrationModel extends BaseModel{
         'HUABEI'    =>  '花呗分期',
         'MYFQ'      =>  '蚂蚁分期',
     ];
+
+    function add(){
+
+    }
 }
