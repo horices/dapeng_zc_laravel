@@ -2,14 +2,17 @@
 @section("right_content")
     <script>
         function selectUserCallback(user){
-            $("input[name='inviter_id']").val(user.uid);
+            $("input[name='seoer_id']").val(user.uid);
             $("input[name='seoer_name']").val(user.name);
         }
         function selectGroupCallback(group){
             $("input[name='group']").val(group.qq_group);
+            $("input[name='qq_group_id']").val(group.id);
         }
     </script>
         <form method="post">
+            <input type="hidden" name="seoer_id" value="" />
+            <input type="hidden" name="qq_group_id" value="" />
             {{ csrf_field() }}
             <div class="form-group ">
                 <label for="">新量类型:</label>
@@ -17,7 +20,7 @@
                     <div class="col-lg-2">
                     @foreach($rosterType as $k => $type)
                         <label class="radio-inline">
-                            <input type="radio" checked class="" name="type" value="{{ $k }}">{{ $type }}
+                            <input type="radio" @if($k == 1) checked @endif class="" name="roster_type" value="{{ $k }}">{{ $type }}
                         </label>
 
                     @endforeach
@@ -28,12 +31,11 @@
                 <label for="">新量号码:</label>
                 <div class="row">
                     <div class="col-lg-3">
-                        <input type="text" class="form-control " name="qq" placeholder="填写QQ号">
+                        <input type="text" class="form-control " name="roster_no" placeholder="填写QQ号">
                     </div>
                 </div>
             </div>
             <div class="form-group ">
-                <input type="hidden" name="inviter_id" value="" />
                 <label for="">填写推广专员:</label>
                 <div class="row">
                     <div class="col-lg-3">
@@ -54,7 +56,7 @@
             </div>
 
             <div class="form-group ">
-                <button class="btn btn-info">提交</button>
+                <button class="btn btn-info ajaxSubmit" type="button">提交</button>
             </div>
           <style>
                 .success-notice{ background:#E0FFE4; border:1px #76E77F solid; width:415px; border-radius:8px; padding:0px 20px; color:#2B6330; margin:30px 0 0 15px}

@@ -19,6 +19,19 @@
 @media (min-width: 992px){
     .col-md-10{width: 85%}
 }
+.flag_icon::before{
+    position:relative;
+    display:block;
+    position:absolute;
+    left:10px;
+}
+.flag_icon_1::before{
+    content:url(/admin/images/flag_icon_new.gif);
+
+}
+.flag_icon_2::before{
+    content:url(/admin/images/flag_icon_active.gif);
+}
 </style>
 
 <style>
@@ -136,7 +149,7 @@
                 @foreach($list as $roster)
                 <tr title="{{ $roster->qq_nickname }}" style="@if($roster->is_old == 1) opacity:0.5; @endif">
                     {{--<td class="flag_icon flag_icon_{{ $roster->flag_type }}">{{ $roster->id }}</td>--}}
-                    <td>{{ $roster->roster_type_text }}</td>
+                    <td class="flag_icon flag_icon_{{ $roster->flag }}">{{ $roster->roster_type_text }}</td>
                     <td>{{ $roster->roster_no }}</td>
                     <td>{{ $roster->group_info->group_name }}</td>
                     <td>{{ $roster->group_info->qq_group }}</td>

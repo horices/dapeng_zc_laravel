@@ -3,8 +3,6 @@
 namespace App\Models;
 
 
-use App\Http\Controllers\BaseController;
-
 class RosterModel extends BaseModel
 {
     protected $table = "user_roster";
