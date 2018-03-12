@@ -21,7 +21,12 @@ class BaseController extends Controller
     //学生量类型
     private static $_ROSTER_TYPE = [
         1   =>  'QQ',
-        '2' =>  '微信'
+        2 =>  '微信'
+    ];
+    //量类型对应的字段名
+    private static $_ROSTER_TYPE_COLUMN = [
+        1   =>  'qq',
+        2   =>  'wx'
     ];
     //注册类型
     private static $_REGISTER_STATUS = [
@@ -111,7 +116,15 @@ class BaseController extends Controller
     }
 
     /**
-     * 获取注册状态
+     * 获取量类型的数据库字段名
+     * @param $key
+     * @return array|mixed
+     */
+    public function getRosterTypeColumn($key){
+        return $key ? self::$_ROSTER_TYPE_COLUMN[$key]: self::$_ROSTER_TYPE_COLUMN;
+    }
+    /**
+     * 获取注册状态描述
      * @param string $key
      * @return array|mixed
      */
@@ -120,7 +133,7 @@ class BaseController extends Controller
     }
 
     /**
-     * 获取开课状态
+     * 获取开课状态描述
      * @param string $key
      * @return array|mixed
      */
@@ -128,9 +141,15 @@ class BaseController extends Controller
         return $key ? self::$_COURSE_TYPE[$key] : self::$_COURSE_TYPE;
     }
 
+    /**
+     * 获取群状态描述
+     * @param string $key
+     * @return array|mixed
+     */
     public function getGroupStatus($key = ''){
         return $key ? self::$_GROUP_STATUS[$key]: self::$_GROUP_STATUS;
     }
+
     /**
      * 获取当前登陆的用户信息
      * @param Request $request
@@ -148,9 +167,10 @@ class BaseController extends Controller
      *          重新开始一次新的大轮分配(重新进行N次小轮分配)
      * @return Ambigous <mixed, boolean, NULL, string, unknown, multitype:, object>
      */
-    function getNextGroupInfo($type = "qq"){
-        $arr = ['qq'=>1,'wx'=>2];
-        $filename = "./logData/advisersOrderNew/".$type."advisersOrderInfo_".date("Y_m_d").".txt";
+    function getNextGroupInfo($type = 1 ){
+        $column  = app('status')->getRosterTypeColumn($type);
+        $row = [];
+        $filename = "./logData/advisersOrderNew/advisersOrderInfo_".$column."_".date("Y_m_d").".txt";
         if(!file_exists(dirname($filename))){
             mkdir(dirname($filename),0777,true);
         }
@@ -158,14 +178,14 @@ class BaseController extends Controller
             $resource = fopen($filename, "w+");
             flock($resource, LOCK_EX);
             //获取所有可用的咨询师
-            $advisers = UserModel::whereIn('grade',[9,10])->where("status",1)->select('uid','grade','name','per_max_num_'.$type)->get()->toArray();
+            $advisers = UserModel::whereIn('grade',[9,10])->where("status",1)->select('uid','grade','name','per_max_num_'.$column)->get()->toArray();
             //设置最大分配数量
             $maxCircle = 0;
             //默认当前分配数量
             foreach($advisers as $k=>$v){
                 $advisers[$k]['currentNum'] = 0;    //本轮已经分配的数量
                 $advisers[$k]['totalNum'] = 0;      //分配的总数量
-                $advisers[$k]['perMaxNum'] = $v['per_max_num_'.$type];        //最大分配数量
+                $advisers[$k]['perMaxNum'] = $v['per_max_num_'.$column];        //最大分配数量
                 $maxCircle = max($maxCircle,$advisers[$k]['perMaxNum']);
             }
             shuffle($advisers);
@@ -213,9 +233,8 @@ class BaseController extends Controller
                     $tempWhere['leader_id'] = $adviser['uid'];
                     $tempWhere['status'] = 1;
                     $tempWhere['is_open'] = 1;
-                    $tempWhere['type'] = $arr[$type]; //判断是获取微信群还是qq群
+                    $tempWhere['type'] = $type; //判断是获取微信群还是qq群
                     $row = GroupModel::where($tempWhere)->first();
-                    //$row = $UserQQGroup->where($tempWhere)->find();
                     if(!$row){
                         //如果当前课程顾问没有指定类型的群，跳过
                         continue ;
