@@ -13,6 +13,8 @@ use App\Api\DapengUserApi;
 use App\Models\CoursePackageModel;
 use App\Models\RebateActivityModel;
 use App\Models\UserHeadMasterModel;
+use App\Models\UserPayLogModel;
+use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
 use App\Utils\Util;
 use Faker\Provider\bn_BD\Utils;
@@ -230,28 +232,26 @@ class RegistrationController extends BaseController{
     function postUpdateRegistration(Request $request){
         $post = $request->post();
         $UserRegistration = new UserRegistrationModel();
-        dd($UserRegistration->add());
-        exit;
         //$UserRegistration = new UserRegistrationModel();
         $UserHeadMaster = new UserHeadMasterModel();
         $adviserId = 0;
         $tmpMap = [];
         if($post['client_submit'] == "WAP"){
             if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile']){
-                $this->returnAjaxJson(FAIL,'请填写课程顾问手机号');
+                return response()->json(['code'=>Util::FAIL,'msg'=>'请填写课程顾问手机号!']);
             }
             $tmpMap = ['mobile'=>$post['adviser_mobile']];
         }else if($post['client_submit'] == "PC"){
-            $tmpMap = ['uid'=>$this->getAdviserId()];
+            $tmpMap = ['uid'=>$this->getUserInfo()['uid']];
         }else{
-            $this->returnAjaxJson(FAIL,'信息来源错误！');
+            return response()->json(['code'=>Util::FAIL,'msg'=>'信息来源错误!']);
         }
 
         //查询和判断课程顾问
         $hasAdviser = $UserHeadMaster->where($tmpMap)->field(true)->find();
 
         if(!$hasAdviser){
-            $this->returnAjaxJson(FAIL,'课程顾问不存在！');
+            return response()->json(['code'=>Util::FAIL,'msg'=>'课程顾问不存在!']);
         }
         $adviserId = $hasAdviser['uid'];
         //补充课程顾问信息
@@ -263,14 +263,14 @@ class RegistrationController extends BaseController{
 //        if(!$hasReg){
 //            $this->returnAjaxJson(FAIL,'该学员与课程顾问信息不一致！');
 //        }
-        M()->startTrans();
+        DB::beginTransaction();
         if(empty($post['pay_type_list']) || empty($post['amount_list'])){
-            $this->returnAjaxJson(FAIL,'必须添加支付信息！');
+            return response()->json(['code'=>Util::FAIL,'msg'=>'必须添加支付信息!']);
         }
         //更新报名已提交金额
         $allAmount = array_sum($post['amount_list']);
         if($allAmount<=0){
-            $this->returnAjaxJson(FAIL,'请填写正确的支付金额！');
+            return response()->json(['code'=>Util::FAIL,'msg'=>'请填写正确的支付金额!']);
         }
         $post['amount_submitted'] = $allAmount;
 
@@ -280,7 +280,7 @@ class RegistrationController extends BaseController{
         //添加用户支付信息
         $UserPay = new UserPayModel();
         if($UserPay->create($post) === false || ($payId = $UserPay->add()) === false){
-            M()->rollback();
+            DB::rollBack();
             $this->returnAjaxJson(FAIL,$UserPay->getError());
         }
         //循环添加多个支付方式记录
@@ -292,7 +292,7 @@ class RegistrationController extends BaseController{
             $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
             $post['pay_type'] = $val;
             if($UserPayLog->create($post) === false || $UserPayLog->add() === false){
-                M()->rollback();
+                DB::rollBack();
                 $this->returnAjaxJson(FAIL,$UserPayLog->getError());
             }
         }
@@ -306,14 +306,17 @@ class RegistrationController extends BaseController{
         $eff = $UserResitration->where(['id'=>$post['registration_id']])
             ->save($regData);
         if(!$eff){
-            M()->rollback();
+            DB::rollBack();
             $this->returnAjaxJson(FAIL,$UserResitration->getError());
         }
         //更新报名信息的最后一次提交支付记录时间
         $UserResitration->setLastPayTime($post['registration_id']);
-        M()->commit();
+        DB::commit();
         $this->returnAjaxJson(SUCCESS,'提交成功！');
     }
+
+
+
 
     function addSubmit(Request $request){
         $post = $request->post();
@@ -407,7 +410,7 @@ class RegistrationController extends BaseController{
         $UserRegistration->setPackageAllTitle($regId);
         //更新报名信息的最后一次提交支付记录时间
         $UserRegistration->setLastPayTime($regId);
-        M()->commit();
+        DB::commit();
         $this->returnAjaxJson(SUCCESS,'信息提交成功！');
         return view("admin.registration.add");
     }
