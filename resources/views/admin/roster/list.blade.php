@@ -156,11 +156,11 @@
                     <td>{{ $roster->inviter_name }}</td>
                     <td>{{ $roster->last_adviser_name }}</td>
                     <td>{!! $roster->addtime_text !!}</td>
-                    <td>{{ $roster->is_reg_text }}</td>
-                    <td title="{{ $roster->course_name }}" onclick="openCourseList(this);" roster_id="{{ $roster->id }}" qq="{{ $roster->roster_no }}" style="cursor:pointer;">
+                    <td class="register_status_{{ $roster->is_reg }}">{{ $roster->is_reg_text }}</td>
+                    <td title="{{ $roster->course_name }}" onclick="openCourseList(this);" roster_id="{{ $roster->id }}" qq="{{ $roster->roster_no }}" style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
                         {{ $roster->course_type_text }}</td>
                     <td>
-                        <span class="group_0{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
+                        <span class="group_status_{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
                     </td>
                     <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{{ $roster->roster_no }}" type="{{ $roster->roster_type }}" style="cursor:pointer;">
                     {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}

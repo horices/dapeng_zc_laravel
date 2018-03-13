@@ -169,7 +169,9 @@ class BaseController extends Controller
      */
     function getNextGroupInfo($type = 1 ){
         $column  = app('status')->getRosterTypeColumn($type);
+
         $row = [];
+        $searched = []; //已经搜索过的课程顾问
         $filename = "./logData/advisersOrderNew/advisersOrderInfo_".$column."_".date("Y_m_d").".txt";
         if(!file_exists(dirname($filename))){
             mkdir(dirname($filename),0777,true);
@@ -209,6 +211,12 @@ class BaseController extends Controller
         $advisersOrderInfo = json_decode($json,true);
         $orderInfo = $advisersOrderInfo['orderInfo'];
         $currentKey = $advisersOrderInfo['currentKey'];
+        //查询所有的课程顾问的群
+        $groupInfo = GroupModel::where([
+            'type'  =>  $type,
+            'status' => 1,
+            'is_open'   => 1
+        ])->has("user")->get()->keyBy("leader_id");
         //最多进行指定次数的小轮循环，如果仍然没有找到合适的群，则退出，防止死循环
         for($i=0;$i<=$advisersOrderInfo['maxCircle'];$i++){
             //查询当前轮是否有合适的群
@@ -226,16 +234,19 @@ class BaseController extends Controller
                     $advisersOrderInfo['currentKey'] = $currentKey;
                     break 2;
                 }
-                if( $currentCircle <= $orderInfo[$m]['perMaxNum']){
+                if( $currentCircle <= $orderInfo[$m]['perMaxNum'] && !in_array($orderInfo[$m]['uid'],$searched)){
                     //该课程顾问参与分量,记录下次起点
                     $adviser = $orderInfo[$m]; //当前课程顾问
                     //logData("第".$currentCircle."小轮参与人:".$adviser['name']);
-                    $tempWhere['leader_id'] = $adviser['uid'];
+                    /*$tempWhere['leader_id'] = $adviser['uid'];
                     $tempWhere['status'] = 1;
                     $tempWhere['is_open'] = 1;
                     $tempWhere['type'] = $type; //判断是获取微信群还是qq群
-                    $row = GroupModel::where($tempWhere)->first();
+                    $row = GroupModel::where($tempWhere)->first();*/
+                    $row = $groupInfo->get($adviser['uid']);
                     if(!$row){
+                        //若该课程顾问未进入到
+                        $searched[] = $adviser['uid'];
                         //如果当前课程顾问没有指定类型的群，跳过
                         continue ;
                     }

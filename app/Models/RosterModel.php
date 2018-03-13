@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -146,6 +147,9 @@ class RosterModel extends BaseModel
         //验证成功后，获取QQ群信息
         if(!$data['qq_group_id']){
             $groupInfo = app('status')->getNextGroupInfo($data['roster_type']);
+            if(!$groupInfo){
+                throw new UserValidateException("未找到可用的QQ群");
+            }
             $data['qq_group_id'] = $groupInfo['id'];
         }
         $group = GroupModel::find($data['qq_group_id']);

@@ -31,7 +31,7 @@
                 <label for="">新量号码:</label>
                 <div class="row">
                     <div class="col-lg-3">
-                        <input type="text" class="form-control " name="roster_no" placeholder="填写QQ号">
+                        <input type="text" class="form-control " name="roster_no" placeholder="填写新量号码">
                     </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <label for="">填写群号:</label>
                 <div class="row">
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" name="group" placeholder="点击选择群号" readonly>
+                        <input type="text" class="form-control" name="group" placeholder="不选择时，进入自动分配" readonly>
                     </div>
                     <button type="button" class="btn btn-info select_group">选择群号码</button>
                 </div>

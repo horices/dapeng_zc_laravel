@@ -1,0 +1,25 @@
+/*未注册*/
+.register_status_0{ color:#333}
+/*已注册*/
+.register_status_1{ color:#00cc33}
+
+/*未开通*/
+.open_course_status_0{ color:#ff1e00}
+/*试学课*/
+.open_course_status_1{color:#3bbbd9}
+/*正式课*/
+.open_course_status_2{ color:#00cc33}
+
+
+/*无*/
+.group_status_0{ color:#333}
+/*等待通过*/
+.group_status_1{ color:#3bbbd9}
+/*已进群*/
+.group_status_2{ color:#00cc33}
+/*已退群*/
+.group_status_3{ color:#ff1e00}
+/*已拒绝*/
+.group_status_4{ color:#ff7f00}
+/*已被踢*/
+.group_status_5{ color:#333}
