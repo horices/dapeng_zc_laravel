@@ -67,7 +67,6 @@
                         <option value="{{ $k }}"  @if(Request::input("is_reg") === strval($k)) selected @endif>{{ $v }}</option>
                     @endforeach
                 </select>
-                <if condition="is_numeric($_GET['status'])"><script>$('select[name=status]').val('{$_GET.status}');</script></if>
             </div>
             <div class="form-group">
                 <label class="control-label">开通课程</label>
@@ -86,25 +85,24 @@
                     <option value="{{ $k }}" @if(Request::input('group_status') === strval($k)) selected @endif>{{ $v }}</option>
                     @endforeach
                 </select>
-                <if condition="is_numeric($_GET['status'])"><script>$('select[name=status]').val('{$_GET.status}');</script></if>
             </div>
             <div class="form-group">
                 <label class="control-label">新活状态</label>
                 <select name="flag" class="form-control">
-                    <option value="">请选择</option>
-                    <option value="1">新量</option>
-                    <option value="2">活量</option>
+                    <option value="" >请选择</option>
+                    <option value="1" @if(\Illuminate\Support\Facades\Input::get("flag") == 1) selected @endif>新量</option>
+                    <option value="2" @if(\Illuminate\Support\Facades\Input::get("flag") == 2) selected @endif>活量</option>
                 </select>
             </div>
             <div class="form-group">
                 <label class="control-label">提交时间</label>
-                <input type="text" id="startdate" name="startdate" class="form-control datetime" style="width:140px;" value="{{ Request::input("startdate") }}" /> 至
-                <input type="text" id="enddate" name="enddate" class="form-control datetime" style="width:140px;" value="{{ Request::input("enddate") }}" />
+                <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" /> 至
+                <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" />
             </div>
-            <div class="form-group">
+{{--            <div class="form-group">
                 <input type="text" name="seoer_name" class="form-control" style="width:140px;" value="{{ Request::input("seoer_name") }}" placeholder="推广专员名称" />
                 <input type="text"  name="adviser_name" class="form-control" style="width:140px;" value="{{ Request::input("adviser_name") }}" placeholder="课程顾问名称" />
-            </div>
+            </div>--}}
             <div class="form-group">
                 <a href="" class="common-button combg2 linkSubmit">搜索</a>
                 <a class="common-button combg4 linkSubmit" href="">
