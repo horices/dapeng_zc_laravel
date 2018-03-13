@@ -51,7 +51,7 @@ class RosterController extends BaseController
         $courseType = Input::get("course_type");
         $groupStatus = Input::get("group_status");
         $flag = Input::get("flag");
-        $startDate = Input::get("startdate",date('Y-m-d '));
+        $startDate = Input::get("startdate");
         $endDate = Input::get("enddate");
         $where = [];
         if($field_k && $field_v !== null){
