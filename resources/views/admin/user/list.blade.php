@@ -16,7 +16,7 @@
             <input type="text" name="field_v" class="form-control" id="name" placeholder="" value="{{Request::input('field_v')}}">
         </div>
         <div class="form-group">
-            <label class="control-label">数据状态</label>
+            <label class="control-label">用户状态</label>
             <select name="status" class="form-control">
                 <option value="">请选择</option>
                 <option value="1" {{ Request::input('status') == 1?'selected':'' }}>正常</option>
@@ -50,9 +50,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>工号</th>
                 <th>姓名</th>
                 <th>手机号</th>
+                <th>主站手机号</th>
                 <th>状态</th>
                 <th>用户身份</th>
                 <th style="padding-left:19px" width="80">操作</th>
@@ -62,9 +63,10 @@
         <tbody>
         	@foreach($list as $user)
             <tr for="user in userList.data" class="{:$v['status']==0 ? 'gray' : ''}">
-                <td>{{$user->uid}}</td>
+                <td>{{$user->staff_no}}</td>
                 <td>{{$user->name}}</td>
                 <td>{{$user->mobile}}</td>
+                <td>{{$user->dapeng_user_mobile ? $user->dapeng_user_mobile : '---------------'}}</td>
                 <td>{{$user->status_text}}</td>
                 <td>{{$user->grade_text}}</td>
                 <td><a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a></td>

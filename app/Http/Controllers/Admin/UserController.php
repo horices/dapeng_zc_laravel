@@ -26,10 +26,8 @@ class UserController extends BaseController
             $query->where("grade",$grade);
         //获取最新20条记录
         $list = $query->orderBy("uid","desc")->paginate(20);
-        $listJson = $list->toJson();
         return view("admin.user.list",[
-            'list'  => $list,
-            'listJson'  => $listJson
+            'list'  => $list
         ]);
     }
     
@@ -52,9 +50,11 @@ class UserController extends BaseController
     function postSave(Request $request){
         if($request->input("uid")){
             $user = UserModel::find($request->input("uid"));
-            if($user->update($request->input())){
+            $user->fill($request->input());
+            if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
                 $returnData['msg'] = "修改成功";
+                $returnData['url'] = route("admin.user.list");
             }else{
                 $returnData['code'] = Util::FAIL ;
                 $returnData['msg'] = "修改失败".$user->errors;
@@ -63,6 +63,7 @@ class UserController extends BaseController
             if(UserModel::create($request->input())){
                 $returnData['code'] = Util::SUCCESS;
                 $returnData['msg'] = "添加成功";
+                $returnData['url'] = route("admin.user.list");
             }else{
                 $returnData['code'] = Util::FAIL ;
                 $returnData['msg'] = "添加失败";

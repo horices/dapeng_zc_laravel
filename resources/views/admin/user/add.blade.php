@@ -47,7 +47,14 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">姓名</label>
                 <div class="col-md-8 controls">
-	                <input type="text" id="name" name="name"  class="form-control" style="width:200px" placeholder="" value="{{$user->name}}">
+	                <input type="text" name="name"  class="form-control" style="width:200px" placeholder="" value="{{$user->name}}">
+                    <p class="help-block"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="input01">工号</label>
+                <div class="col-md-8 controls">
+                    <input type="text" name="staff_no"  class="form-control" style="width:200px" placeholder="" value="{{$user->staff_no}}">
                     <p class="help-block"></p>
                 </div>
             </div>
