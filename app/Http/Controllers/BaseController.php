@@ -102,8 +102,8 @@ class BaseController extends Controller
         ],
         'roster_follow' =>   [
             'text'=> '销售数据',   //文字描述
-            'url'=> "/admin/roster/follow/list",    //链接地址
-            'flag'=> 'admin.roster.follow.list',  //默认选中标识
+            'url'=> "/admin/roster/follow/index",    //链接地址
+            'flag'=> 'admin.roster.follow.index',  //默认选中标识
         ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述

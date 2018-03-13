@@ -149,8 +149,8 @@
                     {{--<td class="flag_icon flag_icon_{{ $roster->flag_type }}">{{ $roster->id }}</td>--}}
                     <td class="flag_icon flag_icon_{{ $roster->flag }}">{{ $roster->roster_type_text }}</td>
                     <td>{{ $roster->roster_no }}</td>
-                    <td>{{ $roster->group_info->group_name }}</td>
-                    <td>{{ $roster->group_info->qq_group }}</td>
+                    <td>{{ $roster->group->group_name }}</td>
+                    <td>{{ $roster->group->qq_group }}</td>
                     <td>{{ $roster->inviter_name }}</td>
                     <td>{{ $roster->last_adviser_name }}</td>
                     <td>{!! $roster->addtime_text !!}</td>
