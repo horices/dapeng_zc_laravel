@@ -16,8 +16,7 @@ class BaseController extends Controller{
      */
     function getSelectSeoer(){
         //查询所有的推广专员
-        $query = UserModel::query();
-        $query->where("grade","=","12");
+        $query = UserModel::seoer();
         $name = Input::get("name");
         if($name){
             $query->where("name","like","%".$name."%");
@@ -33,8 +32,7 @@ class BaseController extends Controller{
      */
     function getSelectAdviser(){
         //查询所有的推广专员
-        $query = UserModel::query();
-        $query->whereIn("grade",[10]);
+        $query = UserModel::adviser();
         $name = Input::get("name");
         if($name){
             $query->where("name","like","%".$name."%");

@@ -216,7 +216,7 @@ class BaseController extends Controller
             $resource = fopen($filename, "w+");
             flock($resource, LOCK_EX);
             //获取所有可用的咨询师
-            $advisers = UserModel::whereIn('grade',[9,10])->where("status",1)->select('uid','grade','name','per_max_num_'.$column)->get()->toArray();
+            $advisers = UserModel::adviser()->select('uid','grade','name','per_max_num_'.$column)->get()->toArray();
             //设置最大分配数量
             $maxCircle = 0;
             //默认当前分配数量
@@ -248,10 +248,8 @@ class BaseController extends Controller
         $orderInfo = $advisersOrderInfo['orderInfo'];
         $currentKey = $advisersOrderInfo['currentKey'];
         //查询所有的课程顾问的群
-        $groupInfo = GroupModel::where([
+        $groupInfo = GroupModel::opened([
             'type'  =>  $type,
-            'status' => 1,
-            'is_open'   => 1
         ])->has("user")->get()->keyBy("leader_id");
         //最多进行指定次数的小轮循环，如果仍然没有找到合适的群，则退出，防止死循环
         for($i=0;$i<=$advisersOrderInfo['maxCircle'];$i++){

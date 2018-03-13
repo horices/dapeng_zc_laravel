@@ -15,7 +15,8 @@ class UserController extends BaseController
         $field_v = Input::get("field_v");
         $status = Input::get("status");
         $grade = Input::get("grade");
-        $query = UserModel::query();
+        //允许查询所有的人员
+        $query = UserModel::withoutGlobalScope('status');
         if($field_v !== null){
             $query->where($field_k,"=",$field_v);
         }

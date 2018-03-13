@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\BaseController;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 
 /**
@@ -32,5 +33,19 @@ class GroupModel extends BaseModel
     
     function user(){
         return $this->belongsTo(UserModel::class,'leader_id','uid')->withDefault();
+    }
+
+    /**
+     * 获取没有关闭的群
+     */
+    public function scopeOpened($query){
+        return $query->where("is_open",1);
+    }
+    protected static function boot()
+    {
+        parent::boot();
+        self::addGlobalScope('status',function (Builder $builder){
+            $builder->where("status",1);
+        });
     }
 }
