@@ -33,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
         View::share("groupStatus",app('status')->getGroupStatus());
         //用户级别
         View::share("userGradeList",app('status')->getUserGradeList());
+        //私聊深度
+        View::share("rosterDeepLevel",app('status')->getRosterDeepLevel());
+        //用户意向
+        View::share("rosterIntention",app('status')->getRosterIntention());
         //导航菜单
         View::share("navList",app('status')->getLeftNavList());
         //监听用户用事件 

@@ -31,33 +31,48 @@ class BaseController extends Controller
     //注册类型
     private static $_REGISTER_STATUS = [
         0   =>  '未注册',
-        '1' =>  '已注册'
+        1 =>  '已注册'
     ];
     //开课状态
     private static $_COURSE_TYPE = [
         0   =>  '未开通',
-        '1' =>  '试学课',
-        '2' =>  '正式课'
+        1 =>  '试学课',
+        2 =>  '正式课'
     ];
     //开课状态
     private static $_GROUP_STATUS = [
         0   =>  '无',
-        '1' =>  '等待进群',
-        '2' =>  '已进群',
-        '3' =>  '已退群',
+        1 =>  '等待进群',
+        2 =>  '已进群',
+        3 =>  '已退群',
         4   =>  '已拒绝',
         5   =>  '已被踢'
     ];
     //用户身份级别
     private static $_USER_GRADE = [
-        '4'     =>  "管理员",
-        '5'     =>  "数据员",
-        '9'     =>  "课程顾问战队长",
-        '10'    =>  "课程顾问",
-        '11'    =>  "机器人推广专员",
-        '12'    =>  "推广专员",
+        4     =>  "管理员",
+        5     =>  "数据员",
+        9     =>  "课程顾问战队长",
+        10    =>  "课程顾问",
+        11    =>  "机器人推广专员",
+        12    =>  "推广专员",
     ];
-    
+
+    //私聊深度
+    private static $_ROSTER_DEEP_LEVEL = [
+        1   =>  '搭话',
+        2   =>  '看人',
+        3   =>  '挖痛',
+        4   =>  '讲价值',
+        5   =>  '关单'
+    ];
+    //用户意向
+    private static $_ROSTER_INTENTION = [
+        1   =>  'A',
+        2   =>  'B',
+        3   =>  'C',
+        4   =>  'D'
+    ];
     //左侧菜单导航
     private static $_LEFT_NAV = [
         'roster_add' =>   [
@@ -106,6 +121,22 @@ class BaseController extends Controller
         return $key ? self::$_LEFT_NAV[$key] : self::$_LEFT_NAV;
     }
 
+    /**
+     * 获取私聊深度
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getRosterDeepLevel($key = ''){
+        return $key ? self::$_ROSTER_DEEP_LEVEL[$key] : SELF::$_ROSTER_DEEP_LEVEL;
+    }
+    /**
+     * 获取用户意向
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getRosterIntention($key = ''){
+        return $key ? self::$_ROSTER_INTENTION[$key] : SELF::$_ROSTER_INTENTION;
+    }
     /**
      * 获取量的类型[QQ,微信]
      * @param string $key

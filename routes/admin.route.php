@@ -25,6 +25,12 @@ Route::get("roster/list","RosterController@getList")->name("admin.roster.list");
 Route::get("roster/add","RosterController@getAdd")->name("admin.roster.add");
 Route::post("roster/add","RosterController@postAdd");
 
+//关单信息管理
+Route::get("index/roster/follow/add/{roster_id}","Roster\FollowController@getAdd")->name("admin.roster.follow.add");
+Route::get("index/roster/follow/add/{roster_id}/{follow_id}","Roster\FollowController@getEdit")->name("admin.roster.follow.edit");
+Route::post("index/roster/follow/save/{roster_id}/{follow_id?}","Roster\FollowController@postSave");
+
+
 //公共操作
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
 Route::get("index/select_adviser","BaseController@getSelectAdviser")->name("admin.public.select_adviser");
