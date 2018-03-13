@@ -499,7 +499,7 @@
                     <input type="hidden" name="rebate_id" v-model="userPayInfo.rebate_id" :disabled="!hasUser" />
                     <input type="hidden" name="registration_id" v-model="userPayInfo.id" :disabled="!hasUser" />
                     <input type="hidden" name="client_submit" value="PC" />
-                    <button class="btn btn-primary ajaxSubmit" type="button" href="{:U('add-registration')}">确认提交</button>
+                    <button class="btn btn-primary ajaxSubmit" type="button" url="{{url('add-registration')}}">确认提交</button>
                 </div>
             </div>
         </div>

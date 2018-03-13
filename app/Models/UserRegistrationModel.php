@@ -9,6 +9,8 @@
 namespace App\Models;
 
 
+use Illuminate\Support\Facades\Validator;
+
 class UserRegistrationModel extends BaseModel{
     protected $table = "user_registration";
     const CREATED_AT = 'creation_time';
@@ -20,7 +22,16 @@ class UserRegistrationModel extends BaseModel{
         'MYFQ'      =>  '蚂蚁分期',
     ];
 
-    function add(){
+    function add($data){
+        $validator = Validator::make($data, [
+            'title' => 'required|unique:posts|max:255',
+            'body' => 'required',
+        ]);
 
+        if ($validator->fails()) {
+            return redirect('post/create')
+                ->withErrors($validator)
+                ->withInput();
+        }
     }
 }

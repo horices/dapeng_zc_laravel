@@ -193,7 +193,6 @@ class RegistrationController extends BaseController{
         if(!isset($post['give_id']) || $post['give_id'] == ''){
             return response()->json(['code'=>Util::FAIL,'msg'=>'请选择赠送课程！']);
         }
-
         if($UserRegistration->create($post) === false || ($regId = $UserRegistration->add()) === false){
             DB::rollBack();
             $this->returnAjaxJson(FAIL,$UserRegistration->getError());
@@ -223,6 +222,97 @@ class RegistrationController extends BaseController{
         $UserRegistration->setLastPayTime($regId);
         DB::commit();
         $this->returnAjaxJson(SUCCESS,'信息提交成功！');
+    }
+
+    /**
+     * @note 更新报名记录（添加支付记录）
+     */
+    function postUpdateRegistration(Request $request){
+        $post = $request->post();
+        $UserRegistration = new UserRegistrationModel();
+        dd($UserRegistration->add());
+        exit;
+        //$UserRegistration = new UserRegistrationModel();
+        $UserHeadMaster = new UserHeadMasterModel();
+        $adviserId = 0;
+        $tmpMap = [];
+        if($post['client_submit'] == "WAP"){
+            if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile']){
+                $this->returnAjaxJson(FAIL,'请填写课程顾问手机号');
+            }
+            $tmpMap = ['mobile'=>$post['adviser_mobile']];
+        }else if($post['client_submit'] == "PC"){
+            $tmpMap = ['uid'=>$this->getAdviserId()];
+        }else{
+            $this->returnAjaxJson(FAIL,'信息来源错误！');
+        }
+
+        //查询和判断课程顾问
+        $hasAdviser = $UserHeadMaster->where($tmpMap)->field(true)->find();
+
+        if(!$hasAdviser){
+            $this->returnAjaxJson(FAIL,'课程顾问不存在！');
+        }
+        $adviserId = $hasAdviser['uid'];
+        //补充课程顾问信息
+        $post['adviser_id'] = $adviserId;
+        $post['adviser_name'] = $hasAdviser['name'];
+        $post['adviser_qq'] = $hasAdviser['qq'] ?: '';
+        //检查报名信息
+//        $hasReg = $UserRegistration->where(['adviser_id'=>$adviserId,'mobile'=>$post['mobile']])->find();
+//        if(!$hasReg){
+//            $this->returnAjaxJson(FAIL,'该学员与课程顾问信息不一致！');
+//        }
+        M()->startTrans();
+        if(empty($post['pay_type_list']) || empty($post['amount_list'])){
+            $this->returnAjaxJson(FAIL,'必须添加支付信息！');
+        }
+        //更新报名已提交金额
+        $allAmount = array_sum($post['amount_list']);
+        if($allAmount<=0){
+            $this->returnAjaxJson(FAIL,'请填写正确的支付金额！');
+        }
+        $post['amount_submitted'] = $allAmount;
+
+//        if($post['amount_submitted'] > $post['package_total_price'])
+//            $this->returnAjaxJson(FAIL,'已提交金额不能大于总金额！');
+
+        //添加用户支付信息
+        $UserPay = new UserPayModel();
+        if($UserPay->create($post) === false || ($payId = $UserPay->add()) === false){
+            M()->rollback();
+            $this->returnAjaxJson(FAIL,$UserPay->getError());
+        }
+        //循环添加多个支付方式记录
+        $UserPayLog = new UserPayLogModel();
+        $post['pay_id'] = $payId;
+
+        foreach ($post['pay_type_list'] as $key=>$val){
+            $post['amount'] = $post['amount_list'][$key];
+            $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
+            $post['pay_type'] = $val;
+            if($UserPayLog->create($post) === false || $UserPayLog->add() === false){
+                M()->rollback();
+                $this->returnAjaxJson(FAIL,$UserPayLog->getError());
+            }
+        }
+
+        //$post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
+        $UserResitration = new UserRegistrationModel();
+        $regData = [
+            'remark'            =>  $post['remark'],
+            'amount_submitted'  =>  ['exp','amount_submitted+'.$allAmount]
+        ];
+        $eff = $UserResitration->where(['id'=>$post['registration_id']])
+            ->save($regData);
+        if(!$eff){
+            M()->rollback();
+            $this->returnAjaxJson(FAIL,$UserResitration->getError());
+        }
+        //更新报名信息的最后一次提交支付记录时间
+        $UserResitration->setLastPayTime($post['registration_id']);
+        M()->commit();
+        $this->returnAjaxJson(SUCCESS,'提交成功！');
     }
 
     function addSubmit(Request $request){

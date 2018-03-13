@@ -37,3 +37,5 @@ Route::get("registration/add","RegistrationController@getAdd");
 Route::post("registration/has-registration","RegistrationController@postHasRegistration");
 //写入支付记录
 Route::post("registration/add-registration","RegistrationController@postAddRegistration");
+//更新支付记录
+Route::post("registration/update-registration","RegistrationController@postUpdateRegistration");
