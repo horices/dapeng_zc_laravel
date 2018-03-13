@@ -40,15 +40,49 @@ class RosterController extends BaseController
         return response()->json($returnData);
     }
     function getList(){
-        $field_k = Input::get("field_k");
-        $field_v = Input::get("field_v");
         //查询所有列表
         $query = RosterModel::query()->with(['group_info',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
         }])->orderBy("id","desc");
-        if($field_k == "account" && $field_v !== null){
-            $query->where("qq","=",$field_v)->orWhere('wx','=',$field_v);
+        $field_k = Input::get("field_k");
+        $field_v = Input::get("field_v");
+        $type = Input::get("type");
+        $isReg = Input::get("is_reg");
+        $courseType = Input::get("course_type");
+        $groupStatus = Input::get("group_status");
+        $flag = Input::get("flag");
+        $startDate = Input::get("startdate");
+        $endDate = Input::get("enddate");
+        $where = [];
+        if($field_k && $field_v !== null){
+            if($field_k == "account"){
+                $query->where("qq","=",$field_v)->orWhere('wx','=',$field_v);
+            }else{
+                $where[$field_k] = $field_v;
+            }
         }
+        if($type !== null){
+            $where['type'] = $type;
+        }
+        if($isReg !== null){
+            $where['is_reg'] = $isReg;
+        }
+        if($courseType !== null){
+            $where['course_type'] = $courseType;
+        }
+        if($groupStatus !== null){
+            $where['group_status'] = $groupStatus;
+        }
+        if($flag !== null){
+            $where['flag'] = $flag;
+        }
+        if($startDate !== null){
+            $query->whereRaw("addtime >= ".strtotime($startDate));
+        }
+        if($endDate !== null){
+            $query->whereRaw("addtime <= ".strtotime($endDate));
+        }
+        $query->where($where);
         $list = $query->paginate(20);
         return view("admin.roster.list",[
             'list' => $list

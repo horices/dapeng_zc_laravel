@@ -8,7 +8,5 @@ class UserObserver{
     function saved(UserModel $userModel){
     }
     function saving(UserModel $userModel){
-        echo 'user';
-        exit();
     }
 }

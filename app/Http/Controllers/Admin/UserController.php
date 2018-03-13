@@ -15,7 +15,8 @@ class UserController extends BaseController
         $field_v = Input::get("field_v");
         $status = Input::get("status");
         $grade = Input::get("grade");
-        $query = UserModel::query();
+        //允许查询所有的人员
+        $query = UserModel::withoutGlobalScope('status');
         if($field_v !== null){
             $query->where($field_k,"=",$field_v);
         }
@@ -26,15 +27,13 @@ class UserController extends BaseController
             $query->where("grade",$grade);
         //获取最新20条记录
         $list = $query->orderBy("uid","desc")->paginate(20);
-        $listJson = $list->toJson();
         return view("admin.user.list",[
-            'list'  => $list,
-            'listJson'  => $listJson
+            'list'  => $list
         ]);
     }
     
     function getEdit($id){
-        $user = UserModel::where("uid","=",$id)->first();
+        $user = UserModel::withoutGlobalScope('status')->where("uid",$id)->first();
         return view("admin.user.add",[
             'user'  =>  $user,
             'leftNav' => "admin.user.list"
@@ -51,10 +50,12 @@ class UserController extends BaseController
      */
     function postSave(Request $request){
         if($request->input("uid")){
-            $user = UserModel::find($request->input("uid"));
-            if($user->update($request->input())){
+            $user = UserModel::withoutGlobalScope('status')->find($request->input("uid"));
+            $user->fill($request->input());
+            if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
                 $returnData['msg'] = "修改成功";
+                $returnData['url'] = route("admin.user.list");
             }else{
                 $returnData['code'] = Util::FAIL ;
                 $returnData['msg'] = "修改失败".$user->errors;
@@ -63,6 +64,7 @@ class UserController extends BaseController
             if(UserModel::create($request->input())){
                 $returnData['code'] = Util::SUCCESS;
                 $returnData['msg'] = "添加成功";
+                $returnData['url'] = route("admin.user.list");
             }else{
                 $returnData['code'] = Util::FAIL ;
                 $returnData['msg'] = "添加失败";

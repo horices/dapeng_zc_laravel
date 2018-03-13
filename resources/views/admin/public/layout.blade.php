@@ -91,6 +91,13 @@ $(function(){
             content:"{{ route("admin.public.select_group") }}"
         });
     });
+    $(".select_date").each(function(){
+        laydate.render({
+            elem: $(this)[0],
+            type:'datetime',
+            //theme:'grid',
+        });
+    });
 });
 
 </script>

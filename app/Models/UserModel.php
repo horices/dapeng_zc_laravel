@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\BaseController;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
 
@@ -52,6 +53,7 @@ class UserModel extends BaseModel
     }
     protected function getStatisticsAttribute(){
     }
+
     /**
      * 检测用户名密码是否正确
      */
@@ -69,9 +71,31 @@ class UserModel extends BaseModel
     }
 
     /**
-     *
+     * 查询课程顾问
+     * @param $query
+     * @return mixed
      */
-    protected function staticstic(){
+    public function scopeAdviser($query){
+        return $query->whereIn('grade',[9,10]);
+    }
 
+    /**
+     * 查询推广专员
+     * @param $query
+     * @return mixed
+     */
+    public function scopeSeoer($query){
+        return $query->whereIn("grade",[11,12]);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        /**
+         * 默认只查询状态为正常的用户
+         */
+        self::addGlobalScope('status',function (Builder $builder){
+            $builder->where("status",1);
+        });
     }
 }
