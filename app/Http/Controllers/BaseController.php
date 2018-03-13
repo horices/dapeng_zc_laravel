@@ -100,6 +100,11 @@ class BaseController extends Controller
             'url'=> "/admin/index/seoer_statistics",    //链接地址
             'flag'=> 'admin.index.seoer_statistics',  //默认选中标识
         ],
+        'roster_follow' =>   [
+            'text'=> '销售数据',   //文字描述
+            'url'=> "/admin/roster/follow/list",    //链接地址
+            'flag'=> 'admin.roster.follow.list',  //默认选中标识
+        ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
             'url'=> "/admin/registration/add",    //链接地址
