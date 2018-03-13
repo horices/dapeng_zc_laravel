@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class UserValidateException extends UserException
+class UserException extends Exception
 {
     //
 }
