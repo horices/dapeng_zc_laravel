@@ -229,8 +229,9 @@ class RegistrationController extends BaseController{
      */
     function postUpdateRegistration(Request $request){
         $post = $request->post();
+
         $UserRegistration = new UserRegistrationModel();
-        dd($UserRegistration->add());
+        dd($UserRegistration->addData($post));
         exit;
         //$UserRegistration = new UserRegistrationModel();
         $UserHeadMaster = new UserHeadMasterModel();

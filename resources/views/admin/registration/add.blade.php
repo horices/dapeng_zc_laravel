@@ -230,7 +230,7 @@
                 vm.hasUser = 1;
                 //修改异步提交地址
                 //$(".ajaxSubmit").attr("href","{:U('updateRegistration')}");
-                $(".ajaxSubmit").attr("submiturl","{:U('updateRegistration')}");
+                $(".ajaxSubmit").attr("url","{{url('registration/update-registration')}}");
                 //判断是否属于当前课程顾问，非当前课程顾问的学员不能提交支付信息
                 if(jsonData.data.isBelong == 0){
                     $(".ajaxSubmit").attr("disabled",true);

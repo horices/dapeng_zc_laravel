@@ -22,16 +22,16 @@ class UserRegistrationModel extends BaseModel{
         'MYFQ'      =>  '蚂蚁分期',
     ];
 
-    function add($data){
+    function addData($data){
         $validator = Validator::make($data, [
-            'title' => 'required|unique:posts|max:255',
-            'body' => 'required',
+            'mobile'=>'required|regex:/\d{11}/|unique:user_registration',
+            'name' => 'required|unique:posts|max:255',
+            'qq' => 'required',
+        ],[
+            'mobile.required' =>  '请输入正确的学员手机号！',
+            'mobile.unique'   =>  '该学员手机号已存在！',
+            'name.required'   =>  '请输入学员姓名！',
+            'qq.required'     =>  '请输入学员QQ号！',
         ]);
-
-        if ($validator->fails()) {
-            return redirect('post/create')
-                ->withErrors($validator)
-                ->withInput();
-        }
     }
 }
