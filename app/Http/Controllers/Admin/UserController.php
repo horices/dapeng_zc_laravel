@@ -33,7 +33,7 @@ class UserController extends BaseController
     }
     
     function getEdit($id){
-        $user = UserModel::where("uid","=",$id)->first();
+        $user = UserModel::withoutGlobalScope('status')->where("uid",$id)->first();
         return view("admin.user.add",[
             'user'  =>  $user,
             'leftNav' => "admin.user.list"
@@ -50,7 +50,7 @@ class UserController extends BaseController
      */
     function postSave(Request $request){
         if($request->input("uid")){
-            $user = UserModel::find($request->input("uid"));
+            $user = UserModel::withoutGlobalScope('status')->find($request->input("uid"));
             $user->fill($request->input());
             if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
