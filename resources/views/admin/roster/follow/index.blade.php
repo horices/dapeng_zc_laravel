@@ -11,7 +11,7 @@
                 </select>
                 <input type="text" name="keywords" class="form-control"
                        style="height:30px; margin-bottom:3px; width:120px;" id="name" placeholder=""
-                       value="{$Think.get.keywords}">
+                       value="">
             </div>
             <div class="form-tm" style="float:left; margin-left:10px;">
                 <label>
@@ -19,10 +19,10 @@
                         <option value="create_time">私聊时间</option>
                     </select>&nbsp;</label>
                 <input type="text" name="startdate" class="form-control datetime" id="startdate" style="height:30px;"
-                       placeholder="开始时间" value="{$Think.get.startdate}">
+                       placeholder="开始时间" value="">
                 <label>&nbsp;至&nbsp;</label>
                 <input type="text" name="enddate" class="form-control datetime" id="enddate" style="height:30px;"
-                       placeholder="结束时间" value="{$Think.get.enddate}">
+                       placeholder="结束时间" value="">
             </div>
             {{--<div class="fleft" style="height:35px;overflow:hidden;line-height:35px;"><a
                         href="{:U('',mergeArray($_GET,['startdate'=>date('Y-m-d 00:00'),'enddate'=>date('Y-m-d 23:59')]))}">今日</a>
@@ -34,9 +34,9 @@
     <div id="w0" class="grid-view">
         <table class="table">
             <thead class="thead" style=" font-size:14px; ">
-            <tr>
-                <th colspan="5">总计:{$r.total|default='0'}</th>
-            </tr>
+            {{--<tr>
+                <th colspan="5">总计:</th>
+            </tr>--}}
             <tr>
                 <th>ID</th>
                 <th>课程顾问</th>
