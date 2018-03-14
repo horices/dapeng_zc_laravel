@@ -33,7 +33,7 @@ class GroupController extends BaseController
         if($isOpen !== null){
             $groupModel->where("is_open","=",$isOpen);
         }
-        $list = $groupModel->paginate(20);
+        $list = $groupModel->paginate();
         return view("admin.group.list",[
             'list' => $list,
         ]);

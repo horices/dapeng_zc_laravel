@@ -26,7 +26,7 @@ class UserController extends BaseController
         if($grade !== null)
             $query->where("grade",$grade);
         //获取最新20条记录
-        $list = $query->orderBy("uid","desc")->paginate(20);
+        $list = $query->orderBy("uid","desc")->paginate();
         return view("admin.user.list",[
             'list'  => $list
         ]);
