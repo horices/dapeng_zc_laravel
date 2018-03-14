@@ -10,6 +10,7 @@ namespace App\Models;
 
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserRegistrationModel extends BaseModel{
     protected $table = "user_registration";
@@ -61,10 +62,20 @@ class UserRegistrationModel extends BaseModel{
      */
     function updateData($data){
         $validator = Validator::make($data, [
-            'id'                =>  'required|numeric',
-            'mobile'            =>'sometimes|required|regex:/\d{11}/|unique:user_registration',
-            'name'              => 'sometimes|required|unique:user_registration|max:255',
-            'qq'                => 'sometimes|required|regex:/\d{5,11}/|unique:user_registration',
+            'id'                =>  'required|numeric|exists:user_registration,id',
+            'mobile'            => [
+                'sometimes',
+                'required',
+                'regex:/\d{11}/',
+                Rule::unique('user_registration')->ignore($data['id']),
+                ],
+            'name'              => 'sometimes|required|max:255',
+            'qq'                => [
+                'sometimes',
+                'required',
+                'regex:/\d{5,11}/',
+                Rule::unique('user_registration')->ignore($data['id']),
+                ],
             'package_id'        => 'sometimes|exists:course_package,id',
             'package_attach_id' => 'sometimes|exists:course_package,id',
             'rebate_id'         => 'sometimes|exists:rebate_activity,id',
@@ -72,9 +83,11 @@ class UserRegistrationModel extends BaseModel{
         ],[
             'id.required'       =>  '更新的支付记录错误！',
             'id.numeric'        =>  '更新的支付记录错误！',
+            'id.exists'         =>  '未找到要修改的支付记录',
             'mobile.required'   =>  '请输入正确的学员手机号！',
             'mobile.unique'     =>  '该学员手机号已存在！',
             'name.required'     =>  '请输入学员姓名！',
+            'name.max'          =>  '学员姓名格式错误！',
             'qq.required'       =>  '请输入学员QQ号！',
             'qq.regex'          =>  '学员QQ号格式错误！',
             'qq.unique'         =>  '学员QQ号已存在！',
@@ -85,8 +98,8 @@ class UserRegistrationModel extends BaseModel{
             'amount_submitted,numeric'=>   '已提交金额有误！',
         ]);
         $validator->validate();
-        self::find($data);
-        return self::save($data['id']);
+        $res = self::find($data['id']);
+        return $res->save($data['id']);
     }
 
 }

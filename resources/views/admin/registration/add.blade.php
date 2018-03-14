@@ -1,5 +1,6 @@
 @extends("admin.public.layout")
 @section("right_content")
+    <link rel="stylesheet" href="/js/datetimepicker/jquery.datetimepicker.css">
     <script>
         function loadInit() {
             vm = new Vue({
@@ -52,7 +53,9 @@
                 },
                 ready:function () {
                     var _this = this;
-                    _this.$nextTick(function () {})
+                    _this.$nextTick(function () {
+
+                    })
                 },
                 methods: {
                     checkCourseIdInStr:function() {
@@ -252,6 +255,10 @@
             $("#show-input").show();
             $(".main_right").show();
             $("#mobile").attr("readonly",true);
+            //初始化日期选择器
+            $('.datetime').datetimepicker({
+                format:'Y-m-d H:i:s',
+            });
             return ;
         }
         /**
@@ -504,4 +511,5 @@
             </div>
         </div>
     </form>
+    <script src="/js/datetimepicker/build/jquery.datetimepicker.full.js"></script>
 @endsection
