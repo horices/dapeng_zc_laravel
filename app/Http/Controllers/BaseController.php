@@ -95,10 +95,10 @@ class BaseController extends Controller
             'url'=> "/admin/roster/list",    //链接地址
             'flag'=> 'admin.roster.list',  //默认选中标识
         ],
-        'statistics' =>   [
+        'roster_statistics' =>   [
             'text'=> '效率统计',   //文字描述
-            'url'=> "/admin/index/seoer_statistics",    //链接地址
-            'flag'=> 'admin.index.seoer_statistics',  //默认选中标识
+            'url'=> "/admin/roster/statistics/seoer_statistics",    //链接地址
+            'flag'=> 'admin.roster.statistics.seoer_statistics',  //默认选中标识
         ],
         'roster_follow' =>   [
             'text'=> '销售数据',   //文字描述
