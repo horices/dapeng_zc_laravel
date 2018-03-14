@@ -26,7 +26,6 @@ class UserPayLogModel extends BaseModel {
         'MAYIFQ'    =>  '蚂蚁分期',
         'BANKZZ'    =>  '银行转账',
     ];
-
     /**
      * 新增数据
      * @param $data
