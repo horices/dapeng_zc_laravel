@@ -28,7 +28,7 @@
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">群昵称</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="" class="form-control" style="width:200px" placeholder="" value="{{ $roster->group_info->group_name }}" disabled="disabled">
+                    <input type="text" name="" class="form-control" style="width:200px" placeholder="" value="{{ $roster->group->group_name }}" disabled="disabled">
                     <p class="help-block"></p>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                 <div class="col-md-8 controls">
                     <select name="deep_level" class="controls col-xs-2">
                         @foreach($rosterDeepLevel as $key =>$level)
-                        <option value="{{ $key }}" class="option_group">{{ $level }}</option>
+                        <option value="{{ $key }}" class="option_group" @if(Request::input('deep_level') == $key) selected @endif>{{ $level }}</option>
                         @endforeach
                     </select>
                     <p class="help-block"></p>
@@ -67,7 +67,7 @@
                 <div class="col-md-8 controls">
                     <select name="intention" class="controls col-xs-2">
                         @foreach($rosterIntention as $key => $intention)
-                        <option value="{{ $key }}" class="option_group">{{ $intention }}</option>
+                        <option value="{{ $key }}" class="option_group" @if(Request::input('intention') == $key) selected @endif>{{ $intention }}</option>
                         @endforeach
                     </select>
                     <p class="help-block"></p>

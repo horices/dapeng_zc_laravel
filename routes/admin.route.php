@@ -26,7 +26,8 @@ Route::get("roster/add","RosterController@getAdd")->name("admin.roster.add");
 Route::post("roster/add","RosterController@postAdd");
 
 //关单信息管理
-Route::get("roster/follow/list","Roster\FollowController@getList")->name("admin.roster.follow.list");
+Route::get("roster/follow/index","Roster\FollowController@getIndex")->name("admin.roster.follow.index");
+Route::get("roster/follow/list/{user_id}","Roster\FollowController@getList")->name("admin.roster.follow.list");
 Route::get("roster/follow/add/{roster_id}","Roster\FollowController@getAdd")->name("admin.roster.follow.add");
 Route::get("roster/follow/add/{roster_id}/{follow_id}","Roster\FollowController@getEdit")->name("admin.roster.follow.edit");
 Route::post("roster/follow/save/{roster_id}/{follow_id?}","Roster\FollowController@postSave");
@@ -36,8 +37,8 @@ Route::post("roster/follow/save/{roster_id}/{follow_id?}","Roster\FollowControll
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
 Route::get("index/select_adviser","BaseController@getSelectAdviser")->name("admin.public.select_adviser");
 Route::get("index/select_group","BaseController@getSelectGroup")->name("admin.public.select_group");
-Route::get("index/seoer_statistics","IndexController@getSeoerStatistics")->name("admin.public.seoer_statistics");
-Route::get("index/adviser_statistics","IndexController@getAdviserStatistics")->name("admin.public.adviser_statistics");
+Route::get("roster/statistics/seoer_statistics","Roster\StatisticsController@getSeoerStatistics")->name("admin.public.seoer_statistics");
+Route::get("roster/statistics/adviser_statistics","Roster\StatisticsController@getAdviserStatistics")->name("admin.public.adviser_statistics");
 
 //支付统计
 Route::get("registration/add","RegistrationController@getAdd");

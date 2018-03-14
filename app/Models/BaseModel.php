@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class BaseModel extends Model
 {
     protected $primaryKey = "id";
+    protected $perPage = 15;    //默认分页数
     public $timestamps = false;
 
     //允许为NULL的字段

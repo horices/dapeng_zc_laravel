@@ -41,7 +41,7 @@ class RosterController extends BaseController
     }
     function getList(){
         //查询所有列表
-        $query = RosterModel::query()->with(['group_info',"group_event_log"=>function($query){
+        $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
         }])->orderBy("id","desc");
         $field_k = Input::get("field_k");
@@ -83,7 +83,7 @@ class RosterController extends BaseController
             $query->whereRaw("addtime <= ".strtotime($endDate));
         }
         $query->where($where);
-        $list = $query->paginate(20);
+        $list = $query->paginate();
         return view("admin.roster.list",[
             'list' => $list
         ]);

@@ -95,7 +95,7 @@ class UserModel extends BaseModel
          * 默认只查询状态为正常的用户
          */
         self::addGlobalScope('status',function (Builder $builder){
-            $builder->where("status",1);
+            //$builder->where("status",1);
         });
     }
 }
