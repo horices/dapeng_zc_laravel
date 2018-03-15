@@ -33,6 +33,9 @@ class GroupController extends BaseController
         if($isOpen !== null){
             $groupModel->where("is_open","=",$isOpen);
         }
+        if(Input::get('export') == 1){
+            return $this->exportGroupList($groupModel);
+        }
         $list = $groupModel->paginate();
         return view("admin.group.list",[
             'list' => $list,
@@ -78,6 +81,21 @@ class GroupController extends BaseController
             }
         }
         return response()->json($returnData);
+    }
+
+    function exportGroupList($query){
+        $data['filename'] = "群信息".date('YmdHis');
+        $data['title']  =   [
+            'group_name'    =>  '群代号',
+            'qq_group'      =>  '群号',
+            'is_open_text'  =>  '开启状态',
+            'user.name'  =>  '课程顾问',
+            'addtime_export_text'   =>  '创建时间',
+            'type_text'          =>  '群类型'
+
+        ];
+        $data['data'] = $query->take(5000)->get();
+        return $this->export($data);
     }
 }
 

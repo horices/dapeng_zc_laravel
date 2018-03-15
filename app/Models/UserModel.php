@@ -27,6 +27,7 @@ class UserModel extends BaseModel
     ];
 
     protected $appends = [
+        'status_text',
         'grade_text',       //级别描述
     ];
     protected function getPerMaxNumWxAttribute($v){

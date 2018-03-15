@@ -47,65 +47,6 @@ class RosterController extends BaseController
         return response()->json($returnData);
     }
 
-    /**
-     * 导出数据，到指定的文件
-     * @param array $data
-     *      filename :  导出的文件名
-     *      title :     字段名,支持点 多级选择
-     *      data    : 数据
-     */
-    function export(array &$data,$exportType = 'xls'){
-        //导出最长为五分钟
-        set_time_limit(60*2);
-        ini_set("memory_limit","100M");
-        //将数组全部转化为 Collect
-        $data = collect($data);
-        $data->transform(function($v,$k){
-            if(is_array($v)){
-                $v = collect($v);
-            }
-            return $v;
-        });
-        //重新整理数组,取出多级数据
-        $data->get("data")->transform(function($v) use ($data){
-            //判断字段中是否存在点的语法,进行多级获取
-            $data->get("title")->keys()->each(function($column) use (&$v){
-                if(strpos($column,'.') !== false){
-                    collect(explode('.',$column))->each(function($key) use (&$v,$column){
-                        if($v instanceof Model){
-                            if(!$v->$column) $v->$column = $v;
-                            $v->$column = $v->$column->$key;
-                        }elseif($v instanceof Collection){
-                            $v->put($column,$v->get($key));
-                        }else{
-                            $v[$column] = $v[$key];
-                        }
-                    });
-                }
-            });
-            //重新排序
-            $temp = [];
-            $data->get("title")->keys()->each(function($key) use (&$temp, $v){
-                $temp[] =  collect($v)->get($key);
-            });
-            return $temp;
-            //return collect($v->toArray())->only($data->get("title")->keys());
-        });
-
-        //添加标头
-        $data->get("data")->prepend($data->get("title"));
-        Excel::create($data->get("filename"), function($excel) use ($data) {
-            /**
-             * @var $excel LaravelExcelWriter
-             */
-            $excel->sheet('Sheetname', function($sheet) use ($data) {
-                /**
-                 * @var $sheet  LaravelExcelWorksheet
-                 */
-                $sheet->fromArray($data->get("data")->toArray(),'','','',false);
-            });
-        })->export($exportType);
-    }
     function getList($export = 0){
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){

@@ -23,14 +23,21 @@ class GroupModel extends BaseModel
     protected $fillable = [
         "type","group_name","qq_group","qrc_url","qrc_link","leader_id","is_open","mark"
     ];
-    
+
+    protected $appends = [
+        'is_open_text',
+        'addtime_export_text',
+        'type_text'
+    ];
     protected function getIsOpenTextAttribute(){
         return $this->is_open == 1 ?'正常':'关闭';
     }
     protected function getTypeTextAttribute(){
-        return app(BaseController::class)->getRosterType()[$this->type];
+        return app("status")->getRosterType()[$this->type];
     }
-    
+    protected function getAddtimeExportTextAttribute(){
+        return date('Y-m-d H:i:s',$this->add_time);
+    }
     function user(){
         return $this->belongsTo(UserModel::class,'leader_id','uid')->withDefault();
     }
