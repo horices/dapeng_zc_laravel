@@ -36,6 +36,14 @@ class BaseModel extends Model
         parent::setAttribute($key,$value);
     }
 
+    /**
+     * 获取当前登陆的用户信息
+     * @param Request $request
+     * @return mixed|\ArrayAccess[]|array[]|\ArrayAccess|array|Closure
+     */
+    public function getUserInfo(){
+        return session()->get("userInfo");
+    }
 
 
 

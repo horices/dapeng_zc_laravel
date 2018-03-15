@@ -20,6 +20,7 @@ use App\Utils\Util;
 use Faker\Provider\bn_BD\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class RegistrationController extends BaseController{
     function getAdd(){
@@ -232,23 +233,23 @@ class RegistrationController extends BaseController{
     function postUpdateRegistration(Request $request){
         $post = $request->post();
         $UserRegistration = new UserRegistrationModel();
-        //$UserRegistration = new UserRegistrationModel();
         $UserHeadMaster = new UserHeadMasterModel();
         $adviserId = 0;
         $tmpMap = [];
+
         if($post['client_submit'] == "WAP"){
             if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile']){
                 return response()->json(['code'=>Util::FAIL,'msg'=>'请填写课程顾问手机号!']);
             }
-            $tmpMap = ['mobile'=>$post['adviser_mobile']];
+            $tmpMap = ['mobile','=',$post['adviser_mobile']];
         }else if($post['client_submit'] == "PC"){
-            $tmpMap = ['uid'=>$this->getUserInfo()['uid']];
+            $tmpMap = ['uid','=',$this->getUserInfo($request)['uid']];
         }else{
             return response()->json(['code'=>Util::FAIL,'msg'=>'信息来源错误!']);
         }
 
         //查询和判断课程顾问
-        $hasAdviser = $UserHeadMaster->where($tmpMap)->field(true)->find();
+        $hasAdviser = $UserHeadMaster::where([$tmpMap])->first();
 
         if(!$hasAdviser){
             return response()->json(['code'=>Util::FAIL,'msg'=>'课程顾问不存在!']);
@@ -279,40 +280,38 @@ class RegistrationController extends BaseController{
 
         //添加用户支付信息
         $UserPay = new UserPayModel();
-        if($UserPay->create($post) === false || ($payId = $UserPay->add()) === false){
+
+        $res = $UserPay->addData($post);
+        if(!$res){
             DB::rollBack();
-            $this->returnAjaxJson(FAIL,$UserPay->getError());
         }
         //循环添加多个支付方式记录
         $UserPayLog = new UserPayLogModel();
-        $post['pay_id'] = $payId;
-
+        $post['pay_id'] = $res['id'];
+        $resUserPayLog = "";
         foreach ($post['pay_type_list'] as $key=>$val){
             $post['amount'] = $post['amount_list'][$key];
             $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
             $post['pay_type'] = $val;
-            if($UserPayLog->create($post) === false || $UserPayLog->add() === false){
+            $resUserPayLog = $UserPayLog->addData($post);
+            if(!$res){
                 DB::rollBack();
-                $this->returnAjaxJson(FAIL,$UserPayLog->getError());
             }
         }
 
         //$post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
-        $UserResitration = new UserRegistrationModel();
         $regData = [
             'remark'            =>  $post['remark'],
-            'amount_submitted'  =>  ['exp','amount_submitted+'.$allAmount]
+            'last_pay_time'     =>  $resUserPayLog['create_time']
         ];
-        $eff = $UserResitration->where(['id'=>$post['registration_id']])
-            ->save($regData);
+
+        $eff = $UserRegistration->where(['id','=',$post['registration_id']])
+            ->increment('amount_submitted',$allAmount,$regData);
         if(!$eff){
             DB::rollBack();
-            $this->returnAjaxJson(FAIL,$UserResitration->getError());
         }
-        //更新报名信息的最后一次提交支付记录时间
-        $UserResitration->setLastPayTime($post['registration_id']);
         DB::commit();
-        $this->returnAjaxJson(SUCCESS,'提交成功！');
+        return response()->json(['code'=>Util::SUCCESS,'msg'=>'提交成功!']);
     }
 
 
