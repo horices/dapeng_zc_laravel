@@ -102,10 +102,10 @@
                        <option value="ur.formal_time">开通正课时间</option>--}}
                 </select>
 
-                <input type="text" name="startdate" class="form-control datetime" id="startdate" style="height:30px;"
+                <input type="text" name="startdate" class="form-control select_date" id="startdate" style="height:30px;"
                        placeholder="开始时间" value="{{ Request::input('startdate') }}">
                 <label>&nbsp;至&nbsp;</label>
-                <input type="text" name="enddate" class="form-control datetime" id="enddate" style="height:30px;"
+                <input type="text" name="enddate" class="form-control select_date" id="enddate" style="height:30px;"
                        placeholder="结束时间" value="{{ Request::input('enddate') }}">
             </div>
             <div class="form-control" style="">
@@ -115,7 +115,7 @@
             </div>
             <div class="form-control" style="">
 <span class="but-ss fleft" style="line-height:25px; ">
-<a class="common-button combg1 linkSubmit" href="{:U('exportAdviserStatistics')}" style="">
+<a class="common-button combg1 linkSubmit" data="{export:1}" style="">
     导出
 </a>
 </span>
