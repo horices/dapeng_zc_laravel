@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Validator;
 class RosterModel extends BaseModel
 {
     protected $table = "user_roster";
+    protected $appends = [
+        'is_reg_text',
+        'roster_no',
+        'roster_type_text',
+        'course_type_text',
+        'group_status_text',
+        'addtime_export_text'
+    ];
 
     function getRosterNoAttribute(){
         return $this->type == 1 ? $this->qq: $this->wx;
@@ -26,6 +34,9 @@ class RosterModel extends BaseModel
     }
     function getGroupStatusTextAttribute(){
         return app("status")->getGroupStatus()[$this->group_status];
+    }
+    function getAddtimeExportTextAttribute($v){
+        return date('Y-m-d H:i:s',$this->addtime);
     }
     function getAddtimeTextAttribute($v){
         return date('m-d',$this->addtime)."<br />".date('H:i',$this->addtime);
