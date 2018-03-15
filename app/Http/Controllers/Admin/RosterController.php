@@ -47,7 +47,7 @@ class RosterController extends BaseController
         return response()->json($returnData);
     }
 
-    function getList($export = 0){
+    function getList(){
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
@@ -91,7 +91,7 @@ class RosterController extends BaseController
             $query->whereRaw("addtime <= ".strtotime($endDate));
         }
         $query->where($where);
-        if($export == 1){
+        if(Input::get('export') == 1){
             return $this->exportRosterList($query);
         }
         $list = $query->paginate();
@@ -102,7 +102,7 @@ class RosterController extends BaseController
 
     function exportRosterList($query){
         //对数据进行导出，不进行展现
-        $data['filename'] = "所有数据导出";
+        $data['filename'] = "所有数据导出".date('YmdHis');
         $data['title'] = [
             'roster_no'    =>  '号码',
             'group.group_name'    =>  '班级代号',
