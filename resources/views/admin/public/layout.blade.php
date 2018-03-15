@@ -14,7 +14,6 @@
 <link href="/admin/css/page.css" rel="stylesheet">
 <link href="/admin/css/btn.css" rel="stylesheet">
 <link href="/admin/css/status.css" rel="stylesheet">
-<script src="/js/bootstrap.min.js"></script>
 @include("admin.public.js")
 <style>
 a{ text-decoration:none;}

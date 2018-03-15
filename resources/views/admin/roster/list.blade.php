@@ -105,7 +105,7 @@
             </div>--}}
             <div class="form-group">
                 <a href="" class="common-button combg2 linkSubmit">搜索</a>
-                <a class="common-button combg4 linkSubmit" href="">
+                <a class="common-button combg4 linkSubmit" showLoading="true" data="{export:1,test:2}" href="{{ route("admin.roster.list",['export'=>1]) }}" >
                     导出
                 </a>
 

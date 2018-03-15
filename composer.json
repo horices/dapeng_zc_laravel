@@ -9,13 +9,12 @@
 	"type" : "project",
 	"require" : {
 		"php": ">=7.0.0",
-		"fideloper/proxy": "~3.3",
-		"laravel/framework": "5.5.*",
-		"laravel/tinker": "~1.0",
 		"curl/curl": "^1.5",
+		"fideloper/proxy": "~3.3",
 		"khanamiryan/qrcode-detector-decoder": "^1.0",
 		"laravel/framework": "5.5.*",
-		"laravel/tinker": "~1.0"
+		"laravel/tinker": "~1.0",
+		"maatwebsite/excel": "~2.1.0"
 	},
 	"require-dev" : {
 		"filp/whoops" : "~2.0",

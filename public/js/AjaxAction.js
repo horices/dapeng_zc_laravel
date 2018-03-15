@@ -60,7 +60,7 @@
 		    });
 		    //绑定重置事件
 		    $(".resetForm").each(function(){
-		       $(this).attr("href","javascript:;"); 
+		       $(this).attr("href","javascript:;");
 		    });
 		    $(".resetForm").click(function(){
 		        $(this).parents("form")[0].reset();
@@ -275,7 +275,18 @@
 		        }
 		        var options = {
 		        	yes:function(){
+		        		var exparams = Utils.strtoobj(obj.attr('data'));
+		        		var node = [];
+		        		var input = '';
+                        for(var k in exparams){
+                        	input = $("<input name='"+k+"' type='hidden' value='" +exparams[k]+ "' />");
+                        	node.push(input);
+                        	form.prepend(input);
+						}
 		        		form[0].submit();
+                        for(var i = 0 ;i<node.length;i++){
+                            node[i].remove();
+						}
 		        	}
 		        };
 		        if(obj.attr("warning")){
@@ -364,7 +375,7 @@
 		    if(_this.beforeBaseAjaxAction(obj) === false){
 		    	return false;
 		    }
-		    
+
 		    var options = {
 		    		yes:function(){
 		    			if(_this.getfn(_this.options.event.ajaxBefore)(obj) === false){
@@ -484,7 +495,7 @@
 		/**
 		 * 异步提交前操作
 		 * @param obj
-		 */ 
+		 */
 		_this.beforeBaseAjaxAction = function (obj){
 			$(obj).attr("interval") || $(obj).attr("interval","1500");
 			if(obj.attr("processing") == "true"){
@@ -509,7 +520,7 @@
 			obj.attr("pagesize") || obj.attr("pagesize",10);
 			obj.attr("storage") || obj.attr("storage","false");
 			obj.attr("direction") || obj.attr("direction","down");
-			
+
 			function scrollCallback(){
 				alert("scrollCallback");
 			}

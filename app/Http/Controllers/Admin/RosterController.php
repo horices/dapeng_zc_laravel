@@ -5,14 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\RosterAdd;
 use App\Models\GroupModel;
 use App\Models\RosterModel;
+use App\Models\UserModel;
 use App\Utils\Util;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Classes\LaravelExcelWorksheet;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Writers\LaravelExcelWriter;
 
 class RosterController extends BaseController
 {
@@ -39,7 +46,8 @@ class RosterController extends BaseController
         }
         return response()->json($returnData);
     }
-    function getList(){
+
+    function getList($export = 0){
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
@@ -83,10 +91,32 @@ class RosterController extends BaseController
             $query->whereRaw("addtime <= ".strtotime($endDate));
         }
         $query->where($where);
+        if($export == 1){
+            return $this->exportRosterList($query);
+        }
         $list = $query->paginate();
         return view("admin.roster.list",[
             'list' => $list
         ]);
+    }
+
+    function exportRosterList($query){
+        //对数据进行导出，不进行展现
+        $data['filename'] = "所有数据导出";
+        $data['title'] = [
+            'roster_no'    =>  '号码',
+            'group.group_name'    =>  '班级代号',
+            'group.qq_group'    =>  '群号',
+            'roster_type_text'    =>  '类型',
+            'inviter_name'    => '推广专员',
+            'last_adviser_name' =>  '课程顾问',
+            'addtime_export_text'   =>  '提交时间',
+            'is_reg_text'   =>  "是否注册",
+            "course_type_text"  =>  "课程类型",
+            "group_status_text" =>  "进群状态",
+        ];
+        $data['data'] = $query->take(5000)->get();
+        return $this->export($data);
     }
 }
 

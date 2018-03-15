@@ -39,7 +39,7 @@
 
         <div class="form-group"  style=" color:#fff;  width:122px; margin-top:3px;  ">
             <span class="but-ss fleft" style=" height:auto;text-align:center; line-height:25px; ">
-                <a class="common-button combg4 linkSubmit" href="{:U('exportUserStatistics')}" style="height:30px;line-height:20px;">导出</a>
+                <a class="common-button combg4 linkSubmit" data="{export:1}" style="height:30px;line-height:20px;">导出</a>
             </span>
         </div>
     </form>

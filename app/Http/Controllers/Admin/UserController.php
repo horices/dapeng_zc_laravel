@@ -25,6 +25,9 @@ class UserController extends BaseController
         }
         if($grade !== null)
             $query->where("grade",$grade);
+        if(Input::get('export') == 1){
+            return $this->exportUserList($query);
+        }
         //获取最新20条记录
         $list = $query->orderBy("uid","desc")->paginate();
         return view("admin.user.list",[
@@ -71,6 +74,21 @@ class UserController extends BaseController
             }
         }
         return response()->json($returnData);
+    }
+
+    function exportUserList($query){
+        $data['filename'] = "用户列表".date('YmdHis');
+        $data['title']  =   [
+            'staff_no'    =>  '工号',
+            'name'      =>  '姓名',
+            'mobile'  =>  '手机号',
+            'dapeng_user_mobile'  =>  '主站手机号',
+            'status_text'   =>  '状态',
+            'grade_text'          =>  '用户级别'
+
+        ];
+        $data['data'] = $query->take(5000)->get();
+        return $this->export($data,'xls');
     }
 }
 

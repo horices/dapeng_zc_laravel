@@ -4,7 +4,7 @@
     <form class="form-inline" style="width:920px; height:auto;" method="get">
         <div class="form-tm" style="float:left; margin-left:10px;">
             <input type="text" name="qq" class="form-control" style="height:30px;width:120px;" placeholder="搜索QQ号"
-                   value="{$Think.get.qq}">
+                   value="">
             <label>
                 <select name="deep_level" style="padding:3px;">
                     <option value="">私聊深度</option>
@@ -27,13 +27,10 @@
                     <option value="create_time">私聊时间</option>
                 </select>&nbsp;</label>
             <input type="text" name="startdate" class="form-control datetime" id="startdate" style="height:30px;"
-                   placeholder="开始时间" value="{$Think.get.startdate}">
+                   placeholder="开始时间" value="">
             <label>&nbsp;至&nbsp;</label>
             <input type="text" name="enddate" class="form-control datetime" id="enddate" style="height:30px;"
-                   placeholder="结束时间" value="{$Think.get.enddate}">
-        </div>
-        <div class="fleft" style="height:35px;overflow:hidden;line-height:35px;"><a
-                    href="{:U('',mergeArray($_GET,['startdate'=>date('Y-m-d 00:00'),'enddate'=>date('Y-m-d 23:59')]))}">今日</a>
+                   placeholder="结束时间" value="">
         </div>
         <div class="form-but" style="float:left;  color:#fff;  width:122px; margin-top:3px;  ">
 <span class="but-ss" style=" height:auto;text-align:center; line-height:25px; ">
