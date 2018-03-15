@@ -11,6 +11,10 @@ namespace App\Models;
 
 class CoursePackageModel extends BaseModel {
     protected $table = "course_package";
+    public $timestamps = true;
+    protected $dateFormat = 'U';
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = 'update_time';
     //赠送课程
     public $give = [
         0=>['id'=>0,'text'=>'无','checked'=>false],

@@ -11,4 +11,8 @@ namespace App\Models;
 
 class RebateActivityModel extends BaseModel {
     protected $table = "rebate_activity";
+    public $timestamps = true;
+    protected $dateFormat = 'U';
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = 'update_time';
 }

@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Validator;
 
 class UserPayModel extends BaseModel{
     protected $table = "user_pay";
-    const CREATED_AT = 'creation_time';
+    public $timestamps = true;
+    protected $dateFormat = 'U';
+    const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
     protected $fillable = ["id", "uid", "amount","registration_id","package_id","mobile","qq","rebate","remark", "create_time", "update_time", "adviser_id", "adviser_name", "adviser_qq", "name"];
     /**
@@ -26,6 +28,7 @@ class UserPayModel extends BaseModel{
         $userInfo = $this->getUserInfo();
         Util::setDefault($data['adviser_id'],$userInfo['uid']);
         Util::setDefault($data['adviser_name'],$userInfo['name']);
+        $data = $this->getColumns($data);
         $validator = Validator::make($data,[
             'mobile'    =>  'regex:/\d{11}/',
             'amount'    =>  'sometime|numeric'

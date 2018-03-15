@@ -14,7 +14,9 @@ use Illuminate\Validation\Rule;
 
 class UserRegistrationModel extends BaseModel{
     protected $table = "user_registration";
-    const CREATED_AT = 'creation_time';
+    public $timestamps = true;
+    protected $dateFormat = 'U';
+    const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
     //报名分期付款方式
     public $fqType = [

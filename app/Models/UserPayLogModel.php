@@ -15,7 +15,9 @@ use Illuminate\Validation\Rule;
 
 class UserPayLogModel extends BaseModel {
     protected $table = "user_pay_log";
-    const CREATED_AT = 'creation_time';
+    public $timestamps = true;
+    protected $dateFormat = 'U';
+    const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
     //支付方式
     public $payType = [
@@ -35,6 +37,7 @@ class UserPayLogModel extends BaseModel {
         $userInfo = $this->getUserInfo();
         Util::setDefault($data['adviser_id'],$userInfo['uid']);
         Util::setDefault($data['adviser_name'],$userInfo['name']);
+        $data = $this->getColumns($data);
         $validator = Validator::make($data,[
             'mobile'        =>  'required|regex:/\d{11}/',
             'pay_time'      =>  'required|numeric',

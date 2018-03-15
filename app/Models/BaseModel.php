@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class BaseModel extends Model
 {
@@ -43,6 +44,22 @@ class BaseModel extends Model
      */
     public function getUserInfo(){
         return session()->get("userInfo");
+    }
+
+    /**
+     * 获取当前model下 表包含的字段 键值对
+     * @param array $data
+     * @return array
+     */
+    public function getColumns(array $data){
+        $columns = Schema::getColumnListing($this->table);
+        $fields = [];
+        foreach ($columns as $key=>$val){
+            if(isset($data[$val])){
+                $fields[$val] = $data[$val];
+            }
+        }
+        return $fields;
     }
 
 
