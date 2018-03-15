@@ -302,10 +302,9 @@ class RegistrationController extends BaseController{
         //$post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
         $regData = [
             'remark'            =>  $post['remark'],
-            'last_pay_time'     =>  $resUserPayLog['create_time']
+            'last_pay_time'     =>  $resUserPayLog['create_time'],
         ];
-
-        $eff = $UserRegistration->where(['id','=',$post['registration_id']])
+        $eff = $UserRegistration->where('id','=',$post['registration_id'])
             ->increment('amount_submitted',$allAmount,$regData);
         if(!$eff){
             DB::rollBack();
