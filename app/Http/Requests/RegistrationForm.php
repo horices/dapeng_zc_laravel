@@ -19,8 +19,7 @@ class RegistrationForm extends FormRequest{
     public function messages()
     {
         return [
-            'username.required'=>'请输入用户名',
-            'password.required'=>'请输入密码'
+
         ];
     }
 
@@ -42,8 +41,7 @@ class RegistrationForm extends FormRequest{
     public function rules()
     {
         return [
-            'username'=>'required',
-            'password'  => 'required'
+
         ];
     }
 }

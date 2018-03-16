@@ -30,4 +30,5 @@ class CoursePackageModel extends BaseModel {
         10=>['id'=>'10','text'=>'摄影','checked'=>false],
         11=>['id'=>'11','text'=>'美妆','checked'=>false],
     ];
+
 }

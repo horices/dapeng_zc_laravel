@@ -40,11 +40,16 @@ Route::get("index/select_group","BaseController@getSelectGroup")->name("admin.pu
 Route::get("roster/statistics/seoer_statistics/{export?}","Roster\StatisticsController@getSeoerStatistics")->name("admin.public.seoer_statistics");
 Route::get("roster/statistics/adviser_statistics","Roster\StatisticsController@getAdviserStatistics")->name("admin.public.adviser_statistics");
 
+/*支付系统*/
 //支付统计
 Route::get("registration/add","RegistrationController@getAdd");
 //验证 支付 是否已存在 并且获取信息
 Route::post("registration/has-registration","RegistrationController@postHasRegistration");
 //写入支付记录
 Route::post("registration/add-registration","RegistrationController@postAddRegistration");
-//更新支付记录
+//更新 报名
 Route::post("registration/update-registration","RegistrationController@postUpdateRegistration");
+//异步获课程取套餐列表
+Route::post("registration/get-package-list","RegistrationController@postPackageList");
+//支付用户统计列表
+Route::get("registration/user-list","RegistrationController@getUserList");

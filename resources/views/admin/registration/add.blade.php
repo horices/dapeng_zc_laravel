@@ -2,6 +2,7 @@
 @section("right_content")
     <link rel="stylesheet" href="/js/datetimepicker/jquery.datetimepicker.css">
     <script>
+        var isAjax = 0;
         function loadInit() {
             vm = new Vue({
                 el: '#container',
@@ -162,12 +163,15 @@
                     },
                     searchPackage:function () { //搜索相关套餐
                         var _this = this;
-                        if(isAjax == 1){
-                            return ;
-                        }
-                        isAjax = 1;
+//                        if(isAjax == 1){
+//                            return ;
+//                        }
+//                        isAjax = 1;
                         $.ajax({
-                            url         :   "{:U('getPackageList')}",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url         :   "{{url('admin/registration/get-package-list')}}",
                             dataType    :   'json',
                             method      :   'post',
                             data        :   {'title':_this.userPayInfo.package_tmp_title},
@@ -261,6 +265,27 @@
             });
             return ;
         }
+
+        /**
+         *  选择课程套餐
+         * @param obj
+         */
+        function setPackName(obj) {
+//            $("#package-title").val($(obj).text());
+            vm.userPayInfo.package_title = $(obj).find('a').text();
+            vm.userPayInfo.package_tmp_title = vm.userPayInfo.package_title;
+            $(".course-package").hide();
+            console.log($(obj).attr("price"));
+            if($(obj).attr("price"))
+                vm.userPayInfo.package_price = $(obj).attr("price");
+            //套餐ID
+            console.log($(obj).attr("package-id"));
+            if($(obj).attr("package-id"))
+                vm.userPayInfo.package_id = $(obj).attr("package-id");
+            vm.userPayInfo.package_total_price = parseFloat(vm.userPayInfo.package_price)+parseFloat(vm.userPayInfo.package_attach_price);
+            setPackageTotal(); //计算最终套餐价格
+        }
+
         /**
          *  判断赠送课程是否包含
          * @param str
@@ -399,7 +424,6 @@
                             <input type="hidden" name="rebate_price" v-model="userPayInfo.rebate_price" />
                         </div>
 
-
                         <div class="div_input_one">
                             <label class="col-md-2 control-label" for="input01">
                                 优惠金额：
@@ -506,7 +530,7 @@
                     <input type="hidden" name="rebate_id" v-model="userPayInfo.rebate_id" :disabled="!hasUser" />
                     <input type="hidden" name="registration_id" v-model="userPayInfo.id" :disabled="!hasUser" />
                     <input type="hidden" name="client_submit" value="PC" />
-                    <button class="btn btn-primary ajaxSubmit" type="button" url="{{url('add-registration')}}">确认提交</button>
+                    <button class="btn btn-primary ajaxSubmit" type="button" url="{{url('admin/registration/add-registration')}}">确认提交</button>
                 </div>
             </div>
         </div>

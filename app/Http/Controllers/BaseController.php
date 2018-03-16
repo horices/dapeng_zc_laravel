@@ -110,6 +110,11 @@ class BaseController extends Controller
             'url'=> "/admin/registration/add",    //链接地址
             'flag'=> 'group_list',  //默认选中标识
         ],
+        'pay_list' =>   [
+            'text'=> '支付查询',   //文字描述
+            'url'=> "/admin/registration/user-list",    //链接地址
+            'flag'=> 'admin.registration.user-list',  //默认选中标识
+        ],
     ];
     
     /**
