@@ -37,7 +37,7 @@ Route::post("roster/follow/save/{roster_id}/{follow_id?}","Roster\FollowControll
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
 Route::get("index/select_adviser","BaseController@getSelectAdviser")->name("admin.public.select_adviser");
 Route::get("index/select_group","BaseController@getSelectGroup")->name("admin.public.select_group");
-Route::get("roster/statistics/seoer_statistics/{export?}","Roster\StatisticsController@getSeoerStatistics")->name("admin.public.seoer_statistics");
+Route::get("roster/statistics/seoer_statistics","Roster\StatisticsController@getSeoerStatistics")->name("admin.public.seoer_statistics");
 Route::get("roster/statistics/adviser_statistics","Roster\StatisticsController@getAdviserStatistics")->name("admin.public.adviser_statistics");
 
 /*支付系统*/
