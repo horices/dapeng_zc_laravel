@@ -89,22 +89,37 @@ class RosterModel extends BaseModel
         /**
          * @var $validator \Illuminate\Validation\Validator;
          */
+        $columnText = app("status")->getRosterType()[$data['roster_type']];;
         $validator = Validator::make($data,[
             'roster_no' =>  'required',
             'roster_type'   =>  'required|in:1,2',
             //'qq_group_id'   =>  'required|exists:user_qqgroup,id',
             'seoer_id'   =>  'required|exists:user_headmaster,uid'
         ],[
-            'roster_no.required' =>  '请输入号码',
-            'roster_no.unique'  =>  '该号码已存在',
+            'roster_no.required' =>  '请输入'.$columnText.'号码',
+            'roster_no.unique'  =>  '该'.$columnText.'号码已存在',
+            'roster_no.digits_between'  =>  'QQ号码必须为全数字，且长度在5-11位',
+            'roster_no.regex'  =>  '该微信号不符合规则',
             'roster_type.required'  =>  '请选择正确的提交类型',
             'roster_type.in'    => "类型只能为1或2",
-            'qq_group_id.required'   =>  '请选择QQ群',
-            'qq_group_id.exists'   =>   'QQ群不存在',
+            'qq_group_id.required'   =>  '请选择'.$columnText.'群',
+            'qq_group_id.exists'   =>   $columnText.'群不存在',
             'seoer_id.required'  =>  '请选择推广专员',
             'seoer_id.exists'   => '推广专员不存在'
         ]);
         $createData = [];   //重置要添加的数据
+        /**
+         * QQ提交时，需要全数字，并且长度为5-12
+         * 微信提交时，
+         */
+        $validator->sometimes("roster_no","digits_between:5,12",function($input){
+            return $input->roster_type == 1;
+        });
+        $validator->sometimes("roster_no",[
+            "regex:/^[a-zA-Z][\w-]{5,19}$/isU"
+        ],function($input){
+            return $input->roster_type == 2;
+        });
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //该量已经存在，判断该量是否允许被添加,添加验证规则，返回 false 表示允许添加  返回 true 表示进需要行验证，不能进行添加
         $validator->sometimes('roster_no','unique:user_roster,'.$column,function($input) use($column , &$roster , &$createData){

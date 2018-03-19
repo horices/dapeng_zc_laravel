@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RosterAdd extends FormRequest
+class ConfirmPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class RosterAdd extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,16 @@ class RosterAdd extends FormRequest
     public function rules()
     {
         return [
-            'type'  => 'required'
+            'password'  =>  'nullable|min:6|max:16|confirmed',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'password.min'  =>  '最少为六位',
+            'password.max'  =>  '最长为16位',
+            'password.confirmed'    =>  '两次密码不一致'
         ];
     }
 }
