@@ -89,8 +89,8 @@ class StatisticsController extends BaseController
         $searchType = Input::get("searchType");
         $keywords = Input::get("keywords");
         $rosterType = Input::get("roster_type");
-        $startDate = Input::get("startDate");
-        $endDate = Input::get("endDate");
+        $startDate = Input::get("startdate");
+        $endDate = Input::get("enddate");
         $field = collect($column)->merge(['is_reg','course_type','group_status'])->filter();
         if($searchType && $keywords !== null){
             $user->where($searchType,$keywords);

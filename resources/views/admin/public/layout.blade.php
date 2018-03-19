@@ -114,12 +114,12 @@ $(function(){
                 
                 <ul class="nav navbar-nav navbar-right dp-navbar">
                     <li class="dropdown hidden-lt-ie8">
-                    	<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade_text")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
+                    	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade_text")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
                         <ul class="dp-dropdown-menu dropdown-menu">
                             <div class="border-top"></div>
-                            <li><a href="{:U('accounts')}">个人中心</a></li>
+                            <li><a href="{{ route("admin.public.account") }}">个人中心</a></li>
                             <li class="divider"></li>
-                            <li><a href="{:U('Portal/logout')}" class="">退出登陆</a></li>
+                            <li><a href="{{ route("admin.public.logout") }}" class="">退出登陆</a></li>
                         </ul>
                     </li>
                 </ul>
