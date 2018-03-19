@@ -10,6 +10,7 @@ namespace App\Http\Requests;
 
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Validator;
 
 class RegistrationForm extends FormRequest{
     /**
@@ -19,7 +20,11 @@ class RegistrationForm extends FormRequest{
     public function messages()
     {
         return [
-
+            'mobile.required'       =>  "请输入正确格式的手机号！",
+            'mobile.regex'          =>  "请输入正确格式的手机号！",
+            'adviser_mobile.required'=> "请输入课程顾问手机号！",
+            'adviser_mobile.regex'   => "课程顾问手机号格式错误！",
+            'adviser_mobile.regex'   => "课程顾问手机号格式错误！",
         ];
     }
 
@@ -41,7 +46,19 @@ class RegistrationForm extends FormRequest{
     public function rules()
     {
         return [
-
+            'mobile'            =>  'required|numeric|regex:/^(1[0-9][0-9])\\d{8}$/',
         ];
+    }
+
+    /**
+     * 重新方法 使用sometimes
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function getValidatorInstance(){
+        $validator = parent::getValidatorInstance();
+        $validator->sometimes('adviser_mobile', 'required|numeric|regex:/^(1[0-9][0-9])\\d{8}$/|exists:user_headmaster,mobile', function($input) {
+            return $input->client_submit == "WAP";
+        });
+        return $validator;
     }
 }

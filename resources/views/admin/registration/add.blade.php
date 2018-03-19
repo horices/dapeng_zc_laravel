@@ -229,7 +229,7 @@
             if(jsonData.code == 1 && jsonData.data){
                 //获取用户支付的相关信息
                 vm.userPayInfo = jsonData.data;
-                vm.userPayInfo.package_tmp_title = jsonData.data.course_package.title;
+                vm.userPayInfo.package_title = vm.userPayInfo.package_tmp_title = jsonData.data.course_package.title;
                 vm.userPayInfo.rebate_tmp_title = jsonData.data.rebate_activity.title;
                 if(jsonData.data.course_package_attach){
                     vm.packageAttachList.push(jsonData.data.course_package_attach);

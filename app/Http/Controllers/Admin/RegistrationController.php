@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Api\DapengUserApi;
+use App\Exceptions\UserValidateException;
 use App\Http\Requests\RegistrationForm;
 use App\Models\CoursePackageModel;
 use App\Models\RebateActivityModel;
@@ -49,20 +50,21 @@ class RegistrationController extends BaseController{
     /**
      * @note 检查学员是否已经报名
      */
-    function postHasRegistration(Request $request){
+    function postHasRegistration(RegistrationForm $request){
         $post = $request->post();
         if(!isset($post['mobile']) || !is_numeric($post['mobile']) || !Util::checkMobileFormat($post['mobile'])){
             return response()->json(['code'=>Util::FAIL,"msg"=>"开课手机号有误请检查!"]);
         }
         //获取当前登录者信息
-        $adminInfo = $this->getUserInfo($request);
+        $adminInfo = $this->getUserInfo();
         //初始化课程顾问ID
         $adviserId = 0;
 
         //如果是手机端提交则需要检查课程顾问
         if($post['client_submit'] == "WAP"){
             if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile'] || !Util::checkMobileFormat($post['adviser_mobile'])){
-                return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问手机号有误请检查!"]);
+                throw new UserValidateException("课程顾问手机号有误请检查");
+                //return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问手机号有误请检查!"]);
             }
             //查询和判断课程顾问
             $hasAdviser = UserHeadMasterModel::where(['mobile','=',$post['adviser_mobile']])->first();

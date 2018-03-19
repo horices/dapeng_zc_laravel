@@ -20,7 +20,7 @@ class UserRegistrationModel extends BaseModel{
     const UPDATED_AT = 'update_time';
 
     protected $appends = [
-        "is_belong"
+        "is_belong","is_open_text","fq_type_text"
     ];
     //报名分期付款方式
     public $fqType = [
@@ -33,15 +33,15 @@ class UserRegistrationModel extends BaseModel{
     public $isOpenArr = ['未开课','部分开课','全部开课'];
 
     //获取分期类型
-    public function getFqTypeAttribute($value){
-        if(in_array($value,$this->fqType))
-            return $this->fqType[$value];
+    public function getFqTypeTextAttribute(){
+        if(in_array($this->fq_type,$this->fqType))
+            return $this->fqType[$this->fq_type];
         else
             return "无分期";
     }
     //获取开课状态
-    public function getIsOpenAttribute($value){
-        return $this->isOpenArr[$value];
+    public function getIsOpenTextAttribute(){
+        return $this->isOpenArr[$this->is_open];
     }
     //获取套餐总价格
     public function getPackageTotalPriceAttribute(){
