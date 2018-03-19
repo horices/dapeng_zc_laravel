@@ -96,7 +96,7 @@ class RosterModel extends BaseModel
             //'qq_group_id'   =>  'required|exists:user_qqgroup,id',
             'seoer_id'   =>  'required|exists:user_headmaster,uid'
         ],[
-            'roster_no.required' =>  '请输入号码',
+            'roster_no.required' =>  '请输入'.$columnText.'号码',
             'roster_no.unique'  =>  '该'.$columnText.'号码已存在',
             'roster_no.digits_between'  =>  'QQ号码必须为全数字，且长度在5-11位',
             'roster_no.regex'  =>  '该微信号不符合规则',
