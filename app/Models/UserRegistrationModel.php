@@ -18,6 +18,10 @@ class UserRegistrationModel extends BaseModel{
     protected $dateFormat = 'U';
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
+
+    protected $appends = [
+        "is_belong"
+    ];
     //报名分期付款方式
     public $fqType = [
         'CASH'      =>  '现金分期',
@@ -39,21 +43,44 @@ class UserRegistrationModel extends BaseModel{
     public function getIsOpenAttribute($value){
         return $this->isOpenArr[$value];
     }
+    //获取套餐总价格
+    public function getPackageTotalPriceAttribute(){
+        return $this->coursePackage->price+$this->coursePackageAttach->price;
+    }
+
+    /**
+     * 获取isBelong
+     * @return int
+     */
+    public function getIsBelongAttribute(){
+        return 1;
+    }
 
     /**
      * 获得关联的主套餐课程。
      */
     public function coursePackage()
     {
-        return $this->belongTo(CoursePackageModel::class,'package_id','id');
+        return $this->belongsTo(CoursePackageModel::class,'package_id','id');
     }
     /**
      * 获得关联的副套餐课程。
      */
     public function coursePackageAttach()
     {
-        return $this->belongTo(CoursePackageModel::class,'package_attach_id','id');
+        return $this->belongsTo(CoursePackageModel::class,'package_attach_id','id');
     }
+
+    /**
+     * 获取优惠活动信息
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rebateActivity(){
+        return $this->belongsTo(RebateActivityModel::class,'rebate_id','id');
+    }
+
+
+
 
     /**
      * 新增数据

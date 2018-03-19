@@ -42,14 +42,14 @@ Route::get("roster/statistics/adviser_statistics","Roster\StatisticsController@g
 
 /*支付系统*/
 //支付统计
-Route::get("registration/add","RegistrationController@getAdd");
+Route::get("registration/add","RegistrationController@getAdd")->name("admin.registration.add");
 //验证 支付 是否已存在 并且获取信息
-Route::post("registration/has-registration","RegistrationController@postHasRegistration");
+Route::post("registration/has-registration","RegistrationController@postHasRegistration")->name("admin.registration.has-registration");
 //写入支付记录
-Route::post("registration/add-registration","RegistrationController@postAddRegistration");
+Route::post("registration/add-registration","RegistrationController@postAddRegistration")->name("admin.registration.add-registration");
 //更新 报名
-Route::post("registration/update-registration","RegistrationController@postUpdateRegistration");
+Route::post("registration/update-registration","RegistrationController@postUpdateRegistration")->name("admin.registration.update-registration");
 //异步获课程取套餐列表
-Route::post("registration/get-package-list","RegistrationController@postPackageList");
+Route::post("registration/get-package-list","RegistrationController@postPackageList")->name("admin.registration.get-package-list");
 //支付用户统计列表
-Route::get("registration/user-list","RegistrationController@getUserList");
+Route::get("registration/user-list","RegistrationController@getUserList")->name("admin.registration.user-list");

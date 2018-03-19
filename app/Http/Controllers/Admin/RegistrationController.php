@@ -29,13 +29,12 @@ class RegistrationController extends BaseController{
         //获取附加课程套餐列表
         $CoursePackage = new CoursePackageModel();
         //$packageAttachList = $CoursePackage->where(['type'=>1,'status'=>'USE'])->select();
-        $packageAttachList = $CoursePackage::where([
+        $packageAttachList = CoursePackageModel::where([
             ['type','=',1],
             ['status','=','USE'],
         ])->get();
         //优惠活动列表
-        $RebateActivity = new RebateActivityModel();
-        $rebateList = $RebateActivity::where('status','=','USE')->get();
+        $rebateList = RebateActivityModel::where('status','=','USE')->get();
 
         //分期支付方式列表
         $UserRegistration = new UserRegistrationModel();
@@ -52,7 +51,6 @@ class RegistrationController extends BaseController{
      */
     function postHasRegistration(Request $request){
         $post = $request->post();
-        $UserRegistration = new UserRegistrationModel();
         if(!isset($post['mobile']) || !is_numeric($post['mobile']) || !Util::checkMobileFormat($post['mobile'])){
             return response()->json(['code'=>Util::FAIL,"msg"=>"开课手机号有误请检查!"]);
         }
@@ -67,8 +65,7 @@ class RegistrationController extends BaseController{
                 return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问手机号有误请检查!"]);
             }
             //查询和判断课程顾问
-            $UserHeadMaster = new UserHeadMasterModel();
-            $hasAdviser = $UserHeadMaster::where(['mobile','=',$post['adviser_mobile']])->first();
+            $hasAdviser = UserHeadMasterModel::where(['mobile','=',$post['adviser_mobile']])->first();
             if(!$hasAdviser){
                 return response()->json(['code'=>Util::FAIL,"msg"=>"课程顾问不存在!"]);
             }
@@ -89,39 +86,8 @@ class RegistrationController extends BaseController{
         if($hasDapengUser['code'] == Util::FAIL){
             return response()->json(['code'=>Util::FAIL,"msg"=>"该开课手机号未注册!"]);
         }
-
-        $map = [['mobile','=',$post['mobile']]];
-        $hasReg = $UserRegistration::where($map)->orderBy("id","desc")->first();
+        $hasReg = UserRegistrationModel::with(["rebateActivity"])->where("mobile",$post['mobile'])->orderBy("id","desc")->first();
         if($hasReg){
-            $hasReg = $hasReg->toArray();
-            $hasReg['isBelong'] = 0;
-            //获取课程套餐信息
-            $coursePackage = new CoursePackageModel();
-            $packageInfo = $coursePackage::where('id','=',$hasReg['package_id'])->first()->toArray();
-
-            $hasReg['package_title'] = $packageInfo['title'];
-            if($packageInfo['status'] == 'DEL'){
-                $hasReg['package_title'] = $hasReg['package_title']."(已删)";
-            }
-            $hasReg['package_price'] = $packageInfo['price'];
-            //获取附加套餐信息
-            $packageAttach = $coursePackage::where('id','=',$hasReg['package_attach_id'])
-                ->first()->toArray();
-            $hasReg['package_attach_title'] = $packageAttach['title'];
-            $hasReg['package_attach_price'] = $packageAttach['price'];
-            $hasReg['package_total_price'] = $packageAttach['price']+$packageInfo['price'];
-            //当前附加套餐信息
-            $hasReg['package_attach_current_data'] = $packageAttach;
-            //获取惠活动信息
-            $RebateActivity = new RebateActivityModel();
-            $rebateData = $RebateActivity::where('id','=',$hasReg['rebate_id'])
-                ->first()->toArray();
-            $hasReg['rebate_price'] = $hasReg['rebate'];
-            $hasReg['rebate_title'] = $rebateData['title'];
-            //检查该学员是否属于当前课程顾问
-//            if($hasReg['adviser_id'] == $adviserId)
-//                $hasReg['isBelong'] = 1;
-            $hasReg['isBelong'] = 1;
             return response()->json(['code'=>Util::SUCCESS,"msg"=>"学员已报名!",'data'=>$hasReg]);
         }else{
             return response()->json(['code'=>Util::SUCCESS,"msg"=>"该学员未报名,请填写报名信息!",'data'=>'']);

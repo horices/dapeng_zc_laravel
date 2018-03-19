@@ -31,4 +31,16 @@ class CoursePackageModel extends BaseModel {
         11=>['id'=>'11','text'=>'美妆','checked'=>false],
     ];
 
+    /**
+     * 获取套餐标题
+     * @param $value
+     * @return string]
+     */
+    public function getTitleAttribute($value){
+        if($this->status == "DEL")
+            return $value."(已删)";
+        else
+            return $value;
+    }
+
 }

@@ -229,15 +229,15 @@
             if(jsonData.code == 1 && jsonData.data){
                 //获取用户支付的相关信息
                 vm.userPayInfo = jsonData.data;
-                vm.userPayInfo.package_tmp_title = jsonData.data.package_title;
-                vm.userPayInfo.rebate_tmp_title = jsonData.data.rebate_title;
-                if(jsonData.data.package_attach_current_data){
-                    vm.packageAttachList.push(jsonData.data.package_attach_current_data);
+                vm.userPayInfo.package_tmp_title = jsonData.data.course_package.title;
+                vm.userPayInfo.rebate_tmp_title = jsonData.data.rebate_activity.title;
+                if(jsonData.data.course_package_attach){
+                    vm.packageAttachList.push(jsonData.data.course_package_attach);
                 }
                 vm.hasUser = 1;
                 //修改异步提交地址
                 //$(".ajaxSubmit").attr("href","{:U('updateRegistration')}");
-                $(".ajaxSubmit").attr("url","{{url('admin/registration/update-registration')}}");
+                $(".ajaxSubmit").attr("url","{{route('admin.registration.update-registration')}}");
                 //判断是否属于当前课程顾问，非当前课程顾问的学员不能提交支付信息
                 if(jsonData.data.isBelong == 0){
                     $(".ajaxSubmit").attr("disabled",true);
