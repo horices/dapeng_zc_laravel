@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class BaseController extends Controller
 {
@@ -198,11 +199,9 @@ class BaseController extends Controller
 
     /**
      * 获取当前登陆的用户信息
-     * @param Request $request
-     * @return mixed|\ArrayAccess[]|array[]|\ArrayAccess|array|Closure
      */
-    public function getUserInfo(Request $request){
-        return $request->session()->get("userInfo");
+    public function getUserInfo(){
+        return Session::get("userInfo");
     }
 
     /**

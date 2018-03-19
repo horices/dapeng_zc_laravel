@@ -39,8 +39,7 @@ Route::get("index/select_adviser","BaseController@getSelectAdviser")->name("admi
 Route::get("index/select_group","BaseController@getSelectGroup")->name("admin.public.select_group");
 Route::get("roster/statistics/seoer_statistics","Roster\StatisticsController@getSeoerStatistics")->name("admin.public.seoer_statistics");
 Route::get("roster/statistics/adviser_statistics","Roster\StatisticsController@getAdviserStatistics")->name("admin.public.adviser_statistics");
-Route::get("index/login","IndexController@getLogin")->name("admin.public.login");
-Route::get("index/logout","IndexController@getLogout")->name("admin.public.logout");
+Route::get("auth/logout","AuthController@getLogout")->name("admin.auth.logout");
 Route::get("index/account","IndexController@getAccount")->name("admin.public.account");
 Route::post("index/account","IndexController@postAccount");
 /*支付系统*/

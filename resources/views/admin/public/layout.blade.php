@@ -119,7 +119,7 @@ $(function(){
                             <div class="border-top"></div>
                             <li><a href="{{ route("admin.public.account") }}">个人中心</a></li>
                             <li class="divider"></li>
-                            <li><a href="{{ route("admin.public.logout") }}" class="">退出登陆</a></li>
+                            <li><a href="{{ route("admin.auth.logout") }}" class="">退出登陆</a></li>
                         </ul>
                     </li>
                 </ul>

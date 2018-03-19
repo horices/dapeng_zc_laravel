@@ -71,10 +71,10 @@
     </ul>
 
     <div id="step_1" style="display:">
-        <p class="s1"><em>ID：</em>{:session('member_auth.uid')}</p>
-        <p class="s1"><em>姓名：</em>{:session('member_auth.name')}</p>
-        <p class="s1"><em>QQ号码：</em>{:session('member_auth.qq')}</p>
-        <p class="s1"><em>手机号码：</em>{:session('member_auth.mobile')} <a class="btn" style="display:none"
+        <p class="s1"><em>ID：</em>{{ $userInfo->uid }}</p>
+        <p class="s1"><em>姓名：</em>{{ $userInfo->name }}</p>
+        <p class="s1"><em>QQ号码：</em>{{ $userInfo->qq }}</p>
+        <p class="s1"><em>手机号码：</em>{{ $userInfo->mobile }} <a class="btn" style="display:none"
                                                                         onClick="$('#tab li').eq(1).trigger('click');">修改手机号码</a>
         </p>
     </div>
