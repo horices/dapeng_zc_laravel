@@ -77,43 +77,48 @@ class BaseController extends Controller
     private static $_LEFT_NAV = [
         'roster_add' =>   [
             'text'=> '添加新量',   //文字描述
-            'url'=> "/admin/roster/add",    //链接地址
+            'route'=> "admin.roster.add",    //链接地址
             'flag'=> 'admin.roster.add',  //默认选中标识
         ],
         'group_list' =>   [
             'text'=> 'QQ群管理',   //文字描述
-            'url'=> "/admin/group/list",    //链接地址
+            'route'=> "admin.group.list",    //链接地址
             'flag'=> 'admin.group.list',  //默认选中标识
         ],
         'user_list' =>   [
             'text'=> '成员管理',   //文字描述
-            'url'=> "/admin/user/list",    //链接地址
+            'route'=> "admin.user.list",    //链接地址
             'flag'=> 'admin.user.list',  //默认选中标识
         ],
         'roster_all' =>   [
             'text'=> '所有数据',   //文字描述
-            'url'=> "/admin/roster/list",    //链接地址
+            'route'=> "admin.roster.list",    //链接地址
             'flag'=> 'admin.roster.list',  //默认选中标识
         ],
         'roster_statistics' =>   [
             'text'=> '效率统计',   //文字描述
-            'url'=> "/admin/roster/statistics/seoer_statistics",    //链接地址
+            'route'=> "admin.public.seoer_statistics",    //链接地址
             'flag'=> 'admin.roster.statistics.seoer_statistics',  //默认选中标识
         ],
         'roster_follow' =>   [
             'text'=> '销售数据',   //文字描述
-            'url'=> "/admin/roster/follow/index",    //链接地址
+            'route'=> "admin.roster.follow.index",    //链接地址
             'flag'=> 'admin.roster.follow.index',  //默认选中标识
         ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
-            'url'=> "/admin/registration/add",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'route'=> "admin.registration.add",    //链接地址
+            'flag'=> 'admin.registration.add',  //默认选中标识
         ],
         'pay_list' =>   [
             'text'=> '支付查询',   //文字描述
-            'url'=> "/admin/registration/user-list",    //链接地址
+            'route'=> "admin.registration.user-list",    //链接地址
             'flag'=> 'admin.registration.user-list',  //默认选中标识
+        ],
+        'accounts' =>   [
+            'text'=> '个人中心',   //文字描述
+            'route'=> "admin.public.account",    //链接地址
+            'flag'=> 'admin.public.account',  //默认选中标识
         ],
     ];
     

@@ -54,5 +54,13 @@ class IndexController extends BaseController
 				</script>
 JS;
     }
+
+
+    /**
+     * 个人中心
+     */
+    function getAccount(){
+        return view("admin.index.accounts");
+    }
 }
 
