@@ -1,12 +1,14 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\ConfirmPasswordRequest;
 use App\Models\RosterModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use App\Utils\Util;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
@@ -63,6 +65,23 @@ JS;
         return view("admin.index.accounts",[
             'userInfo' =>   $this->getUserInfo()
         ]);
+    }
+
+    /**
+     * 修改用户密码
+     */
+    function postAccount(ConfirmPasswordRequest $request){
+        if($request->post("password")){
+            //修改用户密码
+            $userInfo = $this->getUserInfo();
+            $userInfo->password = md5($request->post("password"));
+            if(!$userInfo->save()){
+                Log::error("更新用户密码失败",['data'=>$request->all()]);
+            }
+        }
+        $return['code'] = Util::SUCCESS;
+        $return['msg'] = "保存成功";
+        return response()->json($return);
     }
 }
 

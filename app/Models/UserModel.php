@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -60,7 +61,11 @@ class UserModel extends BaseModel
      */
     protected function checkLogin($username , $password){
         //throw new AuthenticationException("帐号密码错误");
-        return $this->where("mobile","=",$username)->where("password","=",md5($password))->firstOrFail();
+        $userInfo = $this->where("mobile","=",$username)->where("password","=",md5($password))->first();
+        if(!$userInfo){
+            throw new UserValidateException("帐号密码错误");
+        }
+        return $userInfo;
     }
 
     /**

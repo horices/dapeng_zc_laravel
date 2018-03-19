@@ -81,18 +81,18 @@
 
     <div id="step_2" style="display:none">
         <form role="form" id="regForm" class="form-inline">
-            <p class="s2"><em>手机号：</em><input type="text" id="mobile" name="mobile" class="form-control" maxlength="20"
+            {{--<p class="s2"><em>手机号：</em><input type="text" id="mobile" name="mobile" class="form-control" maxlength="20"
                                               style="width:300px" value="{:session('member_auth.mobile')}"
                                               placeholder="请输入新手机号"></p>
             <p class="s2"><em>验证码：</em><input type="text" id="dp-code" name="up-code" class="form-control" maxlength="4"
                                               style="width:100px" placeholder="">&nbsp;&nbsp;<button
                         class="btn btn-primary" id="sendSms" type="button">获取验证码
                 </button>
-            </p>
+            </p>--}}
             <!--<p class="s2"><em>QQ号：</em><input type="text" id="qq" name="qq" class="form-control" maxlength="20" style="width:300px" value="{:session('member_auth.qq')}" placeholder="请输入新qq"></p>-->
             <p class="s2"><em>输入新密码：</em><input type="password" name="password" class="form-control" maxlength="16"
                                                 style="width:300px" placeholder="不修改密码请留空,6-16位"></p>
-            <p class="s2"><em>确认新密码：</em><input type="password" name="repassword" class="form-control" maxlength="16"
+            <p class="s2"><em>确认新密码：</em><input type="password" name="password_confirmation" class="form-control" maxlength="16"
                                                 style="width:300px" placeholder="不修改密码请留空,6-16位"></p>
             <p class="s2" style="padding-left:100px; padding-top:12px;">
                 <button class="btn btn-primary ajaxSubmit" type="button" style="width:230px;">确认修改</button>
