@@ -60,7 +60,9 @@ JS;
      * 个人中心
      */
     function getAccount(){
-        return view("admin.index.accounts");
+        return view("admin.index.accounts",[
+            'userInfo' =>   $this->getUserInfo()
+        ]);
     }
 }
 
