@@ -59,7 +59,7 @@ JS;
     /**
      * 个人中心
      */
-    function getAccounts(){
+    function getAccount(){
         return view("admin.index.accounts");
     }
 }

@@ -108,7 +108,7 @@ class BaseController extends Controller
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
             'route'=> "admin.registration.add",    //链接地址
-            'flag'=> 'group_list',  //默认选中标识
+            'flag'=> 'admin.registration.add',  //默认选中标识
         ],
         'pay_list' =>   [
             'text'=> '支付查询',   //文字描述
