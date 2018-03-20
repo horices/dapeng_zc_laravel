@@ -39,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
         View::share("rosterIntention",app('status')->getRosterIntention());
         //导航菜单
         View::share("navList",app('status')->getLeftNavList());
+        //获取支付方式列表
+        View::share("payTypeList",app('status')->getPayTypeList());
         //监听用户用事件 
         UserModel::observe(UserObserver::class);
         //监听群事件

@@ -28,6 +28,15 @@ class UserPayLogModel extends BaseModel {
         'MAYIFQ'    =>  '蚂蚁分期',
         'BANKZZ'    =>  '银行转账',
     ];
+
+    /**
+     * 获取支付方式
+     * @return mixed
+     */
+    public function getPayTypeTextAttribute(){
+        return app("status")->getPayTypeList($this->pay_type);
+    }
+
     /**
      * 新增数据
      * @param $data

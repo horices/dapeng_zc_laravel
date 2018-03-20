@@ -9,6 +9,10 @@
 namespace App\Models;
 
 
+use App\Api\DapengUserApi;
+use App\Exceptions\DapengApiException;
+use App\Exceptions\UserValidateException;
+use App\Utils\Util;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -79,7 +83,84 @@ class UserRegistrationModel extends BaseModel{
         return $this->belongsTo(RebateActivityModel::class,'rebate_id','id');
     }
 
+    /**
+     * 获取此报名相关的所有支付记录
+     */
+    public function userPayLog() {
+        return $this->morphMany(UserPayLogModel::class, 'registration');
+    }
+    /**
+     * 获取此报名相关的所有一级支付记录
+     */
+    public function userPay() {
+        return $this->morphMany(UserPayModel::class, 'registration');
+    }
 
+
+    /**
+     * 自动补全课程顾问信息
+     * @param array $data
+     *          int mobile:开课手机号
+     *          int uid:顾问ID,
+     *          array pay_type_list:支付方式列表[ALIPAY:支付宝余额支付, HUABEI:花呗,HUABEIFQ:花呗分期, WEIXIN:微信支付, MAYIFQ:蚂蚁分期, BANKZZ:银行转账]
+     *          array amount_list:支付记录的金额
+     *          int give_id:赠送课程，逗号隔开的ID集合
+     *
+     * @return array
+     * @throws DapengApiException
+     * @throws UserValidateException
+     */
+    function completeData(array $data){
+        $tmpMap = [];
+        if($data['client_submit'] == "WAP"){
+            $tmpMap = ['mobile','=',$data['adviser_mobile']];
+        }else if($data['client_submit'] == "PC"){
+            $adminInfo = $this->getUserInfo();
+            $tmpMap = ['uid','=',$adminInfo['uid']];
+        }
+
+        //判断手机号是否在主站注册过
+        $dpData = [
+            'type'      =>  'MOBILE',
+            'keyword'   =>  $data['mobile'],
+        ];
+        $hasDapengUser = DapengUserApi::getInfo($dpData);
+        if($hasDapengUser['code'] == Util::FAIL){
+            throw new DapengApiException("该开课手机号未注册！");
+        }
+        $hasAdviser = self::where([$tmpMap])->first();
+        if(!$hasAdviser){
+            throw new UserValidateException("课程顾问不存在！");
+        }
+        $data['adviser_id'] = $hasAdviser->uid;
+        $data['adviser_name'] = $hasAdviser->name;
+        $data['adviser_qq'] = $hasAdviser->qq;
+        //验证支付金额信息
+        $validator = Validator::make($data,[
+            'pay_type_list'     =>  'required|array',
+            'pay_type_list.*'   =>  [Rule::in(array_keys(app("status")->getPayTypeList()))],
+            'amount_list'       =>  'required|array',
+            'amount_list.*'     =>  'required|numeric',
+            'give_id'           =>  'required',
+
+        ],[
+            'pay_type_list.required'    =>  '请选择支付方式！',
+            'pay_type_list.array'       =>  '请选择支付方式！',
+            'amount_list.required'       =>  '请输入支付金额！',
+            'amount_list.array'         =>  '请输入支付金额！',
+            'pay_type_list.*.in'         =>  '请选择正确的支付方式！',
+            'amount_list.*.numeric'      =>  '请输入正确的支付金额！',
+            'give_id.required'          =>  '请选择要赠送的课程！',
+        ]);
+        //提交的总金额
+        $allAmount= array_sum($data['amount_list']);
+        if($allAmount<=0){
+            throw new UserValidateException("请填写正确的支付金额！");
+        }
+        $data['amount_submitted'] = $allAmount;
+        return $data;
+
+    }
 
 
     /**
@@ -161,7 +242,6 @@ class UserRegistrationModel extends BaseModel{
         $data = $this->getColumns($data);
         //重置优惠活动价格
         if(isset($data['rebate_id']) && $data['rebate_id']){
-            $RebateActivity = new RebateActivityModel();
             $rebateData = RebateActivityModel::where(['id'=>$data['rebate_id']])
                 ->first();
             if($rebateData && isset($rebateData['price'])){
