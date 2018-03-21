@@ -82,6 +82,12 @@ class BaseController extends Controller
             'flag'=> 'admin.roster.add',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
+        'roster_seoer_add' =>   [
+            'text'=> '添加新量',   //文字描述
+            'route'=> "admin.roster.seoer.add",    //链接地址
+            'flag'=> 'admin.roster.seoer.add',  //默认选中标识
+            'grade' =>  [4,5],          //需要展示的权限等级
+        ],
         'group_list' =>   [
             'text'=> 'QQ群管理',   //文字描述
             'route'=> "admin.group.list",    //链接地址

@@ -24,6 +24,8 @@ Route::post("user/save","UserController@postSave")->name("admin.user.save");
 Route::get("roster/list/{export?}","RosterController@getList")->name("admin.roster.list");
 Route::get("roster/add","RosterController@getAdd")->name("admin.roster.add");
 Route::post("roster/add","RosterController@postAdd");
+Route::get("roster/seoer/add","RosterController@getSeoerAdd")->name("admin.roster.seoer.add");
+Route::post("roster/seoer/add","RosterController@postSeoerAdd");
 
 //关单信息管理
 Route::get("roster/follow/index","Roster\FollowController@getIndex")->name("admin.roster.follow.index");

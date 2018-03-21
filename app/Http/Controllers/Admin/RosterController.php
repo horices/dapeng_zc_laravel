@@ -3,30 +3,31 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Requests\RosterAdd;
-use App\Models\GroupModel;
 use App\Models\RosterModel;
-use App\Models\UserModel;
 use App\Utils\Util;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
+use Illuminate\Routing\ControllerDispatcher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use Maatwebsite\Excel\Classes\LaravelExcelWorksheet;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Writers\LaravelExcelWriter;
+use Illuminate\Support\Facades\Route;
 
 class RosterController extends BaseController
 {
-    function getAdd(){
+    function getAdd(Request $request){
         return view("admin.roster.add");
     }
 
+    function getSeoerAdd(Request $request){
+
+        //return Route::dispatchToRoute($request);
+        return view("admin.roster.seoer_add");
+    }
+    function postSeoerAdd(Request $request){
+        $request->merge(['test'=>1]);
+        return Route::respondWithRoute("admin.roster.add");
+
+
+    }
     /**
      * 添加一个新量
      * @param Request $request
@@ -34,6 +35,7 @@ class RosterController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function postAdd(Request $request,array $data = []){
+        dd(1);
         if(!$data){
             $data = $request->all();
         }
