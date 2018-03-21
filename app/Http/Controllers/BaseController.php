@@ -93,9 +93,9 @@ class BaseController extends Controller
         ],
         'roster_seoer_add' =>   [
             'text'=> '添加新量',   //文字描述
-            'route'=> "admin.roster.seoer.add",    //链接地址
-            'flag'=> 'admin.roster.seoer.add',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
+            'route'=> "admin.roster.user.add",    //链接地址
+            'flag'=> 'admin.roster.user.add',  //默认选中标识
+            'grade' =>  [4,5,9,10,11,12],          //需要展示的权限等级
         ],
         'group_list' =>   [
             'text'=> 'QQ群管理',   //文字描述
@@ -109,16 +109,28 @@ class BaseController extends Controller
             'flag'=> 'admin.user.list',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
-        'roster_all' =>   [
+        'roster_list' =>   [
             'text'=> '所有数据',   //文字描述
             'route'=> "admin.roster.list",    //链接地址
             'flag'=> 'admin.roster.list',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
+        'roster_list_user' =>   [
+            'text'=> '我的数据',   //文字描述
+            'route'=> "admin.roster.list.user",    //链接地址
+            'flag'=> 'admin.roster.list.user',  //默认选中标识
+            'grade' =>  [9,10,11,12],          //需要展示的权限等级
+        ],
         'roster_statistics' =>   [
             'text'=> '效率统计',   //文字描述
-            'route'=> "admin.public.seoer_statistics",    //链接地址
-            'flag'=> 'admin.roster.statistics.seoer_statistics',  //默认选中标识
+            'route'=> "admin.roster.statistics.seoer",    //链接地址
+            'flag'=> 'admin.roster.statistics.statistics.seoer',  //默认选中标识
+            'grade' =>  [4,5],          //需要展示的权限等级
+        ],
+        'roster_statistics_user' =>   [
+            'text'=> '我的统计',   //文字描述
+            'route'=> "admin.roster.statistics.seoer",    //链接地址
+            'flag'=> 'admin.roster.statistics.statistics.seoer',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'roster_follow' =>   [
@@ -143,7 +155,7 @@ class BaseController extends Controller
             'text'=> '个人中心',   //文字描述
             'route'=> "admin.public.account",    //链接地址
             'flag'=> 'admin.public.account',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
+            'grade' =>  '*',          //需要展示的权限等级
         ],
     ];
 

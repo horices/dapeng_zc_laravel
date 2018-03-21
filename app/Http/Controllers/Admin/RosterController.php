@@ -19,13 +19,13 @@ class RosterController extends BaseController
         return view("admin.roster.add");
     }
 
-    function getSeoerAdd(Request $request){
+    function getUserAdd(Request $request){
         //dd($request->route());
         //return Route::dispatchToRoute($request);
 //        return Route::respondWithRoute("admin.roster.add");
         return view("admin.roster.seoer_add");
     }
-    function postSeoerAdd(Request $request){
+    function postUserAdd(Request $request){
         $request->merge(['test'=>1]);
         $userInfo = $this->getUserInfo();
         $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>1]);
@@ -64,11 +64,15 @@ class RosterController extends BaseController
         return response()->json($returnData);
     }
 
+    /**
+     * 获取全部列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     */
     function getList(){
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
-        }])->orderBy("id","desc");
+        }]);
         $field_k = Input::get("field_k");
         $field_v = Input::get("field_v");
         $type = Input::get("type");
@@ -78,6 +82,7 @@ class RosterController extends BaseController
         $flag = Input::get("flag");
         $startDate = Input::get("startdate");
         $endDate = Input::get("enddate");
+        $seoerId = Input::get("seoer_id");
         $where = [];
         if($field_k && $field_v !== null){
             if($field_k == "account"){
@@ -107,16 +112,42 @@ class RosterController extends BaseController
         if($endDate !== null){
             $query->whereRaw("addtime <= ".strtotime($endDate));
         }
+        if($seoerId !==  null){
+            $query->where('inviter_id',$seoerId);
+        }
         $query->where($where);
         if(Input::get('export') == 1){
             return $this->exportRosterList($query);
         }
+        $userInfo = $this->getUserInfo();
+        $statistics = $this->getStatistics([''],function($query) use($userInfo) {
+            $query->where("inviter_id", $userInfo->uid);
+        });
+        $query->orderBy("id","desc");
         $list = $query->paginate();
         return view("admin.roster.list",[
-            'list' => $list
+            'list' => $list,
+            "statistics"    => $statistics['statistics']
         ]);
     }
 
+    /**
+     * 获取指定用户的量列表
+     */
+    function getUserList(Request $request){
+        $userInfo = $this->getUserInfo();
+        $user = UserModel::seoer()->find($userInfo['uid']);
+        if($user){
+            $request->merge(['seoer_id'=>$userInfo->uid]);
+        }else{
+            $user = UserModel::adviser()->find($userInfo['uid']);
+            if(!$user){
+                throw new UserValidateException("您还没有权限访问该操作");
+            }
+            $request->merge(['last_adviser_id'=>$userInfo->uid]);
+        }
+        return Route::respondWithRoute("admin.roster.list");
+    }
     function exportRosterList($query){
         //对数据进行导出，不进行展现
         $data['filename'] = "所有数据导出".date('YmdHis');

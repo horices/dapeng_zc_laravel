@@ -97,6 +97,9 @@ $(function(){
             //theme:'grid',
         });
     });
+    $(".dropdown-toggle").click(function(){
+        $(this).next().toggle();
+    });
 });
 
 </script>

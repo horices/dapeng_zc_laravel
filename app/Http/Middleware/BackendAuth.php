@@ -28,7 +28,9 @@ class BackendAuth
         $leftNavList = app('status')->getLeftNavList();
         //只展示用户当前等级的导航
         $leftNavList = collect($leftNavList)->filter(function($v) use($userInfo){
-            return in_array($userInfo['grade'],$v['grade'] ?? []);
+            $grade = collect($v['grade'] ?? []);
+            return $grade->contains($userInfo['grade']) || $grade->contains('*');
+            //return in_array($userInfo['grade'],$v['grade'] ?? []) || in_array('*',$v['grade'] ?? []);
         })->toArray();
         View::share('navList',$leftNavList);
         return $next($request);
