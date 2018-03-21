@@ -1,5 +1,6 @@
 @extends("admin.public.layout")
 @section("right_content")
+<script src="/js/clipboard.min.js"></script>
 <script>
     /**
      * 提交新量检查
@@ -24,6 +25,15 @@
         $(".showmsg").hide();
         $("#success").show();
         $("#qq_group").text(jsonData.data.qq_group);
+        new ClipboardJS('#clipboarder');
+    }
+
+    /**
+     * 重置表单
+     */
+    function resetForm(){
+        $(".showmsg").hide();
+        document.forms[0].reset();
     }
 </script>
 <style>
@@ -73,16 +83,16 @@
             <p class="s3"></p>
             <p class="s2" style="color:#797575;">您可以重新提交新的QQ号码！</p>
             <p class="s4" style="text-align:right">
-                <button class="btn btn-primary" onClick="location.reload();return false;">取消</button>
+                <button type="button" class="btn btn-primary" onClick="resetForm();">取消</button>
             </p>
         </div>
 
         <div id="success" class="success-notice showmsg" style="display:none">
             <p class="s1">QQ号码已成功提交！</p>
-            <p class="s2">请加QQ群 <em id="qq_group"></em>  <input type="button" class="btn btn-primary" value="点击复制QQ群号" data-clipboard-text="" id="clipboarder"/></p>
+            <p class="s2">请加QQ群 <em id="qq_group"></em>  <input type="button" class="btn btn-primary" value="点击复制QQ群号" data-clipboard-target="#qq_group" id="clipboarder"/></p>
             <p class="s3">请告知该QQ号码加入QQ群，完成流量提交！ </p>
             <p class="s4" style="text-align:right">
-                <button class="btn btn-primary" onClick="location.reload();return false;">确认</button>
+                <button type="button" class="btn btn-primary" onClick="resetForm();">确认</button>
             </p>
         </div>
 
