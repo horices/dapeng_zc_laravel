@@ -17,12 +17,12 @@ class BackendAuth
      */
     public function handle($request, Closure $next)
     {
+        if(!$request->session()->get("userToken")){
+            return redirect(route("admin.auth.login"));
+        }
         $userInfo = app('status')->getUserInfo();
         if(app('status')->checkUserPermission(collect($request->route()->getAction())->get('as',''),$userInfo->grade) === false){
             throw new UserValidateException("您没有权限访问此页面");
-        }
-        if(!$request->session()->get("userToken")){
-            return redirect(route("admin.auth.login"));
         }
         //修改模板左侧菜单
         $leftNavList = app('status')->getLeftNavList();
