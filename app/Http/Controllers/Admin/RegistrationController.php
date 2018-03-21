@@ -154,10 +154,6 @@ class RegistrationController extends BaseController{
         }
 
         $list = $query->orderBy("last_pay_time","desc")->paginate(15);
-
-
-
-        $RebateActivity = new RebateActivityModel();
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
             //套餐总金额
@@ -177,7 +173,7 @@ class RegistrationController extends BaseController{
         $_GET['subnavAction'] = "userPayList";
         return view("admin.registration.user-list",[
             'list'          =>  $list,
-            'adminInfo'     =>  $this->getUserInfo($request)
+            'adminInfo'     =>  $this->getUserInfo()
         ]);
 
     }
