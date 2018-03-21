@@ -8,7 +8,6 @@ use App\Models\RosterModel;
 use App\Models\UserModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
-use Illuminate\Routing\ControllerDispatcher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
@@ -68,7 +67,11 @@ class RosterController extends BaseController
      * 获取全部列表
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
-    function getList(){
+    function getList(Request $request){
+        //若没有选择时间，则默认选择当天时间
+        if(!$request->has("startdate")){
+            $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
+        }
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");

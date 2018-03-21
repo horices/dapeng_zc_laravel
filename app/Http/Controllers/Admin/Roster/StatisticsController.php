@@ -37,7 +37,7 @@ class StatisticsController extends BaseController
            $tquery->whereIn("inviter_id",$list->pluck('uid'));
         });
         return view("admin.roster.statistics.statistics",[
-            'leftNav'   => "admin.roster.statistics.seoer_statistics",
+            'leftNav'   => "admin.roster.statistics.seoer",
             'list'  => $list,
             'statistics'    => $statistics['statistics'],
             'user_statistics'    => $statistics['user_statistics']
@@ -70,7 +70,7 @@ class StatisticsController extends BaseController
             $tquery->whereIn("last_adviser_id",$list->pluck('uid'));
         });
         return view("admin.roster.statistics.statistics",[
-            'leftNav'   => "admin.roster.statistics.adviser_statistics",
+            'leftNav'   => "admin.roster.statistics.adviser",
             'list'  => $list,
             'statistics'    => $statistics['statistics'],
             'user_statistics'    => $statistics['user_statistics']
