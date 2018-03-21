@@ -28,6 +28,15 @@ class UserPayLogModel extends BaseModel {
         'MAYIFQ'    =>  '蚂蚁分期',
         'BANKZZ'    =>  '银行转账',
     ];
+
+    /**
+     * 获取支付方式
+     * @return mixed
+     */
+    public function getPayTypeTextAttribute(){
+        return app("status")->getPayTypeList($this->pay_type);
+    }
+
     /**
      * 新增数据
      * @param $data
@@ -39,6 +48,7 @@ class UserPayLogModel extends BaseModel {
         Util::setDefault($data['adviser_name'],$userInfo['name']);
         $data = $this->getColumns($data);
         $validator = Validator::make($data,[
+            'registration_id'=> 'required|exists:user_registration,id',
             'mobile'        =>  'required|regex:/\d{11}/',
             'pay_time'      =>  'required|numeric',
             'pay_type'      =>  [
@@ -47,6 +57,8 @@ class UserPayLogModel extends BaseModel {
                 ],
             'amount'        =>  'required|numeric'
         ],[
+            'registration_id.required'  =>  '未找到报名记录！',
+            'registration_id.exists'    =>  '未找到正确的报名记录！',
             'mobile.required'           =>  '请填写手机号！',
             'pay_time.required'         =>  '填写支付时间！',
             'pay_time.numeric'          =>  '填写正确的支付时间！',

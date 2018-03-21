@@ -80,7 +80,6 @@ class BaseController extends Controller
             'text'=> '添加新量',   //文字描述
             'route'=> "admin.roster.add",    //链接地址
             'flag'=> 'admin.roster.add',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'roster_seoer_add' =>   [
             'text'=> '添加新量',   //文字描述
@@ -92,82 +91,49 @@ class BaseController extends Controller
             'text'=> 'QQ群管理',   //文字描述
             'route'=> "admin.group.list",    //链接地址
             'flag'=> 'admin.group.list',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'user_list' =>   [
             'text'=> '成员管理',   //文字描述
             'route'=> "admin.user.list",    //链接地址
             'flag'=> 'admin.user.list',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'roster_all' =>   [
             'text'=> '所有数据',   //文字描述
             'route'=> "admin.roster.list",    //链接地址
             'flag'=> 'admin.roster.list',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'roster_statistics' =>   [
             'text'=> '效率统计',   //文字描述
             'route'=> "admin.public.seoer_statistics",    //链接地址
             'flag'=> 'admin.roster.statistics.seoer_statistics',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'roster_follow' =>   [
             'text'=> '销售数据',   //文字描述
             'route'=> "admin.roster.follow.index",    //链接地址
             'flag'=> 'admin.roster.follow.index',  //默认选中标识
-            'grade' =>  [4,5],          //权限显示
         ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
             'route'=> "admin.registration.add",    //链接地址
             'flag'=> 'admin.registration.add',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'pay_list' =>   [
             'text'=> '支付查询',   //文字描述
             'route'=> "admin.registration.user-list",    //链接地址
             'flag'=> 'admin.registration.user-list',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'accounts' =>   [
             'text'=> '个人中心',   //文字描述
             'route'=> "admin.public.account",    //链接地址
             'flag'=> 'admin.public.account',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
         ],
     ];
-
-    //用户对系统的访问权限
-    private static $_USER_PERMISSION = [
-        '4' =>  [
-            'allow'    =>  '*',
-            'deny'  =>  [
-                //'admin.group.list'
-            ]
-        ],
-        '5' =>  [
-            'allow'    =>  '*',
-        ],
-        '9' =>  [
-            'allow'    =>  '*',
-        ],
-        '10' =>  [
-            'allow'    =>  '*',
-        ],
-        '11' =>  [
-            'allow'    =>  '*',
-        ],
-        '12' =>  [
-            'allow'    =>  '*',
-        ],
-
-    ];
+    
     /**
      * 获取用户所有权限列表
      */
-    public function getUserGradeList($key = ''){
-        return $key ? self::$_USER_GRADE[$key] : self::$_USER_GRADE;
+    public function getUserGradeList(){
+        return self::$_USER_GRADE;
     }
     /**
      * 获取左侧菜单导航
@@ -235,46 +201,6 @@ class BaseController extends Controller
      */
     public function getGroupStatus($key = ''){
         return $key ? self::$_GROUP_STATUS[$key]: self::$_GROUP_STATUS;
-    }
-
-    /**
-     * 判断用户是否有权限访问当前页面,路由没有name 则全部都不允许访问
-     * @param string $routeName 路由名字
-     * @param integer $userGrade 用户等级
-     */
-    public function checkUserPermission(string $routeName,$userGrade){
-        $route = explode(".",$routeName);
-        $tempv = '';
-        $flag = false;  //不允许列表中，默认禁止访问
-        $permission = collect(self::$_USER_PERMISSION[$userGrade]);
-        $allowList = collect($permission->get('allow',[]));
-        $denyList = collect($permission->get('deny',[]));
-        //判断当前URL是否在允许列表中
-        if($allowList->contains($routeName)){
-            $flag = true;
-        }
-        //判断当前URL是否在禁止列表中
-        if($denyList->contains($routeName)){
-            return false;
-        }
-        //判断是否属于通配符
-        foreach ($route as $k=>$v){
-            if(!$tempv){
-                $url = '*';
-            }else{
-                $url = $tempv.'*';
-            }
-            $tempv.= $v.'.';
-            //是否在允许列表中
-            if($allowList->contains($url)){
-                $flag = true;
-            }
-            if($denyList->contains($url)){
-                //在禁止访问列表中时，立即停止，没有权限
-                return false;
-            }
-        }
-        return $flag;
     }
 
     /**
