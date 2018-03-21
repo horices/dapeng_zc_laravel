@@ -63,10 +63,8 @@
             $(obj).next("div").toggle();
         }
     </script>
-    <div id="content-container" class="container">
-        <div class="row row-2-10">
-            <include file="Public:nav" />
-            <div class="col-md-10 dp-member-content" style="padding:30px 30px;">
+
+
 
                 <style>
                     .link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
@@ -77,12 +75,12 @@
                 <div class="row search-row" style="padding:9px 0 15px 15px;">
                     <form class="form-inline" role="form">
                         <div class="form-group">
-                            <a class="common-button combg4" href="{:U('userPayList')}">切换到支付记录</a>
+                            <a class="common-button combg4" href="{{route('admin.registration.list.pay')}}">切换到支付记录</a>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{$_GET.adviserName}" style="width: 110px;"/>
-                            <input type="text" name="name" class="form-control" placeholder="学员姓名" value="{$_GET.name}" style="width: 110px;"/>
-                            <input type="text" name="mobile" class="form-control" placeholder="开课手机号" value="{$_GET.mobile}" style="width: 110px;"/>
+                            <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{{Request::input('adviserName')}}" style="width: 110px;"/>
+                            <input type="text" name="name" class="form-control" placeholder="学员姓名" value="{{Request::input('name')}}" style="width: 110px;"/>
+                            <input type="text" name="mobile" class="form-control" placeholder="开课手机号" value="{{Request::input('mobile')}}" style="width: 110px;"/>
                             <!--<select name="is_open" class="form-control">
                                 <option value="">是否导学</option>
                                 <option <present name="_GET[is_open]"><eq name="_GET[is_open]" value="1">selected</eq></present> value="1">是</option>
@@ -91,11 +89,11 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" id="startdate" name="startDate" class="form-control datetime" style="width:165px;" value="{$_GET.startDate}" placeholder="开始时间" /> 至
-                            <input type="text" id="enddate" name="endDate" class="form-control datetime" style="width:165px;" value="{$_GET.endDate}" placeholder="截至时间" />
+                            <input type="text" id="startdate" name="startDate" class="form-control datetime" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
+                            <input type="text" id="enddate" name="endDate" class="form-control datetime" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
                         </div>
                         <div class="form-group">
-                            <a class="common-button combg1 linkSubmit" href="{:U()}">搜索</a>
+                            <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
                             <elt name="_SESSION['dapeng']['member_auth']['grade']" value="5">
                                 <a class="common-button combg2 linkSubmit" href="{:U('exportUserList')}">导出</a>
                             </elt>
@@ -137,15 +135,15 @@
                                     <td>
                                         {{$v->package_all_title}}
                                     </td>
-                                    <td>{{$v->fq_type_str}}</td>
+                                    <td>{{$v->fq_type_text}}</td>
                                     <td>
-                                        {{$v->is_open_str}}
+                                        {{$v->is_open_text}}
                                     </td>
-                                    <td>{{floatval($v->package_total_price)}}</td>
+                                    <td>{{$v->package_total_price}}</td>
                                     <td>{{floatval($v->rebate)}}</td>
                                     <td>{{$v->package_total_price-$v->rebate}}</td>
                                     <td>{{$v->amount_submitted}}</td>
-                                    <td>{{$v->last_pay_time}}</td>
+                                    <td>{{date("Y-m-d H:i:s",$v->last_pay_time)}}</td>
                                         @if($adminInfo['grade'] <= 5)
                                         <td>
                                             <a class="set-is-open-a" onclick="setIsOpen(this)">开课</a>
@@ -184,10 +182,6 @@
                         </tbody>
                     </table>
                 </div>
-
-            </div>
-        </div>
-    </div>
     <script>
         function showDetail(obj) {
             var id = $(obj).attr("pay-log-id");
