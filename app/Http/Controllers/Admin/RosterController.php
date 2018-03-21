@@ -2,8 +2,10 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Exceptions\UserValidateException;
 use App\Http\Requests\RosterAdd;
 use App\Models\RosterModel;
+use App\Models\UserModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerDispatcher;
@@ -18,15 +20,28 @@ class RosterController extends BaseController
     }
 
     function getSeoerAdd(Request $request){
-
+        //dd($request->route());
         //return Route::dispatchToRoute($request);
+//        return Route::respondWithRoute("admin.roster.add");
         return view("admin.roster.seoer_add");
     }
     function postSeoerAdd(Request $request){
         $request->merge(['test'=>1]);
-        return Route::respondWithRoute("admin.roster.add");
+        $userInfo = $this->getUserInfo();
+        $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>1]);
 
-
+        if($request->post("validate") == 1){
+            if(!RosterModel::validateRosterData($request->all())){
+                throw new UserValidateException("非法操作");
+            }
+            return Util::ajaxReturn([
+                'code'  => Util::SUCCESS,
+                'msg'   =>  '该量可以被提交',
+                'data'  => ''
+            ]);
+        }
+        //验证数据
+        return Route::respondWithRoute("admin.roster.add.post");
     }
     /**
      * 添加一个新量
@@ -35,13 +50,13 @@ class RosterController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     public function postAdd(Request $request,array $data = []){
-        dd(1);
         if(!$data){
             $data = $request->all();
         }
-        if(RosterModel::addRoster($data)){
+        if($roster = RosterModel::addRoster($data)){
             $returnData['code'] = Util::SUCCESS;
             $returnData['msg'] = "添加成功";
+            $returnData['data'] = $roster;
         }else{
             $returnData['code'] = Util::FAIL;
             $returnData['msg'] = "添加失败";

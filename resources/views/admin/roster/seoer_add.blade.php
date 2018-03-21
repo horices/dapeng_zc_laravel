@@ -1,5 +1,31 @@
 @extends("admin.public.layout")
 @section("right_content")
+<script>
+    /**
+     * 提交新量检查
+     * @param jsonData
+     * @param obj
+     */
+    function checkRosterNoCallback(jsonData,obj) {
+        $(".showmsg").hide();
+        $(".showmsg"+jsonData.code).show();
+        if(jsonData.code == {{ \App\Utils\Util::FAIL }}){
+            CustomDialog.failDialog(jsonData.msg);
+        }
+        return ;
+    }
+
+    /**
+     * 添加新量后的回调
+     * @param jsonData
+     * @param obj
+     */
+    function addRosterCallback(jsonData,obj){
+        $(".showmsg").hide();
+        $("#success").show();
+        $("#qq_group").text(jsonData.data.qq_group);
+    }
+</script>
 <style>
     .info-list{}
     .info-list dt{ background:url(__IMG__/ico-1.gif) no-repeat 0 4px; padding-left:26px; line-height:30px; font-size:16px;}
@@ -25,40 +51,24 @@
     .error-notice .s2 em{ font:700 18px Tahoma; margin-right:15px;}
 </style>
 
-<form role="form" id="regFormCheck" class="form-inline">
+<form role="form" class="form-inline">
     <fieldset>
 
         <div class="form-group">
 
             <div class="col-md-12">
-                <input type="text" id="qq" name="qq" class="form-control" maxlength="12" style="width:300px" placeholder="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"> <button class="btn btn-primary ajaxSubmit" submitUrl="{:U('checkQQStatus')}" callback="isAddQQ" > 提交检查</button>
+                <input type="text" id="qq" name="roster_no" class="form-control" maxlength="12" style="width:300px" placeholder="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"> <button class="btn btn-primary ajaxSubmit" data="{validate:1}" callback="checkRosterNoCallback" > 提交检查</button>
             </div>
         </div>
-        <script>
-            function isAddQQ(jsonData,obj) {
-                if(jsonData.code != -1)
-                var statusStr = "进群状态："+jsonData.data.groupStatus+"<br/>注册状态："+jsonData.data.regType+"<br/>课程状态："+jsonData.data.courseType;
-                $(".showmsg").hide();
-                $(".showmsg").hide();
-                if(jsonData.code == 1){
-                    $("#addQQ>.s3").html(statusStr);
-                    $("#addQQ").show();
-                }else{
-                    $("#unaddQQ>.s1").html(jsonData.msg);
-                    $("#unaddQQ>.s3").html(statusStr);
-                    $("#unaddQQ").show();
-                }
-            }
-        </script>
-        <div id="addQQ" class="showmsg success-notice" style="display:none">
+        <div id="addQQ" class="showmsg success-notice showmsg1" style="display:none;">
             <p class="s1">QQ号码可以提交</p>
             <p class="s3"></p>
             <p class="s4" style="text-align:right">
-                <button class="btn btn-primary ajaxSubmit" callback="addQQCallback">确认提交</button>
+                <button class="btn btn-primary ajaxSubmit" callback="addRosterCallback">确认提交</button>
             </p>
         </div>
 
-        <div id="unaddQQ" class="showmsg error-notice" style="display:none">
+        <div id="unaddQQ" class="showmsg error-notice showmsg0" style="display:none">
             <p class="s1">QQ号码不可以提交</p>
             <p class="s3"></p>
             <p class="s2" style="color:#797575;">您可以重新提交新的QQ号码！</p>
@@ -76,11 +86,11 @@
             </p>
         </div>
 
-        <div id="error" class="error-notice showmsg" style="display:none">
+        {{--<div id="error" class="error-notice showmsg" style="display:none">
             <p class="s1" id="err_msg" style="color:#944F4F;">提交的QQ号码重复！请重新提交！</p>
             <p class="s2" style="color:#797575;">您可以重新提交新的QQ号码！</p>
             <p class="s3" style="text-align:right"><button class="btn btn-primary" onClick="location.reload();return false;">确认</button></p>
-        </div>
+        </div>--}}
     </fieldset>
 </form>
             

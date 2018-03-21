@@ -77,19 +77,23 @@ class RosterModel extends BaseModel
     }
 
     /**
-     * 添加一个新量，自带验证功能
-     * @param $data array 要添加的数据
-     *      keys:
-     *              roster_no:新量号码，QQ或微信号
-     *              roster_type:新量类型，[1:QQ号，２：微信号]
-     *              seoer_id:推广专员ID
-     *              qq_group_id：群ID号，不传该值时，系统会自带分配一个群
+     * 验证数据
+     * @param array $data
+     * @return bool
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public static function addRoster(array $data){
+    public static function validateRosterData(array $data){
         /**
          * @var $validator \Illuminate\Validation\Validator;
          */
-        $columnText = app("status")->getRosterType()[$data['roster_type']];;
+        Validator::make($data,[
+            'roster_type'   =>  'required|in:1,2',
+        ],[
+            'roster_type.required'  =>  '请选择正确的提交类型',
+            'roster_type.in'    => "类型只能为1:QQ或2:微信",
+        ])->validate();
+
+        $columnText = app("status")->getRosterType()[$data['roster_type']];
         $validator = Validator::make($data,[
             'roster_no' =>  'required',
             'roster_type'   =>  'required|in:1,2',
@@ -170,13 +174,38 @@ class RosterModel extends BaseModel
         });
         //调用系统验证，验证失败时，抛出一个异常
         $validator->validate();
+        return true;
+    }
+    /**
+     * 添加一个新量，自带验证功能
+     * @param $data array 要添加的数据
+     *      keys:
+     *              roster_no:新量号码，QQ或微信号
+     *              roster_type:新量类型，[1:QQ号，２：微信号]
+     *              seoer_id:推广专员ID
+     *              qq_group_id：群ID号，不传该值时，系统会自带分配一个群
+     */
+    public static function addRoster(array $data){
+
+        //验证数据是否存在问题
+        if(self::validateRosterData($data) === false){
+            throw new UserValidateException("非法操作");
+        }
+        $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //验证成功后，获取QQ群信息
-        if(!$data['qq_group_id']){
+        if(!isset($data['qq_group_id'])){
             $groupInfo = app('status')->getNextGroupInfo($data['roster_type']);
             if(!$groupInfo){
                 throw new UserValidateException("未找到可用的QQ群");
             }
             $data['qq_group_id'] = $groupInfo['id'];
+        }
+        //补全推广专员信息
+        if(!isset($data['seoer_name'])){
+            $seoer = UserModel::query()->find($data['seoer_id']);
+            if(!$seoer)
+                throw new UserValidateException("本操作只能由推广专员进行操作");
+            $data['seoer_name'] = $seoer->name;
         }
         $group = GroupModel::find($data['qq_group_id']);
         $createData[$column] = $data['roster_no'];
@@ -188,6 +217,9 @@ class RosterModel extends BaseModel
         $createData['adviser_id'] = $createData['last_adviser_id'] = $group->leader_id;
         $createData['adviser_name'] = $createData['last_adviser_name'] = $group->user->name;
         $createData['addtime'] = time();
+        $createData['is_reg'] = 0;
+        $createData['group_status'] = 0;
+        $createData['course_type'] = 0;
         $query = static::query();
         return $query->create($createData);
     }

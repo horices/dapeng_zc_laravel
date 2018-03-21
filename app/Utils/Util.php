@@ -14,7 +14,14 @@ class Util{
      * @return \Illuminate\Http\JsonResponse
      */
     public static function ajaxReturn($status,$msg="",$data=[]){
-        return response()->json(['code'=>$status,'msg'=>$msg,'data'=>$data]);
+        if(is_array($status)){
+            $return  = $status;
+        }else{
+            $return['code'] = $status;
+            $return['msg'] = $msg;
+            $return['data'] = $data;
+        }
+        return response()->json($return);
     }
 
     static function setDefault(&$key, $val) {
