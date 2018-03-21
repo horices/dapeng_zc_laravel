@@ -13,6 +13,7 @@ use App\Api\DapengUserApi;
 use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
 use App\Utils\Util;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -98,7 +99,7 @@ class UserRegistrationModel extends BaseModel{
 
 
     /**
-     * 自动补全课程顾问信息
+     * 新增报名时补全入库字段信息
      * @param array $data
      *          int mobile:开课手机号
      *          int uid:顾问ID,
@@ -128,10 +129,17 @@ class UserRegistrationModel extends BaseModel{
         if($hasDapengUser['code'] == Util::FAIL){
             throw new DapengApiException("该开课手机号未注册！");
         }
-        $hasAdviser = self::where([$tmpMap])->first();
+        $hasAdviser = UserHeadMasterModel::where([$tmpMap])->first();
         if(!$hasAdviser){
             throw new UserValidateException("课程顾问不存在！");
         }
+
+        //检查报名信息 所属课程顾问
+//        if($data['mobile'] != $hasAdviser->mobile){
+//            throw new UserValidateException("该学员与课程顾问信息不一致！");
+//        }
+
+
         $data['adviser_id'] = $hasAdviser->uid;
         $data['adviser_name'] = $hasAdviser->name;
         $data['adviser_qq'] = $hasAdviser->qq;
@@ -152,6 +160,12 @@ class UserRegistrationModel extends BaseModel{
             'amount_list.*.numeric'      =>  '请输入正确的支付金额！',
             'give_id.required'          =>  '请选择要赠送的课程！',
         ]);
+        //执行验证
+        $validator->validate();
+//        if($post['amount_submitted'] > $post['package_total_price'])
+//        $this->returnAjaxJson(FAIL,'已提交金额不能大于总金额！');
+//        $post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
+//        $post['amount_submitted'] = $post['amount'];
         //提交的总金额
         $allAmount= array_sum($data['amount_list']);
         if($allAmount<=0){
@@ -168,7 +182,7 @@ class UserRegistrationModel extends BaseModel{
      * @param $data
      * @return mixed
      */
-    function addData($data){
+    function addData($data,$UserPayModel,$UserPayLogModel){
         $validator = Validator::make($data, [
             'mobile'            =>'required|regex:/\d{11}/|unique:user_registration',
             'name'              => 'required|unique:user_registration|max:255',
@@ -190,10 +204,32 @@ class UserRegistrationModel extends BaseModel{
             'amount_submitted,required'=>   '已提交金额有误！',
             'amount_submitted,numeric'=>   '已提交金额有误！',
         ]);
-        $data = $this->getColumns($data);
         //执行验证
         $validator->validate();
-        return self::create($data);
+        $data = $this->getColumns($data);
+
+        $resReg = self::create($data);
+        //开启事务
+        DB::transaction(function () use($UserPayModel,$UserPayLogModel,$resReg){
+            //添加用户支付信息
+            $post['registration_id'] = $resReg['id']; //关联报名课程记录ID
+            $resUserPay = $UserPayModel->addData($post);
+            //循环添加多个支付方式记录
+            $post['pay_id'] = $resUserPay['id'];
+            foreach ($post['pay_type_list'] as $key=>$val){
+                $post['amount'] = $post['amount_list'][$key];
+                $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
+                $post['pay_type'] = $val;
+                $UserPayLogModel->addData($post);
+            }
+            //重置套餐全名
+            $eff = $this->setPackageAllTitle($resReg['id']);
+            if(!$eff){
+                throw new UserValidateException("重置套餐全名失败！");
+            }
+            //更新报名信息的最后一次提交支付记录时间
+            $this->setLastPayTime($resReg['id']);
+        });
     }
 
     /**
@@ -201,30 +237,31 @@ class UserRegistrationModel extends BaseModel{
      * @param $data
      * @return bool
      */
-    function updateData($data){
+    function updateData($data,$UserPayModel,$UserPayLogModel){
+        $registrationId = $data['registration_id'];
         $validator = Validator::make($data, [
-            'id'                =>  'sometimes|numeric|exists:user_registration,id',
+            'registration_id'      =>  'sometimes|numeric|exists:user_registration,id',
             'mobile'            => [
                 'sometimes',
                 'required',
                 'regex:/\d{11}/',
-                Rule::unique('user_registration')->ignore($data['id']),
+                Rule::unique('user_registration')->ignore($data['registration_id']),
                 ],
-            'name'              => 'sometimes|required|max:255',
+            'name'              => 'sometimes|max:255',
             'qq'                => [
                 'sometimes',
                 'required',
                 'regex:/\d{5,11}/',
-                Rule::unique('user_registration')->ignore($data['id']),
+                Rule::unique('user_registration')->ignore($data['registration_id']),
                 ],
             'package_id'        => 'sometimes|exists:course_package,id',
             'package_attach_id' => 'sometimes|exists:course_package,id',
             'rebate_id'         => 'sometimes|exists:rebate_activity,id',
             'amount_submitted'  =>  'sometimes|required|numeric'
         ],[
-            'id.required'       =>  '更新的支付记录错误！',
-            'id.numeric'        =>  '更新的支付记录错误！',
-            'id.exists'         =>  '未找到要修改的支付记录',
+            'registration_id.required'       =>  '更新的支付记录错误！',
+            'registration_id.numeric'        =>  '更新的支付记录错误！',
+            'registration_id.exists'         =>  '未找到要修改的支付记录',
             'mobile.required'   =>  '请输入正确的学员手机号！',
             'mobile.unique'     =>  '该学员手机号已存在！',
             'name.required'     =>  '请输入学员姓名！',
@@ -239,17 +276,40 @@ class UserRegistrationModel extends BaseModel{
             'amount_submitted,numeric'=>   '已提交金额有误！',
         ]);
         $validator->validate();
-        $data = $this->getColumns($data);
-        //重置优惠活动价格
-        if(isset($data['rebate_id']) && $data['rebate_id']){
-            $rebateData = RebateActivityModel::where(['id'=>$data['rebate_id']])
-                ->first();
-            if($rebateData && isset($rebateData['price'])){
-                $data['rebate'] = $rebateData['price'];
+
+        //开启事务
+        DB::transaction(function () use($UserPayModel,$UserPayLogModel,$data){
+            //添加用户支付信息
+            $resUserPay = $UserPayModel->addData($data);
+            //循环添加多个支付方式记录
+            $data['pay_id'] = $resUserPay['id'];
+            $resUserPayLog = "";
+            foreach ($data['pay_type_list'] as $key=>$val){
+                $data['amount'] = $data['amount_list'][$key];
+                $data['pay_time'] = strtotime($data['pay_time_list'][$key]);
+                $data['pay_type'] = $val;
+                $resUserPayLog = $UserPayLogModel->addData($data);
             }
-        }
-        $res = self::find($data['id']);
-        return $res->save();
+            $data['last_pay_time'] = $resUserPayLog['create_time'];
+            //重置套餐全名
+            $eff = $this->setPackageAllTitle($data['registration_id']);
+            if(!$eff){
+                throw new UserValidateException("重置套餐全名失败！");
+            }
+            //重置优惠活动价格
+//            if(isset($data['rebate_id']) && $data['rebate_id']){
+//                $rebateData = RebateActivityModel::where(['id'=>$data['rebate_id']])
+//                    ->first();
+//                if($rebateData && isset($rebateData['price'])){
+//                    $data['rebate'] = $rebateData['price'];
+//                }
+//            }
+            //更新报名信息的最后一次提交支付记录时间
+            $this->setLastPayTime($data['registration_id']);
+        });
+        $data = $this->getColumns($data);
+        $data['amount_submitted'] = DB::raw('amount_submitted+'.$data['amount_submitted']);
+        return self::where('id',$registrationId)->update($data);
     }
 
     /**
@@ -291,11 +351,11 @@ class UserRegistrationModel extends BaseModel{
         //套餐总金额
         $data['package_total_price'] = $packageData['price']+$packageAttachData['price'];
         $data['id'] = $id;
-        return $this->updateData($data);
-//        self::where('id',$id)->update([
-//            'package_all_title'     =>  $data['package_all_title'],
-//            'package_total_price'   =>  $data['package_total_price']
-//        ]);
+        //return $this->updateData($data);
+        return self::where('id',$id)->update([
+            'package_all_title'     =>  $data['package_all_title'],
+            'package_total_price'   =>  $data['package_total_price']
+        ]);
     }
 
     /**

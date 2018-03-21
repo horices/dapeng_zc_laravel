@@ -73,164 +73,24 @@ class RegistrationController extends BaseController{
     /**
      * @note 添加用户的支付信息和报名信息
      */
-    function postAddRegistration(RegistrationForm $registration,UserRegistrationModel $UserRegistration,UserHeadMasterModel $UserHeadMaster,UserPayModel $UserPayModel,UserPayLogModel $UserPayLogModel){
+    function postAddRegistration(RegistrationForm $registration,UserRegistrationModel $UserRegistration,UserPayModel $UserPayModel,UserPayLogModel $UserPayLogModel){
         $post = $registration->post();
-        //获取当前用户信息
-        $adminInfo = $this->getUserInfo();
-        $adviserId = 0;
-        $tmpMap = [];
-        if($post['client_submit'] == "WAP"){
-            $tmpMap = ['mobile','=',$post['adviser_mobile']];
-        }else if($post['client_submit'] == "PC"){
-            $tmpMap = ['uid','=',$adminInfo['uid']];
-        }
-
-
-        //判断手机号是否在主站注册过
-        $dpData = [
-            'type'      =>  'MOBILE',
-            'keyword'   =>  $post['mobile'],
-        ];
-        $hasDapengUser = DapengUserApi::getInfo($dpData);
-        if($hasDapengUser['code'] == Util::FAIL){
-            throw new DapengApiException("该开课手机号未注册！");
-        }
-        //$post['is_open']    = 1;  //默认报名课程开启
-
-
-        //查询和判断课程顾问
-        $hasAdviser = $UserHeadMaster::where([$tmpMap])->first();
-        if(!$hasAdviser){
-            throw new UserValidateException("课程顾问不存在！");
-        }
-
-
-//        if($post['amount_submitted'] > $post['package_total_price'])
-//            $this->returnAjaxJson(FAIL,'已提交金额不能大于总金额！');
-        //$post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
-        //$post['amount_submitted'] = $post['amount'];
-
-        //开启事务
-        DB::beginTransaction();
-
+        //补全字段数据
+        $UserRegistration->completeData($post);
         //插入报名记录
-        $resReg = $UserRegistration->addData($post);
-        if(!$resReg){
-            DB::rollBack();
-        }
-        Util::setDefault($regId,$resReg['id']);
-        //添加用户支付信息
-        $post['registration_id'] = $resReg['id']; //关联报名课程记录ID
-        $resUserPay = $UserPayModel->addData($post);
-        if(!$resUserPay){
-            DB::rollBack();
-        }
-        //循环添加多个支付方式记录
-        $post['pay_id'] = $resUserPay['id'];
-        foreach ($post['pay_type_list'] as $key=>$val){
-            $post['amount'] = $post['amount_list'][$key];
-            $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
-            $post['pay_type'] = $val;
-            $resUserPayLog = $UserPayLogModel->addData($post);
-            if(!$resUserPayLog){
-                DB::rollBack();
-            }
-        }
-        //重置套餐全名
-        $eff = $UserRegistration->setPackageAllTitle($regId);
-        if(!$eff){
-            DB::rollBack();
-            throw new UserValidateException("重置套餐全名失败！");
-        }
-        //更新报名信息的最后一次提交支付记录时间
-        $UserRegistration->setLastPayTime($regId);
-        DB::commit();
+        $UserRegistration->addData($post,$UserPayModel,$UserPayLogModel);
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'信息提交成功！']);
     }
 
     /**
      * @note 更新报名记录（添加支付记录）
      */
-    function postUpdateRegistration(Request $request){
-        $post = $request->post();
-        $UserRegistration = new UserRegistrationModel();
-        $UserHeadMaster = new UserHeadMasterModel();
-        $adviserId = 0;
-        $tmpMap = [];
-
-        if($post['client_submit'] == "WAP"){
-            if(!key_exists("adviser_mobile",$post) || !$post['adviser_mobile']){
-                return response()->json(['code'=>Util::FAIL,'msg'=>'请填写课程顾问手机号!']);
-            }
-            $tmpMap = ['mobile','=',$post['adviser_mobile']];
-        }else if($post['client_submit'] == "PC"){
-            $tmpMap = ['uid','=',$this->getUserInfo($request)['uid']];
-        }else{
-            return response()->json(['code'=>Util::FAIL,'msg'=>'信息来源错误!']);
-        }
-
-        //查询和判断课程顾问
-        $hasAdviser = $UserHeadMaster::where([$tmpMap])->first();
-
-        if(!$hasAdviser){
-            return response()->json(['code'=>Util::FAIL,'msg'=>'课程顾问不存在!']);
-        }
-        $adviserId = $hasAdviser['uid'];
-        //补充课程顾问信息
-        $post['adviser_id'] = $adviserId;
-        $post['adviser_name'] = $hasAdviser['name'];
-        $post['adviser_qq'] = $hasAdviser['qq'] ?: '';
-        //检查报名信息
-//        $hasReg = $UserRegistration->where(['adviser_id'=>$adviserId,'mobile'=>$post['mobile']])->find();
-//        if(!$hasReg){
-//            $this->returnAjaxJson(FAIL,'该学员与课程顾问信息不一致！');
-//        }
-        DB::beginTransaction();
-        if(empty($post['pay_type_list']) || empty($post['amount_list'])){
-            return response()->json(['code'=>Util::FAIL,'msg'=>'必须添加支付信息!']);
-        }
-        //更新报名已提交金额
-        $allAmount = array_sum($post['amount_list']);
-        if($allAmount<=0){
-            return response()->json(['code'=>Util::FAIL,'msg'=>'请填写正确的支付金额!']);
-        }
-        $post['amount_submitted'] = $allAmount;
-
-//        if($post['amount_submitted'] > $post['package_total_price'])
-//            $this->returnAjaxJson(FAIL,'已提交金额不能大于总金额！');
-
-        //添加用户支付信息
-        $UserPay = new UserPayModel();
-
-        $res = $UserPay->addData($post);
-        if(!$res){
-            DB::rollBack();
-        }
-        //循环添加多个支付方式记录
-        $UserPayLog = new UserPayLogModel();
-        $post['pay_id'] = $res['id'];
-        $resUserPayLog = "";
-        foreach ($post['pay_type_list'] as $key=>$val){
-            $post['amount'] = $post['amount_list'][$key];
-            $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
-            $post['pay_type'] = $val;
-            $resUserPayLog = $UserPayLog->addData($post);
-            if(!$res){
-                DB::rollBack();
-            }
-        }
-
-        //$post['amount_submitted'] = $post['amount_submitted']+$post['amount'];
-        $regData = [
-            'remark'            =>  $post['remark'],
-            'last_pay_time'     =>  $resUserPayLog['create_time'],
-        ];
-        $eff = $UserRegistration->where('id','=',$post['registration_id'])
-            ->increment('amount_submitted',$allAmount,$regData);
-        if(!$eff){
-            DB::rollBack();
-        }
-        DB::commit();
+    function postUpdateRegistration(RegistrationForm $request,UserRegistrationModel $UserRegistration,UserPayModel $UserPayModel,UserPayLogModel $UserPayLogModel){
+        $data = $request->post();
+        //补全字段
+        $data = $UserRegistration->completeData($data);
+        //写入数据
+        $UserRegistration->updateData($data,$UserPayModel,$UserPayLogModel);
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'提交成功!']);
     }
 
