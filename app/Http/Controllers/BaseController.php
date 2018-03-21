@@ -74,15 +74,6 @@ class BaseController extends Controller
         3   =>  'C',
         4   =>  'D'
     ];
-    //支付方式列表
-    private static $_PAY_TYPE_LIST = [
-        'ALIPAY'=>'支付宝余额支付',
-        'HUABEI'=>'花呗',
-        'HUABEIFQ'=>'花呗分期',
-        'WEIXIN'=>'微信支付',
-        'MAYIFQ'=>'蚂蚁分期',
-        'BANKZZ'=>'银行转账'
-    ];
     //左侧菜单导航
     private static $_LEFT_NAV = [
         'roster_add' =>   [
@@ -204,15 +195,6 @@ class BaseController extends Controller
      */
     public function getGroupStatus($key = ''){
         return $key ? self::$_GROUP_STATUS[$key]: self::$_GROUP_STATUS;
-    }
-
-    /**
-     * 获取支付方式列表
-     * @param string $key
-     * @return array|mixed
-     */
-    public function getPayTypeList($key = ''){
-        return $key ? self::$_PAY_TYPE_LIST[$key]: self::$_PAY_TYPE_LIST;
     }
 
     /**
