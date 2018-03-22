@@ -86,6 +86,7 @@ class RosterController extends BaseController
         $startDate = Input::get("startdate");
         $endDate = Input::get("enddate");
         $seoerId = Input::get("seoer_id");
+        $adviserId = Input::get("adviser_id");
         $where = [];
         if($field_k && $field_v !== null){
             if($field_k == "account"){
@@ -117,15 +118,22 @@ class RosterController extends BaseController
         }
         if($seoerId !==  null){
             $query->where('inviter_id',$seoerId);
+            $statisticsWhere['inviter_id'] = $seoerId;
+        }
+        $statistics = '';
+        if($adviserId !== null){
+            $query->where('last_adviser_id',$adviserId);
+            $statistics = $this->getStatistics(['last_adviser_id'],function($query) use($adviserId) {
+                $query->where("last_adviser_id", $adviserId);
+            });
         }
         $query->where($where);
         if(Input::get('export') == 1){
             return $this->exportRosterList($query);
         }
-        $userInfo = $this->getUserInfo();
-        $statistics = $this->getStatistics([''],function($query) use($userInfo) {
-            $query->where("inviter_id", $userInfo->uid);
-        });
+        if(!$statistics){
+            $statistics = $this->getStatistics(['']);
+        }
         $query->orderBy("id","desc");
         $list = $query->paginate();
         return view("admin.roster.list",[
@@ -147,7 +155,7 @@ class RosterController extends BaseController
             if(!$user){
                 throw new UserValidateException("您还没有权限访问该操作");
             }
-            $request->merge(['last_adviser_id'=>$userInfo->uid]);
+            $request->merge(['adviser_id'=>$userInfo->uid]);
         }
         return Route::respondWithRoute("admin.roster.list");
     }

@@ -349,7 +349,7 @@ width: 80%; background-color: #434343; border: 0px; color: #919191; font-weight:
 .dp-vodCourse .expression-frame ul li { padding-bottom: 5px; }
 .dp-vodCourse .expression-frame ul span { width: 100%; display: block; color: #fff; cursor: pointer; }
 .dp-vodCourse .expression-frame .border-bottom:before { content: '\20'; display: block; width: 0; height: 0; top: -10px; position: relative; float: right; margin-right: 46%; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #333333; }
-.dp-vodCourse .pagination { }
+/*.dp-vodCourse .pagination { }
 .dp-vodCourse .pagination > li:first-child > a, .dp-vodCourse .pagination > li:first-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .dp-vodCourse .pagination > .active > a, .dp-vodCourse .pagination > .active > span { background: #00D753 none repeat scroll 0% 0%; }
 .dp-vodCourse .pagination > .active > a:hover, .dp-vodCourse .pagination > .active > span:hover { color: #686880; }
@@ -357,7 +357,7 @@ width: 80%; background-color: #434343; border: 0px; color: #919191; font-weight:
 .dp-vodCourse .pagination .pageNext > a, .dp-vodCourse .pagination .pageNext > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .dp-vodCourse .pagination > li:last-child > a, .pagination > li:last-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; margin-left: 10px; }
 .dp-vodCourse .pagination li:nth-last-child(2) > a, .pagination li:nth-last-child(2) > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
-.dp-vodCourse .pagination li:nth-last-child(1) > a { height: 28px !important; top: -3px; }
+.dp-vodCourse .pagination li:nth-last-child(1) > a { height: 28px !important; top: -3px; }*/
 /** } 点播页面 **/
 
 
@@ -683,9 +683,9 @@ ul.chat li.right .message .text { max-width: 220px; table-layout: fixed; word-wr
 /*******  }  课程页 跟随滚动菜单   **********/
 
 /** 分页 {**/
-.pagination a { color: #686880 !important; }
+/*.pagination a { color: #686880 !important; }
 .pagination a:hover { color: #FFF; background: #00D753 !important; }
-.pagination .disabled a:hover { color: #686880 !important; border: 1px solid #686880; background: #fff !important; }
+.pagination .disabled a:hover { color: #686880 !important; border: 1px solid #686880; background: #fff !important; }*/
 /** } 分页 **/
 
 
@@ -726,12 +726,14 @@ ul.chat li.right .message .text { max-width: 220px; table-layout: fixed; word-wr
 .dp-wdkc-menu .live-tab { background-color: #f7931e; }
 .dp-wdkc-menu .course-tab { background-color: #36c3ff; }
 /***分页样式****/
+/*
 .pagination>li>a, .pagination>li>span { font-size: 18px; line-height: 18px; padding: 2px 6px; border-radius: 13px; color: #686880; border: none; margin-left: 6px; }
 .pagination>li:first-child>a, .pagination>li:first-child>span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .pagination>li:last-child>a, .pagination>li:last-child>span { display: none !important; border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; margin-left: 10px; }
 .pagination .pageNext>a, .pagination .pageNext>span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .pagination>.active>a, .pagination>.active>span { background: #00d753; }
 .pagination a:hover { color: #FFF; background: #00D753 !important; }
+*/
 
 .list-group-panel { }
 .list-group-panel .list-group-heading { color: #999; padding: 5px 0;/*margin-bottom: 5px;*/}
