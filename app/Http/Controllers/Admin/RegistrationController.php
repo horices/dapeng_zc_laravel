@@ -220,7 +220,7 @@ class RegistrationController extends BaseController{
         ]);
     }
 
-    function getPayDetail(Request $request){
+    function getListDetail(Request $request){
         $logId = $request->get("pay_log_id");
 
         $UserPayLog = new UserPayLogModel();
@@ -239,24 +239,25 @@ class RegistrationController extends BaseController{
 //        ];
 //        $detail['package_total_price'] = $CoursePackage->where($tmpMap)->sum("price");
         //套餐信息
-        $CoursePackage = new CoursePackageModel();
-        $packageData = $CoursePackage->where(['id'=>$regData['package_id']])->find();
-        $detail['package_title'] = $packageData['title'];
-        $detail['package_price'] = $packageData['price'];
-        if($packageData['status'] == 'DEL'){
-            $detail['package_title'] = $detail['package_title']."(已删)";
-        }
+//        $CoursePackage = new CoursePackageModel();
+//        $packageData = $CoursePackage->where(['id'=>$regData['package_id']])->find();
+//        $detail['package_title'] = $packageData['title'];
+//        $detail['package_price'] = $packageData['price'];
+//        if($packageData['status'] == 'DEL'){
+//            $detail['package_title'] = $detail['package_title']."(已删)";
+//        }
         //附加套餐列表
-        $packageMap = [
-            '_string' =>    '(type = 1 AND status = "USE") OR id = '.$detail['package_attach_id']
-        ];
-        $packageAttachList = $CoursePackage->where($packageMap)->select();
-        $this->assign("packageAttachList",json_encode($packageAttachList,JSON_UNESCAPED_UNICODE));
+
+        $packageAttachList = CoursePackageModel::where([
+            ['type','=',1],
+            ['status','=','USE']
+        ])->orWhere('id',$detail->userHeadmaster->package_attach_id)->get();
+
         //活动信息
-        $RebateActivity = new RebateActivityModel();
-        //$rebateData = $RebateActivity->where(['id'=>$regData['rebate_id']])->find();
-        $detail['rebate_title'] = $detail['rebate_title'] ?: '';
-        $detail['rebate_price'] = $detail['rebate_price'] ?: 0;
+//        $RebateActivity = new RebateActivityModel();
+//        //$rebateData = $RebateActivity->where(['id'=>$regData['rebate_id']])->find();
+//        $detail['rebate_title'] = $detail['rebate_title'] ?: '';
+//        $detail['rebate_price'] = $detail['rebate_price'] ?: 0;
         //获取赠送课程列表
         $this->assign('giveList',json_encode(array_reverse($CoursePackage->give),JSON_UNESCAPED_UNICODE));
 
@@ -277,7 +278,10 @@ class RegistrationController extends BaseController{
         $this->assign("fqTypeList",json_encode($fqTypeList,JSON_UNESCAPED_UNICODE));
 
         $_GET['subnavAction'] = "userPayList";
-        $this->display("Member@Index/userPayInfoDetail");
+        return view("admin.registration.list-pay",[
+            'packageAttachList' =>  json_encode($packageAttachList,JSON_UNESCAPED_UNICODE),
+
+        ]);
     }
 
 }

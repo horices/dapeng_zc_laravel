@@ -60,4 +60,4 @@ Route::get("registration/list-user","RegistrationController@getUserList")->name(
 //支付记录列表
 Route::get("registration/list-pay","RegistrationController@getPayList")->name("admin.registration.list.pay");
 //支付记录详情
-Route::get("registration/list-detail","RegistrationController@getPayDetail")->name("admin.registration.list.detail");
+Route::get("registration/list-detail","RegistrationController@getListDetail")->name("admin.registration.list.detail");
