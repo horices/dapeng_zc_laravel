@@ -10,18 +10,15 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Api\DapengUserApi;
-use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
 use App\Http\Requests\RegistrationForm;
 use App\Models\CoursePackageModel;
 use App\Models\RebateActivityModel;
-use App\Models\UserHeadMasterModel;
 use App\Models\UserPayLogModel;
 use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 
@@ -98,13 +95,11 @@ class RegistrationController extends BaseController{
      * @note 异步获取课程套餐列表
      */
     function postPackageList(){
-        $CoursePackage = new CoursePackageModel();
-        $map = ['type'=>0,'status'=>'USE'];
         $title = Input::get("title",'trim');
         if(!$title){
-            return response()->json(['code'=>Util::FAIL,'msg'=>'关键字为空!']);
+            throw new UserValidateException("关键字不能为空！");
         }
-        $list = $CoursePackage::where([
+        $list = CoursePackageModel::where([
             ['title','like',"%".$title."%"],
             ['type','=',0],
             ['status','=','USE']
@@ -220,8 +215,13 @@ class RegistrationController extends BaseController{
         ]);
     }
 
+    /**
+     * 获取支付记录的详情信息
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     function getListDetail(Request $request){
-        $logId = $request->get("pay_log_id");
+        $logId = $request->get("payLogId");
 
         $UserPayLog = new UserPayLogModel();
         $detail = UserPayLogModel::find($logId);
@@ -251,36 +251,41 @@ class RegistrationController extends BaseController{
         $packageAttachList = CoursePackageModel::where([
             ['type','=',1],
             ['status','=','USE']
-        ])->orWhere('id',$detail->userHeadmaster->package_attach_id)->get();
-
+        ])->orWhere('id',$detail->userRegistration->package_attach_id)->get()->toJson();
         //活动信息
 //        $RebateActivity = new RebateActivityModel();
 //        //$rebateData = $RebateActivity->where(['id'=>$regData['rebate_id']])->find();
 //        $detail['rebate_title'] = $detail['rebate_title'] ?: '';
 //        $detail['rebate_price'] = $detail['rebate_price'] ?: 0;
-        //获取赠送课程列表
-        $this->assign('giveList',json_encode(array_reverse($CoursePackage->give),JSON_UNESCAPED_UNICODE));
 
-        $detail = json_encode($detail,JSON_UNESCAPED_UNICODE);
-        $this->assign('r',$detail);
-        //获取支付方式列表
-        $this->assign("pay_type_list",json_encode($UserPayLog->payType,JSON_UNESCAPED_UNICODE));
+//        $detail = json_encode($detail,JSON_UNESCAPED_UNICODE);
+//        $this->assign('r',$detail);
+
+        //处理已经赠送课程
+        $giveList = array_reverse(CoursePackageModel::$giveList);
+        foreach ($giveList as $key=>$val){
+            $giveIds = explode(',',$detail->userRegistration->give_id);
+            if(in_array($val['id'],$giveIds)){
+                $giveList[$key]['checked'] = true;
+            }
+        }
         //获取优惠活动列表
-        $rebateMap = [
-            'status'    =>  'USE',
-            '_logic'    =>  'OR',
-            'id'        =>  $regData['rebate_id']
-        ];
-        $rebateList = $RebateActivity->where($rebateMap)->select();
-        $this->assign("rebateList",json_encode($rebateList,JSON_UNESCAPED_UNICODE));
-        //分期方式列表
-        $fqTypeList = $UserRegistration->fqType;
-        $this->assign("fqTypeList",json_encode($fqTypeList,JSON_UNESCAPED_UNICODE));
-
+        $rebateList = RebateActivityModel::where([
+            ['status','=','USE'],
+        ])->orWhere('id',$detail->userRegistration->rebate_id)->get()->toJson();
         $_GET['subnavAction'] = "userPayList";
-        return view("admin.registration.list-pay",[
-            'packageAttachList' =>  json_encode($packageAttachList,JSON_UNESCAPED_UNICODE),
-
+        return view("admin.registration.list-detail",[
+            'r'                 =>  $detail->toJson(),
+            'packageAttachList' =>  $packageAttachList,
+            //获取赠送课程列表
+            'giveList'          =>  collect($giveList)->toJson(),
+            //支付方式列表
+            'payTypeList'       =>  collect(app("status")->getPayTypeList())->toJson(),
+            //优惠活动
+            'rebateList'        =>  collect($rebateList)->toJson(),
+            //分期方式列表
+            'fqTypeList'        =>  collect(app("status")->getFqType())->toJson(),
+            'adminInfo'         =>  $this->getUserInfo()
         ]);
     }
 

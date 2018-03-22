@@ -63,6 +63,14 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
+     * 获取支付记录模型
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userPayLog(){
+        return$this->hasMany(UserPayLogModel::class,'registration_id','id');
+    }
+
+    /**
      * 获得关联的主套餐课程。
      */
     public function coursePackage()
@@ -90,7 +98,7 @@ class UserRegistrationModel extends BaseModel{
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function userHeadmaster(){
-        return $this->belongsTo(UserHeadMasterModel::class,'adviser_id','uid');
+        return $this->belongsTo(UserHeadMasterModel::class,'adviser_id','uid')->withDefault();
     }
 
     /**

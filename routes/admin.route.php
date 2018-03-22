@@ -55,7 +55,7 @@ Route::post("registration/add-registration","RegistrationController@postAddRegis
 //更新 报名
 Route::post("registration/update-registration","RegistrationController@postUpdateRegistration")->name("admin.registration.update-registration");
 //异步获课程取套餐列表
-Route::post("registration/get-package-list","RegistrationController@postPackageList")->name("admin.registration.get-package-list");
+Route::post("registration/post-package-list","RegistrationController@postPackageList")->name("admin.registration.post-package-list");
 //支付用户统计列表
 Route::get("registration/list-user","RegistrationController@getUserList")->name("admin.registration.list.user");
 //支付记录列表

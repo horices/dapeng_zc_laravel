@@ -171,7 +171,7 @@
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
-                            url         :   "{{url('admin/registration/get-package-list')}}",
+                            url         :   "{{url('admin/registration/post-package-list')}}",
                             dataType    :   'json',
                             method      :   'post',
                             data        :   {'title':_this.userPayInfo.package_tmp_title},

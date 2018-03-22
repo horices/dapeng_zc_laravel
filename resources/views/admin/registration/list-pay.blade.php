@@ -141,7 +141,7 @@
                         <td style="text-align: center">
                             <!--<a onclick="showDetail(this)" pay-log-id="{$v.id}">
                                 查看</a>-->
-<a href="{{route('admin.registration.list.detail',['pay_log_id'=>$v->id])}}">查看</a>
+<a href="{{route('admin.registration.list.detail',['payLogId'=>$v->id])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
                                     |<a href="{:U('delPayInfo')}" data="{id:'{$v.id}'}" class="ajaxLink" warning="确认删除？">删除</a>
                                 @endif

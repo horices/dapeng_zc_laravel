@@ -19,6 +19,7 @@ class UserPayLogModel extends BaseModel {
     protected $dateFormat = 'U';
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
+
     /**
      * 应被转换为日期的属性。
      * @var array
@@ -27,7 +28,7 @@ class UserPayLogModel extends BaseModel {
         'pay_time','create_time'
     ];
     protected $appends = [
-        'pay_type_text'
+        'pay_type_text','adviser_name_reg'
     ];
     //支付方式
     public $payType = [
@@ -48,11 +49,19 @@ class UserPayLogModel extends BaseModel {
     }
 
     /**
+     * 获取给报名套餐的课程顾问姓名
+     * @return mixed
+     */
+    public function getAdviserNameRegAttribute(){
+        return $this->userRegistration->userHeadmaster->name;
+    }
+
+    /**
      * 获取报名记录模型
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function userRegistration(){
-        return $this->belongsTo(UserRegistrationModel::class,'registration_id','id');
+        return $this->belongsTo(UserRegistrationModel::class,'registration_id','id')->withDefault();
     }
 
     /**
