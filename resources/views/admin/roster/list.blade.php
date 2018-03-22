@@ -122,6 +122,28 @@
     </style>
     <div id="w0" class="grid-view">
         <table class="table">
+            <thead class="thead" style=" font-size:14px; ">
+            <tr>
+                <th>数据总量</th>
+                <th>进群总量/比例</th>
+                <th>退群总量/比例</th>
+                <th>被踢总量/比例</th>
+                <th>注册总量/比例</th>
+                <th>试学总量/比例</th>
+                <th>正课总量/比例</th>
+            </tr>
+            <tr>
+                <th>{{ $statistics['user_total'] ?? 0 }}</th>
+                <th><span style="color:#3bbbd9">{{ $statistics['user_total_join_group'] ?? 0 }}</span><span style="color:#ccc;">/</span><span style="color:#ff7f00">{{ $statistics['user_total_join_group_percent'] ?? '- -' }}</span></th>
+                <th><span style="color:#3bbbd9">{{ $statistics['user_total_group_num_3'] ?? 0 }}</span><span style="color:#ccc;">/</span><span style="color:#ff7f00">{{ $statistics['user_total_quit_group_percent'] ?? '- -' }}</span></th>
+                <th><span style="color:#3bbbd9">{{ $statistics['user_total_group_num_5'] ?? 0 }}</span><span style="color:#ccc;">/</span><span style="color:#ff7f00">{{ $statistics['user_total_kick_group_percent'] ?? '- -' }}</span></th>
+                <th><span style="color:#3bbbd9">{{ $statistics['user_total_reg_num_1'] ?? 0 }}</span><span style="color:#ccc;">/</span><span style="color:#ff7f00">{{ $statistics['user_total_reg_percent'] ?? '- -' }}</span></td>
+                <th><span style="color:#3bbbd9">{{ $statistics['user_total_course_num_1'] ?? 0 }}</span><span style="color:#ccc;">/</span><span style="color:#ff7f00">{{ $statistics['user_total_trial_course_percent'] ?? '- -' }}</span></th>
+                <th><span style="color:#3bbbd9">{{ $statistics['user_total_course_num_2'] ?? 0 }}</span><span style="color:#ccc;">/</span><span style="color:#ff7f00">{{ $statistics['user_total_formal_course_percent'] ?? '- -' }}</span></th>
+            </tr>
+            </thead>
+        </table>
+        <table class="table">
             <thead>
                 <tr>
                     {{--<th width="50">序号</th>--}}
@@ -187,7 +209,7 @@
             </tbody>
         </table>
 </div>
-<div class="pagenav"> <ul>{{ $list->links() }} </ul></div>
+<div class="pagenav"> <ul>{{ $list->appends(\Illuminate\Support\Facades\Request::input())->links() }} </ul></div>
 <style>
     #open-course{width: 300px; height: 100px; padding-top: 30px;display: none;padding-left: 10px;}
     #open-course input{width: 200px; float: left}
