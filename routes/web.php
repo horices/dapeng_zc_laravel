@@ -1,9 +1,8 @@
 <?php
 
 
-use Illuminate\Support\Facades\Route;
-use function Composer\Autoload\includeFile;
 use App\Http\Middleware\BackendAuth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,17 +22,15 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     Route::get("auth/login","AuthController@getLogin")->name("admin.auth.login");
     Route::post("auth/login","AuthController@postLogin");
 });
-Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class]], function(){
-    //include("admin.route.php");
-    Route::get("index/index","IndexController@getIndex");
-    Route::get("group/list","GroupController@getList");
-    Route::get("index/index","IndexController@getIndex");
-    //用户管理
-    Route::get("user/list","UserController@getList");
+Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class,\App\Http\Middleware\LowerUrl::class]], function(){
     include("admin.route.php");
+});
+Route::group(['prefix'=>'App','namespace'=>"Notify",'middleware'=>[\App\Http\Middleware\NotifyValidate::class]], function(){
+    Route::post("Index/index","DapengNotifyController@reg");
+    Route::post("Index/openCourse","DapengNotifyController@openCourse");
+    Route::post("Index/closeCourse","DapengNotifyController@closeCourse");
 
 });
-
 //Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
