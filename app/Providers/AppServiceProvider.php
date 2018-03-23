@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\GroupModel;
+use App\Models\RosterCourseLogModel;
 use App\Observers\GroupObserver;
+use App\Observers\RosterCourseLogObserver;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -41,11 +43,13 @@ class AppServiceProvider extends ServiceProvider
         View::share("navList",app('status')->getLeftNavList());
         //获取支付方式列表
         View::share("payTypeList",app('status')->getPayTypeList());
+
         //监听用户用事件 
         UserModel::observe(UserObserver::class);
         //监听群事件
         GroupModel::observe(GroupObserver::class);
-
+        //监听开课事件
+        RosterCourseLogModel::observe(RosterCourseLogObserver::class);
 
         //记录SQL日志
         DB::listen(function($query){

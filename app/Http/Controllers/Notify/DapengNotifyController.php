@@ -1,15 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Notify;
-use App\Exceptions\UserValidateException;
 use App\Models\RosterCourseLogModel;
+use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
 
 /**
@@ -35,9 +33,37 @@ class DapengNotifyController extends BaseController
     /**
      * 开课通知
      */
-    function openCourse(){
-        $qq = Input::get("qq");
-        $roster = RosterModel::where('qq',$qq)->orderBy("addtime","desc");
-        RosterCourseLogModel::create(Input::get());
+    function openCourse(Request $request,RosterCourseLogModel $courseLog){
+        //查询这个QQ号的情况
+        $roster = RosterModel::where("qq",Input::get("qq"))->orderBy("id","desc")->first();
+        $request->merge([
+            'action'=>1,
+            'roster_id' => $roster->id,
+            'addtime'   =>  time(),
+            'user_type' => $roster->type,
+            'course_type'=>app('status')->getCourseTypeColumnValue(Input::get('type'))
+        ]);
+        if(!RosterCourseLogModel::create(Input::get())){
+            Log::error("开课通知处理失败");
+        }
+        return Util::ajaxReturn(Util::SUCCESS,"success");
+    }
+    /**
+     * 关闭课程通知
+     */
+    function closeCourse(Request $request,RosterCourseLogModel $courseLog){
+        //查询这个QQ号的情况
+        $roster = RosterModel::where("qq",Input::get("qq"))->orderBy("id","desc")->first();
+        $request->merge([
+            'action'=>2,
+            'roster_id' => $roster->id,
+            'addtime'   =>  time(),
+            'user_type' => $roster->type,
+            'course_type'=>app('status')->getCourseTypeColumnValue(Input::get('type'))
+        ]);
+        if(!RosterCourseLogModel::create(Input::get())){
+            Log::error("开课通知处理失败");
+        }
+        return Util::ajaxReturn(Util::SUCCESS,"success");
     }
 }
