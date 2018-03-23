@@ -16,7 +16,7 @@ class CoursePackageModel extends BaseModel {
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
     //赠送课程
-    public $give = [
+    public static $giveList = [
         0=>['id'=>0,'text'=>'无','checked'=>false],
         1=>['id'=>1,'text'=>'英语口语','checked'=>false],
         2=>['id'=>2,'text'=>'AE','checked'=>false],

@@ -39,7 +39,7 @@ class UserRegistrationModel extends BaseModel{
 
     //获取分期类型
     public function getFqTypeTextAttribute(){
-        if(in_array($this->fq_type,$this->fqType))
+        if(in_array($this->fq_type,array_keys($this->fqType)))
             return $this->fqType[$this->fq_type];
         else
             return "无分期";
@@ -50,7 +50,8 @@ class UserRegistrationModel extends BaseModel{
     }
     //获取套餐总价格
     public function getPackageTotalPriceAttribute(){
-        return $this->coursePackage->price+$this->coursePackageAttach->price;
+        return floatval($this->coursePackage->price) + floatval($this->coursePackageAttach->price);
+
     }
 
     /**
@@ -62,18 +63,26 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
+     * 获取支付记录模型
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userPayLog(){
+        return$this->hasMany(UserPayLogModel::class,'registration_id','id');
+    }
+
+    /**
      * 获得关联的主套餐课程。
      */
     public function coursePackage()
     {
-        return $this->belongsTo(CoursePackageModel::class,'package_id','id');
+        return $this->belongsTo(CoursePackageModel::class,'package_id','id')->withDefault();
     }
     /**
      * 获得关联的副套餐课程。
      */
     public function coursePackageAttach()
     {
-        return $this->belongsTo(CoursePackageModel::class,'package_attach_id','id');
+        return $this->belongsTo(CoursePackageModel::class,'package_attach_id','id')->withDefault();
     }
 
     /**
@@ -85,18 +94,12 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
-     * 获取此报名相关的所有支付记录
+     * 获取管理员记录买模型信息
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function userPayLog() {
-        return $this->morphMany(UserPayLogModel::class, 'registration');
+    public function userHeadmaster(){
+        return $this->belongsTo(UserHeadMasterModel::class,'adviser_id','uid')->withDefault();
     }
-    /**
-     * 获取此报名相关的所有一级支付记录
-     */
-    public function userPay() {
-        return $this->morphMany(UserPayModel::class, 'registration');
-    }
-
 
     /**
      * 新增报名时补全入库字段信息

@@ -81,12 +81,18 @@ class BaseController extends Controller
     ];
     //支付方式列表
     private static $_PAY_TYPE_LIST = [
-        'ALIPAY'=>'支付宝余额支付',
+        'ALIPAY'=>'支付宝',
         'HUABEI'=>'花呗',
         'HUABEIFQ'=>'花呗分期',
         'WEIXIN'=>'微信支付',
         'MAYIFQ'=>'蚂蚁分期',
         'BANKZZ'=>'银行转账'
+    ];
+    //分期方式
+    private static $_FQ_TYPE = [
+        'CASH'      =>  '现金分期',
+        'HUABEI'    =>  '花呗分期',
+        'MYFQ'      =>  '蚂蚁分期',
     ];
     //左侧菜单导航
     private static $_LEFT_NAV = [
@@ -152,8 +158,8 @@ class BaseController extends Controller
         ],
         'pay_list' =>   [
             'text'=> '支付查询',   //文字描述
-            'route'=> "admin.registration.user-list",    //链接地址
-            'flag'=> 'admin.registration.user-list',  //默认选中标识
+            'route'=> "admin.registration.list.user",    //链接地址
+            'flag'=> 'admin.registration.list.user',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'accounts' =>   [
@@ -278,6 +284,15 @@ class BaseController extends Controller
      */
     public function getPayTypeList($key = ''){
         return $key ? self::$_PAY_TYPE_LIST[$key]: self::$_PAY_TYPE_LIST;
+    }
+
+    /**
+     * 获取分期方式
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getFqType($key = ''){
+        return $key ? self::$_FQ_TYPE[$key]: self::$_FQ_TYPE;
     }
 
     /**
