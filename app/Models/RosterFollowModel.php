@@ -3,6 +3,9 @@
 namespace App\Models;
 
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
+
 class RosterFollowModel extends BaseModel
 {
     protected $table = "user_roster_info";

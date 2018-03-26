@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 class BaseModel extends Model
@@ -69,7 +70,9 @@ class BaseModel extends Model
      */
     function fill(array $attributes)
     {
-        $columns = Schema::getColumnListing($this->getTable());
+        $columns = Cache::remember($this->getTable()."columns",1,function(){
+            return Schema::getColumnListing($this->getTable());
+        });
         return parent::fill(collect($attributes)->intersectByKeys(collect($columns)->flip())->toArray());
     }
 

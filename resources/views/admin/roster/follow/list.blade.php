@@ -34,7 +34,7 @@
         </div>
         <div class="form-but" style="float:left;  color:#fff;  width:122px; margin-top:3px;  ">
 <span class="but-ss" style=" height:auto;text-align:center; line-height:25px; ">
-<a class="common-button combg1 linkSubmit" href="{:U('',mergeArray($_GET,['p'=>1,'startdate'=>'','enddate'=>'']))}"
+<a class="common-button combg1 linkSubmit" data="{page:1}"
    data="" style="height:30px;line-height:20px;">搜索</a></span></div>
         <div class="form-but" style=" color:#fff;  width:122px; margin-top:3px;  ">
 <span class="but-ss fleft" style=" height:auto;text-align:center; line-height:25px; ">

@@ -150,6 +150,12 @@ class BaseController extends Controller
             'flag'=> 'admin.roster.follow.index',  //默认选中标识
             'grade' =>  [4,5],          //权限显示
         ],
+        'roster_follow_adviser' =>   [
+            'text'=> '我的销售',   //文字描述
+            'route'=> "admin.roster.follow.list.user",    //链接地址
+            'flag'=> 'admin.roster.follow.list.user',  //默认选中标识
+            'grade' =>  [9,10],          //权限显示
+        ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
             'route'=> "admin.registration.add",    //链接地址

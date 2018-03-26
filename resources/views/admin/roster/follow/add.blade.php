@@ -4,9 +4,9 @@
     <h4 class="col-md-4" style="padding-left:0"><notempty name="r.uid">修改<else />添加</notempty>关单信息</h4>
 </div>
 <div class="row dp-member-body-2">
-    <form role="form" id="regForm" class="form-horizontal" method="post">
-    <input type="hidden" name="roster_id" value="{$r.id}" />
-    <input type="hidden" name="grade" value="{$Think.get.grade}" />
+    <form role="form" id="regForm" class="form-horizontal" method="post" action="{{ route("admin.roster.follow.save.post") }}">
+        <input type="hidden" name="roster_id" value="{{ $roster->id }}" />
+        <input type="hidden" name="test" value="111111111111111" />
         <fieldset>
             <div class="form-group">
                 <!-- Text input-->

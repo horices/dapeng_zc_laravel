@@ -187,7 +187,7 @@
                     </td>
                     <td>
                     @if( $roster->is_old == 0)
-                    <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}" data="{roster_id:{{ $roster->id }}">点击添加</a>
+                    <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}">点击添加</a>
                     @endif
                     </td>
                     <td>
