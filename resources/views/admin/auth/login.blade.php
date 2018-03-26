@@ -313,10 +313,10 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                                 <div class="form-item form-imgcode mb-25">
                                     <div class="form-cont">
                                         <div class="layout-inner">
-                                            <input type="text" id="verify" name="verify" class="passport-txt xl w-lg" tabindex="3" maxlength="4" placeholder="验证码" autocomplete="off" />
+                                            <input type="text" id="verify" name="verify" class="passport-txt xl w-lg" tabindex="3" maxlength="5" placeholder="验证码" autocomplete="off" />
                                         </div>
                                         <div class="imgcode">
-                                            <img src="/Member/Portal/verify" alt='验证码' class="verifyCode" onClick="$('#verify').val(''); this.src='/member/Portal/verify?'+Math.random(100,999)"> <i class="passport-icon icon-refresh refreshCode"></i>
+                                            <img src="{{ captcha_src() }}" alt='验证码' class="verifyCode" onClick="$('#verify').val(''); this.src='{{ captcha_src() }}?'+Math.random(100,999)"> <i class="passport-icon icon-refresh refreshCode"></i>
                                         </div>
                                     </div>
                                 </div>

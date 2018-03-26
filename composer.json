@@ -14,7 +14,8 @@
 		"khanamiryan/qrcode-detector-decoder": "^1.0",
 		"laravel/framework": "5.5.*",
 		"laravel/tinker": "~1.0",
-		"maatwebsite/excel": "~2.1.0"
+		"maatwebsite/excel": "~2.1.0",
+		"mews/captcha": "^2.1"
 	},
 	"require-dev" : {
 		"filp/whoops" : "~2.0",
