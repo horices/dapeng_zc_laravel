@@ -106,6 +106,7 @@
 		        type:obj.attr('method') || "post",
 		        data:data,
 		        success:function(data){
+                    _this.resetFlag(obj);
 		        	if(data.replaceState && data.url){
 		        		var stateObj = {
 		        				title:"测试",
@@ -130,18 +131,7 @@
 		        	if(data.status == 302){
 		        		_this.ajaxLoadAction("<a url='"+data.getResponseHeader('X-Redirect')+"'></a>");
 		        	}else{
-		        		if(obj && obj.attr){
-		    		    	if(obj.attr("interval")){
-		    		    		setTimeout(function(){
-		    		    			obj.attr("processing","false");
-		    		    		},parseInt(obj.attr("interval")));
-		    		    	}else{
-		    		    		obj.attr("processing","false"); //取消正在处理数据标识
-		    		    	}
-		    		    }
-		    		    if(obj.attr("keepDialog") != 'true'){
-		                    CustomDialog.closeDialog();
-		    			}
+		        		_this.resetFlag(obj);
 		    		    CustomDialog.failDialog("请求失败");
 		        	}
 		        }
@@ -153,24 +143,29 @@
 		},
 		_this.ajax = function(options,callback){
 			$.ajax(options);
+		},
+        /**
+		 * 重置标识
+         * @param obj
+         */
+		_this.resetFlag = function(obj){
+            if(obj && obj.attr){
+                if(obj.attr("interval")){
+                    setTimeout(function(){
+                        obj.attr("processing","false");
+                    },parseInt(obj.attr("interval")));
+                }else{
+                    obj.attr("processing","false"); //取消正在处理数据标识
+                }
+            }
+            if(obj.attr("keepDialog") != 'true'){
+                CustomDialog.closeDialog();
+            }
 		}
 		/**
 		 * ajax 默认回调
 		 */
 		_this.ajaxReturn = function (data,obj){
-		    if(obj && obj.attr){
-		    	if(obj.attr("interval")){
-		    		setTimeout(function(){
-		    			obj.attr("processing","false");
-		    		},parseInt(obj.attr("interval")));
-		    	}else{
-		    		obj.attr("processing","false"); //取消正在处理数据标识
-		    	}
-		    }
-		    if(obj.attr("keepDialog") != 'true'){
-                CustomDialog.closeDialog();
-			}
-
 		    //设置默认回调方法后不再执行默认回调
 		    if(obj && obj.attr && obj.attr("callback")){
 		    		var callback = obj.attr("callback");
@@ -242,6 +237,9 @@
 		    }
 		    var options = {
 		    		yes:function(){
+                        if(obj.attr("showloading")){
+                            CustomDialog.loadingDialog();
+                        }
 		    			if(_this.getfn(_this.options.event.ajaxBefore)(obj) === false){
 		    				return false;
 		    			}
@@ -284,6 +282,9 @@
                         	form.prepend(input);
 						}
 		        		form[0].submit();
+                        if(obj.attr("showloading")){
+                            CustomDialog.loadingDialog();
+                        }
                         for(var i = 0 ;i<node.length;i++){
                             node[i].remove();
 						}

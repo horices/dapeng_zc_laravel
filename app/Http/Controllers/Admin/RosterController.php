@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exceptions\UserValidateException;
 use App\Http\Requests\RosterAdd;
+use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
 use App\Models\UserModel;
 use App\Utils\Util;
@@ -141,7 +142,12 @@ class RosterController extends BaseController
             "statistics"    => $statistics['statistics']
         ]);
     }
-
+    function getCourseList(Request $request){
+        $rosterCourse = RosterCourseModel::where(['roster_id'=>$request->get("roster_id")])->orderBy('id','desc')->get();
+        return view("admin.roster.course-list",[
+            'rosterCourse'  =>  $rosterCourse
+        ]);
+    }
     /**
      * 获取指定用户的量列表
      */

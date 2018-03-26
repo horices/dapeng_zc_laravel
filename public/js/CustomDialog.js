@@ -84,7 +84,7 @@
 		 * 正在加载对话框
 		 */
 		this.loadingDialog = function(msg){
-			return layer.load(1);
+			return layer.load(2,{shade:0.3,shadeClose:false});
 			//return this.dialog(options);
 		}
 		/**
