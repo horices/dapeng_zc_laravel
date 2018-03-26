@@ -90,7 +90,7 @@ class UserRegistrationModel extends BaseModel{
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function rebateActivity(){
-        return $this->belongsTo(RebateActivityModel::class,'rebate_id','id');
+        return $this->belongsTo(RebateActivityModel::class,'rebate_id','id')->withDefault();
     }
 
     /**

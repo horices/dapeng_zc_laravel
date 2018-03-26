@@ -25,10 +25,10 @@ class UserPayLogModel extends BaseModel {
      * @var array
      */
     protected $dates = [
-        'pay_time','create_time'
+        'create_time'
     ];
     protected $appends = [
-        'pay_type_text','adviser_name_reg'
+        'pay_type_text','adviser_name_reg','pay_time_text'
     ];
     //支付方式
     public $payType = [
@@ -54,6 +54,14 @@ class UserPayLogModel extends BaseModel {
      */
     public function getAdviserNameRegAttribute(){
         return $this->userRegistration->userHeadmaster->name;
+    }
+
+    /**
+     * 获取pay_time_Text 时间戳转换日期格式
+     * @return false|string
+     */
+    public function getPayTimeTextAttribute(){
+        return date("Y-m-d H:i:s",$this->pay_time);
     }
 
     /**

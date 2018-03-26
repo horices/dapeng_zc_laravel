@@ -363,14 +363,14 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">优惠金额：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="rebate_price" class="form-control" v-model="userPayInfo.rebate_price" disabled />
+                    <input type="text" name="rebate_price" class="form-control" v-model="userPayInfo.user_registration.rebate_activity.price" disabled />
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">收款时间：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="pay_time" class="form-control datetime" v-model="userPayInfo.pay_time"   />
+                    <input type="text" name="pay_time" class="form-control datetime" v-model="userPayInfo.pay_time_text"   />
                 </div>
                 <p class="help-block input-two" >修改</p>
             </div>
@@ -379,16 +379,16 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">已交总金额：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="amount_submitted" class="form-control" v-model="userPayInfo.amount_submitted" readonly   />
+                    <input type="text" name="amount_submitted" class="form-control" v-model="userPayInfo.user_registration.amount_submitted" readonly   />
                     <p class="help-block"></p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">服务期：</label>
                 <div class="col-md-8 controls">
-                    <input type="radio" name="server_date" value="0" v-model="userPayInfo.server_date" :checked="userPayInfo.server_date == 0"   />无&nbsp;&nbsp;
-                    <input type="radio" name="server_date" value="1" v-model="userPayInfo.server_date" :checked="userPayInfo.server_date == 1"   />1个月&nbsp;&nbsp;
-                    <input type="radio" name="server_date" value="2" v-model="userPayInfo.server_date" :checked="userPayInfo.server_date == 2"   />2个月
+                    <input type="radio" name="server_date" value="0" v-model="userPayInfo.user_registration.server_date" />无&nbsp;&nbsp;
+                    <input type="radio" name="server_date" value="1" v-model="userPayInfo.user_registration.server_date" />1个月&nbsp;&nbsp;
+                    <input type="radio" name="server_date" value="2" v-model="userPayInfo.user_registration.server_date" />2个月
                     <input id="server_date" type="hidden" v-model="userPayInfo.server_date"/>
                 </div>
                 <p class="help-block ajaxLink" data="{field:'server_date',val:$('#server_date').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
@@ -396,9 +396,9 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">开课状态：</label>
                 <div class="col-md-8 controls">
-                    <input type="radio" name="is_open" value="0" v-model="userPayInfo.is_open" :checked="userPayInfo.is_open == 0"   />未开课&nbsp;&nbsp;
-                    <input type="radio" name="is_open" value="1" v-model="userPayInfo.is_open" :checked="userPayInfo.is_open == 1"   />部分开课&nbsp;&nbsp;
-                    <input type="radio" name="is_open" value="2" v-model="userPayInfo.is_open" :checked="userPayInfo.is_open == 2"   />全部开课
+                    <input type="radio" name="is_open" value="0" v-model="userPayInfo.user_registration.is_open" />未开课&nbsp;&nbsp;
+                    <input type="radio" name="is_open" value="1" v-model="userPayInfo.user_registration.is_open" />部分开课&nbsp;&nbsp;
+                    <input type="radio" name="is_open" value="2" v-model="userPayInfo.user_registration.is_open"  />全部开课
                     <input id="is_open" type="hidden" v-model="userPayInfo.is_open"/>
                 </div>
                 <p class="help-block ajaxLink" data="{field:'is_open',val:$('#is_open').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
@@ -406,7 +406,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">备注：</label>
                 <div class="col-md-8 controls">
-                    <textarea id="remark" name="remark" class="form-control" style="width:400px; height:120px;" v-model="userPayInfo.remark"   ></textarea>
+                    <textarea id="remark" name="remark" class="form-control" style="width:400px; height:120px;" v-model="userPayInfo.user_registration.remark"   ></textarea>
                 </div>
                 <p class="help-block input-two" data="{field:'remark',val:$('#remark').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
             </div>
