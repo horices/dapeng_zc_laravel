@@ -14,7 +14,9 @@ class LoginForm extends FormRequest
     {
         return [
             'username.required'=>'请输入用户名',
-            'password.required'=>'请输入密码'
+            'password.required'=>'请输入密码',
+            'verify.required'  =>  "请输入验证码",
+            'verify.captcha'   =>  "验证码不正确"
         ];
     }
 
@@ -37,7 +39,8 @@ class LoginForm extends FormRequest
     {
         return [
             'username'=>'required',
-            'password'  => 'required'
+            'password'  => 'required',
+            'verify'          =>   "required|captcha"
         ];
     }
 }

@@ -62,6 +62,16 @@ class BaseModel extends Model
         return $fields;
     }
 
+    /**
+     * 重写父级自动填充，自动过滤非本表自段
+     * @param array $attributes
+     * @return $this
+     */
+    function fill(array $attributes)
+    {
+        $columns = Schema::getColumnListing($this->getTable());
+        return parent::fill(collect($attributes)->intersectByKeys(collect($columns)->flip())->toArray());
+    }
 
 
 }

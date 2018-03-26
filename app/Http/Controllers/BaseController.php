@@ -41,6 +41,11 @@ class BaseController extends Controller
         2 =>  '正式课'
     ];
     //开课状态
+    private static $_COURSE_TYPE_CLOUMN_VALUE = [
+        'trial' =>  1,
+        'formal' =>  2
+    ];
+    //开课状态
     private static $_GROUP_STATUS = [
         0   =>  '无',
         1 =>  '等待进群',
@@ -253,6 +258,14 @@ class BaseController extends Controller
      */
     public function getCourseType($key = ''){
         return $key ? self::$_COURSE_TYPE[$key] : self::$_COURSE_TYPE;
+    }
+    /**
+     * 获取课程类型对应的值
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getCourseTypeColumnValue($key = ''){
+        return $key ? self::$_COURSE_TYPE_CLOUMN_VALUE[$key] : self::$_COURSE_TYPE_CLOUMN_VALUE;
     }
 
     /**

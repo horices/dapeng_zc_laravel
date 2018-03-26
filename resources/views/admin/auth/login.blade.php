@@ -166,7 +166,7 @@ height: 40px; padding: 0 30px; font-size: 18px; line-height: 38px; }
 .passport-tab > .tabbed > .tab-group { display: none; }
 .passport-popup { position: fixed; top: 0; left: 0; z-index: 990; padding: 10px; background: rgba(0, 0, 0, 0.2); }
 .passport-popup:after { display: table; clear: both; content: " "; }
-.passport-popup .close { position: absolute; top: 10px; right: 10px; display: block; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; background: url("__IMG__/popup_def_close.png") no-repeat center center / 14px 14px; }
+.passport-popup .close { position: absolute; top: 10px; right: 10px; display: block; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; background: url("/admin/images/popup_def_close.png") no-repeat center center / 14px 14px; }
 .passport-popup > .layout-inner { position: relative; float: left; width: 100%; height: 100%; background: #fff; }
 .passport-popup > .layout-inner > .hd { height: 40px; padding: 0 30px 0 8px; background: #f3f3f3; line-height: 40px; cursor: default; }
 .passport-popup > .layout-inner > .hd h2 { color: #666; font-size: 16px; font-weight: normal; }
@@ -193,8 +193,8 @@ height: 40px; padding: 0 30px; font-size: 18px; line-height: 38px; }
 .passport-safely.safely-general .danger, .passport-safely.safely-general .general { background-color: #ff5c00; }
 .passport-safely.safely-safe li { background-color: #35b558; }
 .clearfix:after, .passport-step:after, .passport-safely:after, .passport-sign:after, .passport-form .form-imgcode .form-cont:after { display: table; clear: both; content: " "; }
-.passport-icon { background-image: url("__IMG__/fouricon.png"); background-size: 298px 120px; }
-body { background: #f5f5f5 url("__IMG__/rebc.gif"); }
+.passport-icon { background-image: url("/admin/images/fouricon.png"); background-size: 298px 120px; }
+body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
 .wrap { margin-right: auto; margin-left: auto; }
 .wrap:after { display: table; clear: both; content: " "; }
 .passport-wrapper { width: 426px; margin-right: auto; margin-left: auto; padding-top: 100px; padding-bottom: 20px; }
@@ -313,10 +313,10 @@ body { background: #f5f5f5 url("__IMG__/rebc.gif"); }
                                 <div class="form-item form-imgcode mb-25">
                                     <div class="form-cont">
                                         <div class="layout-inner">
-                                            <input type="text" id="verify" name="verify" class="passport-txt xl w-lg" tabindex="3" maxlength="4" placeholder="验证码" autocomplete="off" />
+                                            <input type="text" id="verify" name="verify" class="passport-txt xl w-lg" tabindex="3" maxlength="5" placeholder="验证码" autocomplete="off" />
                                         </div>
                                         <div class="imgcode">
-                                            <img src="/Member/Portal/verify" alt='验证码' class="verifyCode" onClick="$('#verify').val(''); this.src='/member/Portal/verify?'+Math.random(100,999)"> <i class="passport-icon icon-refresh refreshCode"></i>
+                                            <img src="{{ captcha_src() }}" alt='验证码' class="verifyCode" onClick="$('#verify').val(''); this.src='{{ captcha_src() }}?'+Math.random(100,999)"> <i class="passport-icon icon-refresh refreshCode"></i>
                                         </div>
                                     </div>
                                 </div>
