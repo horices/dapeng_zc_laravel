@@ -38,6 +38,27 @@
 .link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
 .link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
 </style>
+<script>
+    function openCourseLog(roster_id,roster_no){
+        AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster_id+"}'></a>",function(data){
+            $("#courseList").empty().html(data);
+            console.log($(data).find("li").size());
+            if($(data).find("li").size()){
+                layer.open({
+                    title:roster_no+" 开通课程记录",
+                    type:1,
+                    shadeClose:true,
+                    area:['400px','200px'],
+                    skin: 'layui-layer-rim',
+                    content:$("#courseList")
+                });
+            }
+        })
+    }
+    $(function(){
+
+    });
+</script>
             
             
   <div class="row search-row" style="padding:9px 0 15px 15px;">
@@ -169,7 +190,7 @@
                 @foreach($list as $roster)
                 <tr title="{{ $roster->qq_nickname }}" style="@if($roster->is_old == 1) opacity:0.5; @endif">
                     {{--<td class="flag_icon flag_icon_{{ $roster->flag_type }}">{{ $roster->id }}</td>--}}
-                    <td class="flag_icon flag_icon_{{ $roster->flag }}">{{ $roster->roster_type_text }}</td>
+                    <td class="flag_icon flag_icon_{{ $roster->flag }}" onclick="openCourseLog('{{ $roster->id }}')">{{ $roster->roster_type_text }}</td>
                     <td>{{ $roster->roster_no }}</td>
                     <td>{{ $roster->group->group_name }}</td>
                     <td>{{ $roster->group->qq_group }}</td>
@@ -177,7 +198,7 @@
                     <td>{{ $roster->last_adviser_name }}</td>
                     <td>{!! $roster->addtime_text !!}</td>
                     <td class="register_status_{{ $roster->is_reg }}">{{ $roster->is_reg_text }}</td>
-                    <td title="{{ $roster->course_name }}" onclick="openCourseList(this);" roster_id="{{ $roster->id }}" qq="{{ $roster->roster_no }}" style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
+                    <td title="{{ $roster->course_name }}" onclick="openCourseLog('{{ $roster->id }}','{{ $roster->qq }}');" style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
                         {{ $roster->course_type_text }}</td>
                     <td>
                         <span class="group_status_{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
@@ -210,6 +231,7 @@
         </table>
 </div>
 <div class="pagenav"> <ul>{{ $list->appends(\Illuminate\Support\Facades\Request::input())->links() }} </ul></div>
+<div id="courseList" style="display:none;"></div>
 <style>
     #open-course{width: 300px; height: 100px; padding-top: 30px;display: none;padding-left: 10px;}
     #open-course input{width: 200px; float: left}

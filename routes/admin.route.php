@@ -22,6 +22,7 @@ Route::post("user/save","UserController@postSave")->name("admin.user.save");
 
 //学员量管理
 Route::get("roster/list","RosterController@getList")->name("admin.roster.list");
+Route::get("roster/course/list","RosterController@getCourseList")->name("admin.roster.course.list");
 Route::get("roster/add","RosterController@getAdd")->name("admin.roster.add");
 Route::post("roster/add","RosterController@postAdd")->name("admin.roster.add.post");
 Route::get("roster/user/add","RosterController@getUserAdd")->name("admin.roster.user.add");
