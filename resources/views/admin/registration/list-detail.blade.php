@@ -26,7 +26,7 @@
                     modData		:	{
                         field:'',
                     },
-                    payTypeList:    {!! $payTypeList !!},
+                    payTypeList:{!! $payTypeList !!},
                     //套餐列表
                     packageList:[],
                     //附加套餐列表
@@ -38,13 +38,13 @@
                     //分期方式列表
                     fqTypeList:{!! $fqTypeList !!},
                     //权限grade
-                    grade:{{$adminInfo['uid']}}
+                    adminInfo:{!! $adminInfo !!}
                 },
                 mounted:function () {
                     var _this = this;
-                    this.$nextTick(function(){
-                        //设置已选赠送课程
-                        if(this.grade > 5){
+                    _this.$nextTick(function(){
+                        //数据员一下的权限没有修改功能
+                        if(_this.grade > 5){
                             $(".help-block").remove();
                         }
                     });
@@ -282,9 +282,9 @@
                     附加套餐：
                 </label>
                 <div class="col-md-8 controls">
-                    <select id="package_attach_id" class="col-md-8 form-control fleft" v-model="userPayInfo.package_attach_id" name="package_attach_id" @change="setPackAttach"  >
+                    <select id="package_attach_id" class="col-md-8 form-control fleft" v-model="userPayInfo.user_registration.course_package_attach.id" name="package_attach_id" @change="setPackAttach"  >
                     <option value="0">选择附加套餐</option>
-                    <option v-for="(l,index) in packageAttachList" :value="l.id" :selected="(l.id == userPayInfo.user_registration.course_package_attach.id)"><a>@{{l.title}}<template v-if="l.status == 'DEL'">(已删)</template></a></option>
+                    <option v-for="(l,index) in packageAttachList" :value="l.id" selected="selected"><a>@{{l.title}}</a></option>
                     </select>
                 </div>
                 <p class="help-block ajaxLink" data="{field:'package_attach_id',val:$('#package_attach_id').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
@@ -324,17 +324,16 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">套餐总金额：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="package_total_price" class="form-control" v-model="userPayInfo.package_total_price" disabled />
+                    <input type="text" name="package_total_price" class="form-control" v-model="userPayInfo.user_registration.package_total_price" disabled />
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">分期方式：</label>
                 <div class="col-md-8 controls">
-
                     <template v-for="(l,index) in fqTypeList">
-                        <input type="radio" name="fq_type" :value="index" v-model="userPayInfo.fq_type"   />@{{l}}&nbsp;
+                        <input type="radio" name="fq_type" :value="index" v-model="userPayInfo.user_registration.fq_type"/>@{{l}}&nbsp;
                     </template>
-                    <input type="radio" name="fq_type" value="" v-model="userPayInfo.fq_type"   />无
+                    <input type="radio" name="fq_type" value="" v-model="userPayInfo.fq_type" />无
                     <input id="fq_type" type="hidden" v-model="userPayInfo.fq_type"/>
                 </div>
                 <p class="help-block ajaxLink" data="{field:'fq_type',val:$('#fq_type').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
@@ -351,9 +350,9 @@
                     优惠活动：
                 </label>
                 <div class="col-md-8 controls">
-                    <select id="rebate_id" class="form-control fleft" v-model="userPayInfo.rebate_id" name="rebate_id"  @change="setRebate"  >
+                    <select id="rebate_id" class="form-control fleft" v-model="userPayInfo.user_registration.rebate_id" name="rebate_id"  @change="setRebate"  >
                     <option value="0">选择优惠活动</option>
-                    <option v-for="(l,index) in rebateList" :value="l.id" :selected="l.id == userPayInfo.rebate_id">@{{l.title}}<template v-if="l.status == 'DEL'">(已删)</template></option>
+                    <option v-for="(l,index) in rebateList" :value="l.id" :selected="l.id == userPayInfo.user_registration.rebate_id">@{{l.title}}<template v-if="l.status == 'DEL'">(已删)</template></option>
                     </select>
                     <input type="hidden" name="rebate_title" v-model="userPayInfo.rebate_title" />
                     <input type="hidden" name="rebate_price" v-model="userPayInfo.rebate_price" />

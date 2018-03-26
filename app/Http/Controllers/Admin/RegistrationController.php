@@ -39,7 +39,7 @@ class RegistrationController extends BaseController{
         $fqTypeList = $UserRegistration->fqType;
         return view("admin.registration.add",[
             'packageAttachList'=>  json_encode($packageAttachList,JSON_UNESCAPED_UNICODE),
-            'giveList'      =>  json_encode(array_reverse($CoursePackage->give),JSON_UNESCAPED_UNICODE),//赠送课程
+            'giveList'      =>  json_encode(array_reverse(CoursePackageModel::$giveList),JSON_UNESCAPED_UNICODE),//赠送课程
             'fqTypeList'    =>  json_encode($fqTypeList,JSON_UNESCAPED_UNICODE),
             'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE)
         ]);
@@ -206,7 +206,6 @@ class RegistrationController extends BaseController{
             $userPayLogModel->where("create_time","<=",strtotime($endDate)+1);
         }
         $list = $userPayLogModel->orderBy("id","desc")->paginate(15);
-
         //总记录条数
         return view("admin.registration.list-pay",[
             'allSubmitAmount'   =>  $allSubmitAmount,
@@ -252,6 +251,11 @@ class RegistrationController extends BaseController{
             ['type','=',1],
             ['status','=','USE']
         ])->orWhere('id',$detail->userRegistration->package_attach_id)->get()->toJson();
+//        foreach ($packageAttachList as $key=>$val){
+//            if($detail->userRegistration->package_attach_id == $val){
+//                $packageAttachList[$key]['']
+//            }
+//        }
         //活动信息
 //        $RebateActivity = new RebateActivityModel();
 //        //$rebateData = $RebateActivity->where(['id'=>$regData['rebate_id']])->find();
@@ -273,7 +277,6 @@ class RegistrationController extends BaseController{
         $rebateList = RebateActivityModel::where([
             ['status','=','USE'],
         ])->orWhere('id',$detail->userRegistration->rebate_id)->get()->toJson();
-        $_GET['subnavAction'] = "userPayList";
         return view("admin.registration.list-detail",[
             'r'                 =>  $detail->toJson(),
             'packageAttachList' =>  $packageAttachList,
@@ -282,10 +285,10 @@ class RegistrationController extends BaseController{
             //支付方式列表
             'payTypeList'       =>  collect(app("status")->getPayTypeList())->toJson(),
             //优惠活动
-            'rebateList'        =>  collect($rebateList)->toJson(),
+            'rebateList'        =>  $rebateList,
             //分期方式列表
             'fqTypeList'        =>  collect(app("status")->getFqType())->toJson(),
-            'adminInfo'         =>  $this->getUserInfo()
+            'adminInfo'         =>  collect($this->getUserInfo())->toJson()
         ]);
     }
 
