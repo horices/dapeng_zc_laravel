@@ -30,6 +30,7 @@ Route::post("roster/change-group-status","Roster\IndexController@changeGroupStat
 Route::get("roster/add","Roster\IndexController@getAdd")->name("admin.roster.add");
 Route::post("roster/add","Roster\IndexController@postAdd")->name("admin.roster.add.post");
 Route::get("roster/user/add","Roster\IndexController@getUserAdd")->name("admin.roster.user.add");
+Route::get("roster/user/addwx","Roster\IndexController@getUserAddWx")->name("admin.roster.user.addwx");
 Route::post("roster/user/add","Roster\IndexController@postUserAdd")->name("admin.roster.user.add.post");
 Route::get("roster/statistics/seoer","Roster\StatisticsController@getSeoerStatistics")->name("admin.roster.statistics.seoer");
 Route::get("roster/statistics/adviser","Roster\StatisticsController@getAdviserStatistics")->name("admin.roster.statistics.adviser");

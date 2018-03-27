@@ -27,13 +27,17 @@ class IndexController extends BaseController
         //dd($request->route());
         //return Route::dispatchToRoute($request);
 //        return Route::respondWithRoute("admin.roster.add");
-        return view("admin.roster.seoer_add");
+        $request->merge(['roster_type'=>1]);
+        return view("admin.roster.seoer-add");
+    }
+    function getUserAddWx(Request $request){
+        $request->merge(['roster_type'=>2]);
+        return view("admin.roster.seoer-add-wx");
     }
     function postUserAdd(Request $request){
         $request->merge(['test'=>1]);
         $userInfo = $this->getUserInfo();
-        $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>1]);
-
+        $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>$request->get("roster_type")]);
         if($request->post("validate") == 1){
             if(!RosterModel::validateRosterData($request->all())){
                 throw new UserValidateException("非法操作");
@@ -58,6 +62,7 @@ class IndexController extends BaseController
             $data = $request->all();
         }
         if($roster = RosterModel::addRoster($data)){
+            $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
             $returnData['msg'] = "添加成功";
             $returnData['data'] = $roster;
@@ -191,7 +196,7 @@ class IndexController extends BaseController
             $userInfo = $this->getUserInfo();
             $data['roster_id'] = $roster->id;
             $data['qq'] = $roster->roster_no;
-            $data['group_status'] = 2;
+            $data['group_status'] = $groupStatus;
             $data['addtime'] = time();
             $data['operator'] = $userInfo->uid;
             $data['operator_name'] = $userInfo->name;
