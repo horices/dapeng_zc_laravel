@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Roster;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\RosterAdd;
+use App\Models\GroupLogModel;
 use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
 use App\Models\UserModel;
@@ -147,6 +148,18 @@ class IndexController extends BaseController
         $rosterCourse = RosterCourseModel::where(['roster_id'=>$request->get("roster_id")])->orderBy('id','desc')->get();
         return view("admin.roster.course-list",[
             'rosterCourse'  =>  $rosterCourse
+        ]);
+    }
+
+    /**
+     * 查询量的群状态变更记录
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    function getGroupLogList(Request $request){
+        $rosterId = $request->get("roster_id");
+        $groupLogList = GroupLogModel::where("roster_id",$rosterId)->orderBy("id","desc")->get();
+        return view("admin.roster.group-log-list",[
+            'groupLogList'=>$groupLogList
         ]);
     }
     /**

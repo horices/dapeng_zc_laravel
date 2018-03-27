@@ -39,13 +39,28 @@
 .link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
 </style>
 <script>
-    function openCourseLog(roster_id,roster_no){
-        AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster_id+"}'></a>",function(data){
+    function openCourseLog(roster){
+        AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
             $("#courseList").empty().html(data);
             console.log($(data).find("li").size());
             if($(data).find("li").size()){
                 layer.open({
-                    title:roster_no+" 开通课程记录",
+                    title:roster.roster_no+" 开通课程记录",
+                    type:1,
+                    shadeClose:true,
+                    area:['400px','200px'],
+                    skin: 'layui-layer-rim',
+                    content:$("#courseList")
+                });
+            }
+        })
+    }
+    function openGroupLog(roster){
+        AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.group.log.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
+            $("#courseList").empty().html(data);
+            if($(data).find("li").size()>1){
+                layer.open({
+                    title:roster.roster_no+" 群状态变更记录",
                     type:1,
                     shadeClose:true,
                     area:['400px','200px'],
@@ -198,12 +213,12 @@
                     <td>{{ $roster->last_adviser_name }}</td>
                     <td>{!! $roster->addtime_text !!}</td>
                     <td class="register_status_{{ $roster->is_reg }}">{{ $roster->is_reg_text }}</td>
-                    <td title="{{ $roster->course_name }}" onclick="openCourseLog('{{ $roster->id }}','{{ $roster->qq }}');" style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
+                    <td title="{{ $roster->course_name }}" @if($roster->course_type) onclick="openCourseLog({{ $roster->toJson() }});" @endif style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
                         {{ $roster->course_type_text }}</td>
                     <td>
-                        <span class="group_status_{{ $roster->group_status }}">{{ $roster->group_status_text }}</span>
+                        <span class="group_status_{{ $roster->group_status }}" @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">{{ $roster->group_status_text }}</span>
                     </td>
-                    <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{{ $roster->roster_no }}" type="{{ $roster->roster_type }}" style="cursor:pointer;">
+                    <td @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">
                     {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}
                     </td>
                     <td>
