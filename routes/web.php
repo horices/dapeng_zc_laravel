@@ -25,10 +25,12 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
 Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class,\App\Http\Middleware\LowerUrl::class]], function(){
     include("admin.route.php");
 });
-Route::group(['prefix'=>'App','namespace'=>"Notify",'middleware'=>[\App\Http\Middleware\NotifyValidate::class]], function(){
-    Route::post("Index/index","DapengNotifyController@reg");
-    Route::post("Index/openCourse","DapengNotifyController@openCourse");
-    Route::post("Index/closeCourse","DapengNotifyController@closeCourse");
+Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
+    Route::post("Index/index.html","DapengNotifyController@reg")->middleware(\App\Http\Middleware\NotifyValidate::class);
+    Route::post("Index/openCourse.html","DapengNotifyController@openCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
+    Route::post("Index/closeCourse.html","DapengNotifyController@closeCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
+
+    Route::post("QQGroupRebotEvent/index.html","QQGroupEventNotifyController@index");
 
 });
 //Auth::routes();
