@@ -9,6 +9,10 @@
 namespace App\Models;
 
 
+use App\Utils\Util;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
 class CoursePackageModel extends BaseModel {
     protected $table = "course_package";
     public $timestamps = true;
@@ -42,5 +46,67 @@ class CoursePackageModel extends BaseModel {
         else
             return $value;
     }
+
+    /**
+     * 获取类型文字
+     * @return string
+     */
+    public function getTypeTextAttribute(){
+        return $this->type == 1 ? "副套餐" : "主套餐";
+    }
+
+    /**
+     * 新增数据
+     * @param $data
+     * @return mixed
+     */
+    static function addData($data){
+        $validator = Validator::make($data,[
+            'title'     =>  'required',
+            'price'     =>  'required|numeric',
+        ],[
+            'title.required'    =>  '请输入套餐标题！',
+            'price.required'    =>  '请输入套餐金额！',
+            'price.numeric'     =>  '请输入正确的金额！'
+        ]);
+        //执行验证
+        $validator->validate();
+        $eff = self::create($data);
+        $eff->package_id = $eff->id;
+        return $eff->save();
+    }
+
+    /**
+     * 修改数据
+     * @param $data
+     * @return mixed
+     */
+    static function updateData($data){
+        $validator = Validator::make($data,[
+            'id'        =>  'sometimes|numeric|exists:course_package,id',
+            'title'     =>  'required',
+            'price'     =>  'required|numeric',
+        ],[
+            'id.numeric'        =>  '请选择要修改的套餐！',
+            'id.exists'         =>  '请选择要修改的套餐！',
+            'title.required'    =>  '请输入套餐标题！',
+            'price.required'    =>  '请输入套餐金额！',
+            'price.numeric'     =>  '请输入正确的金额！'
+        ]);
+        //执行验证
+        $validator->validate();
+        $data['uid'] = Util::getUserInfo()['uid'];
+        $detail = self::find($data['id']);
+        return DB::transaction(function () use($data,$detail){
+            $detail->status = 'MOD';
+            $detail->save();
+            $data['status'] = "USE";
+            $data['package_id'] = $detail->package_id;
+            unset($data['id']);
+            return self::create($data);
+        });
+    }
+
+
 
 }

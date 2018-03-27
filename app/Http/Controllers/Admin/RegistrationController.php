@@ -104,9 +104,7 @@ class RegistrationController extends BaseController{
             ['type','=',0],
             ['status','=','USE']
         ])->get();
-        if($list){
-            return response()->json(['code'=>Util::SUCCESS,'msg'=>'搜索完成!','data'=>$list]);
-        }
+        return response()->json(['code'=>Util::SUCCESS,'msg'=>'搜索完成!','data'=>$list]);
 
     }
 
@@ -154,10 +152,10 @@ class RegistrationController extends BaseController{
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
         }
-        $_GET['subnavAction'] = "userPayList";
         return view("admin.registration.list-user",[
             'list'          =>  $list,
-            'adminInfo'     =>  $this->getUserInfo()
+            'adminInfo'     =>  $this->getUserInfo(),
+            'leftNav'           => "admin.registration.list"
         ]);
     }
 
@@ -213,7 +211,8 @@ class RegistrationController extends BaseController{
         return view("admin.registration.list-pay",[
             'allSubmitAmount'   =>  $allSubmitAmount,
             'list'              =>  $list,
-            'adminInfo'         =>  $this->getUserInfo()
+            'adminInfo'         =>  $this->getUserInfo(),
+            'leftNav'           => "admin.registration.list"
         ]);
     }
 
@@ -253,7 +252,8 @@ class RegistrationController extends BaseController{
             'rebateList'        =>  $rebateList,
             //分期方式列表
             'fqTypeList'        =>  collect(app("status")->getFqType())->toJson(),
-            'adminInfo'         =>  collect($this->getUserInfo())->toJson()
+            'adminInfo'         =>  collect($this->getUserInfo())->toJson(),
+            'leftNav'           => "admin.registration.list"
         ]);
     }
 

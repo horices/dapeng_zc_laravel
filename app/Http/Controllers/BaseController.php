@@ -165,7 +165,19 @@ class BaseController extends Controller
         'pay_list' =>   [
             'text'=> '支付查询',   //文字描述
             'route'=> "admin.registration.list.user",    //链接地址
-            'flag'=> 'admin.registration.list.user',  //默认选中标识
+            'flag'=> 'admin.registration.list',  //默认选中标识
+            'grade' =>  [4,5],          //需要展示的权限等级
+        ],
+        'pay_package' =>   [
+            'text'=> '支付套餐',   //文字描述
+            'route'=> "admin.pay.package.list",    //链接地址
+            'flag'=> 'admin.pay.package',  //默认选中标识
+            'grade' =>  [4,5],          //需要展示的权限等级
+        ],
+        'pay_rebate' =>   [
+            'text'=> '优惠活动',   //文字描述
+            'route'=> "admin.pay.rebate.list",    //链接地址
+            'flag'=> 'admin.pay.rebate',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'accounts' =>   [

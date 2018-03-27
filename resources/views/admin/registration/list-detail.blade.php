@@ -65,7 +65,7 @@
                             method      :   'post',
                             data        :   {'title':_this.userPayInfo.user_registration.course_package.title},
                             success     :   function (data) {
-                                if(data.data.length > 0){
+                                if(data.data && data.data.length>0){
                                     $(".course-package").show();
                                 }else{
                                     $(".course-package").hide();
@@ -192,14 +192,14 @@
             vm.userPayInfo.user_registration.course_package.price = $(obj).attr("price");
             //套餐ID
             vm.userPayInfo.user_registration.course_package.id = $(obj).attr("package-id");
-            vm.userPayInfo.user_registration.package_total_price = parseInt(vm.userPayInfo.package_price)+parseInt(vm.userPayInfo.package_attach_price);
+            //vm.userPayInfo.user_registration.package_total_price = parseInt(vm.userPayInfo.package_price)+parseInt(vm.userPayInfo.package_attach_price);
             setPackageTotal(); //计算最终套餐价格
         }
         /**
          * 计算套餐最终价格
          */
         function setPackageTotal() {
-            vm.userPayInfo.total_price = parseInt(vm.userPayInfo.package_price)+parseInt(vm.userPayInfo.package_attach_price);
+            vm.userPayInfo.user_registration.package_total_price = parseInt(vm.userPayInfo.course_package.price)+parseInt(vm.userPayInfo.course_package_attach.price);
         }
 
         /**
@@ -242,7 +242,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">学员QQ：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="qq" class="form-control" v-model="userPayInfo.qq"   />
+                    <input type="text" name="qq" class="form-control" v-model="userPayInfo.qq" />
                 </div>
                 <p class="help-block input-two" >修改</p>
             </div>
