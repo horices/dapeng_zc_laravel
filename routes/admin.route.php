@@ -26,6 +26,7 @@ Route::get("roster/list","Roster\IndexController@getList")->name("admin.roster.l
 Route::get("roster/course/list","Roster\IndexController@getCourseList")->name("admin.roster.course.list");
 //进群记录
 Route::get("roster/group/list","Roster\IndexController@getGroupLogList")->name("admin.roster.group.log.list");
+Route::post("roster/change-group-status","Roster\IndexController@changeGroupStatus")->name("admin.roster.change-group-status");
 Route::get("roster/add","Roster\IndexController@getAdd")->name("admin.roster.add");
 Route::post("roster/add","Roster\IndexController@postAdd")->name("admin.roster.add.post");
 Route::get("roster/user/add","Roster\IndexController@getUserAdd")->name("admin.roster.user.add");

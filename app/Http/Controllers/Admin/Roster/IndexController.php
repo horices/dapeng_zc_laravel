@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Roster;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\RosterAdd;
+use App\Models\EventGroupLogModel;
 use App\Models\GroupLogModel;
 use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
@@ -13,6 +14,7 @@ use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 class IndexController extends BaseController
@@ -141,9 +143,16 @@ class IndexController extends BaseController
         $list = $query->paginate();
         return view("admin.roster.list",[
             'list' => $list,
+            'userInfo'  => $this->getUserInfo(),
             "statistics"    => $statistics['statistics']
         ]);
     }
+
+    /**
+     * 获取开课记录
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     function getCourseList(Request $request){
         $rosterCourse = RosterCourseModel::where(['roster_id'=>$request->get("roster_id")])->orderBy('id','desc')->get();
         return view("admin.roster.course-list",[
@@ -157,10 +166,38 @@ class IndexController extends BaseController
      */
     function getGroupLogList(Request $request){
         $rosterId = $request->get("roster_id");
-        $groupLogList = GroupLogModel::where("roster_id",$rosterId)->orderBy("id","desc")->get();
+        $groupLogList = EventGroupLogModel::where("roster_id",$rosterId)->orderBy("id","desc")->get();
         return view("admin.roster.group-log-list",[
             'groupLogList'=>$groupLogList
         ]);
+    }
+
+    /**
+     * 修改量的进群状态
+     * 目前只有微信量未进群时，可以修改此状态
+     */
+    function changeGroupStatus(Request $request){
+        $rosterId = $request->get("roster_id");
+        $groupStatus = $request->get("group_status");
+        if(!$rosterId)
+            throw new UserValidateException("缺少必要信息");
+        $roster = RosterModel::find($rosterId);
+        if(!$roster){
+            throw new UserValidateException("出现未知错误");
+        }
+        if($roster->roster_type == 2){
+            $roster->group_status = $groupStatus;
+            //添加用户的进群记录
+            $userInfo = $this->getUserInfo();
+            $data['roster_id'] = $roster->id;
+            $data['qq'] = $roster->roster_no;
+            $data['group_status'] = 2;
+            $data['addtime'] = time();
+            $data['operator'] = $userInfo->uid;
+            $data['operator_name'] = $userInfo->name;
+            EventGroupLogModel::create($data);
+        }
+        return Util::ajaxReturn(Util::SUCCESS,"修改成功",[]);
     }
     /**
      * 获取指定用户的量列表

@@ -26,7 +26,7 @@
 	@foreach($groupLogList as $log)
 	<li>
 		<div class="course_name">{{ $log->group_status_text }}</div>
-	  <div class="course_addtime">{{ $log->addtime_text }}</div>
+	  <div class="course_addtime">{{ $log->addtime_full_text }}</div>
 	  </li>
 	@endforeach
 </ul>
