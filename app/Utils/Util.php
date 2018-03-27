@@ -100,6 +100,14 @@ class Util{
         return false;
     }
 
+    /**
+     * 获取当前登录用户的信息
+     * @return mixed
+     */
+    static function getUserInfo(){
+        return session()->get("userInfo");
+    }
+
 }
 
 ?>

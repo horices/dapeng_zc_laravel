@@ -210,10 +210,9 @@ class UserRegistrationModel extends BaseModel{
         //执行验证
         $validator->validate();
         $data = $this->getColumns($data);
-
-        $resReg = self::create($data);
         //开启事务
-        DB::transaction(function () use($UserPayModel,$UserPayLogModel,$resReg){
+        DB::transaction(function () use($UserPayModel,$UserPayLogModel,$data){
+            $resReg = self::create($data);
             //添加用户支付信息
             $post['registration_id'] = $resReg['id']; //关联报名课程记录ID
             $resUserPay = $UserPayModel->addData($post);

@@ -69,3 +69,23 @@ Route::get("registration/list-user","RegistrationController@getUserList")->name(
 Route::get("registration/list-pay","RegistrationController@getPayList")->name("admin.registration.list.pay");
 //支付记录详情
 Route::get("registration/list-detail","RegistrationController@getListDetail")->name("admin.registration.list.detail");
+
+/**
+ * 课程套餐
+ */
+//课程套餐列表
+Route::get("pay/package/list","Pay\PackageController@getList")->name("admin.pay.package.list");
+//修改课程套餐
+Route::get("pay/package/add","Pay\PackageController@getAdd")->name("admin.pay.package.add");
+//修改课程套餐
+Route::get("pay/package/edit","Pay\PackageController@getEdit")->name("admin.pay.package.edit");
+Route::post("pay/package/save","Pay\PackageController@postSave")->name("admin.pay.package.save");
+Route::post("pay/package/delete","Pay\PackageController@postDelete")->name("admin.pay.package.delete");
+
+/**
+ * 课程优惠活动
+ */
+Route::get("pay/rebate/list","Pay\RebateController@getList")->name("admin.pay.rebate.list");
+Route::get("pay/rebate/add","Pay\RebateController@getAdd")->name("admin.pay.rebate.add");
+Route::get("pay/rebate/edit","Pay\RebateController@getEdit")->name("admin.pay.rebate.edit");
+Route::get("pay/rebate/save","Pay\RebateController@postSave")->name("admin.pay.rebate.save");
