@@ -1,8 +1,9 @@
 <?php
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Roster;
 
 
 use App\Exceptions\UserValidateException;
+use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\RosterAdd;
 use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
 
-class RosterController extends BaseController
+class IndexController extends BaseController
 {
     function getAdd(Request $request){
         return view("admin.roster.add");
