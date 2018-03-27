@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 /**
  * @property-read string $type_text [QQ,微信]
@@ -31,6 +32,12 @@ class GroupModel extends BaseModel
     ];
     protected function getIsOpenTextAttribute(){
         return $this->is_open == 1 ?'正常':'关闭';
+    }
+    protected function getQrcUrlAttribute($v){
+        if(Str::startsWith($v,"./Uploads")){
+            $v = Str::lower(Str::substr($v,1));
+        }
+        return $v;
     }
     protected function getTypeTextAttribute(){
         return app("status")->getRosterType()[$this->type];

@@ -14,6 +14,7 @@ class RosterModel extends BaseModel
     protected $appends = [
         'is_reg_text',
         'roster_no',
+        'roster_type',
         'roster_type_text',
         'course_type_text',
         'group_status_text',
@@ -26,8 +27,11 @@ class RosterModel extends BaseModel
     function getIsRegTextAttribute(){
         return app("status")->getRegisterStatus()[$this->is_reg];
     }
+    function getRosterTypeAttribute(){
+        return $this->type;
+    }
     function getRosterTypeTextAttribute(){
-        return app("status")->getRosterType()[$this->type];
+        return app("status")->getRosterType()[$this->roster_type];
     }
     function getCourseTypeTextAttribute(){
         return app("status")->getCourseType()[$this->course_type];
@@ -46,7 +50,7 @@ class RosterModel extends BaseModel
      * 群信息
      */
     function group(){
-        return $this->hasOne(GroupModel::class,'id','qq_group_id');
+        return $this->belongsTo(GroupModel::class,'qq_group_id')->withDefault();
     }
 
     /**
@@ -151,7 +155,7 @@ class RosterModel extends BaseModel
                 }
                 if($flag == 1){
                     //需要对该QQ号取消所有的新量标识
-                    if(RosterModel::where($column,$input->roster_no)->update(['flag'=>0]) === false){
+                    if(RosterModel::where($column,$input->roster_no)->update(['flag'=>0,'is_old'=>1]) === false){
                         Log::error("取消活量标识失败");
                     }
                     $createData['flag'] = $flag;    //标识为活量
@@ -174,7 +178,7 @@ class RosterModel extends BaseModel
         });
         //调用系统验证，验证失败时，抛出一个异常
         $validator->validate();
-        return true;
+        return array_merge($data,$createData);
     }
     /**
      * 添加一个新量，自带验证功能
@@ -187,10 +191,8 @@ class RosterModel extends BaseModel
      */
     public static function addRoster(array $data){
 
-        //验证数据是否存在问题
-        if(self::validateRosterData($data) === false){
-            throw new UserValidateException("非法操作");
-        }
+        //验证数据是否存在问题，并补全部分信息
+        $data = self::validateRosterData($data);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
@@ -216,6 +218,8 @@ class RosterModel extends BaseModel
         $createData['inviter_name'] = $data['seoer_name'];
         $createData['adviser_id'] = $createData['last_adviser_id'] = $group->leader_id;
         $createData['adviser_name'] = $createData['last_adviser_name'] = $group->user->name;
+        $createData['flag'] = $data['flag'] ?? 0;
+        $createData['addtimes'] = $data['addtimes'] ?? 1;
         $createData['addtime'] = time();
         $createData['is_reg'] = 0;
         $createData['group_status'] = 0;

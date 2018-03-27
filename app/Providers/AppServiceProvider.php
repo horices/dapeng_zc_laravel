@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\EventGroupLogModel;
 use App\Models\GroupModel;
 use App\Models\RosterCourseLogModel;
+use App\Observers\EventGroupLogObserver;
 use App\Observers\GroupObserver;
 use App\Observers\RosterCourseLogObserver;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +52,8 @@ class AppServiceProvider extends ServiceProvider
         GroupModel::observe(GroupObserver::class);
         //监听开课事件
         RosterCourseLogModel::observe(RosterCourseLogObserver::class);
-
+        //监听群日志事件
+        EventGroupLogModel::observe(EventGroupLogObserver::class);
         //记录SQL日志
         DB::listen(function($query){
             $sql = $query->sql;

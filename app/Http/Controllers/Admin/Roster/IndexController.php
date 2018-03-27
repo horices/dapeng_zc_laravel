@@ -1,9 +1,12 @@
 <?php
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Roster;
 
 
 use App\Exceptions\UserValidateException;
+use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\RosterAdd;
+use App\Models\EventGroupLogModel;
+use App\Models\GroupLogModel;
 use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
 use App\Models\UserModel;
@@ -11,9 +14,10 @@ use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
-class RosterController extends BaseController
+class IndexController extends BaseController
 {
     function getAdd(Request $request){
         return view("admin.roster.add");
@@ -23,13 +27,17 @@ class RosterController extends BaseController
         //dd($request->route());
         //return Route::dispatchToRoute($request);
 //        return Route::respondWithRoute("admin.roster.add");
-        return view("admin.roster.seoer_add");
+        $request->merge(['roster_type'=>1]);
+        return view("admin.roster.seoer-add");
+    }
+    function getUserAddWx(Request $request){
+        $request->merge(['roster_type'=>2]);
+        return view("admin.roster.seoer-add-wx");
     }
     function postUserAdd(Request $request){
         $request->merge(['test'=>1]);
         $userInfo = $this->getUserInfo();
-        $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>1]);
-
+        $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>$request->get("roster_type")]);
         if($request->post("validate") == 1){
             if(!RosterModel::validateRosterData($request->all())){
                 throw new UserValidateException("非法操作");
@@ -54,6 +62,7 @@ class RosterController extends BaseController
             $data = $request->all();
         }
         if($roster = RosterModel::addRoster($data)){
+            $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
             $returnData['msg'] = "添加成功";
             $returnData['data'] = $roster;
@@ -139,14 +148,61 @@ class RosterController extends BaseController
         $list = $query->paginate();
         return view("admin.roster.list",[
             'list' => $list,
+            'userInfo'  => $this->getUserInfo(),
             "statistics"    => $statistics['statistics']
         ]);
     }
+
+    /**
+     * 获取开课记录
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     function getCourseList(Request $request){
         $rosterCourse = RosterCourseModel::where(['roster_id'=>$request->get("roster_id")])->orderBy('id','desc')->get();
         return view("admin.roster.course-list",[
             'rosterCourse'  =>  $rosterCourse
         ]);
+    }
+
+    /**
+     * 查询量的群状态变更记录
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    function getGroupLogList(Request $request){
+        $rosterId = $request->get("roster_id");
+        $groupLogList = EventGroupLogModel::where("roster_id",$rosterId)->orderBy("id","desc")->get();
+        return view("admin.roster.group-log-list",[
+            'groupLogList'=>$groupLogList
+        ]);
+    }
+
+    /**
+     * 修改量的进群状态
+     * 目前只有微信量未进群时，可以修改此状态
+     */
+    function changeGroupStatus(Request $request){
+        $rosterId = $request->get("roster_id");
+        $groupStatus = $request->get("group_status");
+        if(!$rosterId)
+            throw new UserValidateException("缺少必要信息");
+        $roster = RosterModel::find($rosterId);
+        if(!$roster){
+            throw new UserValidateException("出现未知错误");
+        }
+        if($roster->roster_type == 2){
+            $roster->group_status = $groupStatus;
+            //添加用户的进群记录
+            $userInfo = $this->getUserInfo();
+            $data['roster_id'] = $roster->id;
+            $data['qq'] = $roster->roster_no;
+            $data['group_status'] = $groupStatus;
+            $data['addtime'] = time();
+            $data['operator'] = $userInfo->uid;
+            $data['operator_name'] = $userInfo->name;
+            EventGroupLogModel::create($data);
+        }
+        return Util::ajaxReturn(Util::SUCCESS,"修改成功",[]);
     }
     /**
      * 获取指定用户的量列表
