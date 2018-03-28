@@ -326,10 +326,11 @@
 		    }else{
 		            form = obj.parents("form").eq(0);
 		    }
-		    form.serializeArray().map(function(x){formData[x.name] = x.value;});
 		    obj.attr("url") || obj.attr("url",form.attr("action"));
-		    obj.attr("addData",JSON.stringify(formData));
-		    var options = {
+            formData = form.serializeJSON();
+            //form.serializeArray().map(function(x){formData[x.name] = x.value;});
+            obj.attr("addData",JSON.stringify(formData));
+            var options = {
 		    		yes:function(){
 		    			if(obj.attr("showloading")){
 		    				CustomDialog.loadingDialog();
