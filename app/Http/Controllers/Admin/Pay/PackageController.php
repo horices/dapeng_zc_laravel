@@ -35,19 +35,19 @@ class PackageController extends BaseController {
         return view("admin.pay.package.list",[
             'list'          =>  $list,
             'adminInfo'     =>  $this->getUserInfo(),
-            'leftNav'           => "admin.pay-package"
+            'leftNav'           => "admin.pay.package"
         ]);
     }
 
     function getAdd(CoursePackageModel $package){
         return view("admin.pay.package.detail",[
             'r' =>  $package,
-            'leftNav'           => "admin.pay-package"
+            'leftNav'           => "admin.pay.package"
         ]);
     }
 
     /**
-     * 获取套餐详情
+     * 获取套餐详情 增/改
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -55,7 +55,8 @@ class PackageController extends BaseController {
         $id = $request->get("id");
         $detail = CoursePackageModel::where("package_id",$id)->orderBy("id","desc")->first();
         return view("admin.pay.package.detail",[
-            'r'     =>  $detail
+            'r'                 =>  $detail,
+            'leftNav'           => "admin.pay.package"
         ]);
     }
 

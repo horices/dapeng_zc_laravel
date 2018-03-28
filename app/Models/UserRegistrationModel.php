@@ -204,8 +204,8 @@ class UserRegistrationModel extends BaseModel{
             'package_id.exists' =>  '请选择正确的课程主套餐！',
             'package_attach_id.exists' =>  '请选择正确的课程副套餐！',
             'rebate_id.exists'  =>  '请选择正确的优惠活动！',
-            'amount_submitted,required'=>   '已提交金额有误！',
-            'amount_submitted,numeric'=>   '已提交金额有误！',
+            'amount_submitted.required'=>   '已提交金额有误！',
+            'amount_submitted.numeric'=>   '已提交金额有误！',
         ]);
         //执行验证
         $validator->validate();

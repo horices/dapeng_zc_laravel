@@ -127,8 +127,8 @@
 
                     },
                     minusPayType:function (index) {
-                        this.userPayInfo.amount_submitted = accSub(parseFloat(this.userPayInfo.amount_submitted),parseFloat(this.payDataList[index].amount));
-                        //this.userPayInfo.amount_submitted = parseFloat(this.userPayInfo.amount_submitted)-parseFloat(this.payDataList[index].amount);
+                        //this.userPayInfo.amount_submitted = accSub(parseFloat(this.userPayInfo.amount_submitted),parseFloat(this.payDataList[index].amount));
+                        this.userPayInfo.amount_submitted = parseFloat(this.userPayInfo.amount_submitted)-parseFloat(this.payDataList[index].amount);
                         this.payDataList.splice(index, 1);
 
                     },
@@ -513,8 +513,14 @@
                         </div>
                         <div class="col-md-8 controls fa fa-minus add-pay-type" @click="minusPayType(index)" title="删除该支付方式"></div>
                     </div>
+                <div class="div_input_one" style="margin-top: 10px;">
+                    <label class="col-md-2 control-label" for="input01" style="text-align:left;padding-left:7px;">
+                        已交总金额：
+                    </label>
+                    <input type="text" name="amount_submitted" class="form-control" v-model="userPayInfo.amount_submitted" readonly />
                 </div>
-        </div>
+                </div>
+                </div>
                 </div>
 
             <div class="sub_main_two">

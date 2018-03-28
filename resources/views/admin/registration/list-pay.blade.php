@@ -66,6 +66,7 @@
         <form class="form-inline" role="form">
             <div class="form-group">
                 <a class="common-button combg4" href="{{route('admin.registration.list.user')}}">切换到用户统计</a>
+                <a class="common-button combg3" href="{{route('admin.registration.add')}}">添加支付</a>
             </div>
 
             <div class="form-group">

@@ -41,7 +41,8 @@ class RegistrationController extends BaseController{
             'packageAttachList'=>  json_encode($packageAttachList,JSON_UNESCAPED_UNICODE),
             'giveList'      =>  json_encode(array_reverse(CoursePackageModel::$giveList),JSON_UNESCAPED_UNICODE),//赠送课程
             'fqTypeList'    =>  json_encode($fqTypeList,JSON_UNESCAPED_UNICODE),
-            'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE)
+            'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE),
+            'leftNav'           => "admin.registration.add"
         ]);
     }
     /**
@@ -72,6 +73,7 @@ class RegistrationController extends BaseController{
      */
     function postAddRegistration(RegistrationForm $registration,UserRegistrationModel $UserRegistration,UserPayModel $UserPayModel,UserPayLogModel $UserPayLogModel){
         $post = $registration->post();
+
         //补全字段数据
         $UserRegistration->completeData($post);
         //插入报名记录

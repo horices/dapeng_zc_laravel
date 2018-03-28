@@ -74,13 +74,14 @@
 
                 <div class="row search-row" style="padding:9px 0 15px 15px;">
                     <form class="form-inline" role="form">
-                        <div class="form-group">
+                        <div class="form-group" style="margin-right:0px ">
                             <a class="common-button combg4" href="{{route('admin.registration.list.pay')}}">切换到支付记录</a>
+                            <a class="common-button combg3" href="{{route('admin.registration.add')}}">添加支付</a>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{{Request::input('adviserName')}}" style="width: 110px;"/>
-                            <input type="text" name="name" class="form-control" placeholder="学员姓名" value="{{Request::input('name')}}" style="width: 110px;"/>
-                            <input type="text" name="mobile" class="form-control" placeholder="开课手机号" value="{{Request::input('mobile')}}" style="width: 110px;"/>
+                            <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{{Request::input('adviserName')}}" style="width: 100px;"/>
+                            <input type="text" name="name" class="form-control" placeholder="学员姓名" value="{{Request::input('name')}}" style="width: 100px;"/>
+                            <input type="text" name="mobile" class="form-control" placeholder="开课手机号" value="{{Request::input('mobile')}}" style="width: 100px;"/>
                             <!--<select name="is_open" class="form-control">
                                 <option value="">是否导学</option>
                                 <option <present name="_GET[is_open]"><eq name="_GET[is_open]" value="1">selected</eq></present> value="1">是</option>
@@ -88,7 +89,7 @@
                             </select>-->
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style="margin-right: 0px;">
                             <input type="text" id="startdate" name="startDate" class="form-control datetime" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
                             <input type="text" id="enddate" name="endDate" class="form-control datetime" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
                         </div>
