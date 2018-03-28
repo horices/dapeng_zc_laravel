@@ -25,25 +25,39 @@ class RosterModel extends BaseModel
         return $this->type == 1 ? $this->qq: $this->wx;
     }
     function getIsRegTextAttribute(){
-        return app("status")->getRegisterStatus()[$this->is_reg];
+        if($this->is_reg !== null){
+            return app("status")->getRegisterStatus()[$this->is_reg];
+        }
     }
     function getRosterTypeAttribute(){
-        return $this->type;
+        if($this->type !== null) {
+            return $this->type;
+        }
     }
     function getRosterTypeTextAttribute(){
-        return app("status")->getRosterType()[$this->roster_type];
+        if($this->roster_type !== null) {
+            return app("status")->getRosterType()[$this->roster_type];
+        }
     }
     function getCourseTypeTextAttribute(){
-        return app("status")->getCourseType()[$this->course_type];
+        if($this->course_type !== null) {
+            return app("status")->getCourseType()[$this->course_type];
+        }
     }
     function getGroupStatusTextAttribute(){
-        return app("status")->getGroupStatus()[$this->group_status];
+        if($this->group_status !== null) {
+            return app("status")->getGroupStatus()[$this->group_status];
+        }
     }
     function getAddtimeExportTextAttribute($v){
-        return date('Y-m-d H:i:s',$this->addtime);
+        if($this->addtime !== null) {
+            return date('Y-m-d H:i:s', $this->addtime);
+        }
     }
     function getAddtimeTextAttribute($v){
-        return date('m-d',$this->addtime)."<br />".date('H:i',$this->addtime);
+        if($this->addtime !== null) {
+            return date('m-d', $this->addtime) . "<br />" . date('H:i', $this->addtime);
+        }
     }
 
     /**

@@ -11,13 +11,19 @@ class RosterFollowModel extends BaseModel
     protected $table = "user_roster_info";
 
     protected function getDeepLevelTextAttribute(){
-        return app('status')->getRosterDeepLevel($this->deep_level);
+        if($this->deep_level !== null) {
+            return app('status')->getRosterDeepLevel($this->deep_level);
+        }
     }
     protected function getIntentionTextAttribute(){
-        return app('status')->getRosterIntention($this->intention);
+        if($this->intention !== null) {
+            return app('status')->getRosterIntention($this->intention);
+        }
     }
     protected function getCreateTimeTextAttribute(){
-        return date('Y-m-d H:i',$this->create_time);
+        if($this->create_time !== null) {
+            return date('Y-m-d H:i', $this->create_time);
+        }
     }
 
     function roster(){
