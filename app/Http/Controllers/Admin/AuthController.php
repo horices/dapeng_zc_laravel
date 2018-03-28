@@ -2,6 +2,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\LoginForm;
+use App\Http\Requests\RegRequest;
+use App\Http\Requests\SendSMSRequest;
+use App\Models\UserHeadMasterModel;
 use App\Models\UserModel;
 use Illuminate\Auth\AuthenticationException;
 use App\Utils\Util;
@@ -24,7 +27,24 @@ class AuthController extends  BaseController{
         //返回登陆成功的信息
         return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功","url"=>url("/admin/index/index")]);
     }
-    
+
+    /**
+     * 注册
+     */
+    function postReg(RegRequest $request){
+        $request->merge([
+            'grade' =>  12,
+            'addtime'   => time(),
+            'password'=>md5($request->get("password"))
+        ]);
+        $user = UserHeadMasterModel::create($request->all());
+        return Util::ajaxReturn(Util::SUCCESS,"注册成功");
+    }
+
+    function postSendSms(SendSMSRequest $request){
+        Util::sendSms($request->get("mobile"));
+        return Util::ajaxReturn(Util::SUCCESS,"发送成功");
+    }
     /**
      * 将指定的用户登入到系统中
      * @param array $userInfo

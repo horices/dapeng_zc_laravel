@@ -1,5 +1,8 @@
 <?php 
 namespace App\Utils;
+use App\Exceptions\UserValidateException;
+use Illuminate\Support\Facades\Session;
+
 class Util{
     const SUCCESS = 1;
     const WARNING = 2;
@@ -108,6 +111,39 @@ class Util{
         return session()->get("userInfo");
     }
 
+    /**
+     * 引入 vendor 目录下的插件
+     * @param $name
+     */
+    static function vendor($name,$ext = ".php"){
+       $arr = explode(".",$name);
+       $url = __DIR__."/vendor";
+       foreach ($arr as $v){
+           $url.= "/".$v;
+       }
+       $url.=$ext;
+       include $url;
+    }
+
+    /**
+     * 发送短信接口
+     * @param $mobile
+     * @param string $type
+     */
+    static function sendSms($mobile , $type="REGISTER"){
+        self::vendor("alidayu.sendSMS");
+        $data = [
+            'code' => strval(mt_rand(1000, 9999)),
+            'limit_time' => '30'
+        ];
+        $ret = (array) sendSMS(strval($mobile), '大鹏教育', 'SMS_11540677', json_encode($data));
+        //$ret = json_decode($ret,true);
+        if(!$ret || !isset($ret['result'])){
+            throw new UserValidateException("短信发送失败:".$ret['sub_msg']);
+        }
+        Session::put("sms_code",$data['code']);
+        Session::put("sms_code_expire_time",time()+60*30);
+    }
 }
 
 ?>

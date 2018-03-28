@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="renderer" content="webkit">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
 <title>用户登录 大鹏教育-高品质的设计师在线教育</title>
@@ -274,6 +275,44 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
 	.passport-wrapper .passport-sign .imgcode { clear: both; float: left; margin-top: 4px; }
 }
 </style>
+
+<script>
+    smsIntervel = "";
+    function checkSmsTime(obj){
+        var time  = parseInt($(obj).attr("time"));
+        if(time > 0){
+            CustomDialog.failDialog(time + "秒后重试");
+            return false;
+        }
+    }
+    function sendSms(obj,mobile){
+        var time = parseInt($(obj).attr("time"));
+        if(time > 0){
+            CustomDialog.failDialog(time + "秒后重试");
+            return false;
+        }
+        AjaxAction.ajaxLinkAction("<a url='{{ route('admin.auth.send.sms') }}' data=\"{mobile:'"+mobile+"'}\"></a>",function(data){
+            if(data.code == {{ \App\Utils\Util::SUCCESS }}){
+                CustomDialog.successDialog("发送成功");
+                $(obj).attr("time",60);
+                //进行倒计时
+                smsIntervel = setInterval(function(){
+                    var time = parseInt($(obj).attr("time"));
+                    if(time >0){
+                        $(obj).attr("time",time-1);
+                        $(obj).text("剩于"+$(obj).attr("time")+" 秒")
+                    }else{
+                        $(obj).text("获取验证码");
+                        clearInterval(smsIntervel);
+                    }
+                },1000);
+            }else{
+                CustomDialog.failDialog(data.msg);
+            }
+        })
+    }
+
+</script>
 </head>
 
 <body>
@@ -302,7 +341,7 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                             {{ csrf_field() }}
                                 <div class="form-item">
                                     <div class="form-cont">
-                                        <input type="text" id="username" name="username" class="passport-txt xl w-full" tabindex="1" placeholder="手机 / 邮箱" />
+                                        <input type="text" id="username" name="username" class="passport-txt xl w-full" tabindex="1" placeholder="手机号" />
                                     </div>
                                 </div>
                                 <div class="form-item">
@@ -344,34 +383,35 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                         
                         <!-- tab-group -->
                         <div class="tab-group" id="step_2" style="display:none;">
-                        	<form class="passport-form passport-form-sign" action="" id="regForm">
+                        	<form class="passport-form passport-form-sign" action="{{ route("admin.auth.reg.post") }}" method="post">
+                                {{ csrf_field() }}
                                 <div class="form-item">
                                     <div class="form-cont">
-                                        <input type="text" id="regName" name="regName" class="passport-txt xl w-full" tabindex="1" placeholder="姓名" />
+                                        <input type="text" name="name" class="passport-txt xl w-full" tabindex="1" placeholder="姓名" />
                                     </div>
                                 </div>
                                 <div class="form-item">
                                     <div class="form-cont">
-                                        <input type="text" id="mobile" name="mobile" class="passport-txt xl w-full" tabindex="1" placeholder="手机" />
+                                        <input type="text" name="mobile" maxlength="11" minlength="11" class="passport-txt xl w-full" tabindex="1" placeholder="手机" />
                                     </div>
                                 </div>
                                 <div class="form-item">
                                     <div class="form-cont">
                                         <div class="layout-inner">
-                                            <input type="text" id="verifycode" name="verifycode" class="passport-txt xl w-lg" tabindex="3" maxlength="4" placeholder="验证码" autocomplete="off" />
-                                            <button class="btn btn-primary" type="button" id="getCodeBtn" onClick="getCode();" style="width:119px; height:40px;">获取验证码</button>
+                                            <input type="text" name="smscode" class="passport-txt xl w-lg" tabindex="3" maxlength="4" placeholder="验证码" autocomplete="off" />
+                                            <button class="btn btn-primary" type="button" onClick="sendSms(this,$('input[name=mobile]').val());" beforeAction="checkSmsTime" style="width:119px; height:40px;">获取验证码</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-item">
                                     <div class="form-cont">
-                                        <input type="password" id="regPwd" name="regPwd" class="passport-txt xl w-full" tabindex="1" placeholder="密码（必须由字母和数字组成，不少于8位）" />
+                                        <input type="password" name="password" class="passport-txt xl w-full" tabindex="1" placeholder="密码（必须由字母和数字组成，不少于6位）" />
                                     </div>
                                 </div>
                                 
                                 <div class="form-item">
                                     <div class="form-cont">
-                                        <button type="submit" class="passport-btn passport-btn-def xl w-full" tabindex="4">注册</button>
+                                        <button type="button" class="passport-btn passport-btn-def xl w-full ajaxSubmit" tabindex="4">注册</button>
                                     </div>
                                 </div>
                             </form>

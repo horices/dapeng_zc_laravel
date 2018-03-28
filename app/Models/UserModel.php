@@ -47,8 +47,9 @@ class UserModel extends BaseModel
         return date('Y-m-d H:i:s',$v);
     }
     protected function getGradeTextAttribute(){
-        if($this->grade)
+        if($this->grade !== null){
             return app(BaseController::class)->getUserGradeList()[$this->grade];
+        }
     }
     protected function getStatusTextAttribute($v){
         return $this->status == 1 ? '正常':'暂停';

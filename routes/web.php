@@ -20,7 +20,9 @@ Route::get('/',function(){
 Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     //不需要登陆验证过滤的地址
     Route::get("auth/login","AuthController@getLogin")->name("admin.auth.login");
-    Route::post("auth/login","AuthController@postLogin");
+    Route::post("auth/login","AuthController@postLogin")->name("admin.auth.login.post");
+    Route::post("auth/reg","AuthController@postReg")->name("admin.auth.reg.post");
+    Route::post("auth/sendsms","AuthController@postSendSms")->name("admin.auth.send.sms");
 });
 Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class,\App\Http\Middleware\LowerUrl::class]], function(){
     include("admin.route.php");
