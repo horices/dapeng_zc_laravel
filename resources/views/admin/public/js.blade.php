@@ -1,4 +1,5 @@
 <script src="/js/jquery-2.1.4.js"></script>
+<script src="/js/jquery.serializejson.min.js"></script>
 <script src="/js/nprogress/nprogress.js"></script>
 <script src="/js/vue-2.0.js"></script>
 <script src="/js/layer/layer.js"></script>
