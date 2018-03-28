@@ -25,7 +25,7 @@ class UserRegistrationModel extends BaseModel{
     const UPDATED_AT = 'update_time';
 
     protected $appends = [
-        "is_belong","is_open_text","fq_type_text"
+        "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text"
     ];
     //报名分期付款方式
     public $fqType = [
@@ -53,7 +53,6 @@ class UserRegistrationModel extends BaseModel{
         return floatval($this->coursePackage->price) + floatval($this->coursePackageAttach->price);
 
     }
-
     /**
      * 获取isBelong
      * @return int
@@ -61,13 +60,28 @@ class UserRegistrationModel extends BaseModel{
     public function getIsBelongAttribute(){
         return 1;
     }
+    /**
+     * 获取应交金额
+     * @return mixed
+     */
+    public function getSubPriceAttribute(){
+        return $this->package_total_price - $this->rebate;
+    }
+
+    /**
+     * 获取提交时间文字
+     * @return false|string
+     */
+    public function getLastPayTimeTextAttribute(){
+        return date("Y-m-d H:i:s",$this->last_pay_time);
+    }
 
     /**
      * 获取支付记录模型
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function userPayLog(){
-        return$this->hasMany(UserPayLogModel::class,'registration_id','id');
+        return $this->hasMany(UserPayLogModel::class,'registration_id','id');
     }
 
     /**
@@ -209,20 +223,21 @@ class UserRegistrationModel extends BaseModel{
         ]);
         //执行验证
         $validator->validate();
-        $data = $this->getColumns($data);
+        //$data = $this->getColumns($data);
         //开启事务
         DB::transaction(function () use($UserPayModel,$UserPayLogModel,$data){
             $resReg = self::create($data);
             //添加用户支付信息
-            $post['registration_id'] = $resReg['id']; //关联报名课程记录ID
-            $resUserPay = $UserPayModel->addData($post);
+            $data['registration_id'] = $resReg['id']; //关联报名课程记录ID
+            unset($data['id']);
+            $resUserPay = $UserPayModel->addData($data);
             //循环添加多个支付方式记录
-            $post['pay_id'] = $resUserPay['id'];
-            foreach ($post['pay_type_list'] as $key=>$val){
-                $post['amount'] = $post['amount_list'][$key];
-                $post['pay_time'] = strtotime($post['pay_time_list'][$key]);
-                $post['pay_type'] = $val;
-                $UserPayLogModel->addData($post);
+            $data['pay_id'] = $resUserPay->id;
+            foreach ($data['pay_type_list'] as $key=>$val){
+                $data['amount'] = $data['amount_list'][$key];
+                $data['pay_time'] = strtotime($data['pay_time_list'][$key]);
+                $data['pay_type'] = $val;
+                $UserPayLogModel->addData($data);
             }
             //重置套餐全名
             $eff = $this->setPackageAllTitle($resReg['id']);

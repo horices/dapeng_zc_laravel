@@ -76,7 +76,6 @@
                     <form class="form-inline" role="form">
                         <div class="form-group" style="margin-right:0px ">
                             <a class="common-button combg4" href="{{route('admin.registration.list.pay')}}">切换到支付记录</a>
-                            <a class="common-button combg3" href="{{route('admin.registration.add')}}">添加支付</a>
                         </div>
                         <div class="form-group">
                             <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{{Request::input('adviserName')}}" style="width: 100px;"/>
@@ -90,14 +89,14 @@
                         </div>
 
                         <div class="form-group" style="margin-right: 0px;">
-                            <input type="text" id="startdate" name="startDate" class="form-control datetime" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
-                            <input type="text" id="enddate" name="endDate" class="form-control datetime" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
+                            <input type="text" id="startdate" name="startDate" class="form-control select_date" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
+                            <input type="text" id="enddate" name="endDate" class="form-control select_date" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
                         </div>
                         <div class="form-group">
                             <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
-                            <elt name="_SESSION['dapeng']['member_auth']['grade']" value="5">
-                                <a class="common-button combg2 linkSubmit" href="{:U('exportUserList')}">导出</a>
-                            </elt>
+                            @if($adminInfo['grade'] <= 5)
+                                <a class="common-button combg2 linkSubmit" data="{'export':'1'}" href="{{route('admin.registration.list.user')}}">导出</a>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -119,9 +118,9 @@
                             <th>应交</th>
                             <th>已交</th>
                             <th width="100">提交时间</th>
-                            <elt name="_SESSION['dapeng']['member_auth']['grade']" value="5">
+                            @if($adminInfo['grade'] <= 5)
                                 <th width="60">操作</th>
-                            </elt>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
@@ -142,9 +141,9 @@
                                     </td>
                                     <td>{{$v->package_total_price}}</td>
                                     <td>{{floatval($v->rebate)}}</td>
-                                    <td>{{$v->package_total_price-$v->rebate}}</td>
+                                    <td>{{$v->sub_price}}</td>
                                     <td>{{$v->amount_submitted}}</td>
-                                    <td>{{date("Y-m-d H:i:s",$v->last_pay_time)}}</td>
+                                    <td>{{$v->last_pay_time_text}}</td>
                                         @if($adminInfo['grade'] <= 5)
                                         <td>
                                             <a class="set-is-open-a" onclick="setIsOpen(this)">开课</a>

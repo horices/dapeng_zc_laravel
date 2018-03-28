@@ -6,10 +6,16 @@ use App\Models\EventGroupLogModel;
 use App\Models\GroupModel;
 use App\Models\RebateActivityModel;
 use App\Models\RosterCourseLogModel;
+use App\Models\UserPayLogModel;
+use App\Models\UserPayModel;
+use App\Models\UserRegistrationModel;
 use App\Observers\EventGroupLogObserver;
 use App\Observers\GroupObserver;
 use App\Observers\RebateObserver;
 use App\Observers\RosterCourseLogObserver;
+use App\Observers\UserPayLogObservers;
+use App\Observers\UserPayObservers;
+use App\Observers\UserRegistrationObservers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -58,6 +64,13 @@ class AppServiceProvider extends ServiceProvider
         EventGroupLogModel::observe(EventGroupLogObserver::class);
         //观察器 优惠活动表
         RebateActivityModel::observe(RebateObserver::class);
+        //观察器 支付报名
+        UserRegistrationModel::observe(UserRegistrationObservers::class);
+        //一级支付记录
+        UserPayModel::observe(UserPayObservers::class);
+        //二级支付记录
+        UserPayLogModel::observe(UserPayLogObservers::class);
+
         //记录SQL日志
         DB::listen(function($query){
             $sql = $query->sql;
