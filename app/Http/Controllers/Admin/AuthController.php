@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\LoginForm;
+use App\Http\Requests\RegRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Models\UserHeadMasterModel;
 use App\Models\UserModel;
@@ -30,8 +31,14 @@ class AuthController extends  BaseController{
     /**
      * 注册
      */
-    function postReg(Request $request){
+    function postReg(RegRequest $request){
+        $request->merge([
+            'grade' =>  12,
+            'addtime'   => time(),
+            'password'=>md5($request->get("password"))
+        ]);
         $user = UserHeadMasterModel::create($request->all());
+        return Util::ajaxReturn(Util::SUCCESS,"注册成功");
     }
 
     function postSendSms(SendSMSRequest $request){

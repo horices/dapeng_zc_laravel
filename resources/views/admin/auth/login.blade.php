@@ -383,7 +383,8 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                         
                         <!-- tab-group -->
                         <div class="tab-group" id="step_2" style="display:none;">
-                        	<form class="passport-form passport-form-sign" action="" id="regForm">
+                        	<form class="passport-form passport-form-sign" action="{{ route("admin.auth.reg.post") }}" method="post">
+                                {{ csrf_field() }}
                                 <div class="form-item">
                                     <div class="form-cont">
                                         <input type="text" name="name" class="passport-txt xl w-full" tabindex="1" placeholder="姓名" />
@@ -397,7 +398,7 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                                 <div class="form-item">
                                     <div class="form-cont">
                                         <div class="layout-inner">
-                                            <input type="text" name="verifycode" class="passport-txt xl w-lg" tabindex="3" maxlength="4" placeholder="验证码" autocomplete="off" />
+                                            <input type="text" name="smscode" class="passport-txt xl w-lg" tabindex="3" maxlength="4" placeholder="验证码" autocomplete="off" />
                                             <button class="btn btn-primary" type="button" onClick="sendSms(this,$('input[name=mobile]').val());" beforeAction="checkSmsTime" style="width:119px; height:40px;">获取验证码</button>
                                         </div>
                                     </div>
@@ -410,7 +411,7 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                                 
                                 <div class="form-item">
                                     <div class="form-cont">
-                                        <button type="submit" class="passport-btn passport-btn-def xl w-full" tabindex="4">注册</button>
+                                        <button type="button" class="passport-btn passport-btn-def xl w-full ajaxSubmit" tabindex="4">注册</button>
                                     </div>
                                 </div>
                             </form>

@@ -136,9 +136,10 @@ class Util{
             'code' => strval(mt_rand(1000, 9999)),
             'limit_time' => '30'
         ];
-        $result = sendSMS(strval($mobile), '大鹏教育', 'SMS_11540677', json_encode($data));
-        if(!$result->result){
-            throw new UserValidateException("短信发送失败".$result->sub_msg);
+        $ret = (array) sendSMS(strval($mobile), '大鹏教育', 'SMS_11540677', json_encode($data));
+        //$ret = json_decode($ret,true);
+        if(!$ret || !isset($ret['result'])){
+            throw new UserValidateException("短信发送失败:".$ret['sub_msg']);
         }
         Session::put("sms_code",$data['code']);
         Session::put("sms_code_expire_time",time()+60*30);
