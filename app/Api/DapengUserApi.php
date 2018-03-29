@@ -43,22 +43,20 @@ class DapengUserApi extends BaseApi {
         if($data['code'] == Util::FAIL){
             return $data;
         }
-        $data['data'] = array_merge($data['data'], $data['data']['user']);
-        unset($data['data']['user']);
         if($data['data']){
-            Util::getImgUrl($data['data']['avatar']);
-            if($data['data']['gender'] == 'S'){
-                $data['data']['gender'] = "保密";
-            }elseif( $data['data']['gender'] == "M"){
-                $data['data']['gender'] = "男";
-            }elseif( $data['data']['gender'] == "F"){
-                $data['data']['gender'] = "女";
+            Util::getImgUrl($data['data']['user']['avatar']);
+            if($data['data']['user']['gender'] == 'S'){
+                $data['data']['user']['gender'] = "保密";
+            }elseif( $data['data']['user']['gender'] == "M"){
+                $data['data']['user']['gender'] = "男";
+            }elseif( $data['data']['user']['gender'] == "F"){
+                $data['data']['user']['gender'] = "女";
             }
-            //$data['data']['gender'] = "保密";
+            //$data['data']['user']['gender'] = "保密";
         }
         //获取用户身份 接口1
-        $info = UserIntegralApi::getTotalScoreByUserId($data['data']['userId']);
-        $data = collect([$data,$info])->collapse()->all();
+        $info = UserIntegralApi::getTotalScoreByUserId($data['data']['user']['userId']);
+        $data['data']['user'] = collect([$data['data']['user'],$info['data']])->collapse();
         //$data= ArrayHelper::merge($data,$info);
         $typeArr = [
             'VIP'   =>  '/images/per_bg (12).png',
@@ -70,12 +68,12 @@ class DapengUserApi extends BaseApi {
             'ZCXY'  =>  '/images/zhu.png',
             'SXXY'  =>  '/images/shi.png',
         ];
-        if(!isset($data['data']['type'])){
-            $data['data']['type'] = 'ZCXY';
+        if(!isset($data['data']['user']['type'])){
+            $data['data']['user']['type'] = 'ZCXY';
         }
 
-        $data['data']['identityImg'] = $typeArr[$data['data']['type']];
-        $data['data']['identityGuestImg'] = $typeGuestArr[$data['data']['type']];
+        $data['data']['user']['identityImg'] = $typeArr[$data['data']['user']['type']];
+        $data['data']['user']['identityGuestImg'] = $typeGuestArr[$data['data']['user']['type']];
         return $data;
     }
 }
