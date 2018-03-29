@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Roster;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\RosterAdd;
+use App\Models\DpRegUrlModel;
 use App\Models\EventGroupLogModel;
 use App\Models\GroupLogModel;
 use App\Models\RosterCourseModel;
@@ -238,6 +239,25 @@ class IndexController extends BaseController
         ];
         $data['data'] = $query->take(5000)->get();
         return $this->export($data);
+    }
+
+    /**
+     * @note 保存用户注册链接地址
+     */
+    function postSetRegUrl(Request $request){
+        $post = collect($request->get())->toJson();
+        $field = [
+            'url_option'           =>  $post,
+        ];
+        DpRegUrlModel::create($field);
+        if($RegUrl->create($field) == false || ($lastId = $RegUrl->add()) === false){
+            $this->ajaxReturn(['code'=>FAIL,'msg'=>'生成链接失败！']);
+        }
+        $url_option = "http://".$_SERVER['HTTP_HOST']."/Member/Portal/goToRegUrl/urlId/".$lastId;
+        $UserRoster = new UserRosterModel();
+        $regUrl = file_get_contents(C('SHORT_URL_API').$url_option);
+        $regUrlArr = json_decode($regUrl,1);
+        $this->ajaxReturn(['code'=>SUCCESS,'msg'=>'生成链接成功！','data'=>['url'=>$regUrlArr[0]['url_short']]]);
     }
 }
 

@@ -239,7 +239,7 @@
                         @else
                         <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
                         @endif
-                        <a href="javascript:;" url="{$v[userRegUrl]}" wx="{$v[wx]}" qq="{$v[qq]}" class="link_4" >链接</a>
+                        <a href="javascript:;" url="{{$v->userRegUrl}}" wx="{{$v->wx}}" qq="{{$v->qq}}" onclick="registerUrl()" >链接</a>
 
                     </td>
                 </tr>
@@ -267,4 +267,32 @@
         &nbsp;<a class="common-button combg1 ajaxSubmit" showLoading="1" method="get" callback="reFun" href="{:U('openCourse')}">提交</a>
     </form>
 </div>
+<script>
+    function registerUrl() {
+        $(".link_4").click(function(){
+            var url = $(this).attr("url");
+            var wx  =  $(this).attr("wx");
+            var qq  =  $(this).attr("qq");
+            var str = wx ? "微信号<b>"+wx+"</b>的专属注册链接" : "QQ号<b>"+qq+"</b>的专属注册链接";
+            //url_con = "";
+            $.ajax({
+                url         :   "{:U('setRegUrl')}",
+                data        :   url,
+                method      :   "post",
+                dataType    :   "json",
+                success     :   function(data){
+                    //页面层-自定义
+                    layer.open({
+                        type        : 1,
+                        area        : ['30%','150px'],
+                        title       : str,
+                        closeBtn    : 1,
+                        shadeClose  : true,
+                        content     : "<input type='text' value='"+data.data.url+"' style='height: 50px;margin:5px 0px 0px 10px;'/>"
+                    });
+                }
+            });
+        });
+    }
+</script>
 @endsection

@@ -43,7 +43,8 @@ Route::get("roster/follow/user/list","Roster\FollowController@getUserList")->nam
 Route::get("roster/follow/add/{roster_id}","Roster\FollowController@getAdd")->name("admin.roster.follow.add");
 Route::get("roster/follow/add/{roster_id}/{follow_id}","Roster\FollowController@getEdit")->name("admin.roster.follow.edit");
 Route::post("roster/follow/save","Roster\FollowController@postSave")->name("admin.roster.follow.save.post");
-
+//形成专属注册链接
+Route::post("roster/index/set-reg-url","Roster\IndexController@postSetRegUrl")->name("admin.roster.index.set-reg-url");
 
 //公共操作
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
@@ -52,6 +53,10 @@ Route::get("index/select_group","BaseController@getSelectGroup")->name("admin.pu
 Route::get("auth/logout","AuthController@getLogout")->name("admin.auth.logout");
 Route::get("index/account","IndexController@getAccount")->name("admin.public.account");
 Route::post("index/account","IndexController@postAccount");
+
+
+
+
 /*支付系统*/
 //支付统计
 Route::get("registration/add","RegistrationController@getAdd")->name("admin.registration.add");
