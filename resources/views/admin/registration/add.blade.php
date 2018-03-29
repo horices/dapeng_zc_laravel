@@ -127,8 +127,8 @@
 
                     },
                     minusPayType:function (index) {
-                        //this.userPayInfo.amount_submitted = accSub(parseFloat(this.userPayInfo.amount_submitted),parseFloat(this.payDataList[index].amount));
-                        this.userPayInfo.amount_submitted = parseFloat(this.userPayInfo.amount_submitted)-parseFloat(this.payDataList[index].amount);
+                        this.userPayInfo.amount_submitted = Utils.subtraction(parseFloat(this.userPayInfo.amount_submitted),parseFloat(this.payDataList[index].amount));
+                        //this.userPayInfo.amount_submitted = parseFloat(this.userPayInfo.amount_submitted)-parseFloat(this.payDataList[index].amount);
                         this.payDataList.splice(index, 1);
 
                     },
@@ -283,7 +283,7 @@
             if($(obj).attr("package-id"))
                 vm.userPayInfo.package_id = $(obj).attr("package-id");
             vm.userPayInfo.package_total_price = parseFloat(vm.userPayInfo.package_price)+parseFloat(vm.userPayInfo.package_attach_price);
-            setPackageTotal(); //计算最终套餐价格
+            //setPackageTotal(); //计算最终套餐价格
         }
 
         /**

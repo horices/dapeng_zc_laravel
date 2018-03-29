@@ -19,7 +19,10 @@ use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 
 class RegistrationController extends BaseController{
@@ -150,10 +153,11 @@ class RegistrationController extends BaseController{
         }
 
         if($request->get('export') == 1){
+            $query->orderBy("last_pay_time","desc");
             return $this->exportListUser($query);
         }
 
-        $list = $query->orderBy("last_pay_time","desc")->paginate(15);
+        $list = $query->orderBy("id","desc")->paginate(15);
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
         }
@@ -186,6 +190,35 @@ class RegistrationController extends BaseController{
         ];
         $data['data'] = $query->take(100000)->get();
         return $this->export($data);
+    }
+
+    /**
+     * 修改字段值
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UserValidateException
+     */
+    function postModField(Request $request){
+        if(!$request->get('id') || !$request->has('val') || !$request->get('field')){
+            throw new UserValidateException("修改数据错误!");
+        }
+        $post = $request->input();
+        $UserRegData = UserRegistrationModel::find($post['id']);
+        if(!$UserRegData){
+            throw new UserValidateException("未找到该用户报名记录!");
+        }
+        $field = $post['field'];
+        $UserRegData->$field = $post['val'];
+        $data = $UserRegData->toArray();
+        $data['registration_id'] = $data['id'];
+
+        UserRegistrationModel::updateValidate($data);
+        $eff = $UserRegData->save();
+        if($eff){
+            return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
+        }else{
+            throw new UserValidateException("修改失败!");
+        }
     }
 
     /**
@@ -281,6 +314,36 @@ class RegistrationController extends BaseController{
             'adminInfo'         =>  collect($this->getUserInfo())->toJson(),
             'leftNav'           => "admin.registration.list"
         ]);
+    }
+
+    /**
+     * 删除支付记录
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UserValidateException
+     */
+    function postDelete(Request $request){
+        if(!$request->get("id")){
+            throw new UserValidateException("未找到支付记录！");
+        }
+        $id = $request->get("id");
+        $UserPayLog = UserPayLogModel::find($id);
+        if(!$UserPayLog){
+            throw new UserValidateException("未找到该支付记录!");
+        }
+        //判断并删除没有支付记录的报名信息和顶级支付记录
+        $eff = DB::transaction(function ()use($UserPayLog) {
+            return $UserPayLog->delete();
+        });
+        if($eff){
+            return response()->json(['code'=>Util::SUCCESS,'msg'=>'删除成功！']);
+        }else{
+            throw new UserValidateException("删除失败！");
+        }
+    }
+
+    function postPayModify(){
+
     }
 
 }

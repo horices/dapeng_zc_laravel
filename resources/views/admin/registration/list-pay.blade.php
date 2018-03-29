@@ -81,8 +81,8 @@
             </div>
 
             <div class="form-group">
-                <input type="text" id="startdate" name="startDate" class="form-control datetime" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
-                <input type="text" id="enddate" name="endDate" class="form-control datetime" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
+                <input type="text" id="startdate" name="startDate" class="form-control select_date" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
+                <input type="text" id="enddate" name="endDate" class="form-control select_date" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
             </div>
             <div class="form-group">
                 <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
@@ -119,9 +119,9 @@
             </thead>
             <tbody>
             @if (count($list) > 0)
-                @foreach ($list as $v)
+                @foreach ($list as $k=>$v)
                     <tr class="listCurrent">
-                        <td>{{$v->key+1}}</td>
+                        <td>{{$v->id}}</td>
                         <td>{{$v->adviser_name}}</td>
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
@@ -143,7 +143,7 @@
                                 查看</a>-->
 <a href="{{route('admin.registration.list.detail',['payLogId'=>$v->id])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
-                                    |<a href="{:U('delPayInfo')}" data="{id:'{$v.id}'}" class="ajaxLink" warning="确认删除？">删除</a>
+                                    |<a url="{{route('admin.registration.delete')}}" data="{id:'{{$v->id}}'}" class="ajaxLink" warning="确认删除？">删除</a>
                                 @endif
                         </td>
                     </tr>

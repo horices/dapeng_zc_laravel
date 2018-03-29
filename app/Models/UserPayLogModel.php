@@ -64,6 +64,7 @@ class UserPayLogModel extends BaseModel {
         return date("Y-m-d H:i:s",$this->pay_time);
     }
 
+
     /**
      * 获取报名记录模型
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

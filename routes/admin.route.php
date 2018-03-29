@@ -69,6 +69,9 @@ Route::get("registration/list-user","RegistrationController@getUserList")->name(
 Route::get("registration/list-pay","RegistrationController@getPayList")->name("admin.registration.list.pay");
 //支付记录详情
 Route::get("registration/list-detail","RegistrationController@getListDetail")->name("admin.registration.list.detail");
+Route::post("registration/mod-field","RegistrationController@postModField")->name("admin.registration.mod-field");
+Route::post("registration/delete","RegistrationController@postDelete")->name("admin.registration.delete");
+
 
 /**
  * 课程套餐
