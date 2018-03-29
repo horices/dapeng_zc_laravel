@@ -16,6 +16,10 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
+        //变更用户所属课程顾问
+        'App\Events\RevisingAdvisor'   =>  [
+            'App\Listeners\RevisingAdvisorListener'
+        ]
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\RevisingAdvisor;
 use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
@@ -38,6 +39,13 @@ class GroupModel extends BaseModel
             $v = Str::lower(Str::substr($v,1));
         }
         return $v;
+    }
+    function setLeaderIdAttribute($v){
+        if($this->attributes['leader_id'] != $v){
+            //触发更换课程顾问事件
+            event(new RevisingAdvisor(['groupId'=>$this->attributes['id'],'newAdviserId'=>$v]));
+        }
+        $this->attributes['leader_id'] = $v;
     }
     protected function getTypeTextAttribute(){
         if($this->type !== null){

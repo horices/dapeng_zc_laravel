@@ -31,6 +31,7 @@ class DapengUserApi extends BaseApi {
         'getLottery'                =>  '/api/extension/drawTheLottery',    //自动抽奖
         'getSecurity'               =>  '/api/extension/userSecurity',   //获取用户帐号安全等级
         'updateStudyTime'           =>  "/api/extension/updateStudyTtime",   //接口编号：42-1 更新用户的最后学习时间
+        'revisingAdvisor'           =>  "/api/displaywindow/revisingAdvisor",   //接口编号 62 ,修改学员主站的课程顾问
     ];
     /**
      * 获取用户信息
@@ -75,5 +76,14 @@ class DapengUserApi extends BaseApi {
         $data['data']['user']['identityImg'] = $typeArr[$data['data']['user']['type']];
         $data['data']['user']['identityGuestImg'] = $typeGuestArr[$data['data']['user']['type']];
         return $data;
+    }
+
+    /**
+     * 转移学员的课程顾问
+     * @param $data
+     * @return mixed
+     */
+    static function revisingAdvisor($data){
+        return self::api(self::$url['revisingAdvisor'],$data,"post");
     }
 }
