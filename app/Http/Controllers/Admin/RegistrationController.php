@@ -155,7 +155,7 @@ class RegistrationController extends BaseController{
             return $this->exportListUser($query);
         }
 
-        $list = $query->orderBy("last_pay_time","desc")->paginate(15);
+        $list = $query->orderBy("id","desc")->paginate(15);
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
         }
@@ -327,7 +327,7 @@ class RegistrationController extends BaseController{
         }
         //判断并删除没有支付记录的报名信息和顶级支付记录
         $eff = DB::transaction(function ()use($UserPayLog) {
-            $UserPayLog->delete();
+            return $UserPayLog->delete();
         });
         if($eff){
             return response()->json(['code'=>Util::SUCCESS,'msg'=>'删除成功！']);

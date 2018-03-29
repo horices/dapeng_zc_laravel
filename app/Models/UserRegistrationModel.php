@@ -51,7 +51,6 @@ class UserRegistrationModel extends BaseModel{
     //获取套餐总价格
     public function getPackageTotalPriceAttribute(){
         return floatval($this->coursePackage->price) + floatval($this->coursePackageAttach->price);
-
     }
     /**
      * 获取isBelong
@@ -73,7 +72,8 @@ class UserRegistrationModel extends BaseModel{
      * @return false|string
      */
     public function getLastPayTimeTextAttribute(){
-        return date("Y-m-d H:i:s",$this->last_pay_time);
+        $pay_time = UserPayLogModel::where("registration_id",$this->id)->orderBy("id","desc")->value("pay_time");
+        return date("Y-m-d H:i:s",$pay_time);
     }
 
     /**
@@ -322,7 +322,7 @@ class UserRegistrationModel extends BaseModel{
 //                }
 //            }
             //更新报名信息的最后一次提交支付记录时间
-            $this->setLastPayTime($data['registration_id']);
+            return $this->setLastPayTime($data['registration_id']);
         });
         if(!$eff){
             throw new UserValidateException("更新失败！");

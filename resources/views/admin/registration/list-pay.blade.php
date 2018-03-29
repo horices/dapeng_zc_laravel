@@ -119,9 +119,9 @@
             </thead>
             <tbody>
             @if (count($list) > 0)
-                @foreach ($list as $v)
+                @foreach ($list as $k=>$v)
                     <tr class="listCurrent">
-                        <td>{{$v->key+1}}</td>
+                        <td>{{$v->id}}</td>
                         <td>{{$v->adviser_name}}</td>
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
@@ -143,7 +143,7 @@
                                 查看</a>-->
 <a href="{{route('admin.registration.list.detail',['payLogId'=>$v->id])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
-                                    |<a href="{:U('delPayInfo')}" data="{id:'{$v.id}'}" class="ajaxLink" warning="确认删除？">删除</a>
+                                    |<a url="{{route('admin.registration.delete')}}" data="{id:'{{$v->id}}'}" class="ajaxLink" warning="确认删除？">删除</a>
                                 @endif
                         </td>
                     </tr>
