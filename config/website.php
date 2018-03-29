@@ -6,6 +6,7 @@
  * TEST 对应测试站相应配置
  */
 return [
+    //本网站所有的域名地址，用于判断本站现处于正式或测试域名下，若不在以下列表中，则默认为测试站
     'HOST_ALL'  =>  [
         'bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::MASTER,
         'zc.dapengjiaoyu.com'  =>  \App\Utils\Util::MASTER,
