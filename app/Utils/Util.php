@@ -8,6 +8,10 @@ class Util{
     const WARNING = 2;
     const FAIL = 0;
 
+    const MASTER = 'MASTER';
+    const TEST  = "TEST";
+    const DEV = "DEV";
+
 
     /**
      * @note json返回数据
@@ -34,11 +38,18 @@ class Util{
     }
 
     /**
-     * 判断是否在主站站点
-     * @return boolean
+     * 获取website 配置文件中的配置
+     * @param $key
+     * @param int $getSub 是否根据获取相应的正式或测试数据
      */
-    public static function isMasterWebSite(){
-        return in_array($_SERVER['HTTP_HOST'], config("app.master_host"));
+    static function getWebSiteConfig($key,$getSub = 1){
+        $key = "website.".$key;
+        if($getSub){
+            $host = $_SERVER['HTTP_HOST'];
+            $subKey = collect(config("website.HOST_ALL"))->get($host,Util::TEST);
+            $key.= ".".$subKey;
+        }
+        return config($key);
     }
 
     /**
@@ -46,10 +57,7 @@ class Util{
      * @return mixed
      */
     public static function getDapengHost(){
-        if(self::isMasterWebSite())
-            return config("app.dapeng_host")['real'];
-        else
-            return config("app.dapeng_host")['test'];
+        return self::getWebSiteConfig("PC_URL");
     }
 
     /**
@@ -58,10 +66,7 @@ class Util{
      * @return mixed
      */
     public static function getSystemHost($schoolId = "sj"){
-        if(self::isMasterWebSite())
-            return config('app.system_host')[$schoolId];
-        else
-            return config('app.system_host_test')[$schoolId];
+        return self::getWebSiteConfig("ZC_URL.".$schoolId);
     }
 
     /**
