@@ -41,7 +41,8 @@ class RegistrationController extends BaseController{
             'packageAttachList'=>  json_encode($packageAttachList,JSON_UNESCAPED_UNICODE),
             'giveList'      =>  json_encode(array_reverse(CoursePackageModel::$giveList),JSON_UNESCAPED_UNICODE),//赠送课程
             'fqTypeList'    =>  json_encode($fqTypeList,JSON_UNESCAPED_UNICODE),
-            'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE)
+            'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE),
+            'leftNav'           => "admin.registration.add"
         ]);
     }
     /**
@@ -148,6 +149,10 @@ class RegistrationController extends BaseController{
             $query->where("create_time","<=",strtotime($endDate));
         }
 
+        if($request->get('export') == 1){
+            return $this->exportListUser($query);
+        }
+
         $list = $query->orderBy("last_pay_time","desc")->paginate(15);
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
@@ -159,16 +164,38 @@ class RegistrationController extends BaseController{
         ]);
     }
 
-    function getPayList(Request $request){
-        $UserPayLog = new UserPayLogModel();
-        $map = [];
+    /**
+     * 导出用户支付列表
+     * @param $query
+     */
+    function exportListUser($query){
+        $data['filename'] = "用户统计".date("Y-m-d_H:i:s");
+        $data['title'] = [
+            'idk'               =>  '序号',
+            'name'              =>  '学员姓名',
+            'adviser_name'      =>  '课程顾问',
+            'mobile'            =>  '开课手机',
+            'qq'                =>  '学员QQ',
+            'package_all_title' =>  '报名套餐',
+            'amount_submitted'  =>  '已收金额',
+            'package_total_price'=> '套餐总金额',
+            'fq_type_text'       =>  '分期方式',
+            'is_open_text'       =>  '开课状态',
+            'last_pay_time_text' =>  '提交时间',
+            'remark'            =>  '课程交接备注',
+        ];
+        $data['data'] = $query->take(100000)->get();
+        return $this->export($data);
+    }
 
+    /**
+     * 获取支付记录列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    function getPayList(Request $request){
         //根据课程顾问ID来筛选所属学员的支付记录信息
-        $adviserId = $request->get("adviserId");
-        if($adviserId){
-            $map['upl.adviser_id'] = $adviserId;
-            $mapA['adviser_id'] = $adviserId;
-        }
+
         //月统计条总金额
         $allSubmitAmount = UserPayLogModel::whereBetween('create_time',[strtotime(date('Y-m-1 00:00:00')),time()])->sum("amount");
 
@@ -194,7 +221,6 @@ class RegistrationController extends BaseController{
                 $query->where("is_open",$isOpen);
             }
         })->with('userRegistration');
-
 
         //根据时间来检索
         $startDate = $request->get("startDate");

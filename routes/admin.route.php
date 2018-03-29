@@ -88,4 +88,5 @@ Route::post("pay/package/delete","Pay\PackageController@postDelete")->name("admi
 Route::get("pay/rebate/list","Pay\RebateController@getList")->name("admin.pay.rebate.list");
 Route::get("pay/rebate/add","Pay\RebateController@getAdd")->name("admin.pay.rebate.add");
 Route::get("pay/rebate/edit","Pay\RebateController@getEdit")->name("admin.pay.rebate.edit");
-Route::get("pay/rebate/save","Pay\RebateController@postSave")->name("admin.pay.rebate.save");
+Route::post("pay/rebate/save","Pay\RebateController@postSave")->name("admin.pay.rebate.save");
+Route::post("pay/rebate/delete","Pay\RebateController@postDelete")->name("admin.pay.rebate.delete");

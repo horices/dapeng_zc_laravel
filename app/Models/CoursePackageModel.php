@@ -71,9 +71,7 @@ class CoursePackageModel extends BaseModel {
         ]);
         //执行验证
         $validator->validate();
-        $eff = self::create($data);
-        $eff->package_id = $eff->id;
-        return $eff->save();
+
     }
 
     /**
