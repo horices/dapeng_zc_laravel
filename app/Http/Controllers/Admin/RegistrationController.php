@@ -21,6 +21,8 @@ use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 
 class RegistrationController extends BaseController{
@@ -207,6 +209,10 @@ class RegistrationController extends BaseController{
         }
         $field = $post['field'];
         $UserRegData->$field = $post['val'];
+        $data = $UserRegData->toArray();
+        $data['registration_id'] = $data['id'];
+
+        UserRegistrationModel::updateValidate($data);
         $eff = $UserRegData->save();
         if($eff){
             return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
@@ -334,6 +340,10 @@ class RegistrationController extends BaseController{
         }else{
             throw new UserValidateException("删除失败！");
         }
+    }
+
+    function postPayModify(){
+
     }
 
 }

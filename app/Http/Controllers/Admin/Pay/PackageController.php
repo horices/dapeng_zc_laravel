@@ -52,8 +52,8 @@ class PackageController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getEdit(Request $request){
-        $id = $request->get("id");
-        $detail = CoursePackageModel::where("package_id",$id)->orderBy("id","desc")->first();
+        $packageId = $request->get("package_id");
+        $detail = CoursePackageModel::where("package_id",$packageId)->orderBy("id","desc")->first();
         return view("admin.pay.package.detail",[
             'r'                 =>  $detail,
             'leftNav'           => "admin.pay.package"

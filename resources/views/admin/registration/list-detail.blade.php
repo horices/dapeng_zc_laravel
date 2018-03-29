@@ -52,25 +52,25 @@
                 methods:{
                     searchPackage:function () { //搜索相关套餐
                         var _this = this;
-                        if(isAjax == 1){
-                            return ;
-                        }
-                        isAjax = 1;
+//                        if(isAjax == 1){
+//                            return ;
+//                        }
+//                        isAjax = 1;
                         $.ajax({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
-                            url         :   "{{route('admin.registration.post-package-list')}}",
+                            url         :   "{{url('admin/registration/post-package-list')}}",
                             dataType    :   'json',
                             method      :   'post',
                             data        :   {'title':_this.userPayInfo.user_registration.course_package.title},
                             success     :   function (data) {
-                                if(data.data && data.data.length>0){
+                                if(data.data.length > 0){
                                     $(".course-package").show();
                                 }else{
                                     $(".course-package").hide();
                                 }
-                                vm.userPayInfo.package_total_price = 0;
+                                //vm.userPayInfo.package_total_price = "";
                                 _this.packageList = data.data;
                                 isAjax = 0;
                             }
@@ -79,18 +79,20 @@
                     setPackAttach:function () {
                         var attachId;
                         var _this = this;
-                        if(_this.userPayInfo.package_attach_id == 0){
-                            _this.userPayInfo.package_total_price = _this.userPayInfo.package_price;
+                        //如果没有选附加套餐
+                        if(_this.userPayInfo.user_registration.course_package_attach.id == 0){
+                            _this.userPayInfo.user_registration.course_package_attach.title = "";
+                            _this.userPayInfo.user_registration.course_package_attach.price = 0
                         }
-                        //用each获取每个元素
+                        //选择附加附加套餐后重新赋值标题和价格
                         $.each(this.packageAttachList, function(i, val){
-                            if(_this.userPayInfo.package_attach_id == val.id){
-                                _this.userPayInfo.package_attach_title = val.title;
-                                _this.userPayInfo.package_attach_price = val.price;
-                                _this.userPayInfo.package_total_price = parseInt(_this.userPayInfo.package_price)+parseInt(_this.userPayInfo.package_attach_price);
+                            if(_this.userPayInfo.user_registration.course_package_attach.id == val.id){
+                                _this.userPayInfo.user_registration.course_package_attach.title = val.title;
+                                _this.userPayInfo.user_registration.course_package_attach.price = val.price;
                             }
                         });
-                        setPackageTotal(); //计算最终套餐价格
+                        //用each获取每个元素
+                        setPackageTotal();
                     },
                     setRebate:function () {
                         var _this = this;
@@ -188,18 +190,22 @@
         function setPackName(obj) {
 //            $("#package-title").val($(obj).text());
             vm.userPayInfo.user_registration.course_package.title = $(obj).find('a').text();
+            vm.userPayInfo.package_tmp_title = vm.userPayInfo.package_title;
             $(".course-package").hide();
-            vm.userPayInfo.user_registration.course_package.price = $(obj).attr("price");
+            console.log($(obj).attr("price"));
+            if($(obj).attr("price"))
+                vm.userPayInfo.package_price = $(obj).attr("price");
             //套餐ID
-            vm.userPayInfo.user_registration.course_package.id = $(obj).attr("package-id");
-            //vm.userPayInfo.user_registration.package_total_price = parseInt(vm.userPayInfo.package_price)+parseInt(vm.userPayInfo.package_attach_price);
+            console.log($(obj).attr("package-id"));
+            if($(obj).attr("package-id"))
+                vm.userPayInfo.package_id = $(obj).attr("package-id");
+                vm.userPayInfo.user_registration.package_id = $(obj).attr("package-id");
             setPackageTotal(); //计算最终套餐价格
         }
-        /**
-         * 计算套餐最终价格
-         */
+
+        //重新计算套餐总价
         function setPackageTotal() {
-            vm.userPayInfo.user_registration.package_total_price = parseInt(vm.userPayInfo.course_package.price)+parseInt(vm.userPayInfo.course_package_attach.price);
+            vm.userPayInfo.user_registration.package_total_price = parseFloat(vm.userPayInfo.user_registration.course_package.price)+parseFloat(vm.userPayInfo.user_registration.course_package_attach.price);
         }
 
         /**
@@ -233,23 +239,23 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">学员手机</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="mobile" value="" class="form-control fleft" maxlength="11" v-model="userPayInfo.mobile"  />
+                    <input type="text" name="mobile" value="" class="form-control fleft" maxlength="11" v-model="userPayInfo.user_registration.mobile"  />
                 </div>
-                <p class="help-block input-two" >修改</p>
+                <p class="help-block input-two ajaxLink" :data="'{id:\''+userPayInfo.registration_id+'\',field:\'mobile\',val:\''+userPayInfo.user_registration.mobile+'\'}'" url="{{route('admin.registration.mod-field')}}" >修改</p>
             </div>
             <!--提交用户支付信息 开通课程信息-->
 
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">学员QQ：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="qq" class="form-control" v-model="userPayInfo.qq" />
+                    <input type="text" name="qq" class="form-control" v-model="userPayInfo.user_registration.qq" />
                 </div>
-                <p class="help-block input-two" >修改</p>
+                <p class="help-block input-two ajaxLink" :data="'{id:\''+userPayInfo.registration_id+'\',field:\'qq\',val:\''+userPayInfo.user_registration.qq+'\'}'" url="{{route('admin.registration.mod-field')}}" >修改</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">学员姓名：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="name" class="form-control" v-model="userPayInfo.name"   />
+                    <input type="text" name="name" :data="'{id:\''+userPayInfo.registration_id+'\',field:\'name\',val:\''+userPayInfo.user_registration.name+'\'}'" class="form-control" v-model="userPayInfo.name"   />
                 </div>
                 <p class="help-block input-two" >修改</p>
             </div>
@@ -270,7 +276,7 @@
                 <div class="col-md-8 controls">
                     <input id="package-title" type="text" name="package_title" class="form-control fleft" v-model="userPayInfo.user_registration.course_package.title" @keyup="searchPackage" style="width: 400px;"   />
                 </div>
-                <p class="help-block ajaxLink" data="{field:'package_id',val:$('#package_id').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
+                <p class="help-block ajaxLink" :data="'{field:\'package_id\',val:\''+userPayInfo.user_registration.package_id+'\',id:\''+userPayInfo.registration_id+'\'}'" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
             </div>
             <div class="course-package" style="display: none;">
                 <span onclick="setPackName(this)" v-for="(l,index) in packageList" :price="l.price" :package-id="l.id"><a>@{{l.title}}</a> - (金额@{{l.price}}元)</span>
@@ -282,7 +288,7 @@
                     附加套餐：
                 </label>
                 <div class="col-md-8 controls">
-                    <select id="package_attach_id" class="col-md-8 form-control fleft" v-model="userPayInfo.user_registration.course_package_attach.id" name="package_attach_id" @change="setPackAttach"  >
+                    <select id="package_attach_id" class="col-md-8 form-control fleft" v-model="userPayInfo.user_registration.course_package_attach.id" name="package_attach_id" @change="setPackAttach">
                     <option value="0">选择附加套餐</option>
                     <option v-for="(l,index) in packageAttachList" :value="l.id" selected="selected"><a>@{{l.title}}</a></option>
                     </select>
@@ -317,7 +323,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">收款金额：</label>
                 <div class="col-md-8 controls">
-                    <input id="package-price" type="text" name="amount" class="form-control" v-model="userPayInfo.amount"   />
+                    <input id="package-price" type="text" name="amount" class="form-control" v-model="userPayInfo.amount" />
                 </div>
                 <p class="help-block input-two" >修改</p>
             </div>

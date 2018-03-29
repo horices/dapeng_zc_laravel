@@ -30,6 +30,10 @@ class UserRegistrationObservers{
         unset($userPayArr['id']);
         $userPayModel = UserPayModel::query();
         $userPayModel->create($userPayArr);
-
     }
+
+//    function updating(UserRegistrationModel $registrationModel){
+//
+//    }
+
 }

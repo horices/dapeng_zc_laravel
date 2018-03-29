@@ -116,6 +116,51 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
+     * 更新数据库验证
+     * @param $data
+     * @return mixed
+     */
+    static function updateValidate($data){
+        $validator = Validator::make($data, [
+            'registration_id'      =>  'sometimes|numeric|exists:user_registration,id',
+            'mobile'            => [
+                'sometimes',
+                'required',
+                'regex:/\d{11}/',
+                Rule::unique('user_registration')->ignore($data['registration_id']),
+            ],
+            'name'              => 'sometimes|max:255',
+            'qq'                => [
+                'sometimes',
+                'required',
+                'regex:/\d{5,11}/',
+                Rule::unique('user_registration')->ignore($data['registration_id']),
+            ],
+            'package_id'        => 'sometimes|exists:course_package,id',
+            'package_attach_id' => 'sometimes|exists:course_package,id',
+            'rebate_id'         => 'sometimes|exists:rebate_activity,id',
+            'amount_submitted'  =>  'sometimes|required|numeric'
+        ],[
+            'registration_id.required'       =>  '更新的支付记录错误！',
+            'registration_id.numeric'        =>  '更新的支付记录错误！',
+            'registration_id.exists'         =>  '未找到要修改的支付记录',
+            'mobile.required'   =>  '请输入正确的学员手机号！',
+            'mobile.unique'     =>  '该学员手机号已存在！',
+            'name.required'     =>  '请输入学员姓名！',
+            'name.max'          =>  '学员姓名格式错误！',
+            'qq.required'       =>  '请输入学员QQ号！',
+            'qq.regex'          =>  '学员QQ号格式错误！',
+            'qq.unique'         =>  '学员QQ号已存在！',
+            'package_id.exists' =>  '请选择正确的课程主套餐！',
+            'package_attach_id.exists' =>  '请选择正确的课程副套餐！',
+            'rebate_id.exists'  =>  '请选择正确的优惠活动！',
+            'amount_submitted,required'=>   '已提交金额有误！',
+            'amount_submitted,numeric'=>   '已提交金额有误！',
+        ]);
+        $validator->validate();
+    }
+
+    /**
      * 新增报名时补全入库字段信息
      * @param array $data
      *          int mobile:开课手机号
