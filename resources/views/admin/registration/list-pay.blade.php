@@ -81,8 +81,8 @@
             </div>
 
             <div class="form-group">
-                <input type="text" id="startdate" name="startDate" class="form-control datetime" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
-                <input type="text" id="enddate" name="endDate" class="form-control datetime" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
+                <input type="text" id="startdate" name="startDate" class="form-control select_date" style="width:165px;" value="{{Request::input('startDate')}}" placeholder="开始时间" /> 至
+                <input type="text" id="enddate" name="endDate" class="form-control select_date" style="width:165px;" value="{{Request::input('endDate')}}" placeholder="截至时间" />
             </div>
             <div class="form-group">
                 <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
