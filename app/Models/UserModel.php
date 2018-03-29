@@ -47,7 +47,7 @@ class UserModel extends BaseModel
         return date('Y-m-d H:i:s',$v);
     }
     protected function getGradeTextAttribute(){
-        if($this->grade !== null){
+        if($this->grade >0 ){
             return app(BaseController::class)->getUserGradeList()[$this->grade];
         }
     }

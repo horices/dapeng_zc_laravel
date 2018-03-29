@@ -40,8 +40,8 @@ class GroupModel extends BaseModel
         return $v;
     }
     protected function getTypeTextAttribute(){
-        if($this->group_status !== null){
-            return app("status")->getRosterType()[$this->type];
+        if($this->type !== null){
+            return app("status")->getRosterType($this->type);
         }
     }
     protected function getAddtimeExportTextAttribute(){
