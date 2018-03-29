@@ -1,5 +1,23 @@
 @extends("admin.public.layout")
 @section("right_content")
+<script src="/js/vue-2.0.js"></script>
+<script>
+    var vm ;
+    $(function () {
+        vm = new Vue({
+            el:"#w0",
+            data:{
+                group:{
+                    name:"adbc"
+                }
+            },
+            ready:function(){
+                alert(1);
+            }
+        });
+    });
+
+</script>
        <div class="row search-row" style="padding:9px 0 15px 15px;">
        <div class="">
         <a href="{{ route('admin.group.add') }}" class="btn btn-info">添加新群</a>
@@ -62,7 +80,7 @@
                            <td>{{ $group->type_text }}</td>
                            <td>{{ $group->group_name }}</td>
                            <td>{{ $group->qq_group }}</td>
-                           <td>{{ $group->user->name }} {{ $group->status }}</td>
+                           <td :data="'{id:2,name:\''+group.name+'\'}'">{{ $group->user->name }} {{ $group->status }}</td>
                            <td>
                            @if($group->is_open)
                            <a class="common-button combg1 ajaxLink" style="margin:0px;padding:4px 8px;" url="{{ route('admin.group.save') }}" data="{id:{{ $group->id }},is_open:0,_token:'{{ csrf_token() }}'}">{{$group->is_open_text}}</a>
