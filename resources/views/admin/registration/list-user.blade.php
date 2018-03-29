@@ -150,17 +150,17 @@
                                             <div class="set-open">
                                                 <dl>
                                                     <dd>
-                                                        <a class="ajaxLink" href="{:U('modRegistrationField')}" data="{id:{$v.id},val:'0',field:'is_open'}" warning="开课状态是否确认？">
+                                                        <a class="ajaxLink" url="{{route('admin.registration.mod-field')}}" data="{id:{{$v->id}},val:'0',field:'is_open'}" warning="开课状态是否确认？">
                                                             未开课
                                                         </a>
                                                     </dd>
                                                     <dd>
-                                                        <a class="ajaxLink" href="{:U('modRegistrationField')}" data="{id:{$v.id},val:'1',field:'is_open'}" warning="开课状态是否确认？">
+                                                        <a class="ajaxLink" url="{{route('admin.registration.mod-field')}}" data="{id:{{$v->id}},val:'1',field:'is_open'}" warning="开课状态是否确认？">
                                                             部分开课
                                                         </a>
                                                     </dd>
                                                     <dd>
-                                                        <a class="ajaxLink" href="{:U('modRegistrationField')}" data="{id:{$v.id},val:'2',field:'is_open'}" warning="开课状态是否确认？">
+                                                        <a class="ajaxLink" url="{{route('admin.registration.mod-field')}}" data="{id:{{$v->id}},val:'2',field:'is_open'}" warning="开课状态是否确认？">
                                                             全部开课
                                                         </a>
                                                     </dd>

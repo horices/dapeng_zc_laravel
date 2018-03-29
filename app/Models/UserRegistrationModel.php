@@ -295,7 +295,7 @@ class UserRegistrationModel extends BaseModel{
         $validator->validate();
 
         //开启事务
-        DB::transaction(function () use($UserPayModel,$UserPayLogModel,$data){
+        $eff = DB::transaction(function () use($UserPayModel,$UserPayLogModel,$data){
             //添加用户支付信息
             $resUserPay = $UserPayModel->addData($data);
             //循环添加多个支付方式记录
@@ -324,6 +324,9 @@ class UserRegistrationModel extends BaseModel{
             //更新报名信息的最后一次提交支付记录时间
             $this->setLastPayTime($data['registration_id']);
         });
+        if(!$eff){
+            throw new UserValidateException("更新失败！");
+        }
         $data = $this->getColumns($data);
         $data['amount_submitted'] = DB::raw('amount_submitted+'.$data['amount_submitted']);
         return self::where('id',$registrationId)->update($data);
