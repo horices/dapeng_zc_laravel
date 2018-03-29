@@ -250,9 +250,9 @@ class IndexController extends BaseController
             'url_option'           =>  $post,
         ];
         DpRegUrlModel::create($field);
-        if($RegUrl->create($field) == false || ($lastId = $RegUrl->add()) === false){
-            $this->ajaxReturn(['code'=>FAIL,'msg'=>'生成链接失败！']);
-        }
+//        if($RegUrl->create($field) == false || ($lastId = $RegUrl->add()) === false){
+//            $this->ajaxReturn(['code'=>FAIL,'msg'=>'生成链接失败！']);
+//        }
         $url_option = "http://".$_SERVER['HTTP_HOST']."/Member/Portal/goToRegUrl/urlId/".$lastId;
         $UserRoster = new UserRosterModel();
         $regUrl = file_get_contents(C('SHORT_URL_API').$url_option);

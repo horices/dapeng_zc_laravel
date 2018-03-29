@@ -239,7 +239,7 @@
                         @else
                         <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
                         @endif
-                        <a href="javascript:;" url="{{$v->userRegUrl}}" wx="{{$v->wx}}" qq="{{$v->qq}}" onclick="registerUrl()" >链接</a>
+                        <a href="javascript:;" url="{{$roster->userRegUrl}}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" onclick="registerUrl()" >链接</a>
 
                     </td>
                 </tr>
