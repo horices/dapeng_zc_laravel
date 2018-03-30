@@ -31,9 +31,12 @@ Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
     Route::post("Index/index.html","DapengNotifyController@reg")->middleware(\App\Http\Middleware\NotifyValidate::class);
     Route::post("Index/openCourse.html","DapengNotifyController@openCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
     Route::post("Index/closeCourse.html","DapengNotifyController@closeCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
-
     Route::post("QQGroupRebotEvent/index.html","QQGroupEventNotifyController@index");
+});
 
+Route::group(['prefix'=>'Api','namespace'=>"Api"], function(){
+    Route::get("User/getInfo","RosterController@getInfo");
+    Route::post("User/addQQ","RosterController@add");
 });
 //Auth::routes();
 

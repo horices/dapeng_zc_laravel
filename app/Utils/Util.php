@@ -42,16 +42,26 @@ class Util{
      * @param $key
      * @param int $getSub 是否根据获取相应的正式或测试数据
      */
-    static function getWebSiteConfig($key,$getSub = 1){
+    static function getWebSiteConfig($key,$getSub = 1,$default = ""){
         $key = "website.".$key;
         if($getSub){
             $host = $_SERVER['HTTP_HOST'];
             $subKey = collect(config("website.HOST_ALL"))->get($host,Util::TEST);
             $key.= ".".$subKey;
         }
-        return config($key);
+        return config($key,$default);
     }
 
+    /**
+     * 获取当前学院的名字
+     * @param string $host
+     * @return mixed
+     */
+    static function getSchoolName($host = "",$default = "SJ"){
+        if(!$host)
+            $host = $_SERVER['HTTP_HOST'];
+        return collect(self::getWebSiteConfig("SCHOOL_NAME",false))->get($host,$default);
+    }
     /**
      *  获取大鹏主站的接口host地址
      * @return mixed

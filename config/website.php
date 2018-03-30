@@ -13,6 +13,12 @@ return [
         'test.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::TEST,
         'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::TEST,
     ],
+    //学院名字
+    'SCHOOL_NAME'   =>  [
+        'bzr.dapengjiaoyu.com'   =>  'SJ',
+        'zc.dapengjiaoyu.com'   =>  'SJ',
+        'ms.dapengjiaoyu.com'   =>  'MS',
+    ],
     //大鹏主站URL
     'PC_URL'   =>  [
         \App\Utils\Util::MASTER    =>  'http://www.dapengjiaoyu.com',
