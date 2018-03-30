@@ -16,7 +16,6 @@ class GroupController extends BaseController
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     function getList(){
-        event(new RevisingAdvisor(['test'=>1]));
         $type = Input::get("type");
         $fieldK = Input::get("field_k");
         $fieldV = Input::get("field_v");
