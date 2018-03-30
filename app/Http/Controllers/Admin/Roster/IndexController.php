@@ -98,6 +98,7 @@ class IndexController extends BaseController
         $endDate = Input::get("enddate");
         $seoerId = Input::get("seoer_id");
         $adviserId = Input::get("adviser_id");
+        $showStatistics = Input::get("show_statistics");
         $where = [];
         if($field_k && $field_v !== null){
             if($field_k == "account"){
@@ -131,7 +132,8 @@ class IndexController extends BaseController
             $query->where('inviter_id',$seoerId);
             $statisticsWhere['inviter_id'] = $seoerId;
         }
-        $statistics = '';
+        $statistics = [];
+        $statistics['statistics'] = '';
         if($adviserId !== null){
             $query->where('last_adviser_id',$adviserId);
             $statistics = $this->getStatistics(['last_adviser_id'],function($query) use($adviserId) {
@@ -142,7 +144,7 @@ class IndexController extends BaseController
         if(Input::get('export') == 1){
             return $this->exportRosterList($query);
         }
-        if(!$statistics){
+        if(!$statistics['statistics'] && $showStatistics){
             $statistics = $this->getStatistics(['']);
         }
         $query->orderBy("id","desc");
@@ -210,6 +212,8 @@ class IndexController extends BaseController
      */
     function getUserList(Request $request){
         $userInfo = $this->getUserInfo();
+        //默认显示数据统计
+        $request->merge(["show_statistics"=>1]);
         $user = UserModel::seoer()->find($userInfo['uid']);
         if($user){
             $request->merge(['seoer_id'=>$userInfo->uid]);

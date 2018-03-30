@@ -154,6 +154,7 @@
         .table th,td{text-align: center}
     </style>
     <div id="w0" class="grid-view">
+        @if(Request::get("show_statistics"))
         <table class="table">
             <thead class="thead" style=" font-size:14px; ">
             <tr>
@@ -176,6 +177,7 @@
             </tr>
             </thead>
         </table>
+        @endif
         <table class="table">
             <thead>
                 <tr>
