@@ -27,12 +27,12 @@ return [
     //展翅系统URL
     'ZC_URL'   =>  [
         //设计学院
-        'sj'    =>  [
+        'SJ'    =>  [
             \App\Utils\Util::TEST      =>  'http://test.bzr.dapengjiaoyu.com',
             \App\Utils\Util::MASTER    =>  'http://bzr.dapengjiaoyu.com',
         ],
         //美术学院
-        'ms'    =>  [
+        'MS'    =>  [
             \App\Utils\Util::MASTER    =>  'http://ms.dapengjiaoyu.com',
             \App\Utils\Util::TEST      =>  'http://test.ms.dapengjiaoyu.com',
         ]
