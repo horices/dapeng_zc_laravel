@@ -2,21 +2,27 @@
 namespace App\Http\Controllers\Admin\Roster;
 
 
+use App\Api\DapengUserApi;
+use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\RosterAdd;
 use App\Models\DpRegUrlModel;
 use App\Models\EventGroupLogModel;
 use App\Models\GroupLogModel;
+use App\Models\GroupModel;
 use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
+use App\Models\UserHeadMasterModel;
 use App\Models\UserModel;
+use App\Rules\DapengUserHas;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Validator;
 
 class IndexController extends BaseController
 {
@@ -246,23 +252,44 @@ class IndexController extends BaseController
         return $this->export($data);
     }
 
-    /**
-     * @note 保存用户注册链接地址
-     */
-    function postSetRegUrl(Request $request){
-        $post = collect($request->get())->toJson();
-        $field = [
-            'url_option'           =>  $post,
+    function postOpenCourse(Request $request){
+        $validator = Validator::make($request,[
+            'id'        =>  'sometimes|required|exists:user_roster,id',
+            'phone'     =>  ['required_without:dapeng_user_id','regex:/\d{11}/',new DapengUserHas()],
+        ],[
+            'id.required'       =>  '请选择要开课的用户！',
+            'id.exists'         =>  '未找到要开课的用户！',
+            'phone.required'    =>  '请输入要开课用户的手机号！',
+            'phone.regex'       =>  '请输入正确格式的手机号！'
+        ]);
+        $validator->validate();
+        //当前用户信息
+        $rosterData = RosterModel::find($request->get("id"));
+        //所属课程顾问信息
+        $userData = UserModel::find($rosterData->last_adviser_id);
+        //用户主站手机号
+        $studentMobile = $request->has("phone") ? $request->get("phone") : $rosterData->dapeng_user_mobile;
+        //获取主站信息
+        $dapengUserInfo = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$studentMobile]);
+        if($dapengUserInfo['code'] == Util::FAIL){
+            throw new DapengApiException("主站未找到该用户！");
+        }
+        $data = [
+            'wingsId'           =>  $userData->uid,
+            'advisorMobile'     =>  $userData->dapeng_user_mobile,
+            'studentMobile'     =>  $studentMobile,
+            'qq'                =>  $userData->qq,
+            'wx'                =>  $userData->wx,
+            'schoolId'          =>  'SJ'
         ];
-        DpRegUrlModel::create($field);
-//        if($RegUrl->create($field) == false || ($lastId = $RegUrl->add()) === false){
-//            $this->ajaxReturn(['code'=>FAIL,'msg'=>'生成链接失败！']);
-//        }
-        $url_option = "http://".$_SERVER['HTTP_HOST']."/Member/Portal/goToRegUrl/urlId/".$lastId;
-        $UserRoster = new UserRosterModel();
-        $regUrl = file_get_contents(C('SHORT_URL_API').$url_option);
-        $regUrlArr = json_decode($regUrl,1);
-        $this->ajaxReturn(['code'=>SUCCESS,'msg'=>'生成链接成功！','data'=>['url'=>$regUrlArr[0]['url_short']]]);
+        $res = DapengUserApi::openCourse($data); //接口59
+        if($res['code'] == Util::FAIL){
+            throw new DapengApiException($res['msg']);
+        }
+        $rosterData->dapeng_user_mobile = $studentMobile;
+        $rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
+        $rosterData->save();
+        return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
 }
 

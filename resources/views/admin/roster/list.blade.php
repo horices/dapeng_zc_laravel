@@ -237,7 +237,7 @@
                     </td>
                     <td>
                         @if($roster->dapeng_user_mobile)
-                        <a class="ajaxLink" method="get" callback="reFun" data="{'phone':}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
+                        <a class="ajaxLink" method="post" callback="reFun" data="{'phone':}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
                         @else
                         <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
                         @endif
@@ -270,6 +270,28 @@
     </form>
 </div>
 <script>
+    function reFun(json,obj){
+        if(json.code == 1){
+            openSuccessDialog("开通成功！");
+            setTimeout(function () {
+                window.location.reload();
+            },1500);
+        }else{
+            openFailDialog(json.msg);
+        }
+    }
+
+    //开通课程弹窗
+    function alertOpenCourse(user_roster_id){
+        $("input[name='user_roster_id']").val(user_roster_id);
+        layer.open({
+            type: 1,
+            title: "开通课程",
+            closeBtn: 1,
+            shadeClose: true,
+            content: $("#open-course")
+        });
+    }
     function registerUrl(obj) {
         var url = $(obj).attr("url");
         var wx  =  $(obj).attr("wx");

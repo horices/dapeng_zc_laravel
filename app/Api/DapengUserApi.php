@@ -17,7 +17,7 @@ class DapengUserApi extends BaseApi {
         'register'                  => "/api/register",    //注册
         'login'                     => "/api/login",           //登陆
         'setSignIn'                 =>  '/api/extension/addAttendanceRecord', //用户签到
-        'getInfo'               => "/api/user-message",    //获取用户信息
+        'getInfo'                   => "/api/user-message",    //获取用户信息
         'getUserList'               => "/api/users",           //获得用户列表
         'setUserInfo'               => "/api/secure/user/basic",    //修改用户信息
         'getSignDays'               =>  '/api/extension/signDays',        //获取用户签到天数
@@ -32,6 +32,7 @@ class DapengUserApi extends BaseApi {
         'getSecurity'               =>  '/api/extension/userSecurity',   //获取用户帐号安全等级
         'updateStudyTime'           =>  "/api/extension/updateStudyTtime",   //接口编号：42-1 更新用户的最后学习时间
         'revisingAdvisor'           =>  "/api/displaywindow/revisingAdvisor",   //接口编号 62 ,修改学员主站的课程顾问
+        'openCourse'                =>  "/api/extension/opencourse",    //接口59 开通课程
     ];
     /**
      * 获取用户信息
@@ -85,5 +86,14 @@ class DapengUserApi extends BaseApi {
      */
     static function revisingAdvisor($data){
         return self::api(self::$url['revisingAdvisor'],$data,"post");
+    }
+
+    /**
+     * 开通课程
+     * @param $data
+     * @return mixed
+     */
+    static function openCourse($data){
+        return self::api(self::$url['openCourse'],$data,"post");
     }
 }

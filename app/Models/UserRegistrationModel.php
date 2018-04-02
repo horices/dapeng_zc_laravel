@@ -112,7 +112,7 @@ class UserRegistrationModel extends BaseModel{
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function userHeadmaster(){
-        return $this->belongsTo(UserHeadMasterModel::class,'adviser_id','uid')->withDefault();
+        return $this->belongsTo(UserModel::class,'adviser_id','uid')->withDefault();
     }
 
     /**

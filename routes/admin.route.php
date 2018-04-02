@@ -45,6 +45,9 @@ Route::get("roster/follow/add/{roster_id}/{follow_id}","Roster\FollowController@
 Route::post("roster/follow/save","Roster\FollowController@postSave")->name("admin.roster.follow.save.post");
 //形成专属注册链接
 Route::post("roster/index/set-reg-url","Roster\IndexController@postSetRegUrl")->name("admin.roster.index.set-reg-url");
+//开通课程
+Route::post("roster/index/open-course","Roster\IndexController@postOpenCourse")->name("admin.roster.index.open-course");
+
 
 //公共操作
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");
