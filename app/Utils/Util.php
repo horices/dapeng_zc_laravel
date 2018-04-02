@@ -2,6 +2,7 @@
 namespace App\Utils;
 use App\Exceptions\UserValidateException;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class Util{
     const SUCCESS = 1;
@@ -76,7 +77,7 @@ class Util{
      * @return mixed
      */
     public static function getSystemHost($schoolId = "sj"){
-        return self::getWebSiteConfig("ZC_URL.".$schoolId);
+        return self::getWebSiteConfig("ZC_URL.".Str::upper($schoolId));
     }
 
     public static function getWapHost(){
