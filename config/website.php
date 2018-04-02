@@ -27,14 +27,21 @@ return [
     //展翅系统URL
     'ZC_URL'   =>  [
         //设计学院
-        'sj'    =>  [
+        'SJ'    =>  [
             \App\Utils\Util::TEST      =>  'http://test.bzr.dapengjiaoyu.com',
             \App\Utils\Util::MASTER    =>  'http://bzr.dapengjiaoyu.com',
         ],
         //美术学院
-        'ms'    =>  [
+        'MS'    =>  [
             \App\Utils\Util::MASTER    =>  'http://ms.dapengjiaoyu.com',
             \App\Utils\Util::TEST      =>  'http://test.ms.dapengjiaoyu.com',
         ]
     ],
+    //M站地址
+    'WAP_URL'   =>  [
+        \App\Utils\Util::TEST      =>  'http://test.m.dapengjiaoyu.com',
+        \App\Utils\Util::MASTER    =>  'http://m.dapengjiaoyu.com',
+    ],
+    /*第三方接口,生成短连接*/
+    'SHORT_URL_API' =>  "http://api.t.sina.com.cn/short_url/shorten.json?source=3645189310&url_long=",
 ];

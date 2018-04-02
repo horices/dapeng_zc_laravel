@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
+use App\Utils\Util;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,6 +59,27 @@ class RosterModel extends BaseModel
         if($this->addtime !== null) {
             return date('m-d', $this->addtime) . "<br />" . date('H:i', $this->addtime);
         }
+    }
+
+    /**
+     * 获取专属注册链接
+     * @return string
+     */
+    function getRegUrlAttribute(){
+        $qqCrypt = Util::think_encrypt($this->qq);
+        $stamp = time();
+        $data = [$qqCrypt,$this->group_name,time()];
+        $str = http_build_query($data);
+        $signData = md5('8934031001776A04444F72154425DDBC'.$str.'8934031001776A04444F72154425DDBC');
+        return Util::getShorturl(Util::getWapHost()."/login/register-zc?qqCrypt=".$signData."&className=".$this->group_name."&stamp=".$stamp."&sign=".$signData."&schoolId=sj");
+    }
+
+    /**
+     * 根据类型返回账号
+     * @return mixed
+     */
+    function getAccountAttribute(){
+        return ($this->type == 1) ? $this->qq : $this->wx;
     }
 
     /**

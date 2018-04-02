@@ -149,6 +149,7 @@ class IndexController extends BaseController
         }
         $query->orderBy("id","desc");
         $list = $query->paginate();
+
         return view("admin.roster.list",[
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),

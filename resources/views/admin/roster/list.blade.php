@@ -241,7 +241,7 @@
                         @else
                         <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
                         @endif
-                        <a href="javascript:;" url="{{$roster->userRegUrl}}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" onclick="registerUrl()" >链接</a>
+                        <a href="javascript:;" url="{{$roster->regUrl}}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" onclick="registerUrl(this)" >链接</a>
 
                     </td>
                 </tr>
@@ -270,30 +270,19 @@
     </form>
 </div>
 <script>
-    function registerUrl() {
-        $(".link_4").click(function(){
-            var url = $(this).attr("url");
-            var wx  =  $(this).attr("wx");
-            var qq  =  $(this).attr("qq");
-            var str = wx ? "微信号<b>"+wx+"</b>的专属注册链接" : "QQ号<b>"+qq+"</b>的专属注册链接";
-            //url_con = "";
-            $.ajax({
-                url         :   "{:U('setRegUrl')}",
-                data        :   url,
-                method      :   "post",
-                dataType    :   "json",
-                success     :   function(data){
-                    //页面层-自定义
-                    layer.open({
-                        type        : 1,
-                        area        : ['30%','150px'],
-                        title       : str,
-                        closeBtn    : 1,
-                        shadeClose  : true,
-                        content     : "<input type='text' value='"+data.data.url+"' style='height: 50px;margin:5px 0px 0px 10px;'/>"
-                    });
-                }
-            });
+    function registerUrl(obj) {
+        var url = $(obj).attr("url");
+        var wx  =  $(obj).attr("wx");
+        var qq  =  $(obj).attr("qq");
+        var str = wx ? "微信号<b>"+wx+"</b>的专属注册链接" : "QQ号<b>"+qq+"</b>的专属注册链接";
+        //页面层-自定义
+        layer.open({
+            type        : 1,
+            area        : ['30%','150px'],
+            title       : str,
+            closeBtn    : 1,
+            shadeClose  : true,
+            content     : "<input type='text' value='"+url+"' style='height: 50px;margin:5px 0px 0px 10px;'/>"
         });
     }
 </script>
