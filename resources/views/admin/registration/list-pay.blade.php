@@ -133,7 +133,7 @@
                         </td>
                         <!--<td>{$v.title}</td>-->
                         <td>{{floatval($v->userRegistration->package_total_price)}}</td>
-                        <td>{{$v->pay_time}}</td>
+                        <td>{{$v->pay_time_text}}</td>
                         <!--<td>{$v[package_total_price] - $v[rebate]}</td>
                         <td>{$v.amount_submitted}</td>-->
                         <td>{{$v->create_time}}</td>
