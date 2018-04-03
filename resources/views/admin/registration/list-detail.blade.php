@@ -276,7 +276,7 @@
                 <div class="col-md-8 controls">
                     <input id="package-title" type="text" name="package_title" class="form-control fleft" v-model="userPayInfo.user_registration.course_package.title" @keyup="searchPackage" style="width: 400px;"   />
                 </div>
-                <p class="help-block ajaxLink" :data="'{field:\'package_id\',val:\''+userPayInfo.user_registration.package_id+'\',id:\''+userPayInfo.registration_id+'\'}'" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>
+                {{--<p class="help-block ajaxLink" :data="'{field:\'package_id\',val:\''+userPayInfo.user_registration.package_id+'\',id:\''+userPayInfo.registration_id+'\'}'" url="" >修改</p>--}}
             </div>
             <div class="course-package" style="display: none;">
                 <span onclick="setPackName(this)" v-for="(l,index) in packageList" :price="l.price" :package-id="l.id"><a>@{{l.title}}</a> - (金额@{{l.price}}元)</span>

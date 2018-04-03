@@ -2,6 +2,9 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Api\DapengUserApi;
+use App\Exceptions\DapengApiException;
+use App\Exceptions\UserValidateException;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -89,6 +92,50 @@ class UserController extends BaseController
         ];
         $data['data'] = $query->take(5000)->get();
         return $this->export($data,'xls');
+    }
+
+    /**
+     * 课程顾问开课
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws DapengApiException
+     * @throws UserValidateException
+     */
+    function postOpenCourseHead(Request $request){
+        $uid = $request->get("uid");
+        $userData = UserModel::find($uid);
+        if($userData->status == 0){
+            throw new UserValidateException("该账号已暂停！");
+        }
+        if(!$userData->dapeng_user_mobile){
+            throw new UserValidateException("请先绑定主站账号！");
+        }
+        //查询主站的用户信息
+        $dapengMap = [
+            'type'      =>  'MOBILE',
+            'keyword'   =>  $userData->dapeng_user_mobile
+        ];
+        $dapengUserInfo = DapengUserApi::getInfo($dapengMap);
+        if($dapengUserInfo['code'] == Util::FAIL){
+            throw new UserValidateException("主站找不到该课程顾问！");
+        }
+
+        if(!$dapengUserInfo['data']['user']['qqAccount']){
+            throw new UserValidateException("请先去主站补全QQ号！");
+        }
+        $data = [
+            'wingsId'           =>  $userData->uid,
+            'advisorMobile'     =>  $userData->dapeng_user_mobile,
+            'studentMobile'     =>  $userData->dapeng_user_mobile,
+            'schoolId'          =>  Util::getSchoolName(),
+            'qq'                =>  $dapengUserInfo['data']['user']['qqAccount'],
+            'wx'                =>  ''
+        ];
+        $openCourseInfo = DapengUserApi::openCourse($data);
+        if($openCourseInfo['code'] == Util::FAIL){
+            throw new DapengApiException($openCourseInfo['msg']);
+        }
+        return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
 }
 

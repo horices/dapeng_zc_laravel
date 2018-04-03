@@ -68,10 +68,11 @@ class RosterModel extends BaseModel
     function getRegUrlAttribute(){
         $qqCrypt = Util::think_encrypt($this->qq);
         $stamp = time();
-        $data = [$qqCrypt,$this->group_name,time()];
+        $data = [$qqCrypt,$this->group->group_name,time()];
         $str = http_build_query($data);
         $signData = md5('8934031001776A04444F72154425DDBC'.$str.'8934031001776A04444F72154425DDBC');
-        return Util::getShorturl(Util::getWapHost()."/login/register-zc?qqCrypt=".$signData."&className=".$this->group_name."&stamp=".$stamp."&sign=".$signData."&schoolId=sj");
+        //return Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName());
+        return Util::getShorturl(Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName()));
     }
 
     /**
