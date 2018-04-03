@@ -37,6 +37,7 @@ Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
 Route::group(['prefix'=>'Api','namespace'=>"Api"], function(){
     Route::get("User/getInfo","RosterController@getInfo");
     Route::post("User/addQQ","RosterController@add");
+    Route::post("User/setInfo","RosterController@setInfo");
 });
 //Auth::routes();
 
