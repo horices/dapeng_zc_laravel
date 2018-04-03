@@ -81,7 +81,6 @@ Route::get("registration/list-detail","RegistrationController@getListDetail")->n
 Route::post("registration/mod-field","RegistrationController@postModField")->name("admin.registration.mod-field");
 Route::post("registration/delete","RegistrationController@postDelete")->name("admin.registration.delete");
 
-
 /**
  * 课程套餐
  */

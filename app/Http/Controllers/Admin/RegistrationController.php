@@ -193,35 +193,6 @@ class RegistrationController extends BaseController{
     }
 
     /**
-     * 修改字段值
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws UserValidateException
-     */
-    function postModField(Request $request){
-        if(!$request->get('id') || !$request->has('val') || !$request->get('field')){
-            throw new UserValidateException("修改数据错误!");
-        }
-        $post = $request->input();
-        $UserRegData = UserRegistrationModel::find($post['id']);
-        if(!$UserRegData){
-            throw new UserValidateException("未找到该用户报名记录!");
-        }
-        $field = $post['field'];
-        $UserRegData->$field = $post['val'];
-        $data = $UserRegData->toArray();
-        $data['registration_id'] = $data['id'];
-
-        UserRegistrationModel::updateValidate($data);
-        $eff = $UserRegData->save();
-        if($eff){
-            return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
-        }else{
-            throw new UserValidateException("修改失败!");
-        }
-    }
-
-    /**
      * 获取支付记录列表
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -342,8 +313,32 @@ class RegistrationController extends BaseController{
         }
     }
 
-    function postPayModify(){
+    /**
+     * 修改字段值
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UserValidateException
+     */
+    function postModField(Request $request){
+        if(!$request->get('id') || !$request->has('val') || !$request->get('field')){
+            throw new UserValidateException("修改数据错误!");
+        }
+        $post = $request->input();
+        $UserRegData = UserRegistrationModel::find($post['id']);
+        if(!$UserRegData){
+            throw new UserValidateException("未找到该用户报名记录!");
+        }
+        $field = $post['field'];
+        $UserRegData->$field = $post['val'];
+        $data = $UserRegData->toArray();
+        $data['registration_id'] = $data['id'];
 
+        UserRegistrationModel::updateValidate($data);
+        $eff = $UserRegData->save();
+        if($eff){
+            return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
+        }else{
+            throw new UserValidateException("修改失败!");
+        }
     }
-
 }

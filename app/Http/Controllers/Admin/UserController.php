@@ -110,7 +110,6 @@ class UserController extends BaseController
         if(!$userData->dapeng_user_mobile){
             throw new UserValidateException("请先绑定主站账号！");
         }
-
         //查询主站的用户信息
         $dapengMap = [
             'type'      =>  'MOBILE',

@@ -9,10 +9,9 @@
 namespace App\Api;
 
 
-use App\Utils\DapengApiBase;
 use App\Utils\Util;
 
-class DapengUserApi extends BaseApi {
+class DapengUserApi extends DapengApiBase {
     protected static $url = [
         'register'                  => "/api/register",    //注册
         'login'                     => "/api/login",           //登陆
