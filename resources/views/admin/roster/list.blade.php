@@ -237,12 +237,11 @@
                     </td>
                     <td>
                         @if($roster->dapeng_user_mobile)
-                        <a class="ajaxLink" method="post" callback="reFun" data="{'phone':}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
+                        <a class="ajaxLink" method="post" showLoading="1" callback="reFun" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}">开通</a>
                         @else
                         <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
                         @endif
                         <a href="javascript:;" url="{{$roster->regUrl}}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" onclick="registerUrl(this)" >链接</a>
-
                     </td>
                 </tr>
                 @endforeach
@@ -264,26 +263,17 @@
 <!--弹窗 开通课程 -->
 <div id="open-course" class="form-group">
     <form method="get">
-        <input type="hidden" name="user_roster_id" value="" />
+        <input type="hidden" name="id" value="" />
         <input type="text" name="phone" class="form-control" placeholder="请输入开课学员手机号" value="" />
-        &nbsp;<a class="common-button combg1 ajaxSubmit" showLoading="1" method="get" callback="reFun" href="{:U('openCourse')}">提交</a>
+        &nbsp;<a class="common-button combg1 ajaxSubmit" showLoading="1" method="post" url="{{route('admin.roster.index.open-course')}}">提交</a>
     </form>
 </div>
 <script>
-    function reFun(json,obj){
-        if(json.code == 1){
-            openSuccessDialog("开通成功！");
-            setTimeout(function () {
-                window.location.reload();
-            },1500);
-        }else{
-            openFailDialog(json.msg);
-        }
-    }
 
     //开通课程弹窗
     function alertOpenCourse(user_roster_id){
-        $("input[name='user_roster_id']").val(user_roster_id);
+        $("#open-course").find("input[name='id']").val(user_roster_id);
+        //$("input[name='user_roster_id']").val(user_roster_id);
         layer.open({
             type: 1,
             title: "开通课程",

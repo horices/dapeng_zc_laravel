@@ -9,6 +9,6 @@
 namespace App\Exceptions;
 
 
-class ApiException extends \Exception{
+class ApiException extends UserException {
 
 }

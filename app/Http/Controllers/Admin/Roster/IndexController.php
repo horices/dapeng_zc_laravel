@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 
 class IndexController extends BaseController
 {
@@ -253,22 +253,33 @@ class IndexController extends BaseController
     }
 
     function postOpenCourse(Request $request){
-        $validator = Validator::make($request,[
+        $data = collect($request)->toArray();
+        $validator = Validator::make($data,[
             'id'        =>  'sometimes|required|exists:user_roster,id',
-            'phone'     =>  ['required_without:dapeng_user_id','regex:/\d{11}/',new DapengUserHas()],
+            //'phone'     =>  ['required_without:dapeng_user_id','regex:/\d{11}/',new DapengUserHas()],
         ],[
             'id.required'       =>  '请选择要开课的用户！',
             'id.exists'         =>  '未找到要开课的用户！',
-            'phone.required'    =>  '请输入要开课用户的手机号！',
-            'phone.regex'       =>  '请输入正确格式的手机号！'
+            //'phone.required_without'    =>  '请输入要开课用户的手机号！',
+            //'phone.regex'       =>  '请输入正确格式的手机号！'
         ]);
         $validator->validate();
         //当前用户信息
-        $rosterData = RosterModel::find($request->get("id"));
+        $rosterData = RosterModel::find($data['id']);
+
+        //用户开课的主站手机号
+        //$studentMobile = "";
+        if($rosterData->dapeng_user_id && $rosterData->dapeng_user_mobile) {
+            $studentMobile = $rosterData->dapeng_user_mobile;
+        }else {
+            if(!$request->phone){
+                throw new UserValidateException("请填写开课用户的手机号！");
+            }
+            $studentMobile = $request->phone;
+        }
         //所属课程顾问信息
         $userData = UserModel::find($rosterData->last_adviser_id);
-        //用户主站手机号
-        $studentMobile = $request->has("phone") ? $request->get("phone") : $rosterData->dapeng_user_mobile;
+
         //获取主站信息
         $dapengUserInfo = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$studentMobile]);
         if($dapengUserInfo['code'] == Util::FAIL){
@@ -278,8 +289,8 @@ class IndexController extends BaseController
             'wingsId'           =>  $userData->uid,
             'advisorMobile'     =>  $userData->dapeng_user_mobile,
             'studentMobile'     =>  $studentMobile,
-            'qq'                =>  $userData->qq,
-            'wx'                =>  $userData->wx,
+            'qq'                =>  $rosterData->qq,
+            'wx'                =>  $rosterData->wx,
             'schoolId'          =>  'SJ'
         ];
         $res = DapengUserApi::openCourse($data); //接口59
