@@ -11,6 +11,7 @@
         }
     </script>
         <form method="post">
+            <input type="hidden" name="is_admin_add" value="1" />
             <input type="hidden" name="seoer_id" value="" />
             <input type="hidden" name="qq_group_id" value="" />
             {{ csrf_field() }}

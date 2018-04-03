@@ -6,6 +6,7 @@ use App\Models\EventGroupLogModel;
 use App\Models\GroupModel;
 use App\Models\RebateActivityModel;
 use App\Models\RosterCourseLogModel;
+use App\Models\RosterModel;
 use App\Models\UserPayLogModel;
 use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
@@ -13,6 +14,7 @@ use App\Observers\EventGroupLogObserver;
 use App\Observers\GroupObserver;
 use App\Observers\RebateObserver;
 use App\Observers\RosterCourseLogObserver;
+use App\Observers\RosterObserver;
 use App\Observers\UserPayLogObservers;
 use App\Observers\UserPayObservers;
 use App\Observers\UserRegistrationObservers;
@@ -56,6 +58,8 @@ class AppServiceProvider extends ServiceProvider
 
         //监听用户用事件 
         UserModel::observe(UserObserver::class);
+        //监听新量事件
+        RosterModel::observe(RosterObserver::class);
         //监听群事件
         GroupModel::observe(GroupObserver::class);
         //监听开课事件
