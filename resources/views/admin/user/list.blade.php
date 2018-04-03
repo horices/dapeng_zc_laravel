@@ -70,6 +70,11 @@
                 <td>{{$user->status_text}}</td>
                 <td>{{$user->grade_text}}</td>
                 <td><a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a></td>
+                <td>
+                    @if($user->grade == 10)
+                        <a class="ajaxSubmit" data="{uid:{{$user->uid}}}" url="{{route('admin.user.open-course-head')}}">开课</a>
+                    @endif
+                </td>
             </tr>
             @endforeach
             <tr>
