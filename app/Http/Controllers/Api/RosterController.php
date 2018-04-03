@@ -7,6 +7,7 @@ use App\Models\RosterModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -34,5 +35,21 @@ class RosterController extends BaseController
         $roster['qq_group_url'] = $roster['group']['qrc_link'];
         $roster['qq_group_qrc'] = $roster['group']['qrc_url'];
         return Util::ajaxReturn(Util::SUCCESS,"",$roster);
+    }
+
+
+    /**
+     * M站注册调用该接口，设置用户的主站信息 dapeng_user_id,dapeng_user_mobile,dapeng_reg_time
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function setInfo(Request $request){
+        $rosterId = $request->get("roster_id");
+        $roster = RosterModel::find($rosterId);
+        $roster->fild($request->all());
+        if($roster->save() === false){
+            Log::error("保存roster信息失败");
+        }
+        return Util::ajaxReturn(Util::SUCCESS,"success","修改成功");
     }
 }
