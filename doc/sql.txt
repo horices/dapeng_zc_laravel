@@ -1,0 +1,3 @@
+ALTER TABLE `user_pay_log`
+ADD INDEX `registration_id` (`registration_id`) USING BTREE ;
+

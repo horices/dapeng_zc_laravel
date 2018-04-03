@@ -239,7 +239,7 @@ class Util{
      */
     static function getShorturl($data){
         $shortUrlApi = self::getWebSiteConfig("SHORT_URL_API",0);
-        $regUrl = file_get_contents($shortUrlApi.$data);
+        $regUrl = file_get_contents($shortUrlApi.urlencode($data));
         $regUrlArr = json_decode($regUrl,1);
         return $regUrlArr[0]['url_short'];
     }

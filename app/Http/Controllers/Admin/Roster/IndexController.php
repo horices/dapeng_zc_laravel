@@ -291,7 +291,7 @@ class IndexController extends BaseController
             'studentMobile'     =>  $studentMobile,
             'qq'                =>  $rosterData->qq,
             'wx'                =>  $rosterData->wx,
-            'schoolId'          =>  'SJ'
+            'schoolId'          =>  Util::getSchoolName()
         ];
         $res = DapengUserApi::openCourse($data); //接口59
         if($res['code'] == Util::FAIL){
