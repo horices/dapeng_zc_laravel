@@ -71,9 +71,8 @@ class BaseModel extends Model
         if($this->default){
             $attributes = collect($attributes)->merge(collect($this->default)->flip()->map(function ($item){
                 return null;
-            })->toArray());
+            }));
         }
-        collect($attributes)->merge(collect())
         $columns = Cache::remember($this->getTable()."columns",1,function(){
             return Schema::getColumnListing($this->getTable());
         });
