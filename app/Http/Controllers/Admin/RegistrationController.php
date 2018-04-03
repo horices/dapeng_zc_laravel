@@ -116,7 +116,7 @@ class RegistrationController extends BaseController{
      * 获取用户统计列表
      */
     function getUserList(Request $request){
-        $query = UserRegistrationModel::with(["userPayLog","coursePackage","coursePackageAttach","rebateActivity","userHeadmaster"])->where('is_active',1);
+        $query = UserRegistrationModel::with(["coursePackage","coursePackageAttach","rebateActivity","userHeadmaster"])->where('is_active',1);
         //根据学员姓名检索
         $name = $request->get("name");
         if(!empty($name)){
@@ -232,7 +232,7 @@ class RegistrationController extends BaseController{
         //月统计条总金额
         $allSubmitAmount = UserPayLogModel::whereBetween('create_time',[strtotime(date('Y-m-1 00:00:00')),time()])->sum("amount");
 
-        $userPayLogModel = UserPayLogModel::query();
+        $userPayLogModel = UserPayLogModel::with(["userRegistration","userHeadmaster"]);
         //根据学员姓名检索
         $name = $request->get("name");
         if(!empty($name)){

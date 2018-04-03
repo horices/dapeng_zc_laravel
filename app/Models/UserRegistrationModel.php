@@ -72,8 +72,8 @@ class UserRegistrationModel extends BaseModel{
      * @return false|string
      */
     public function getLastPayTimeTextAttribute(){
-        $pay_time = UserPayLogModel::where("registration_id",$this->id)->orderBy("id","desc")->value("pay_time");
-        return date("Y-m-d H:i:s",$pay_time);
+        //$pay_time = UserPayLogModel::where("registration_id",$this->id)->orderBy("id","desc")->value("pay_time");
+        return date("Y-m-d H:i:s",$this->last_pay_time);
     }
 
     /**
