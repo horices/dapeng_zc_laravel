@@ -31,9 +31,6 @@ class IndexController extends BaseController
     }
 
     function getUserAdd(Request $request){
-        //dd($request->route());
-        //return Route::dispatchToRoute($request);
-//        return Route::respondWithRoute("admin.roster.add");
         $request->merge(['roster_type'=>1]);
         return view("admin.roster.seoer-add");
     }
@@ -42,7 +39,7 @@ class IndexController extends BaseController
         return view("admin.roster.seoer-add-wx");
     }
     function postUserAdd(Request $request){
-        $request->merge(['test'=>1]);
+        $request->merge(['is_admin_add'=>0]);
         $userInfo = $this->getUserInfo();
         $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>$request->get("roster_type")]);
         if($request->post("validate") == 1){

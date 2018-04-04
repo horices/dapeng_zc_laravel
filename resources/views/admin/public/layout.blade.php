@@ -125,6 +125,7 @@ $(function(){
                             <li><a href="{{ route("admin.auth.logout") }}" class="">退出登陆</a></li>
                         </ul>
                     </li>
+                    <li><a href="{{ \App\Utils\Util::getWebSiteConfig("PC_URL") }}/signin" class="" target="_blank">橱窗管理系统登录</a></li>
                 </ul>
             </div>
             <!--/.navbar-collapse -->

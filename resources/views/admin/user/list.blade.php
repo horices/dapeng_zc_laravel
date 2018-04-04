@@ -67,7 +67,14 @@
                 <td>{{$user->name}}</td>
                 <td>{{$user->mobile}}</td>
                 <td>{{$user->dapeng_user_mobile ? $user->dapeng_user_mobile : '---------------'}}</td>
-                <td>{{$user->status_text}}</td>
+                <td>
+                    @if($user->status == 1)
+                    <span class="common-button combg1 ajaxLink" url="{{ route("admin.user.save") }}" showloading="true" data="{uid:{{ $user->uid }},status:0}" warning="确认要暂停该账号么，暂停后，群自动关闭">{{$user->status_text}}</span>
+                    @else
+                    <span class="common-button combg3 ajaxLink" url="{{ route("admin.user.save") }}" showloading="true" data="{uid:{{ $user->uid }},status:1}" warning="确认要启用该账号么">{{$user->status_text}}</span>
+                    @endif
+
+                </td>
                 <td>{{$user->grade_text}}</td>
                 <td><a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a></td>
                 <td>

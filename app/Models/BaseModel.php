@@ -13,17 +13,15 @@ class BaseModel extends Model
     public $timestamps = false;
 
     //允许为NULL的字段
-    protected $nullable = [
-
-    ];
+    protected $nullable = [];
     //禁止批量赋值的字段
-    protected $guarded = [
-
-    ];
+    protected $guarded = [];
 
     //允许转为数组的字段,自动调用 getColumnAttribute 方法
     protected $appends = [];
 
+    //添加或修改时，必须要补全的字段,自动调用 setColumnAttribute;
+    protected $default = [];
     /**
      * 重写父类设置属性，防止通过中间件时，返回的NULL问题
      * @param string $key
@@ -70,6 +68,11 @@ class BaseModel extends Model
      */
     function fill(array $attributes)
     {
+        if($this->default){
+            $attributes = collect($attributes)->merge(collect($this->default)->flip()->map(function ($item){
+                return null;
+            }));
+        }
         $columns = Cache::remember($this->getTable()."columns",1,function(){
             return Schema::getColumnListing($this->getTable());
         });
