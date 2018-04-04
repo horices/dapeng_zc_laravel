@@ -13,9 +13,12 @@ use Illuminate\Support\Str;
 
 class RosterController extends BaseController
 {
-    //
+    /**
+     * 获取用户信息
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     function getInfo(Request $request){
-
         Validator::make($request->all(),[
             'schoolId'  =>  "nullable|in:SJ,MS",
             'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",

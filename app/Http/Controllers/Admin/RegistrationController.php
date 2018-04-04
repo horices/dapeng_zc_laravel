@@ -198,8 +198,6 @@ class RegistrationController extends BaseController{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getPayList(Request $request){
-        //根据课程顾问ID来筛选所属学员的支付记录信息
-
         //月统计条总金额
         $allSubmitAmount = UserPayLogModel::whereBetween('create_time',[strtotime(date('Y-m-1 00:00:00')),time()])->sum("amount");
 
