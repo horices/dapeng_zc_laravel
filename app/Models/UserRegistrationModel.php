@@ -354,10 +354,7 @@ class UserRegistrationModel extends BaseModel{
             }
             $data['last_pay_time'] = $resUserPayLog['create_time'];
             //重置套餐全名
-            $eff = $this->setPackageAllTitle($data['registration_id']);
-            if(!$eff){
-                throw new UserValidateException("重置套餐全名失败！");
-            }
+            return $this->setPackageAllTitle($data['registration_id']);
             //重置优惠活动价格
 //            if(isset($data['rebate_id']) && $data['rebate_id']){
 //                $rebateData = RebateActivityModel::where(['id'=>$data['rebate_id']])
@@ -366,12 +363,7 @@ class UserRegistrationModel extends BaseModel{
 //                    $data['rebate'] = $rebateData['price'];
 //                }
 //            }
-            //更新报名信息的最后一次提交支付记录时间
-            return $this->setLastPayTime($data['registration_id']);
         });
-        if(!$eff){
-            throw new UserValidateException("更新失败！");
-        }
         $data = $this->getColumns($data);
         $data['amount_submitted'] = DB::raw('amount_submitted+'.$data['amount_submitted']);
         return self::where('id',$registrationId)->update($data);
@@ -432,7 +424,7 @@ class UserRegistrationModel extends BaseModel{
         $lastPayTime = $UserPayLog::where('registration_id',$id)
             ->orderBy("id","desc")
             ->value("create_time");
-        self::where('id',$id)->update(['last_pay_time'=>$lastPayTime]);
+        return self::where('id',$id)->update(['last_pay_time'=>$lastPayTime]);
     }
 
 }

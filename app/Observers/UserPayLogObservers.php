@@ -23,6 +23,12 @@ class UserPayLogObservers {
         $userPayLog->adviser_qq = $userInfo['qq'];
     }
 
+    function created(UserPayLogModel $userPayLog){
+        $query = UserRegistrationModel::find($userPayLog->registration_id);
+        $query->last_pay_time = $userPayLog->create_time;
+        $query->save();
+    }
+
     function deleted(UserPayLogModel $userPayLog){
         $logPayCount = UserPayLogModel::where("pay_id",$userPayLog->pay_id)->count();
         //如果二级支付记录为空，则删除一级支付记录
