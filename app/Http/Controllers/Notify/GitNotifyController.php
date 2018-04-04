@@ -11,7 +11,7 @@ class GitNotifyController extends BaseController
      * coding webHook
      */
     function coding(Request $request){
-        dd($request->headers);
+        dd($request->json(),$request->headers);
     }
 
 }
