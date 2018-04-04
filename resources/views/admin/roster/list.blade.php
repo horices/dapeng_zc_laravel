@@ -1,5 +1,6 @@
 @extends("admin.public.layout")
 @section("right_content")
+<link rel="stylesheet" href="/js/webuploader/webuploader.css" />
 <style>
 .act_list{ position:relative; background:#f00; zoom:1;}
 .act_list .sel{ margin:0; padding:0; width:80px; height:22px; line-height:22px; overflow:hidden; position:absolute; border:1px transparent solid; left:0; top:0;}
@@ -32,11 +33,11 @@
 .flag_icon_2::before{
     content:url(/admin/images/flag_icon_active.gif);
 }
-</style>
 
-<style>
 .link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
 .link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
+
+.webuploader-pick{padding: 5px 15px !important;margin-top: 10px !important;display: inline !important;}
 </style>
 <script>
     function openCourseLog(roster){
@@ -70,6 +71,43 @@
             }
         })
     }
+
+    $(function () {
+        var uploader = WebUploader.create({
+            auto: true,
+            // swf文件路径
+            swf: '/Public/js/webupload/Uploader.swf',
+            //默认值：'file'文件上传域的name
+            fileVal: 'download',
+            // 文件接收服务端。
+            server: "{{route('admin.roster.index.upload-excel')}}",
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#uploader',
+            // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+            resize: false,
+            //文件重复上传
+            duplicate: true,
+            formData:{
+                _token:$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        //上传成功回调 如果code == 2 则跳转到导出地址
+        uploader.on('uploadSuccess', function (file, response) {
+            layer.close();
+            ajaxReturn(response);
+        });
+        //上传进度
+        uploader.on('uploadStart', function (file) {
+//            layer.msg('正在导入数据，请稍候。。', {
+//                icon: 16
+//                , shade: 0.1,
+//                time: 99999999
+//            });
+        });
+    })
+
 </script>
             
             
@@ -141,10 +179,9 @@
                 <a class="common-button combg4 linkSubmit" showLoading="true" data="{export:1,test:2}" href="{{ route("admin.roster.list",['export'=>1]) }}" >
                     导出
                 </a>
-
-                <!--<a href="{:U('exportResult')}"  class="common-button combg4 ajaxSubmit">
-                    导出
-                </a>-->
+                <a id="uploader">
+                    导入
+                </a>
 
 
             </div>
@@ -268,6 +305,7 @@
         &nbsp;<a class="common-button combg1 ajaxSubmit" showLoading="1" method="post" url="{{route('admin.roster.index.open-course')}}">提交</a>
     </form>
 </div>
+<script src="/js/webuploader/webuploader.js"></script>
 <script>
 
     //开通课程弹窗

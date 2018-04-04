@@ -48,7 +48,7 @@ Route::post("roster/follow/save","Roster\FollowController@postSave")->name("admi
 Route::post("roster/index/set-reg-url","Roster\IndexController@postSetRegUrl")->name("admin.roster.index.set-reg-url");
 //开通课程
 Route::post("roster/index/open-course","Roster\IndexController@postOpenCourse")->name("admin.roster.index.open-course");
-
+Route::post("roster/index/upload-excel","Roster\IndexController@postUploadExcel")->name("admin.roster.index.upload-excel");
 
 //公共操作
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");

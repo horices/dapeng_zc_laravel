@@ -1,24 +1,5 @@
 @extends("admin.public.layout")
 @section("right_content")
-
-    <style>
-        .container{width: 1364px}
-        .act_list{ position:relative; background:#f00; zoom:1;}
-        .act_list .sel{ margin:0; padding:0; width:80px; height:22px; line-height:22px; overflow:hidden; position:absolute; border:1px transparent solid; left:0; top:0;}
-        .act_list .sel li a{ display:block; width:100%; height:22px; line-height:22px; margin:0; padding:0 0 0 10px; outline:0; text-decoration:none;}
-        .act_list .sel_on{ height:auto; border:1px #C4C4C4 solid; background:#fff; z-index:10; box-shadow:0px 0px 6px #ccc; border-radius:3px;}
-        .act_list .sel_on li a:hover{ background:#71A406; color:#fff; text-decoration:none;}
-
-        .gray{ color:#aaa;}
-        .form-group a:hover{ color:#fff;}
-        .group_00{}/*默认色*/
-        .group_01{color:#3bbbd9;}/*蓝色*/
-        .group_02{color:#00cc33;}/*绿色*/
-        .group_03{color:#ff1e00;}/*黄色*/
-        .group_04{color:#ff7f00;}/*红色*/
-        .td_clip{overflow:hidden; white-space: nowrap;-moz-text-overflow: ellipsis;text-overflow: ellipsis;width: 100px;}
-    </style>
-
     <script type="text/javascript">
         $(function(){
             var currentGroupStatus = "{$Think.get.group_status|default=''}";
