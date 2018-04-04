@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',function(){
     return redirect("/admin/index/index");
 });
+//后台页面不需要登陆即可访问
 Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     //不需要登陆验证过滤的地址
     Route::get("auth/login","AuthController@getLogin")->name("admin.auth.login");
@@ -24,16 +25,19 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     Route::post("auth/reg","AuthController@postReg")->name("admin.auth.reg.post");
     Route::post("auth/sendsms","AuthController@postSendSms")->name("admin.auth.send.sms");
 });
+//管理员后台,需要验证登陆
 Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class,\App\Http\Middleware\LowerUrl::class]], function(){
     include("admin.route.php");
 });
+//通知接口地址(大鹏主站开课通知,QQ群机器人通知)
 Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
     Route::post("Index/index.html","DapengNotifyController@reg")->middleware(\App\Http\Middleware\NotifyValidate::class);
     Route::post("Index/openCourse.html","DapengNotifyController@openCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
     Route::post("Index/closeCourse.html","DapengNotifyController@closeCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
     Route::post("QQGroupRebotEvent/index.html","QQGroupEventNotifyController@index");
+    Route::post("git/coding","GitNotifyController@coding");
 });
-
+//向外提供接口的地址(外部添加新量和修改部分信息)
 Route::group(['prefix'=>'Api','namespace'=>"Api"], function(){
     Route::get("User/getInfo","RosterController@getInfo");
     Route::post("User/addQQ","RosterController@add");
