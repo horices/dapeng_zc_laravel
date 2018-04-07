@@ -16,6 +16,7 @@ use App\Models\RosterModel;
 use App\Models\UserHeadMasterModel;
 use App\Models\UserModel;
 use App\Rules\DapengUserHas;
+use App\Utils\StrValueBinder;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -308,12 +309,9 @@ class IndexController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      * @throws UserValidateException
      */
-    function postUploadExcel(Request $request){
+    function postUploadExcel(Request $request,StrValueBinder $binder){
         $path = $request->file('download')->store('upload/excel');
-        //$typeArr = [1=>'qq',2=>'wx'];
-        $excelArr = Excel::load($path, function($reader) {
-            //$excelArr = $reader->all()->toArray();
-        })->all()->toArray();
+        $excelArr = Excel::selectSheetsByIndex(0)->setValueBinder($binder)->load($path)->all()->toArray();
         if(empty($excelArr)){
             throw new UserValidateException("表格数据不能为空！");
         }
