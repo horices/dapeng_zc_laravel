@@ -96,7 +96,7 @@
         //上传成功回调 如果code == 2 则跳转到导出地址
         uploader.on('uploadSuccess', function (file, response) {
             layer.close();
-            ajaxReturn(response);
+            AjaxAction.ajaxReturn(response);
         });
         //上传进度
         uploader.on('uploadStart', function (file) {

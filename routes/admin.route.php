@@ -49,6 +49,7 @@ Route::post("roster/index/set-reg-url","Roster\IndexController@postSetRegUrl")->
 //开通课程
 Route::post("roster/index/open-course","Roster\IndexController@postOpenCourse")->name("admin.roster.index.open-course");
 Route::post("roster/index/upload-excel","Roster\IndexController@postUploadExcel")->name("admin.roster.index.upload-excel");
+Route::get("roster/index/export-error-user","Roster\IndexController@getExportErrorUser")->name("admin.roster.index.export-error-user");
 
 //公共操作
 Route::get("index/select_seoer","BaseController@getSelectSeoer")->name("admin.public.select_seoer");

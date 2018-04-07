@@ -225,6 +225,8 @@ class RosterModel extends BaseModel
      *              roster_type:新量类型，[1:QQ号，２：微信号]
      *              seoer_id:推广专员ID
      *              qq_group_id：群ID号，不传该值时，系统会自带分配一个群
+     *              is_admin_add:是否是管理员添加，[1是，0否]
+     *              from_type:来源类型,[1:正常提交 2:大鹏PC站 3:大鹏WAP站 4:Android 5:IOS 6.批量导入]
      */
     public static function addRoster(array $data){
 
@@ -242,6 +244,7 @@ class RosterModel extends BaseModel
         //补全推广专员信息
         if(!isset($data['seoer_name'])){
             $seoer = UserModel::query()->find($data['seoer_id']);
+            dd($seoer);
             if(!$seoer)
                 throw new UserValidateException("本操作只能由推广专员进行操作");
             $data['seoer_name'] = $seoer->name;
@@ -261,6 +264,8 @@ class RosterModel extends BaseModel
         $createData['is_reg'] = 0;
         $createData['group_status'] = 0;
         $createData['course_type'] = 0;
+        $createData['is_admin_add'] = $data['is_admin_add'] ?? 0;
+        $createData['from_type'] = $data['from_type'] ?? 1;
         $query = static::query();
         return $query->create($createData);
     }

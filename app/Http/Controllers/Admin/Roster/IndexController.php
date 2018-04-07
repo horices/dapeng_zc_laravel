@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
 class IndexController extends BaseController
@@ -301,18 +302,34 @@ class IndexController extends BaseController
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
 
+    /**
+     * 使用excel批量导入量
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UserValidateException
+     */
     function postUploadExcel(Request $request){
         $path = $request->file('download')->store('upload/excel');
-        $typeArr = [1=>'qq',2=>'wx'];
+        //$typeArr = [1=>'qq',2=>'wx'];
         $excelArr = Excel::load($path, function($reader) {
-            $excelArr = $reader->all();
-            dd(array_splice($excelArr,1));
-        });
+            //$excelArr = $reader->all()->toArray();
+        })->all()->toArray();
         if(empty($excelArr)){
             throw new UserValidateException("表格数据不能为空！");
         }
-        exit;
-        /*
+        $data = [];
+        foreach ($excelArr[0] as $key=>$val){
+            if(empty($val['account'])){
+                continue;
+            }
+            $val = array_slice($val,0,4);
+            foreach ($val as $k=>$v){
+                if(is_numeric($v)){
+                    $val[$k] = floatval($v);
+                }
+            }
+            $data[$key] = $val;
+        }
         //发生错误的量
         $errorArr = [];
         $returnData = [];
@@ -320,64 +337,84 @@ class IndexController extends BaseController
         //导出excel信息
         $exportData = [];
         if(!empty($excelArr)){
-            $UserHead = new UserHeadMasterModel();
             $returnData = [
-                'code'  =>  SUCCESS,
+                'code'  =>  Util::SUCCESS,
                 'msg'   =>  '导入成功！'
             ];
-            $excelArr = array_splice($excelArr,1);
             $i = 0;
-            foreach ($excelArr as $key=>$val){
-                if(empty($val['A'])){
+            foreach ($data as $key=>$val){
+                if(empty($val['account'])){
                     continue;
                 }
-                $UserRoster = new UserRosterModel();
                 $userData['is_admin_add'] = 1;
-                $userData['type'] = $val['C']; //量的类型 1qq 2微信
-                $userData[$typeArr[$val['C']]] = $val['A'];  //量账号
+                $userData['roster_type'] = $val['type']; //量的类型 1qq 2微信
+                $userData['roster_no'] = $val['account'];  //量账号
                 //推广专员ID
-                $userHeadInfo = $UserHead->where(['mobile'=>$val['B']])->find();
-                $userData['inviter_id'] = $userHeadInfo['uid'] ?: "";
-                //qq群账号
-                $userData['qq_group'] = $val['D'];
-                //查询量的主站信息
-                $type = ($userData['type'] == 1) ? "QQ" : "WEIXIN";
-                $userData = mergeArray($userData,$this->getQQRegInfo($val['A'],$type));
+                $userData['seoer_id'] = UserModel::where('mobile',$val['seoer'])->value("uid");
+                //根据qq群账号获取群ID
+                $userData['qq_group_id'] = GroupModel::where("qq_group",$val['group'])->value("id");
+                //来源类型，批量导入
                 $userData['from_type'] = 6;
-                if($UserRoster->create($userData) == false || $UserRoster->add() === false){
+                //查询量的主站信息
+                //$type = ($userData['type'] == 1) ? "QQ" : "WEIXIN";
+                //$userData = collect($userData,$this->getQQRegInfo($val['account'],$type))->collapse();
+                try{
+                    //dd($userData);
+                    $eff = RosterModel::addRoster($userData);
+                }catch (ValidationException $exception){
                     $isImport = 1;
-                    $errorArr[$i]['account'] = $val['A'];  //量账号
-                    $errorArr[$i]['inviter'] = $val['B'];    //推广专员账号
-                    $errorArr[$i]['type']    =  $val['C'];  //量的类型
-                    $errorArr[$i]['group']   =  $val['D'];  //群账号
-                    $errorArr[$i]['error']   =  $UserRoster->getError() ?: "未知";
+                    $errorArr[$i]['account'] = $val['account'];  //量账号
+                    $errorArr[$i]['seoer'] = $val['seoer'];    //推广专员账号
+                    $errorArr[$i]['type'] = $val['type'];  //量的类型
+                    $errorArr[$i]['group'] = $val['group'];  //群账号
+                    $errorArr[$i]['error']   =  collect($exception->errors())->first()[0] ?: "未知";
                     $i++;
                 }
+
+            }
                 unset($userData);
             }
+
             //如果有错误的量，需要导出
             if($isImport == 1){
                 //返回提示
-                $returnData['code'] = WARNING;
+                $returnData['code'] = Util::WARNING;
                 $returnData['msg'] = "部分量未导入！";
                 $exportData['filename'] = date("Y-m-d H:i:s")."问题数据";
                 $exportData['title'] = [
                     'account'=>"账号",
-                    'inviter'=>"推广专员",
+                    'seoer'=>"推广专员",
                     'type'=>"类型",
                     'group'=>"群账号",
                     'error'=>"错误原因",
                 ];
                 $exportData['data'] = $errorArr;
-                unset($_SESSION['error_user']);
-                $_SESSION['error_user'] = $exportData;
-                $returnData['url'] = U('exportErrorUser');
+                //unset($_SESSION['error_user']);
+                $request->session()->forget('error_user');
+                session(['error_user'=>$exportData]);
+                //$_SESSION['error_user'] = $exportData;
+                $returnData['url'] = route('admin.roster.index.export-error-user');
                 $returnData['location'] = true;
-                unlink($post['download']);
+                unlink($path);
                 //$this->exportCsv($exportData);
             }
-            $this->ajaxReturn($returnData);
-            */
+            return response()->json($returnData);
     }
+
+    /**
+     * 执行导入 量
+     * @param Request $request
+     */
+    function getExportErrorUser(Request $request){
+        if($request->session()->has('error_user')){
+            $exportData = $request->session()->get('error_user');
+            $request->session()->forget('error_user');
+            return $this->export($exportData);
+            //$this->exportCsv($exportData);
+        }else{
+            echo "无导出数据！";
+        }
+    }
+
 }
 
