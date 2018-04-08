@@ -21,9 +21,9 @@ class GitNotifyController extends BaseController
     ];
     //远程用户
     protected $user = [
-        Util::MASTER => 'horice',
-        Util::TEST => 'horice',
-        Util::DEV => 'horice',
+        Util::MASTER => 'zhang',
+        Util::TEST => 'zhang',
+        Util::DEV => 'zhang',
     ];
     function getRemoteUser(){
         $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::TEST);
@@ -56,7 +56,7 @@ class GitNotifyController extends BaseController
      * 自动更新
      */
     function deploy (){
-        $info = shell_exec("sudo -uhorice ".base_path()."/../website-auto-update.sh ".base_path());
+        $info = shell_exec("sudo -u ".$this->getRemoteUser()." ".base_path()."/../website-auto-update.sh ".base_path());
         echo "自动更新";
         echo $info;
         Log::info($info);
