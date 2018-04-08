@@ -26,18 +26,17 @@ class GitNotifyController extends BaseController
         Util::DEV => 'zhang',
     ];
     function getRemoteUser(){
-        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::TEST);
+        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::DEV);
         return $this->user[$host];
     }
     function getBranchName(){
-        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::TEST);
+        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::DEV);
         return $this->branch[$host];
     }
     /**
      * coding webHook
      */
     function coding(){
-        $hosts = Util::getWebSiteConfig('HOST_ALL',false);
         //推送时，自动更新
         if(Request::header("x-coding-event") == "push"){
             if(Str::endsWith(Request::input("ref"),$this->getBranchName())){
@@ -56,7 +55,7 @@ class GitNotifyController extends BaseController
      * 自动更新
      */
     function deploy (){
-        $info = shell_exec("sudo -u ".$this->getRemoteUser()." ".base_path()."/../website-auto-update.sh ".base_path());
+        $info = shell_exec("sudo -u".$this->getRemoteUser()." ".base_path()."/../website-auto-update.sh ".base_path()." 2>&1");
         echo "自动更新";
         echo $info;
         Log::info($info);
