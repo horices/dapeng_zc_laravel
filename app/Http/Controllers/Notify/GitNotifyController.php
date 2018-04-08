@@ -26,11 +26,11 @@ class GitNotifyController extends BaseController
         Util::DEV => 'horice',
     ];
     function getRemoteUser(){
-        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('HTTP_HOST'),Util::TEST);
+        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::TEST);
         return $this->user[$host];
     }
     function getBranchName(){
-        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('HTTP_HOST'),Util::TEST);
+        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::TEST);
         return $this->branch[$host];
     }
     /**
