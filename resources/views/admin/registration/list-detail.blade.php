@@ -128,30 +128,19 @@
                         })
                     },
                     //控制赠送课程 只要选择了否，则前面的
-                    giveSelect:function () {
+                    giveSelect:function (obj) {
                         var _this = this;
-                        var glen = $(".give_select_id").length-1;
-                        if($($(".give_select_id")[glen]).prop('checked')){
-                            $(".give_select_id").each(function (e) {
-                                if(e == glen){
-                                    return ;
-                                }
-                                _this.giveList[e].checked = false;
-                                _this.userPayInfo.give_id = 0;
-                                $(this).attr("disabled",'true');
-                            });
-                            return ;
-                        }else{
-                            $(".give_select_id").attr("disabled",false);
+                        var giveListLen = _this.giveList.length-1;
+                        if(_this.giveList[giveListLen].checked == true){
+                            for(var i=0;i<giveListLen;i++){
+                                _this.giveList[i].checked = false;
+                            }
+//                            for (var key in _this.giveList) {
+//                                _this.giveList[key].checked = false;
+//                            }
                         }
-                        var k = 0;
-                        var giveArr = [];
-                        $("input[name='give_id[]']:checked").each(function (i,el) {
-                            giveArr[k] = $(el).val();
-                            k++;
-                        });
-                        _this.userPayInfo.give_id = giveArr.toString();
-                    },
+                        _this.userPayInfo.give_id = _this.giveList.filter(item => item.checked).map(item => item.id).toString();
+                    }
                 }
             });
         }
@@ -194,7 +183,7 @@
             $(".course-package").hide();
             console.log($(obj).attr("price"));
             if($(obj).attr("price"))
-                vm.userPayInfo.package_price = $(obj).attr("price");
+                vm.userPayInfo.user_registration.course_package.price = $(obj).attr("price");
             //套餐ID
             console.log($(obj).attr("package-id"));
             if($(obj).attr("package-id"))
@@ -276,7 +265,7 @@
                 <div class="col-md-8 controls">
                     <input id="package-title" type="text" name="package_title" class="form-control fleft" v-model="userPayInfo.user_registration.course_package.title" @keyup="searchPackage" style="width: 400px;"   />
                 </div>
-                {{--<p class="help-block ajaxLink" :data="'{field:\'package_id\',val:\''+userPayInfo.user_registration.package_id+'\',id:\''+userPayInfo.registration_id+'\'}'" url="" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'package_id\',val:\''+userPayInfo.user_registration.package_id+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}" >修改</p>
             </div>
             <div class="course-package" style="display: none;">
                 <span onclick="setPackName(this)" v-for="(l,index) in packageList" :price="l.price" :package-id="l.id"><a>@{{l.title}}</a> - (金额@{{l.price}}元)</span>
@@ -293,7 +282,7 @@
                     <option v-for="(l,index) in packageAttachList" :value="l.id" selected="selected"><a>@{{l.title}}</a></option>
                     </select>
                 </div>
-                {{--<p class="help-block ajaxLink" data="{field:'package_attach_id',val:$('#package_attach_id').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'package_attach_id\',val:\''+userPayInfo.user_registration.course_package_attach.id+'\',id:\''+userPayInfo.registration_id+'\'}'"  url="{{route('admin.registration.mod-field')}}" >修改</p>
 
                 <input type="hidden" name="package_attach_title" v-model="userPayInfo.package_attach_title" />
                 <!--<input type="hidden" name="package_attach_id" v-model="userPayInfo.package_attach_id" />-->
@@ -303,11 +292,11 @@
                 <label class="col-md-2 control-label" for="input01">赠送课程：</label>
                 <div class="col-md-8 controls">
                     <template v-for="(l,index) in giveList">
-                        <input type="checkbox" class="give_select_id" name="give_id[]" :value="l.id" v-model="l.checked"  @click="giveSelect(index)"  />@{{l.text}}&nbsp;
+                        <input type="checkbox" class="give_select_id" name="give_id[]" :value="l.id" v-model="l.checked"  @click="giveSelect(this)"  />@{{l.text}}&nbsp;
                     </template>
                     <input name="give_id" id="give_id" type="hidden" v-model="userPayInfo.give_id"/>
                 </div>
-                {{--<p class="help-block ajaxLink" data="{field:'give_id',val:$('#give_id').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'package_attach_id\',val:\''+userPayInfo.user_registration.course_package_attach.id+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}" >修改</p>
             </div>
 
             <div class="form-group">

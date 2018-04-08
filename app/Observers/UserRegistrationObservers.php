@@ -32,7 +32,12 @@ class UserRegistrationObservers{
         $userPayModel->create($userPayArr);
     }
 
-//    function updating(UserRegistrationModel $registrationModel){
+    function updating(UserRegistrationModel $registrationModel){
+        //重新设置套餐总价格
+        $registrationModel->setPackageAll($registrationModel);
+    }
+
+//    function updated(UserRegistrationModel $registrationModel){
 //
 //    }
 

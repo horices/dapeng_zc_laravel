@@ -369,6 +369,27 @@ class UserRegistrationModel extends BaseModel{
         return self::where('id',$registrationId)->update($data);
     }
 
+
+    /**
+     * 重新设置套餐总金额
+     * @param UserRegistrationModel $userRegistrationModel
+     */
+    function setPackageAll(UserRegistrationModel $userRegistrationModel){
+        //主套餐价格
+        $package = CoursePackageModel::find($userRegistrationModel->package_id);
+        $packageAttach = CoursePackageModel::find($userRegistrationModel->package_attach_id);
+        $this->attributes['package_total_price'] = $package->price+$packageAttach->price;
+        //套餐全名
+        $packageAllTitle = $package->title."+".$packageAttach->title;
+        $giveTitle = "";
+        $giveArr = explode(',',$userRegistrationModel->give_id);
+        foreach ($giveArr as $key=>$val){
+            $giveTitle .= CoursePackageModel::$giveList[$val]['text']."+";
+        }
+        $packageAllTitle .= trim("+赠送".$giveTitle);
+        $this->attributes['package_all_title'] = $packageAllTitle;
+    }
+
     /**
      * 设置开课报名学员的 套餐全名和重新套餐应付计算金额
      * @param $id

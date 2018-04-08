@@ -265,6 +265,7 @@ class RegistrationController extends BaseController{
                 $giveList[$key]['checked'] = true;
             }
         }
+        //dd($giveList);
         //获取优惠活动列表
         $rebateList = RebateActivityModel::where([
             ['status','=','USE'],
@@ -330,7 +331,6 @@ class RegistrationController extends BaseController{
         $UserRegData->$field = $post['val'];
         $data = $UserRegData->toArray();
         $data['registration_id'] = $data['id'];
-
         UserRegistrationModel::updateValidate($data);
         $eff = $UserRegData->save();
         if($eff){
