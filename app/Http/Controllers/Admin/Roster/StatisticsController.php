@@ -7,6 +7,7 @@ use App\Models\RosterModel;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 
 class StatisticsController extends BaseController
 {
@@ -66,7 +67,7 @@ class StatisticsController extends BaseController
             return $this->exportStatisticsList($users);
         }
         $list = $user->paginate();
-        $statistics = $this->getStatistics(["inviter_id"],function ($tquery) use ($list){
+        $statistics = $this->getStatistics(["last_adviser_id"],function ($tquery) use ($list){
             $tquery->whereIn("last_adviser_id",$list->pluck('uid'));
         });
         return view("admin.roster.statistics.statistics",[

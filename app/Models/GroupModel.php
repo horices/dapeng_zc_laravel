@@ -32,7 +32,7 @@ class GroupModel extends BaseModel
         'type_text'
     ];
     protected function getIsOpenTextAttribute(){
-        return $this->is_open == 1 ?'正常':'关闭';
+        return $this->is_open == 1 ?'开启':'关闭';
     }
     protected function getQrcUrlAttribute($v){
         if(Str::startsWith($v,"./Uploads")){

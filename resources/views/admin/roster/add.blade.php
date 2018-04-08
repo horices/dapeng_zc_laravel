@@ -1,6 +1,12 @@
 @extends("admin.public.layout")
 @section("right_content")
     <script>
+        $(function(){
+            $("input[name='roster_type']").click(function () {
+                $(".select_group").attr("group_type",$(this).val());
+            });
+            $("input[name='roster_type'][value='1']").click();
+        });
         function selectUserCallback(user){
             $("input[name='seoer_id']").val(user.uid);
             $("input[name='seoer_name']").val(user.name);
@@ -21,7 +27,7 @@
                     <div class="col-lg-2">
                     @foreach($rosterType as $k => $type)
                         <label class="radio-inline">
-                            <input type="radio" @if($k == 1) checked @endif class="" name="roster_type" value="{{ $k }}">{{ $type }}
+                            <input type="radio" class="" name="roster_type" value="{{ $k }}">{{ $type }}
                         </label>
 
                     @endforeach
@@ -52,12 +58,12 @@
                     <div class="col-lg-3">
                         <input type="text" class="form-control" name="group" placeholder="不选择时，进入自动分配" readonly>
                     </div>
-                    <button type="button" class="btn btn-info select_group">选择群号码</button>
+                    <button type="button" class="btn btn-info select_group" group_type="1">选择群号码</button>
                 </div>
             </div>
 
             <div class="form-group ">
-                <button class="btn btn-info ajaxSubmit" type="button">提交</button>
+                <button class="btn btn-info ajaxSubmit" showloading="true" type="button">提交</button>
             </div>
           <style>
                 .success-notice{ background:#E0FFE4; border:1px #76E77F solid; width:415px; border-radius:8px; padding:0px 20px; color:#2B6330; margin:30px 0 0 15px}

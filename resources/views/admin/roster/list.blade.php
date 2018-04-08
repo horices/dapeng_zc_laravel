@@ -113,19 +113,22 @@
             
   <div class="row search-row" style="padding:9px 0 15px 15px;">
         <form class="form-inline" role="form">
+                <input type="hidden" name="seoer_id" value="{{ Request::input("seoer_id") }}" />
+            <input type="hidden" name="adviser_id" value="{{ Request::input("adviser_id") }}" />
+            <input type="hidden" name="show_statistics" value="{{ Request::input("show_statistics") }}" />
             <div class="form-group">
-                <select name="field_k" class="form-control">
-                    <option value="account" selected>QQ/微信</option>
-                    <option value="group_name" @if(Request::input('field_k') == 'group_name') selected @endif>班级代号</option>
+                <select name="search_type" class="form-control">
+                    <option value="roster_no" selected>QQ/微信</option>
+                    {{--<option value="group_name" @if(Request::input('field_k') == 'group_name') selected @endif>班级代号</option>--}}
                 </select>
-                <input type="text" name="field_v" class="form-control" id="name" placeholder="" value="{{ Request::input("field_v") }}">
+                <input type="text" name="keywords" class="form-control" placeholder="" value="{{ Request::input("keywords") }}">
             </div>
             <div class="form-group">
                 <label class="control-label">来源类型</label>
-                <select name="type" class="form-control">
+                <select name="roster_type" class="form-control">
                     <option value="">不限</option>
                     @foreach($rosterType  as $k=>$v)
-                    <option value="{{ $k }}"  @if(Request::input("type") == $k) selected @endif>{{ $v }}</option>
+                    <option value="{{ $k }}"  @if(Request::input("roster_type") == $k) selected @endif>{{ $v }}</option>
                     @endforeach
                 </select>
             </div>
@@ -260,7 +263,7 @@
                             @elseif($roster->group_status == 1)
                                 <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 11 && $userInfo->grade != 12) ajaxLink @endif" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加嘛" style="cursor:pointer;">等待添加</span>
                             @else
-                                <span class="group_status_{{ $roster->group_status }}"  onclick="openGroupLog({{ $roster->toJson() }})" style="cursor:pointer;">已添加</span>
+                                <span class="group_status_{{ $roster->group_status }}" style="cursor:pointer;">已添加</span>
                             @endif
                         @endif
                     </td>

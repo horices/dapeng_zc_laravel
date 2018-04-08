@@ -65,9 +65,9 @@
                    <td>{{ $group->user->name }}</td>
                    <td>
                    @if($group->is_open)
-                   <a class="common-button combg1 ajaxLink" style="margin:0px;padding:4px 8px;" url="{{ route('admin.group.save') }}" data="{id:{{ $group->id }},is_open:0}">{{$group->is_open_text}}</a>
+                   <a class="common-button combg1 ajaxLink" style="margin:0px;padding:4px 8px;" url="{{ route('admin.group.save') }}" data="{id:{{ $group->id }},is_open:0}" warning="确认要关闭该群么">{{$group->is_open_text}}</a>
                    @else
-                   <a class="common-button combg3 ajaxLink" style="margin:0px;padding:4px 8px;" url="{{ route('admin.group.save') }}" data="{id:{{ $group->id }},is_open:1}" warning="确认要开启该群组么,开启后会自动关闭该课程顾问关联的其它群？">{{$group->is_open_text}}</a>
+                   <a class="common-button combg3 ajaxLink" style="margin:0px;padding:4px 8px;" url="{{ route('admin.group.save') }}" data="{id:{{ $group->id }},is_open:1}" warning="确认要开启该群组,开启后会自动关闭该课程顾问关联的其它群">{{$group->is_open_text}}</a>
                    @endif
                    </td>
                    <td>

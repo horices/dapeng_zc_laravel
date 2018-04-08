@@ -10,8 +10,8 @@ return [
     'HOST_ALL'  =>  [
         'bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::MASTER,
         'zc.dapengjiaoyu.com'  =>  \App\Utils\Util::MASTER,
-        'test.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::TEST,
-        'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::TEST,
+        'test.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
+        'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
     ],
     //学院名字
     'SCHOOL_NAME'   =>  [

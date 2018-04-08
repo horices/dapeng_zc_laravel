@@ -8,6 +8,7 @@ use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 class GroupController extends BaseController
 {
@@ -37,7 +38,7 @@ class GroupController extends BaseController
         if(Input::get('export') == 1){
             return $this->exportGroupList($groupModel);
         }
-        $list = $groupModel->paginate();
+        $list = $groupModel->orderBy("id","desc")->paginate();
         return view("admin.group.list",[
             'list' => $list,
         ]);
@@ -63,8 +64,20 @@ class GroupController extends BaseController
     }
     
     function postSave(Request $request){
+        $rules = [
+            'qq_group'  =>  'required|unique:user_qqgroup,qq_group',
+            'leader_id' =>  'required|exists:user_headmaster,uid'
+        ];
+        $messages = [
+            'qq_group.required' =>  '群号码为必填项',
+            'qq_group.unique'   =>  '该群号码已存在',
+            'leader_id.required'    =>  "请选择课程顾问",
+            "leader_id.exists"  =>  "请选择正确的课程顾问"
+        ];
         if($request->input("id")){
             $group = GroupModel::find($request->input("id"));
+            $rules['qq_group'] = $rules['qq_group'].",".$group->id;
+            Validator::make($request->all(),$rules,$messages)->validate();
             if($group->update($request->input())){
                 $returnData['code'] = Util::SUCCESS ;
                 $returnData['msg'] = "修改成功";
@@ -73,6 +86,7 @@ class GroupController extends BaseController
                 $returnData['msg'] = "修改失败".$group->errors;
             }
         } else {
+            Validator::make($request->all(),$rules,$messages)->validate();
             if(GroupModel::create($request->input())){
                 $returnData['code'] = Util::SUCCESS;
                 $returnData['msg'] = "添加成功";

@@ -52,6 +52,7 @@ class BaseController extends Controller{
      */
     function getSelectGroup(){
         $group = Input::get("group");
+        $type = Input::get("type");
         $groupName = Input::get("group_name");
         $adviserName = Input::get("adviser_name");
         $query = GroupModel::with("user")->whereHas('user' ,function($query) use ($adviserName){
@@ -64,6 +65,9 @@ class BaseController extends Controller{
         }
         if($groupName){
             $query->where("group_name",$groupName);
+        }
+        if($type){
+            $query->where("type",$type);
         }
         $list = $query->paginate(5);
         return view("admin.public.select_group",[
@@ -134,7 +138,7 @@ class BaseController extends Controller{
 
     /**
      * 通用处理统计
-     * @param array $column
+     * @param array $column 需要分组的字段
      * @param \Closure|null $rosterWhere
      * @return mixed
      */
@@ -146,18 +150,41 @@ class BaseController extends Controller{
         }
         $roster = RosterModel::query();
         $user = UserModel::query();
-        $searchType = Input::get("searchType");
+        $searchType = Input::get("search_type");
         $keywords = Input::get("keywords");
         $rosterType = Input::get("roster_type");
         $startDate = Input::get("startdate");
         $endDate = Input::get("enddate");
+        $isReg = Input::get("is_reg");
+        $courseType = Input::get("course_type");
+        $groupStatus = Input::get("group_status");
+        $flag = Input::get("flag");
         $field = collect($column)->merge(['is_reg','course_type','group_status'])->filter();
+        $where = [];
         if($searchType && $keywords !== null){
-            $user->where($searchType,$keywords);
+            if($searchType == "roster_no"){
+                $roster->where("qq",$keywords)->orWhere('wx',$keywords);
+            }else{
+                $where[$searchType] = $keywords;
+            }
         }
-        if($rosterType){
-            $roster->where("type",$rosterType);
+        if($rosterType !== null){
+            $where['type'] = $rosterType;
+            //$roster->where("type",$rosterType);
         }
+        if($isReg !== null){
+            $where['is_reg'] = $isReg;
+        }
+        if($courseType !== null){
+            $where['course_type'] = $courseType;
+        }
+        if($groupStatus !== null){
+            $where['group_status'] = $groupStatus;
+        }
+        if($flag !== null){
+            $where['flag'] = $flag;
+        }
+        $roster->where($where);
         if($startDate){
             $roster->where('addtime','>=',strtotime($startDate));
         }

@@ -207,13 +207,13 @@
                     </td>
                     <!--                                     <td><a href="{:U('my_data?subnavAction=adviser_statistics&adviser_id='.$l['uid'],$_GET)}">查看</a></td> -->
                     <!--                                     <td><a href="{:U('data_all?subnavAction=adviser_statistics&adviser_name='.$l['name'],$_GET)}">查看</a></td> -->
-                    <td><a href="">查看</a></td>
+                    <td><a href="{{ route("admin.roster.list",\Illuminate\Support\Facades\Input::merge(['adviser_id'=>$user->uid,'show_statistics'=>1])->all()) }}">查看</a></td>
                 </tr>
             @endforeach
             <tr>
                 <td colspan="10">
                     <div class="pagenav">
-                        <ul>{{ $list->links() }}</ul>
+                        <ul>{{ $list->appends(\Illuminate\Support\Facades\Request::all())->links() }}</ul>
                     </div>
                 </td>
             </tr>
