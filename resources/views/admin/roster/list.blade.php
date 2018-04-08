@@ -100,11 +100,11 @@
         });
         //上传进度
         uploader.on('uploadStart', function (file) {
-//            layer.msg('正在导入数据，请稍候。。', {
-//                icon: 16
-//                , shade: 0.1,
-//                time: 99999999
-//            });
+            layer.msg('正在导入数据，请稍候。。', {
+                icon: 16
+                , shade: 0.1,
+                time: 99999999
+            });
         });
     })
 
