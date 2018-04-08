@@ -40,6 +40,10 @@
 .webuploader-pick{padding: 5px 15px !important;margin-top: 10px !important;display: inline !important;}
 </style>
 <script>
+    $(function () {
+        $(".grade").hide();
+        $(".grade{{$userInfo->grade}}").show();
+    });
     function openCourseLog(roster){
         AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
             $("#courseList").empty().html(data);
@@ -179,10 +183,10 @@
             </div>--}}
             <div class="form-group">
                 <a href="" class="common-button combg2 linkSubmit">搜索</a>
-                <a class="common-button combg4 linkSubmit" showLoading="true" data="{export:1,test:2}" href="{{ route("admin.roster.list",['export'=>1]) }}" >
+                <a class="common-button combg4 linkSubmit grade grade4 grade5" showLoading="true" data="{export:1,test:2}" href="{{ route("admin.roster.list",['export'=>1]) }}" >
                     导出
                 </a>
-                <a id="uploader">
+                <a id="uploader" class="grade grade4 grade5">
                     导入
                 </a>
 
@@ -233,8 +237,8 @@
                     <th width="80">开通课程</th>
                     <th width="80">进群状态</th>
                     <th width="80">进群时间</th>
-                    <th width="80">销售数据</th>
-                    <th width="90">操作</th>
+                    <th width="80" class="grade grade4 grade5 grade9 grade10">销售数据</th>
+                    <th width="90" class="grade grade4 grade5 grade9 grade10">操作</th>
 
                     <!-- <th style="padding-left:19px" width="80">操作</th> -->
                 </tr>
@@ -270,12 +274,12 @@
                     <td @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">
                     {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}
                     </td>
-                    <td>
+                    <td class="grade grade4 grade5 grade9 grade10">
                     @if( $roster->is_old == 0)
                     <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}">点击添加</a>
                     @endif
                     </td>
-                    <td>
+                    <td class="grade grade4 grade5 grade9 grade10">
                         @if($roster->dapeng_user_mobile)
                         <a class="ajaxLink" method="post" showLoading="1" callback="reFun" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}">开通</a>
                         @else

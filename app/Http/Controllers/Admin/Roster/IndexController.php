@@ -91,7 +91,7 @@ class IndexController extends BaseController
         }
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
-            $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
+            $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status",">",0)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
         }]);
         $seachType = Input::get("search_type");
         $keywords = Input::get("keywords");
@@ -134,12 +134,15 @@ class IndexController extends BaseController
         if($endDate !== null){
             $query->whereRaw("addtime <= ".strtotime($endDate));
         }
-        if($seoerId !==  null){
-            $query->where('inviter_id',$seoerId);
-            $statisticsWhere['inviter_id'] = $seoerId;
-        }
+
         $statistics = [];
         $statistics['statistics'] = '';
+        if($seoerId !==  null){
+            $query->where('inviter_id',$seoerId);
+            $statistics = $this->getStatistics(['inviter_id'],function($query) use($seoerId) {
+                $query->where("inviter_id", $seoerId);
+            });
+        }
         if($adviserId !== null){
             $query->where('last_adviser_id',$adviserId);
             $statistics = $this->getStatistics(['last_adviser_id'],function($query) use($adviserId) {

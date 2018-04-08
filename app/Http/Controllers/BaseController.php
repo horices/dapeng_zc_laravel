@@ -213,9 +213,15 @@ class BaseController extends Controller
         ],
         '11' =>  [
             'allow'    =>  '*',
+            'deny'  =>  [
+                "admin.roster.follow.add"
+            ]
         ],
         '12' =>  [
             'allow'    =>  '*',
+            'deny'  =>  [
+                "admin.roster.follow.add"
+            ]
         ],
 
     ];
