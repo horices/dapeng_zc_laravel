@@ -93,9 +93,9 @@ class IndexController extends BaseController
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
         }]);
-        $field_k = Input::get("field_k");
-        $field_v = Input::get("field_v");
-        $type = Input::get("type");
+        $seachType = Input::get("search_type");
+        $keywords = Input::get("keywords");
+        $type = Input::get("roster_type");
         $isReg = Input::get("is_reg");
         $courseType = Input::get("course_type");
         $groupStatus = Input::get("group_status");
@@ -106,11 +106,11 @@ class IndexController extends BaseController
         $adviserId = Input::get("adviser_id");
         $showStatistics = Input::get("show_statistics");
         $where = [];
-        if($field_k && $field_v !== null){
-            if($field_k == "account"){
-                $query->where("qq","=",$field_v)->orWhere('wx','=',$field_v);
+        if($seachType && $keywords !== null){
+            if($seachType == "roster_no"){
+                $query->where("qq",$keywords)->orWhere('wx',$keywords);
             }else{
-                $where[$field_k] = $field_v;
+                $where[$seachType] = $keywords;
             }
         }
         if($type !== null){
