@@ -57,6 +57,8 @@ class GitNotifyController extends BaseController
      */
     function deploy (){
         $info = shell_exec("sudo -uhorice ".base_path()."/../website-auto-update.sh ".base_path());
+        echo "自动更新";
+        echo $info;
         Log::info($info);
     }
 
