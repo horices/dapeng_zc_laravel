@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Exceptions\UserValidateException;
+use App\Models\RosterModel;
+use App\Utils\Util;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -25,6 +27,10 @@ class NotifyValidate
         }
         if($this->checkSign($request) === false){
             throw new NotAcceptableHttpException("签名错误");
+        }
+        if(!RosterModel::where('qq',$request->input("qq"))->first()){
+            response()->json(['code'=>Util::SUCCESS,"msg"=>"该QQ号不存在"])->send();
+            exit();
         }
         return $next($request);
     }
