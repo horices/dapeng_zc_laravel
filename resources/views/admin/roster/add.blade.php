@@ -57,7 +57,7 @@
             </div>
 
             <div class="form-group ">
-                <button class="btn btn-info ajaxSubmit" type="button">提交</button>
+                <button class="btn btn-info ajaxSubmit" showloading="true" type="button">提交</button>
             </div>
           <style>
                 .success-notice{ background:#E0FFE4; border:1px #76E77F solid; width:415px; border-radius:8px; padding:0px 20px; color:#2B6330; margin:30px 0 0 15px}

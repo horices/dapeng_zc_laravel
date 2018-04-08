@@ -143,7 +143,7 @@ class RosterModel extends BaseModel
         ],[
             'roster_no.required' =>  '请输入'.$columnText.'号码',
             'roster_no.unique'  =>  '该'.$columnText.'号码已存在',
-            'roster_no.digits_between'  =>  'QQ号码必须为全数字，且长度在5-11位',
+            'roster_no.digits_between'  =>  'QQ号码必须为全数字，且长度在5-10位',
             'roster_no.regex'  =>  '该微信号不符合规则',
             'roster_type.required'  =>  '请选择正确的提交类型',
             'roster_type.in'    => "类型只能为1或2",
@@ -157,7 +157,7 @@ class RosterModel extends BaseModel
          * QQ提交时，需要全数字，并且长度为5-12
          * 微信提交时，
          */
-        $validator->sometimes("roster_no","digits_between:5,12",function($input){
+        $validator->sometimes("roster_no","digits_between:5,10",function($input){
             return $input->roster_type == 1;
         });
         $validator->sometimes("roster_no",[
