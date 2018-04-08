@@ -139,6 +139,7 @@ class RosterModel extends BaseModel
             'roster_no' =>  'required',
             'roster_type'   =>  'required|in:1,2',
             //'qq_group_id'   =>  'required|exists:user_qqgroup,id',
+            'qq_group_id'   =>  'required_if:from_type,6|exists:user_qqgroup,id',
             'seoer_id'   =>  'required|exists:user_headmaster,uid'
         ],[
             'roster_no.required' =>  '请输入'.$columnText.'号码',
@@ -147,7 +148,7 @@ class RosterModel extends BaseModel
             'roster_no.regex'  =>  '该微信号不符合规则',
             'roster_type.required'  =>  '请选择正确的提交类型',
             'roster_type.in'    => "类型只能为1或2",
-            'qq_group_id.required'   =>  '请选择'.$columnText.'群',
+            'qq_group_id.required_if'   =>  '请选择'.$columnText.'群',
             'qq_group_id.exists'   =>   $columnText.'群不存在',
             'seoer_id.required'  =>  '请选择推广专员',
             'seoer_id.exists'   => '推广专员不存在'
@@ -244,7 +245,6 @@ class RosterModel extends BaseModel
         //补全推广专员信息
         if(!isset($data['seoer_name'])){
             $seoer = UserModel::query()->find($data['seoer_id']);
-            dd($seoer);
             if(!$seoer)
                 throw new UserValidateException("本操作只能由推广专员进行操作");
             $data['seoer_name'] = $seoer->name;
