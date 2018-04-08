@@ -52,6 +52,7 @@ class BaseController extends Controller{
      */
     function getSelectGroup(){
         $group = Input::get("group");
+        $type = Input::get("type");
         $groupName = Input::get("group_name");
         $adviserName = Input::get("adviser_name");
         $query = GroupModel::with("user")->whereHas('user' ,function($query) use ($adviserName){
@@ -64,6 +65,9 @@ class BaseController extends Controller{
         }
         if($groupName){
             $query->where("group_name",$groupName);
+        }
+        if($type){
+            $query->where("type",$type);
         }
         $list = $query->paginate(5);
         return view("admin.public.select_group",[

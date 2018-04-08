@@ -83,11 +83,13 @@ $(function(){
         });
     });
     $(".select_group").click(function(){
+        $(this).attr("group_type") || $(this).attr("group_type","");
+        var url = Utils.createUrl({'type':$(this).attr("group_type")},"{{ route("admin.public.select_group") }}");
         layer.open({
             type:2,
             title:"选择群号",
             area:['750px','500px'],
-            content:"{{ route("admin.public.select_group") }}"
+            content:url
         });
     });
     $(".select_date").each(function(){
