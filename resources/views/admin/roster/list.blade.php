@@ -263,7 +263,7 @@
                             @elseif($roster->group_status == 1)
                                 <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 11 && $userInfo->grade != 12) ajaxLink @endif" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加嘛" style="cursor:pointer;">等待添加</span>
                             @else
-                                <span class="group_status_{{ $roster->group_status }}"  onclick="openGroupLog({{ $roster->toJson() }})" style="cursor:pointer;">已添加</span>
+                                <span class="group_status_{{ $roster->group_status }}" style="cursor:pointer;">已添加</span>
                             @endif
                         @endif
                     </td>
