@@ -314,22 +314,9 @@ class IndexController extends BaseController
      */
     function postUploadExcel(Request $request,StrValueBinder $binder){
         $path = $request->file('download')->store('upload/excel');
-        $excelArr = Excel::selectSheetsByIndex(0)->setValueBinder($binder)->load($path)->all()->toArray();
+        $excelArr = Excel::selectSheetsByIndex(0)->setValueBinder($binder)->load($path)->all(['account','seoer','type','group'])->toArray();
         if(empty($excelArr)){
             throw new UserValidateException("表格数据不能为空！");
-        }
-        $data = [];
-        foreach ($excelArr[0] as $key=>$val){
-            if(empty($val['account'])){
-                continue;
-            }
-            $val = array_slice($val,0,4);
-            foreach ($val as $k=>$v){
-                if(is_numeric($v)){
-                    $val[$k] = floatval($v);
-                }
-            }
-            $data[$key] = $val;
         }
         //发生错误的量
         $errorArr = [];
@@ -343,7 +330,7 @@ class IndexController extends BaseController
                 'msg'   =>  '导入成功！'
             ];
             $i = 0;
-            foreach ($data as $key=>$val){
+            foreach ($excelArr as $key=>$val){
                 if(empty($val['account'])){
                     continue;
                 }
