@@ -10,6 +10,7 @@ class RosterFollowModel extends BaseModel
 {
     protected $table = "user_roster_info";
 
+
     protected function getDeepLevelTextAttribute(){
         if($this->deep_level !== null) {
             return app('status')->getRosterDeepLevel($this->deep_level);
@@ -26,9 +27,18 @@ class RosterFollowModel extends BaseModel
         }
     }
 
+    /**
+     * 量的详情
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function roster(){
         return $this->belongsTo(RosterModel::class);
     }
+
+    /**
+     * 创建者信息
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     function creator(){
         return $this->belongsTo(UserModel::class,'create_id','uid');
     }

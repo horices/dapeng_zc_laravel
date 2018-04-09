@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 /**
 
@@ -73,10 +74,19 @@ class UserModel extends BaseModel
      * 用户管理群信息
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    protected function groups(){
+    function groups(){
         return $this->hasMany(GroupModel::class,'leader_id','uid');
     }
 
+    /**
+     * 销售记录
+     */
+    function rosterFollow(){
+        return $this->hasMany(RosterFollowModel::class,'adviser_id');
+    }
+    function lastRosterFollowOne(){
+        return $this->belongsTo(RosterFollowModel::class,"uid","adviser_id")->orderBy("id","desc")->withDefault();
+    }
     /**
      * 查询课程顾问
      * @param $query

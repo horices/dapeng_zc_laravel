@@ -10,6 +10,7 @@ use App\Models\RosterModel;
 use App\Models\UserModel;
 use App\Utils\Util;
 use Faker\Provider\bn_BD\Utils;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +20,16 @@ class FollowController extends BaseController
 
     function getIndex(){
         //查询所有用户
-        $query = UserModel::adviser();
+        $query = UserModel::adviser()->with(['lastRosterFollowOne','rosterFollow'=>function($query){
+            $startDate = Request::get("startdate");
+            $endDate = Request::get("enddate");
+            if($startDate){
+                $query->where("create_time",">=",strtotime($startDate));
+            }
+            if($endDate){
+                $query->where("create_time","<",strtotime($endDate));
+            }
+        }]);
         $list = $query->paginate();
         return view("admin.roster.follow.index",[
             'list'  =>  $list

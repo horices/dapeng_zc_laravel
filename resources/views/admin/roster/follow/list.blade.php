@@ -51,9 +51,12 @@
         </tr> -->
         <tr>
             <th style="width:50px;">ID</th>
-            <th style="width:110px;">QQ号</th>
+            <th style="width:110px;">类型</th>
+            <th style="width:110px;">号码</th>
             <th style="width:60px;">群昵称</th>
+            <th style="width:60px;">群号</th>
             <th style="width:85px;">课程顾问</th>
+            <th style="width:85px;">私聊次数</th>
             <th style="width:75px;">私聊深度</th>
             <th style="width:75px;">报名意向</th>
             <th>备注</th>
@@ -66,8 +69,11 @@
         @foreach($list as $followInfo)
             <tr class="">
                 <td>{{ $followInfo->id }}</td>
-                <td>{{ $followInfo->qq }}</td>
+                <td>{{ $followInfo->roster->roster_type_text }}</td>
+                <td>{{ $followInfo->roster->roster_no }}</td>
                 <td>{{ $followInfo->roster->group->group_name}}</td>
+                <td>{{ $followInfo->roster->group->qq_group }}</td>
+                <td>{{ $followInfo->adviser_name }}</td>
                 <td>{{ $followInfo->adviser_name }}</td>
                 <td class="showTip" src="{:U('getChart?type=deep_level&qq='.$l['qq'])}">
                     {{ $followInfo->deep_level_text }}
