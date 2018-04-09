@@ -41,7 +41,7 @@ Route::get("roster/list/one","Roster\IndexController@getSelectOne")->name("admin
 
 //关单信息管理
 Route::get("roster/follow/index","Roster\FollowController@getIndex")->name("admin.roster.follow.index");
-Route::get("roster/follow/list/{user_id}","Roster\FollowController@getList")->name("admin.roster.follow.list");
+Route::get("roster/follow/list","Roster\FollowController@getList")->name("admin.roster.follow.list");
 Route::get("roster/follow/user/list","Roster\FollowController@getUserList")->name("admin.roster.follow.list.user");
 Route::get("roster/follow/add/{roster_id}","Roster\FollowController@getAdd")->name("admin.roster.follow.add");
 Route::get("roster/follow/add/{roster_id}/{follow_id}","Roster\FollowController@getEdit")->name("admin.roster.follow.edit");
