@@ -112,6 +112,10 @@ class IndexController extends BaseController
             }else{
                 $where[$seachType] = $keywords;
             }
+            //隐藏指定的关键字
+            if($keywords == 'default'){
+                $request->merge(['keywords'=>null]);
+            }
         }
         if($type !== null){
             $where['type'] = $type;
@@ -158,7 +162,6 @@ class IndexController extends BaseController
         }
         $query->orderBy("id","desc");
         $list = $query->paginate();
-
         return view("admin.roster.list",[
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
@@ -404,5 +407,16 @@ class IndexController extends BaseController
         }
     }
 
+    /**
+     * 查询指定的量
+     */
+    function getSelectOne(Request $request){
+        $keywords = $request->input("keywords");
+        if(!$keywords){
+            $keywords = "default";
+        }
+        $request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords]);
+        return Route::respondWithRoute("admin.roster.list");
+    }
 }
 

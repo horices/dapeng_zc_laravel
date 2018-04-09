@@ -237,7 +237,7 @@
                     <th width="80">开通课程</th>
                     <th width="80">进群状态</th>
                     <th width="80">进群时间</th>
-                    <th width="80" class="grade grade4 grade5 grade9 grade10">销售数据</th>
+                    <th width="80" class="grade grade4 grade5">销售数据</th>
                     <th width="90" class="grade grade4 grade5 grade9 grade10">操作</th>
 
                     <!-- <th style="padding-left:19px" width="80">操作</th> -->
@@ -274,7 +274,7 @@
                     <td @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">
                     {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}
                     </td>
-                    <td class="grade grade4 grade5 grade9 grade10">
+                    <td class="grade grade4 grade5">
                     @if( $roster->is_old == 0)
                     <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}">点击添加</a>
                     @endif
