@@ -22,24 +22,24 @@ return [
     //大鹏主站URL
     'PC_URL'   =>  [
         \App\Utils\Util::MASTER    =>  'http://www.dapengjiaoyu.com',
-        \App\Utils\Util::TEST      =>  'http://123.56.200.151',
+        \App\Utils\Util::DEV      =>  'http://123.56.200.151',
     ],
     //展翅系统URL
     'ZC_URL'   =>  [
         //设计学院
         'SJ'    =>  [
-            \App\Utils\Util::TEST      =>  'http://test.bzr.dapengjiaoyu.com',
+            \App\Utils\Util::DEV      =>  'http://test.bzr.dapengjiaoyu.com',
             \App\Utils\Util::MASTER    =>  'http://bzr.dapengjiaoyu.com',
         ],
         //美术学院
         'MS'    =>  [
             \App\Utils\Util::MASTER    =>  'http://ms.dapengjiaoyu.com',
-            \App\Utils\Util::TEST      =>  'http://test.ms.dapengjiaoyu.com',
+            \App\Utils\Util::DEV      =>  'http://test.ms.dapengjiaoyu.com',
         ]
     ],
     //M站地址
     'WAP_URL'   =>  [
-        \App\Utils\Util::TEST      =>  'http://test.m.dapengjiaoyu.com',
+        \App\Utils\Util::DEV      =>  'http://test.m.dapengjiaoyu.com',
         \App\Utils\Util::MASTER    =>  'http://m.dapengjiaoyu.com',
     ],
     /*第三方接口,生成短连接*/
