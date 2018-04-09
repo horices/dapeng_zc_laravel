@@ -47,7 +47,7 @@ class Util{
         $key = "website.".$key;
         if($getSub){
             $host = $_SERVER['HTTP_HOST'];
-            $subKey = collect(config("website.HOST_ALL"))->get($host,Util::TEST);
+            $subKey = collect(config("website.HOST_ALL"))->get($host,Util::DEV);
             $key.= ".".$subKey;
         }
         return config($key,$default);
