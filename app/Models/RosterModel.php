@@ -62,17 +62,17 @@ class RosterModel extends BaseModel
     }
 
     /**
-     * 获取专属注册链接
+     * 获取专属注册链接的地址参数
      * @return string
      */
-    function getRegUrlAttribute(){
+    function getRegUrlPramaAttribute(){
         $qqCrypt = Util::think_encrypt($this->qq);
         $stamp = time();
         $data = [$qqCrypt,$this->group->group_name,time()];
         $str = http_build_query($data);
         $signData = md5('8934031001776A04444F72154425DDBC'.$str.'8934031001776A04444F72154425DDBC');
-        //return Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName());
-        return Util::getShorturl(Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName()));
+        return Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName());
+        //return Util::getShorturl(Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName()));
     }
 
     /**

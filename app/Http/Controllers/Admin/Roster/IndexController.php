@@ -164,6 +164,16 @@ class IndexController extends BaseController
     }
 
     /**
+     * 生成新浪接口的短连接
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function postSetRegUrl(Request $request){
+        $regUrl = Util::getShorturl($request->input('url'));
+        return Util::ajaxReturn(Util::SUCCESS,'生成成功！',['reg_url'=>$regUrl]);
+    }
+
+    /**
      * 获取开课记录
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
