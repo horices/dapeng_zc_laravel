@@ -27,6 +27,7 @@ Route::get("roster/list","Roster\IndexController@getList")->name("admin.roster.l
 Route::get("roster/course/list","Roster\IndexController@getCourseList")->name("admin.roster.course.list");
 //进群记录
 Route::get("roster/group/list","Roster\IndexController@getGroupLogList")->name("admin.roster.group.log.list");
+//量的其它操作
 Route::post("roster/change-group-status","Roster\IndexController@changeGroupStatus")->name("admin.roster.change-group-status");
 Route::get("roster/add","Roster\IndexController@getAdd")->name("admin.roster.add");
 Route::post("roster/add","Roster\IndexController@postAdd")->name("admin.roster.add.post");
@@ -36,6 +37,7 @@ Route::post("roster/user/add","Roster\IndexController@postUserAdd")->name("admin
 Route::get("roster/statistics/seoer","Roster\StatisticsController@getSeoerStatistics")->name("admin.roster.statistics.seoer");
 Route::get("roster/statistics/adviser","Roster\StatisticsController@getAdviserStatistics")->name("admin.roster.statistics.adviser");
 Route::get("roster/list/user","Roster\IndexController@getUserList")->name("admin.roster.list.user");
+Route::get("roster/list/one","Roster\IndexController@getSelectOne")->name("admin.roster.list.one");
 
 //关单信息管理
 Route::get("roster/follow/index","Roster\FollowController@getIndex")->name("admin.roster.follow.index");

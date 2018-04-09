@@ -58,7 +58,7 @@ class GitNotifyController extends BaseController
         $info = shell_exec("sudo -u".$this->getRemoteUser()." ".base_path()."/../website-auto-update.sh ".base_path()." 2>&1");
         echo "自动更新";
         echo $info;
-        Log::info($info);
+        //Log::info($info);
     }
 
 }

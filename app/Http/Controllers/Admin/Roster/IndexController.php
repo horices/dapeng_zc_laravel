@@ -91,7 +91,7 @@ class IndexController extends BaseController
         }
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
-            $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status","=",2)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
+            $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status",">",0)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
         }]);
         $seachType = Input::get("search_type");
         $keywords = Input::get("keywords");
@@ -111,6 +111,10 @@ class IndexController extends BaseController
                 $query->where("qq",$keywords)->orWhere('wx',$keywords);
             }else{
                 $where[$seachType] = $keywords;
+            }
+            //隐藏指定的关键字
+            if($keywords == 'default'){
+                $request->merge(['keywords'=>null]);
             }
         }
         if($type !== null){
@@ -134,12 +138,15 @@ class IndexController extends BaseController
         if($endDate !== null){
             $query->whereRaw("addtime <= ".strtotime($endDate));
         }
-        if($seoerId !==  null){
-            $query->where('inviter_id',$seoerId);
-            $statisticsWhere['inviter_id'] = $seoerId;
-        }
+
         $statistics = [];
         $statistics['statistics'] = '';
+        if($seoerId !==  null){
+            $query->where('inviter_id',$seoerId);
+            $statistics = $this->getStatistics(['inviter_id'],function($query) use($seoerId) {
+                $query->where("inviter_id", $seoerId);
+            });
+        }
         if($adviserId !== null){
             $query->where('last_adviser_id',$adviserId);
             $statistics = $this->getStatistics(['last_adviser_id'],function($query) use($adviserId) {
@@ -155,7 +162,6 @@ class IndexController extends BaseController
         }
         $query->orderBy("id","desc");
         $list = $query->paginate();
-
         return view("admin.roster.list",[
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
@@ -411,5 +417,16 @@ class IndexController extends BaseController
         }
     }
 
+    /**
+     * 查询指定的量
+     */
+    function getSelectOne(Request $request){
+        $keywords = $request->input("keywords");
+        if(!$keywords){
+            $keywords = "default";
+        }
+        $request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords]);
+        return Route::respondWithRoute("admin.roster.list");
+    }
 }
 
