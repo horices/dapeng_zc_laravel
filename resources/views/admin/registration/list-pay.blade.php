@@ -50,10 +50,11 @@
             </div>
 
             <div class="form-group">
-                <eq name="_SESSION['dapeng']['member_auth']['grade']" value="5">
-                    <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{{Request::input('adviserName')}}" style="width: 110px;"/>
-                </eq>
+                @if($adminInfo['grade']<9)
+                <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{{Request::input('adviserName')}}" style="width: 110px;"/>
+                @endif
                 <input type="text" name="name" class="form-control" placeholder="学员姓名" value="{{Request::input('name')}}" style="width: 110px;"/>
+                <input type="text" name="mobile" class="form-control" placeholder="开课手机号" value="{{Request::input('mobile')}}" style="width: 100px;"/>
                 <!--<select name="is_open" class="form-control">
                     <option value="">是否导学</option>
                     <option <present name="_GET[is_open]"><eq name="_GET[is_open]" value="1">selected</eq></present> value="1">是</option>

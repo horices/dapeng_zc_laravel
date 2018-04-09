@@ -78,7 +78,9 @@
                             <a class="common-button combg4" href="{{route('admin.registration.list.pay')}}">切换到支付记录</a>
                         </div>
                         <div class="form-group">
+                            @if($adminInfo['grade']<9)
                             <input type="text" name="adviserName" class="form-control" placeholder="顾问姓名" value="{{Request::input('adviserName')}}" style="width: 100px;"/>
+                            @endif
                             <input type="text" name="name" class="form-control" placeholder="学员姓名" value="{{Request::input('name')}}" style="width: 100px;"/>
                             <input type="text" name="mobile" class="form-control" placeholder="开课手机号" value="{{Request::input('mobile')}}" style="width: 100px;"/>
                             <!--<select name="is_open" class="form-control">
