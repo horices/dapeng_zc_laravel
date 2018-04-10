@@ -59,6 +59,14 @@ class UserModel extends BaseModel
     }
     protected function getStatisticsAttribute(){
     }
+    protected function setPasswordAttribute($v){
+        if(!$v && !$this->uid){
+            $v = "123456";
+        }
+        if($v){
+            $this->attributes['password'] = md5($v);
+        }
+    }
     function setDapengUserMobileAttribute($v){
         if($this->dapeng_user_mobile != $v){
             //判断当前主站账号是否已经绑定
