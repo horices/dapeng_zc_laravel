@@ -10,6 +10,7 @@ use App\Models\RosterModel;
 use App\Models\UserModel;
 use App\Utils\Util;
 use Faker\Provider\bn_BD\Utils;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,8 +19,23 @@ class FollowController extends BaseController
 {
 
     function getIndex(){
+        $searchType = Request::get("search_type");
+        $keywords = Request::get("keywords");
         //查询所有用户
-        $query = UserModel::adviser();
+        $query = UserModel::adviser()->status()->with(['lastRosterFollowOne'])->withCount(['rosterFollow'=>function($query){
+            $startDate = Request::get("startdate");
+            $endDate = Request::get("enddate");
+            if($startDate){
+                $query->where("create_time",">=",strtotime($startDate));
+            }
+            if($endDate){
+                $query->where("create_time","<",strtotime($endDate));
+            }
+            $query->select(DB::raw(" count(DISTINCT roster_id,from_unixtime(create_time,'%Y%m%d'))"));
+        }]);
+        if($searchType && $keywords !== null){
+            $query->where($searchType,$keywords);
+        }
         $list = $query->paginate();
         return view("admin.roster.follow.index",[
             'list'  =>  $list
@@ -27,11 +43,34 @@ class FollowController extends BaseController
     }
     //获取单个课程顾问的关单记录
     function getList(){
-        $userId = Request::get("user_id");
-        //获取单个用户的销售统计
-        $query = RosterFollowModel::query();
+        $query = RosterFollowModel::query()->withCount("followCount as follow_count");
         $query->with(["roster.group",'creator']);
-        $query->where('adviser_id',$userId);
+        $userId = Request::get("user_id");
+        $rosterNo = Request::get("roster_no");
+        $deepLevel = Request::get("deep_level");
+        $intention = Request::get("intention");
+        $startDate = Request::get("startdate");
+        $endDate = Request::get("enddate");
+        if($userId){
+            $where['adviser_id'] = $userId;
+        }
+        if($deepLevel !== null){
+            $where['deep_level'] = $deepLevel;
+        }
+        if ($intention){
+            $where['intention'] = $intention;
+        }
+        if($rosterNo !== null){
+            $where['qq'] = $rosterNo;
+        }
+        if($startDate !== null){
+            $query->where("create_time",">=",strtotime($startDate));
+        }
+        if($endDate !== null){
+            $query->where("create_time","<",strtotime($endDate));
+        }
+        $query->where($where);
+        //获取单个用户的销售统计
         $list = $query->paginate();
         return view("admin.roster.follow.list",[
             'leftNav'   =>  Request::get("leftNav","admin.roster.follow.index"),
@@ -54,8 +93,9 @@ class FollowController extends BaseController
      * @param $roster_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    function getAdd($roster_id){
-        $roster = RosterModel::find($roster_id);
+    function getAdd(){
+        $rosterId = Request::get("roster_id");
+        $roster = RosterModel::find($rosterId);
         return view("admin.roster.follow.add",[
             'leftNav'   => "admin.roster.list",
             'roster'    =>  $roster

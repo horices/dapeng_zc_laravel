@@ -92,7 +92,7 @@ function selectUserCallback(user){
             <div class="form-group">
                 <label class="col-md-2 control-label fleft" for="input01">开启状态</label>
                   <div class="slideThree fleft ml15" on="开启" off="关闭">  
-				      <input value="1" id="slideThree" name="is_open" type="checkbox">
+				      <input value="1" id="slideThree" name="is_open" type="checkbox" @if($group->is_open) checked @endif>
 				      <label for="slideThree"></label>
 				    </div>
             </div>
@@ -114,7 +114,7 @@ function selectUserCallback(user){
             <div class="form-group">
                 <label class="col-md-2 control-label"></label>
                 <div class="col-md-8 controls">
-                    <button class="btn btn-primary ajaxSubmit" type="button" showLoading="1">确认保存</button>
+                    <button class="btn btn-primary ajaxSubmit" type="button" showLoading="true">确认保存</button>
                     <button class="btn btn-white" type="reset">重置</button>
                 </div>
             </div>

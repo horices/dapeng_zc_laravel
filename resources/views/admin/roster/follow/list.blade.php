@@ -2,9 +2,10 @@
 @section("right_content")
 <div class="row search-row" style="padding:9px 0 15px 15px;">
     <form class="form-inline" style="width:920px; height:auto;" method="get">
+        <input type="hidden" name="user_id" value="{{ Request::get("user_id") }}" />
         <div class="form-tm" style="float:left; margin-left:10px;">
-            <input type="text" name="qq" class="form-control" style="height:30px;width:120px;" placeholder="搜索QQ号"
-                   value="">
+            <input type="text" name="roster_no" class="form-control" style="height:30px;width:120px;" placeholder="搜索量号码"
+                   value="{{ Request::get("roster_no") }}">
             <label>
                 <select name="deep_level" style="padding:3px;">
                     <option value="">私聊深度</option>
@@ -26,11 +27,11 @@
                 <select name="dateType" style="padding:3px;">
                     <option value="create_time">私聊时间</option>
                 </select>&nbsp;</label>
-            <input type="text" name="startdate" class="form-control datetime" id="startdate" style="height:30px;"
-                   placeholder="开始时间" value="">
+            <input type="text" name="startdate" class="form-control select_date" id="startdate" style="height:30px;"
+                   placeholder="开始时间" value="{{ Request::get("startdate") }}">
             <label>&nbsp;至&nbsp;</label>
-            <input type="text" name="enddate" class="form-control datetime" id="enddate" style="height:30px;"
-                   placeholder="结束时间" value="">
+            <input type="text" name="enddate" class="form-control select_date" id="enddate" style="height:30px;"
+                   placeholder="结束时间" value="{{ Request::get("enddate") }}">
         </div>
         <div class="form-but" style="float:left;  color:#fff;  width:122px; margin-top:3px;  ">
 <span class="but-ss" style=" height:auto;text-align:center; line-height:25px; ">
@@ -51,9 +52,12 @@
         </tr> -->
         <tr>
             <th style="width:50px;">ID</th>
-            <th style="width:110px;">QQ号</th>
+            <th style="width:110px;">类型</th>
+            <th style="width:110px;">号码</th>
             <th style="width:60px;">群昵称</th>
+            <th style="width:60px;">群号</th>
             <th style="width:85px;">课程顾问</th>
+            <th style="width:85px;">私聊次数</th>
             <th style="width:75px;">私聊深度</th>
             <th style="width:75px;">报名意向</th>
             <th>备注</th>
@@ -66,9 +70,12 @@
         @foreach($list as $followInfo)
             <tr class="">
                 <td>{{ $followInfo->id }}</td>
-                <td>{{ $followInfo->qq }}</td>
+                <td>{{ $followInfo->roster->roster_type_text }}</td>
+                <td>{{ $followInfo->roster->roster_no }}</td>
                 <td>{{ $followInfo->roster->group->group_name}}</td>
+                <td>{{ $followInfo->roster->group->qq_group }}</td>
                 <td>{{ $followInfo->adviser_name }}</td>
+                <td>{{ $followInfo->follow_count }}</td>
                 <td class="showTip" src="{:U('getChart?type=deep_level&qq='.$l['qq'])}">
                     {{ $followInfo->deep_level_text }}
                 </td>

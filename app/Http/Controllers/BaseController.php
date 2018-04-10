@@ -116,7 +116,7 @@ class BaseController extends Controller
             'grade' =>  [11,12],          //需要展示的权限等级
         ],
         'group_list' =>   [
-            'text'=> 'QQ群管理',   //文字描述
+            'text'=> '群管理',   //文字描述
             'route'=> "admin.group.list",    //链接地址
             'flag'=> 'admin.group.list',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
@@ -133,12 +133,12 @@ class BaseController extends Controller
             'flag'=> 'admin.roster.list',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
-        'roster_list_one' =>   [
+        /*'roster_list_one' =>   [
             'text'=> '指定开课',   //文字描述
             'route'=> "admin.roster.list.one",    //链接地址
             'flag'=> 'admin.roster.list.one',  //默认选中标识
             'grade' =>  [9,10],          //需要展示的权限等级
-        ],
+        ],*/
         'roster_list_user' =>   [
             'text'=> '我的数据',   //文字描述
             'route'=> "admin.roster.list.user",    //链接地址
@@ -432,7 +432,7 @@ class BaseController extends Controller
         $orderInfo = $advisersOrderInfo['orderInfo'];
         $currentKey = $advisersOrderInfo['currentKey'];
         //查询所有的课程顾问的群
-        $groupInfo = GroupModel::opened([
+        $groupInfo = GroupModel::opened()->where([
             'type'  =>  $type,
         ])->has("user")->get()->keyBy("leader_id");
         //最多进行指定次数的小轮循环，如果仍然没有找到合适的群，则退出，防止死循环

@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Api\DapengUserApi;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
+use App\Utils\Util;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 /**
 
@@ -56,7 +59,32 @@ class UserModel extends BaseModel
     }
     protected function getStatisticsAttribute(){
     }
-
+    protected function setPasswordAttribute($v){
+        if(!$v && !$this->uid){
+            $v = "123456";
+        }
+        if($v){
+            $this->attributes['password'] = md5($v);
+        }
+    }
+    function setDapengUserMobileAttribute($v){
+        if($this->dapeng_user_mobile != $v){
+            //判断当前主站账号是否已经绑定
+            if($temp = $this->where("dapeng_user_mobile",$v)->first()){
+                throw new UserValidateException($temp->name." 已绑定该主站账号");
+            }
+            $return = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$v]);
+            if($return['code'] != Util::SUCCESS){
+                throw new UserValidateException("获取主站用户信息失败");
+            }
+            $dapengUserInfo = $return['data'];
+            if(!collect($dapengUserInfo['roleList'])->contains("consultant")){
+                throw new UserValidateException("该用户没有课程顾问权限");
+            }
+            $this->dapeng_user_id = $dapengUserInfo['user']['userId'];
+            $this->attributes['dapeng_user_mobile'] = $v;
+        }
+    }
     /**
      * 检测用户名密码是否正确
      */
@@ -66,6 +94,9 @@ class UserModel extends BaseModel
         if(!$userInfo){
             throw new UserValidateException("帐号密码错误");
         }
+        if(!$userInfo->status){
+            throw new UserValidateException("该账号已经被暂停。请联系管理员");
+        }
         return $userInfo;
     }
 
@@ -73,10 +104,19 @@ class UserModel extends BaseModel
      * 用户管理群信息
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    protected function groups(){
+    function groups(){
         return $this->hasMany(GroupModel::class,'leader_id','uid');
     }
 
+    /**
+     * 销售记录
+     */
+    function rosterFollow(){
+        return $this->hasMany(RosterFollowModel::class,'adviser_id');
+    }
+    function lastRosterFollowOne(){
+        return $this->belongsTo(RosterFollowModel::class,"uid","adviser_id")->orderBy("id","desc")->withDefault();
+    }
     /**
      * 查询课程顾问
      * @param $query
@@ -94,7 +134,9 @@ class UserModel extends BaseModel
     public function scopeSeoer($query){
         return $query->whereIn("grade",[11,12]);
     }
-
+    public function scopeStatus($query){
+        return $query->where("status",1);
+    }
     protected static function boot()
     {
         parent::boot();

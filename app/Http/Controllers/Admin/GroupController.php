@@ -65,8 +65,8 @@ class GroupController extends BaseController
     
     function postSave(Request $request){
         $rules = [
-            'qq_group'  =>  'required|unique:user_qqgroup,qq_group',
-            'leader_id' =>  'required|exists:user_headmaster,uid'
+            'qq_group'  =>  'sometimes|required|unique:user_qqgroup,qq_group',
+            'leader_id' =>  'sometimes|required|exists:user_headmaster,uid'
         ];
         $messages = [
             'qq_group.required' =>  '群号码为必填项',

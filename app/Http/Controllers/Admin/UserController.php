@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Api\DapengUserApi;
 use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
+use App\Http\Requests\UserRequest;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
@@ -54,7 +55,8 @@ class UserController extends BaseController
     /**
      * 添加或删除记录
      */
-    function postSave(Request $request){
+    function postSave(UserRequest $request){
+
         if($request->input("uid")){
             $user = UserModel::withoutGlobalScope('status')->find($request->input("uid"));
             $user->fill($request->input());
