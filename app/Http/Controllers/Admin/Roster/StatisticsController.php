@@ -40,6 +40,7 @@ class StatisticsController extends BaseController
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.seoer",
             'list'  => $list,
+            'user_id_str'  =>  'seoer_id',
             'statistics'    => $statistics['statistics'],
             'user_statistics'    => $statistics['user_statistics']
         ]);
@@ -73,6 +74,7 @@ class StatisticsController extends BaseController
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.adviser",
             'list'  => $list,
+            'user_id_str'   =>  'adviser_id',
             'statistics'    => $statistics['statistics'],
             'user_statistics'    => $statistics['user_statistics']
         ]);
