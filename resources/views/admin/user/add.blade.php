@@ -70,7 +70,7 @@
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">展翅系统密码</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="mobile" class="form-control" style="width:200px" maxlength='11' placeholder="" value="{{$user->mobile}}">
+                    <input type="text" name="password" class="form-control" style="width:200px" maxlength='11' placeholder="@if($user->uid) 不修改请留空 @else 默认密码为123456 @endif" value="">
                     <p class="help-block"></p>
                 </div>
             </div>

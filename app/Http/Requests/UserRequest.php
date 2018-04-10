@@ -25,7 +25,7 @@ class UserRequest extends FormRequest
     {
         return [
             'name'  =>  "sometimes|required",
-            'mobile'    =>  "sometimes|required",
+            'mobile'    =>  "sometimes|required|digits_between:11,11",
             'grade' =>  'sometimes|required',
             'dapeng_user_mobile'   =>   "sometimes|required_if:grade,9,10",
         ];
@@ -38,6 +38,7 @@ class UserRequest extends FormRequest
             'grade.required'    =>  '请选择用户级别',
             "dapeng_user_mobile.required_if"    =>  "请输入主站帐号",
             "mobile.required"  =>  "展翅系统账号为必填",
+            "mobile.digits_between"   =>  "展翅系统账号为11位的数字"
         ];
     }
     public function getValidatorInstance()
