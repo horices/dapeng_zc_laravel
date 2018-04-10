@@ -82,6 +82,7 @@ Route::get("registration/list-pay","RegistrationController@getPayList")->name("a
 //支付记录详情
 Route::get("registration/list-detail","RegistrationController@getListDetail")->name("admin.registration.list.detail");
 Route::post("registration/mod-field","RegistrationController@postModField")->name("admin.registration.mod-field");
+Route::post("registration/mod-log-field","RegistrationController@postModLogField")->name("admin.registration.mod-log-field");;
 Route::post("registration/delete","RegistrationController@postDelete")->name("admin.registration.delete");
 
 /**

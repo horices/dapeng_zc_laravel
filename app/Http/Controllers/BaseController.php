@@ -90,6 +90,7 @@ class BaseController extends Controller
     ];
     //分期方式
     private static $_FQ_TYPE = [
+        'NO'        =>  '无分期',
         'CASH'      =>  '现金分期',
         'HUABEI'    =>  '花呗分期',
         'MYFQ'      =>  '蚂蚁分期',
@@ -178,7 +179,7 @@ class BaseController extends Controller
             'text'=> '支付查询',   //文字描述
             'route'=> "admin.registration.list.user",    //链接地址
             'flag'=> 'admin.registration.list',  //默认选中标识
-            'grade' =>  [4,9,5],          //需要展示的权限等级
+            'grade' =>  [4,5,9,10],          //需要展示的权限等级
         ],
         'pay_package' =>   [
             'text'=> '支付套餐',   //文字描述

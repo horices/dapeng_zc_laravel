@@ -143,6 +143,10 @@ class RegistrationController extends BaseController{
             $query->where("create_time",">=",strtotime($startDate));
         }
         //根据课程顾问ID来筛选所属学员的统计信息
+        $adminInfo = $this->getUserInfo();
+        if($adminInfo['grade'] >=9 ){
+            $query->where("adviser_id",$adminInfo['uid']);
+        }
 //        $adviserId = I("get.adviserId",0,"intval");
 //        if($adviserId){
 //            $map['adviser_id'] = $adviserId;
@@ -157,7 +161,7 @@ class RegistrationController extends BaseController{
             return $this->exportListUser($query);
         }
 
-        $list = $query->orderBy("id","desc")->paginate(15);
+        $list = $query->orderBy("last_pay_time","desc")->paginate(15);
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
         }
@@ -198,14 +202,21 @@ class RegistrationController extends BaseController{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getPayList(Request $request){
-        //月统计条总金额
-        $allSubmitAmount = UserPayLogModel::whereBetween('create_time',[strtotime(date('Y-m-1 00:00:00')),time()])->sum("amount");
-
         $userPayLogModel = UserPayLogModel::with(["userRegistration","userHeadmaster"]);
         //根据学员姓名检索
         $name = $request->get("name");
         if(!empty($name)){
             $userPayLogModel->where("name","like",'%'.$name.'%');
+        }
+        //根据开课手机号检索
+        $mobile = $request->get("mobile");
+        if($mobile){
+            $userPayLogModel->where("mobile","like",'%'.$mobile.'%');
+        }
+        //根据课程顾问ID来筛选所属学员的统计信息
+        $adminInfo = $this->getUserInfo();
+        if($adminInfo['grade'] >=9 ){
+            $userPayLogModel->where("adviser_id",$adminInfo['uid']);
         }
         //根据课程顾问姓名检索
         $adviserName = $request->get("adviserName");
@@ -234,12 +245,15 @@ class RegistrationController extends BaseController{
         if(!empty($endDate)){
             $userPayLogModel->where("create_time","<=",strtotime($endDate)+1);
         }
+        //月统计条总金额
+        $allSubmitAmount = $userPayLogModel->whereBetween('create_time',[strtotime(date('Y-m-1 00:00:00')),time()])->sum("amount");
+
         $list = $userPayLogModel->orderBy("id","desc")->paginate(15);
         //总记录条数
         return view("admin.registration.list-pay",[
             'allSubmitAmount'   =>  $allSubmitAmount,
             'list'              =>  $list,
-            'adminInfo'         =>  $this->getUserInfo(),
+            'adminInfo'         =>  $adminInfo,
             'leftNav'           => "admin.registration.list"
         ]);
     }
@@ -337,6 +351,29 @@ class RegistrationController extends BaseController{
             return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
         }else{
             throw new UserValidateException("修改失败!");
+        }
+    }
+
+    /**
+     * 修改支付记录字段
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UserValidateException
+     */
+    function postModLogField(Request $request){
+        $logModel = UserPayLogModel::find($request->get('id'));
+        if(!$logModel){
+            throw new UserValidateException("未找到要修改的支付记录！");
+        }
+        $field = $request->get("field");
+        $logModel->$field = $request->get("val");
+        $data = $logModel->toArray();
+        $logModel->updateValidate($data);
+        $eff = $logModel->save();
+        if($eff){
+            return Util::ajaxReturn(Util::SUCCESS,'修改成功！');
+        }else{
+            throw new UserValidateException("修改失败");
         }
     }
 }
