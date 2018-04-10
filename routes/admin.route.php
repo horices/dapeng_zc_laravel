@@ -43,8 +43,8 @@ Route::get("roster/list/one","Roster\IndexController@getSelectOne")->name("admin
 Route::get("roster/follow/index","Roster\FollowController@getIndex")->name("admin.roster.follow.index");
 Route::get("roster/follow/list","Roster\FollowController@getList")->name("admin.roster.follow.list");
 Route::get("roster/follow/user/list","Roster\FollowController@getUserList")->name("admin.roster.follow.list.user");
-Route::get("roster/follow/add/{roster_id}","Roster\FollowController@getAdd")->name("admin.roster.follow.add");
-Route::get("roster/follow/add/{roster_id}/{follow_id}","Roster\FollowController@getEdit")->name("admin.roster.follow.edit");
+Route::get("roster/follow/add","Roster\FollowController@getAdd")->name("admin.roster.follow.add");
+Route::get("roster/follow/edit","Roster\FollowController@getEdit")->name("admin.roster.follow.edit");
 Route::post("roster/follow/save","Roster\FollowController@postSave")->name("admin.roster.follow.save.post");
 //形成专属注册链接
 Route::post("roster/index/set-reg-url","Roster\IndexController@postSetRegUrl")->name("admin.roster.index.set-reg-url");

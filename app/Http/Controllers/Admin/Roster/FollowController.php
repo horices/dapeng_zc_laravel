@@ -19,6 +19,8 @@ class FollowController extends BaseController
 {
 
     function getIndex(){
+        $searchType = Request::get("search_type");
+        $keywords = Request::get("keywords");
         //查询所有用户
         $query = UserModel::adviser()->status()->with(['lastRosterFollowOne'])->withCount(['rosterFollow'=>function($query){
             $startDate = Request::get("startdate");
@@ -31,6 +33,9 @@ class FollowController extends BaseController
             }
             $query->select(DB::raw(" count(DISTINCT roster_id,from_unixtime(create_time,'%Y%m%d'))"));
         }]);
+        if($searchType && $keywords !== null){
+            $query->where($searchType,$keywords);
+        }
         $list = $query->paginate();
         return view("admin.roster.follow.index",[
             'list'  =>  $list
@@ -89,7 +94,7 @@ class FollowController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getAdd(){
-        $rosterId = Request::get("rosterId");
+        $rosterId = Request::get("roster_id");
         $roster = RosterModel::find($rosterId);
         return view("admin.roster.follow.add",[
             'leftNav'   => "admin.roster.list",

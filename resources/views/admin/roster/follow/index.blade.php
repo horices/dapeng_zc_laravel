@@ -5,13 +5,13 @@
         <form class="form-inline" style="width:920px; height:auto;" method="get">
             <div class="" style="float:left; height:30px;">
                 <select name="search_type" class="form-qq" style="width:80px; padding:3px;">
-                    <option value="name">姓名</option>
-                    <option value="qq">QQ号</option>
-                    <option value="mobile">手机号</option>
+                    <option value="name" @if(Request::get('search_type') == 'name') selected @endif>姓名</option>
+                    <option value="qq" @if(Request::get('search_type') == 'qq') selected @endif>QQ号</option>
+                    <option value="mobile" @if(Request::get('search_type') == 'mobile') selected @endif>手机号</option>
                 </select>
                 <input type="text" name="keywords" class="form-control"
                        style="height:30px; margin-bottom:3px; width:120px;" id="name" placeholder=""
-                       value="">
+                       value="{{ Request::get("keywords") }}">
             </div>
             <div class="form-tm" style="float:left; margin-left:10px;">
                 <label>
