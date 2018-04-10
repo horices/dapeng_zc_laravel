@@ -86,7 +86,7 @@ class IndexController extends BaseController
      */
     function getList(Request $request){
         //若没有选择时间，则默认选择当天时间
-        if(!$request->has("startdate")){
+        if(!$request->get("startdate")){
             $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
         }
         //查询所有列表
@@ -95,6 +95,21 @@ class IndexController extends BaseController
         }]);
         $seachType = Input::get("search_type");
         $keywords = Input::get("keywords");
+        if($seachType && $keywords !== null){
+            if($seachType == "roster_no"){
+                $query->where(function($query) use ($keywords){
+                    $query->where("qq",$keywords)->orWhere("wx",$keywords);
+                });
+                //搜索指定的QQ号或微信号时，自动清除其它条件，除推广专员，其它人搜索没有条件限制
+                $request->replace([
+                    'search_type'  =>   $seachType,
+                    'keywords'  => $keywords,
+                    'seoer_id'=>$request->get("seoer_id")
+                ]);
+            }else{
+                $where[$seachType] = $keywords;
+            }
+        }
         $type = Input::get("roster_type");
         $isReg = Input::get("is_reg");
         $courseType = Input::get("course_type");
@@ -106,17 +121,6 @@ class IndexController extends BaseController
         $adviserId = Input::get("adviser_id");
         $showStatistics = Input::get("show_statistics");
         $where = [];
-        if($seachType && $keywords !== null){
-            if($seachType == "roster_no"){
-                $query->where("qq",$keywords)->orWhere('wx',$keywords);
-            }else{
-                $where[$seachType] = $keywords;
-            }
-            //隐藏指定的关键字
-            if($keywords == 'default'){
-                $request->merge(['keywords'=>null]);
-            }
-        }
         if($type !== null){
             $where['type'] = $type;
         }
