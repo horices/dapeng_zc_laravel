@@ -8,8 +8,14 @@ class EventGroupLogModel extends BaseModel
     protected $table = "event_group_log";
 
     protected function getGroupStatusTextAttribute(){
+        $status = app('status')->getGroupStatus();
+        //如果当前为微信时，
+        if($this->roster->type == 2){
+            $status[1] = "等待添加";
+            $status[2] = "已添加";
+        }
         if($this->group_status !== null){
-            return app('status')->getGroupStatus($this->group_status);
+            return $status[$this->group_status];
         }
     }
     protected function getAddtimeTextAttribute(){
