@@ -25,7 +25,7 @@ class StatisticsController extends BaseController
         if(Input::get('export') == 1){
             $uids = $user->get()->pluck('uid')->toArray();
             $temp = $this->getStatistics(["inviter_id"],function($query) use ($uids){
-                $query->whereIn('inviter_id',$uids);
+                //$query->whereIn('inviter_id',$uids);
             });
             //查询所有的推广专员,并补全每个专员的统计信息
             $users = $user->select("uid","name")->get()->keyBy('uid')->transform(function($v,$k) use($temp){
@@ -35,7 +35,7 @@ class StatisticsController extends BaseController
         }
         $list = $user->paginate();
         $statistics = $this->getStatistics(["inviter_id"],function ($tquery) use ($list){
-           $tquery->whereIn("inviter_id",$list->pluck('uid'));
+           //$tquery->whereIn("inviter_id",$list->pluck('uid'));
         });
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.seoer",
@@ -59,7 +59,7 @@ class StatisticsController extends BaseController
         if(Input::get('export') == 1){
             $uids = $user->get()->pluck('uid')->toArray();
             $temp = $this->getStatistics(["last_adviser_id"],function($query) use ($uids){
-                $query->whereIn('last_adviser_id',$uids);
+                //$query->whereIn('last_adviser_id',$uids);
             });
             //查询所有的推广专员,并补全每个专员的统计信息
             $users = $user->select("uid","name")->get()->keyBy('uid')->transform(function($v,$k) use($temp){
@@ -69,12 +69,12 @@ class StatisticsController extends BaseController
         }
         $list = $user->paginate();
         $statistics = $this->getStatistics(["last_adviser_id"],function ($tquery) use ($list){
-            $tquery->whereIn("last_adviser_id",$list->pluck('uid'));
+            //$tquery->whereIn("last_adviser_id",$list->pluck('uid'));
         });
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.adviser",
             'list'  => $list,
-            'user_id_str'   =>  'adviser_id',
+            'user_id_str'   => "adviser_id",
             'statistics'    => $statistics['statistics'],
             'user_statistics'    => $statistics['user_statistics']
         ]);
