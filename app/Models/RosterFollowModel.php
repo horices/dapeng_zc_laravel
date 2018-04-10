@@ -28,6 +28,15 @@ class RosterFollowModel extends BaseModel
     }
 
     /**
+     * 获取私聊次数(每个记录算一次)
+     */
+    protected function getTimesAttribute(){
+        if($this->roster_id !== null)
+            $times = $this->where("roster_id",$this->roster_id)->count();
+        return $times ?? 0;
+    }
+
+    /**
      * 量的详情
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -41,5 +50,13 @@ class RosterFollowModel extends BaseModel
      */
     function creator(){
         return $this->belongsTo(UserModel::class,'create_id','uid');
+    }
+
+    /**
+     * 获取私聊次数
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    function followCount(){
+        return $this->hasMany(self::class,'roster_id','roster_id');
     }
 }

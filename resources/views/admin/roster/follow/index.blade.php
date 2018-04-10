@@ -50,7 +50,7 @@
                 <tr class="">
                     <td>{{ $user->uid }}</td>
                     <td>{{ $user->name }}</td>
-                    <td>{{ $user->rosterFollow->count() }}</td>
+                    <td>{{ $user->roster_follow_count }}</td>
                     <td>
                         {{ $user->lastRosterFollowOne->create_time_text ?? '-------------------' }}
                     </td>

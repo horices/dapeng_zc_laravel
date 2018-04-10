@@ -75,7 +75,7 @@
                 <td>{{ $followInfo->roster->group->group_name}}</td>
                 <td>{{ $followInfo->roster->group->qq_group }}</td>
                 <td>{{ $followInfo->adviser_name }}</td>
-                <td>{{ $followInfo->adviser_name }}</td>
+                <td>{{ $followInfo->follow_count }}</td>
                 <td class="showTip" src="{:U('getChart?type=deep_level&qq='.$l['qq'])}">
                     {{ $followInfo->deep_level_text }}
                 </td>

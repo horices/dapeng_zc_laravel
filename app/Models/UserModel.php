@@ -104,7 +104,9 @@ class UserModel extends BaseModel
     public function scopeSeoer($query){
         return $query->whereIn("grade",[11,12]);
     }
-
+    public function scopeStatus($query){
+        return $query->where("status",1);
+    }
     protected static function boot()
     {
         parent::boot();

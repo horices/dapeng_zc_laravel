@@ -20,8 +20,8 @@ class FollowController extends BaseController
 
     function getIndex(){
         //查询所有用户
-        $query = UserModel::adviser()->with(['lastRosterFollowOne','rosterFollow'=>function($query){
-            $startDate = Request::get("startdate",date('Y-m-d 00:00:00'));
+        $query = UserModel::adviser()->status()->with(['lastRosterFollowOne'])->withCount(['rosterFollow'=>function($query){
+            $startDate = Request::get("startdate");
             $endDate = Request::get("enddate");
             if($startDate){
                 $query->where("create_time",">=",strtotime($startDate));
@@ -29,7 +29,7 @@ class FollowController extends BaseController
             if($endDate){
                 $query->where("create_time","<",strtotime($endDate));
             }
-            $query->groupBy('adviser_id','roster_id',DB::raw("from_unixtime(create_time,'%Y%m%d')"));
+            $query->select(DB::raw(" count(DISTINCT roster_id,from_unixtime(create_time,'%Y%m%d'))"));
         }]);
         $list = $query->paginate();
         return view("admin.roster.follow.index",[
@@ -38,12 +38,14 @@ class FollowController extends BaseController
     }
     //获取单个课程顾问的关单记录
     function getList(){
-        $query = RosterFollowModel::query();
+        $query = RosterFollowModel::query()->withCount("followCount as follow_count");
         $query->with(["roster.group",'creator']);
         $userId = Request::get("user_id");
         $rosterNo = Request::get("roster_no");
         $deepLevel = Request::get("deep_level");
         $intention = Request::get("intention");
+        $startDate = Request::get("startdate");
+        $endDate = Request::get("enddate");
         if($userId){
             $where['adviser_id'] = $userId;
         }
@@ -55,6 +57,12 @@ class FollowController extends BaseController
         }
         if($rosterNo !== null){
             $where['qq'] = $rosterNo;
+        }
+        if($startDate !== null){
+            $query->where("create_time",">=",strtotime($startDate));
+        }
+        if($endDate !== null){
+            $query->where("create_time","<",strtotime($endDate));
         }
         $query->where($where);
         //获取单个用户的销售统计
