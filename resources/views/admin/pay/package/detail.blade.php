@@ -8,9 +8,9 @@
     </div>
     <div class="row dp-member-body-2">
         <form class="form-horizontal">
-            @if(Request::input('id'))
-                <input type="hidden" name="id" value="{{$r->id}}" />
-            @endif
+
+            <input type="hidden" name="id" value="{{$r->id}}" />
+
             <fieldset>
 
                 <div class="form-group">
