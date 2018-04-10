@@ -71,6 +71,7 @@ class CoursePackageModel extends BaseModel {
         ]);
         //执行验证
         $validator->validate();
+        return self::create($data);
 
     }
 
