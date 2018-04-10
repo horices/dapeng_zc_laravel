@@ -67,6 +67,9 @@ class UserModel extends BaseModel
         if(!$userInfo){
             throw new UserValidateException("帐号密码错误");
         }
+        if(!$userInfo->status){
+            throw new UserValidateException("该账号已经被暂停。请联系管理员");
+        }
         return $userInfo;
     }
 
