@@ -1,7 +1,7 @@
 @extends("admin.public.layout")
 @section("right_content")
 <div class="row dp-member-title-2">
-    <h4 class="col-md-4" style="padding-left:0"><notempty name="r.uid">修改<else />添加</notempty>关单信息</h4>
+    <h4 class="col-md-4" style="padding-left:0">@if(Request::get("follow_id")))修改 @else 添加@endif关单信息</h4>
 </div>
 <div class="row dp-member-body-2">
     <form role="form" id="regForm" class="form-horizontal" method="post" action="{{ route("admin.roster.follow.save.post") }}">

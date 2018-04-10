@@ -25,7 +25,7 @@ class RosterFollowRequest extends FormRequest
     {
         return [
             'roster_id'=>"exists:user_roster,id",
-            'picurl'    =>  "required",
+            //'picurl'    =>  "required",
             "deep_level"=> "required|in:".implode(',',array_keys(app('status')->getRosterDeepLevel())),
             'intention' =>  "required|in:".implode(',',array_keys(app('status')->getRosterIntention()))
         ];
