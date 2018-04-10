@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\RevisingAdvisor;
+use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;

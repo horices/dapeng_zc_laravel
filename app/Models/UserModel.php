@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Api\DapengUserApi;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
+use App\Utils\Util;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -57,7 +59,24 @@ class UserModel extends BaseModel
     }
     protected function getStatisticsAttribute(){
     }
-
+    function setDapengUserMobileAttribute($v){
+        if($this->dapeng_user_mobile != $v){
+            //判断当前主站账号是否已经绑定
+            if($temp = $this->where("dapeng_user_mobile",$v)->first()){
+                throw new UserValidateException($temp->name." 已绑定该主站账号");
+            }
+            $return = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$v]);
+            if($return['code'] != Util::SUCCESS){
+                throw new UserValidateException("获取主站用户信息失败");
+            }
+            $dapengUserInfo = $return['data'];
+            if(!collect($dapengUserInfo['roleList'])->contains("consultant")){
+                throw new UserValidateException("该用户没有课程顾问权限");
+            }
+            $this->dapeng_user_id = $dapengUserInfo['user']['userId'];
+            $this->attributes['dapeng_user_mobile'] = $v;
+        }
+    }
     /**
      * 检测用户名密码是否正确
      */
