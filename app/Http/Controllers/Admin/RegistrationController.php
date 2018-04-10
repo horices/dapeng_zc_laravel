@@ -161,7 +161,7 @@ class RegistrationController extends BaseController{
             return $this->exportListUser($query);
         }
 
-        $list = $query->orderBy("id","desc")->paginate(15);
+        $list = $query->orderBy("last_pay_time","desc")->paginate(15);
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
         }
@@ -351,6 +351,29 @@ class RegistrationController extends BaseController{
             return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
         }else{
             throw new UserValidateException("修改失败!");
+        }
+    }
+
+    /**
+     * 修改支付记录字段
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UserValidateException
+     */
+    function postModLogField(Request $request){
+        $logModel = UserPayLogModel::find($request->get('id'));
+        if(!$logModel){
+            throw new UserValidateException("未找到要修改的支付记录！");
+        }
+        $field = $request->get("field");
+        $logModel->$field = $request->get("val");
+        $data = $logModel->toArray();
+        $logModel->updateValidate($data);
+        $eff = $logModel->save();
+        if($eff){
+            return Util::ajaxReturn(Util::SUCCESS,'修改成功！');
+        }else{
+            throw new UserValidateException("修改失败");
         }
     }
 }

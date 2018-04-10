@@ -28,13 +28,6 @@
 
     <script type="text/javascript">
         $(function(){
-            var currentGroupStatus = "{$Think.get.group_status|default=''}";
-            var courseType = "{$Think.get.course_type}";
-            var isReg = "{$Think.get.is_reg}";
-            $("select[name='group_status'] option[value='"+currentGroupStatus+"']").prop("selected","selected");
-            $("select[name='course_type'] option[value='"+courseType+"']").prop("selected","selected");
-            $("select[name='is_reg'] option[value='"+isReg+"']").prop("selected","selected");
-            $("select[name='dateType'] option[value='{$Think.get.dateType}']").prop("selected",true);
             //列表点击变色
             $(".listCurrent").click(function () {
                 $(this).css('background-color','darkgrey').siblings().css('background-color','')
@@ -64,12 +57,10 @@
         }
     </script>
 
-
-
-                <style>
-                    .link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
-                    .link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
-                </style>
+    <style>
+        .link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
+        .link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
+    </style>
 
 
                 <div class="row search-row" style="padding:9px 0 15px 15px;">
@@ -128,7 +119,7 @@
                         <tbody>
                         @if (count($list) > 0)
                             @foreach ($list as $v)
-                                <tr class="listCurrent">
+                                <tr class="listCurrent @if($v->is_bright == 1) bg_color @endif">
                                     <td>{{$v->id}}</td>
                                     <td>{{$v->adviser_name}}</td>
                                     <td>{{$v->name}}</td>

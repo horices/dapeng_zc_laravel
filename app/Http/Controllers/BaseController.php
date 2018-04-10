@@ -90,6 +90,7 @@ class BaseController extends Controller
     ];
     //分期方式
     private static $_FQ_TYPE = [
+        'NO'        =>  '无分期',
         'CASH'      =>  '现金分期',
         'HUABEI'    =>  '花呗分期',
         'MYFQ'      =>  '蚂蚁分期',

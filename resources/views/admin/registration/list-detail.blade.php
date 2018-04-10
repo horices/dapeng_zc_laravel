@@ -302,19 +302,19 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">收款方式：</label>
                 <div class="col-md-8 controls">
-                    <select class="form-control" name="pay_type"  >
-                        <option value="" v-for="(l,index) in payTypeList" :value="index" :selected="index == userPayInfo.pay_type" >@{{l}}</option>
+                    <select class="form-control" name="pay_type" v-model="userPayInfo.pay_type">
+                        <option v-for="(l,index) in payTypeList" :value="index" >@{{l}}</option>
                     </select>
 
                 </div>
-                {{--<p class="help-block input-two" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'pay_type\',val:\''+userPayInfo.pay_type+'\',id:\''+userPayInfo.id+'\'}'" url="{{route('admin.registration.mod-log-field')}}" >修改</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">收款金额：</label>
                 <div class="col-md-8 controls">
                     <input id="package-price" type="text" name="amount" class="form-control" v-model="userPayInfo.amount" />
                 </div>
-                {{--<p class="help-block input-two" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'amount\',val:\''+userPayInfo.amount+'\',id:\''+userPayInfo.id+'\'}'" url="{{route('admin.registration.mod-log-field')}}">修改</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">套餐总金额：</label>
@@ -328,10 +328,10 @@
                     <template v-for="(l,index) in fqTypeList">
                         <input type="radio" name="fq_type" :value="index" v-model="userPayInfo.user_registration.fq_type"/>@{{l}}&nbsp;
                     </template>
-                    <input type="radio" name="fq_type" value="" v-model="userPayInfo.fq_type" />无
-                    <input id="fq_type" type="hidden" v-model="userPayInfo.fq_type"/>
+                    {{--<input type="radio" name="fq_type" value="" v-model="userPayInfo.fq_type" />无--}}
+                    <input id="fq_type" type="hidden" v-model="userPayInfo.user_registration.fq_type"/>
                 </div>
-                {{--<p class="help-block ajaxLink" data="{field:'fq_type',val:$('#fq_type').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'fq_type\',val:\''+userPayInfo.user_registration.fq_type+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}">修改</p>
             </div>
             <!--<div class="div_input_one">-->
             <!--<label class="col-md-2 control-label" for="input01">-->
@@ -347,12 +347,10 @@
                 <div class="col-md-8 controls">
                     <select id="rebate_id" class="form-control fleft" v-model="userPayInfo.user_registration.rebate_id" name="rebate_id"  @change="setRebate"  >
                     <option value="0">选择优惠活动</option>
-                    <option v-for="(l,index) in rebateList" :value="l.id" :selected="l.id == userPayInfo.user_registration.rebate_id">@{{l.title}}<template v-if="l.status == 'DEL'">(已删)</template></option>
+                    <option v-for="(l,index) in rebateList" :value="l.id">@{{l.title}}<template v-if="l.status == 'DEL'">(已删)</template></option>
                     </select>
-                    <input type="hidden" name="rebate_title" v-model="userPayInfo.rebate_title" />
-                    <input type="hidden" name="rebate_price" v-model="userPayInfo.rebate_price" />
                 </div>
-                {{--<p class="help-block ajaxLink" data="{field:'rebate_id',val:$('#rebate_id').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'rebate_id\',val:\''+userPayInfo.user_registration.rebate_id+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}">修改</p>
             </div>
 
             <div class="form-group">
@@ -365,9 +363,9 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">收款时间：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="pay_time" class="form-control datetime" v-model="userPayInfo.pay_time_text"   />
+                    <input type="text" name="pay_time" class="form-control" v-model="userPayInfo.pay_time_text"   />
                 </div>
-                {{--<p class="help-block input-two" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'pay_time\',val:\''+userPayInfo.pay_time_text+'\',id:\''+userPayInfo.id+'\'}'" url="{{route('admin.registration.mod-log-field')}}">修改</p>
             </div>
 
 
@@ -384,9 +382,8 @@
                     <input type="radio" name="server_date" value="0" v-model="userPayInfo.user_registration.server_date" />无&nbsp;&nbsp;
                     <input type="radio" name="server_date" value="1" v-model="userPayInfo.user_registration.server_date" />1个月&nbsp;&nbsp;
                     <input type="radio" name="server_date" value="2" v-model="userPayInfo.user_registration.server_date" />2个月
-                    <input id="server_date" type="hidden" v-model="userPayInfo.server_date"/>
                 </div>
-                {{--<p class="help-block ajaxLink" data="{field:'server_date',val:$('#server_date').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'server_date\',val:\''+userPayInfo.user_registration.server_date+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}">修改</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">开课状态：</label>
@@ -394,16 +391,15 @@
                     <input type="radio" name="is_open" value="0" v-model="userPayInfo.user_registration.is_open" />未开课&nbsp;&nbsp;
                     <input type="radio" name="is_open" value="1" v-model="userPayInfo.user_registration.is_open" />部分开课&nbsp;&nbsp;
                     <input type="radio" name="is_open" value="2" v-model="userPayInfo.user_registration.is_open"  />全部开课
-                    <input id="is_open" type="hidden" v-model="userPayInfo.is_open"/>
                 </div>
-                {{--<p class="help-block ajaxLink" data="{field:'is_open',val:$('#is_open').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'is_open\',val:\''+userPayInfo.user_registration.is_open+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}">修改</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label">备注：</label>
                 <div class="col-md-8 controls">
-                    <textarea id="remark" name="remark" class="form-control" style="width:400px; height:120px;" v-model="userPayInfo.user_registration.remark"   ></textarea>
+                    <textarea name="remark" class="form-control" style="width:400px; height:120px;" v-model="userPayInfo.user_registration.remark"></textarea>
                 </div>
-                {{--<p class="help-block input-two" data="{field:'remark',val:$('#remark').val()}" href="{:U('modField',['pay_log_id'=>$_GET['pay_log_id']])}" >修改</p>--}}
+                <p class="help-block ajaxLink" :data="'{field:\'remark\',val:\''+userPayInfo.user_registration.remark+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}">修改</p>
             </div>
         </fieldset>
     </form>
