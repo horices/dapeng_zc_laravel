@@ -104,6 +104,8 @@ class IndexController extends BaseController
                 $request->replace([
                     'search_type'  =>   $seachType,
                     'keywords'  => $keywords,
+                    'startdate' =>  null,
+                    'enddate'   =>  null,
                     'seoer_id'=>$request->get("seoer_id")
                 ]);
             }else{
@@ -142,7 +144,6 @@ class IndexController extends BaseController
         if($endDate !== null){
             $query->whereRaw("addtime <= ".strtotime($endDate));
         }
-
         $statistics = [];
         $statistics['statistics'] = '';
         if($seoerId !==  null){
