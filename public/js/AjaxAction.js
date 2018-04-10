@@ -65,13 +65,18 @@
 		    $(".resetForm").click(function(){
 		        $(this).parents("form")[0].reset();
 		    });
+		    $("form").keyup(function(event){
+                if(event.keyCode ==13){
+                    $(this).find(".linkSubmit,.ajaxSubmit").first().click();
+                }
+			});
 		    $(".ajaxUpload").each(function(){
 				$(this).attr("href","javascript:;");
 			});
 			$(".ajaxUpload").unbind("click").click(function(){
 				openUpload($(this));
 				return false;
-			})
+			});
 		    $(".back").each(function(){
 		    	$(this).attr("href","javascript:;");
 		    	$(this).unbind("click").click(function(){
