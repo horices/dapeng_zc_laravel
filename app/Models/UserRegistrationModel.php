@@ -272,7 +272,7 @@ class UserRegistrationModel extends BaseModel{
         $validator->validate();
         //$data = $this->getColumns($data);
         //开启事务
-        DB::transaction(function () use($UserPayModel,$UserPayLogModel,$data){
+        return DB::transaction(function () use($UserPayModel,$UserPayLogModel,$data){
             $resReg = self::create($data);
             //添加用户支付信息
             $data['registration_id'] = $resReg['id']; //关联报名课程记录ID
@@ -292,7 +292,7 @@ class UserRegistrationModel extends BaseModel{
                 throw new UserValidateException("重置套餐全名失败！");
             }
             //更新报名信息的最后一次提交支付记录时间
-            $this->setLastPayTime($resReg['id']);
+            //$this->setLastPayTime($resReg['id']);
         });
     }
 
@@ -443,8 +443,7 @@ class UserRegistrationModel extends BaseModel{
      * @param $registration_id
      */
     function setLastPayTime($id){
-        $UserPayLog = new UserPayLogModel();
-        $lastPayTime = $UserPayLog::where('registration_id',$id)
+        $lastPayTime = UserPayLogModel::where('registration_id',$id)
             ->orderBy("id","desc")
             ->value("create_time");
         return self::where('id',$id)->update(['last_pay_time'=>$lastPayTime]);

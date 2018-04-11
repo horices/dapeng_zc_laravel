@@ -79,7 +79,7 @@ class RegistrationController extends BaseController{
         //补全字段数据
         $UserRegistration->completeData($post);
         //插入报名记录
-        $UserRegistration->addData($post,$UserPayModel,$UserPayLogModel);
+        $eff = $UserRegistration->addData($post,$UserPayModel,$UserPayLogModel);
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'信息提交成功！']);
     }
 
