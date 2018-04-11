@@ -49,6 +49,10 @@
                         server_date:0,  //赠送服务期
                         is_open:0,      //是否已经开课导学
                     },
+                    //学员开课手机号
+                    mobile:'',
+                    //是否显示第二个form
+                    hasForm:0,
                     //用户是否已经存在
                     hasUser:false
                 },
@@ -98,7 +102,6 @@
                     },
                     addPayType:function(){
                         this.payData.txt = $("#pay-type").find("option:selected").text();
-                        this.payData.time = $(".datetime").val();
                         if(!this.payData.type){
                             layer.msg("请先选择支付方式！",{icon:2,time:2000});
                             return false;
@@ -255,9 +258,7 @@
                 }
             });
             $(".main_left").css({'border-right':'1px solid #666'});
-            $(".sub_main_two").show();
-            $("#show-input").show();
-            $(".main_right").show();
+            vm.hasForm = 1;
             $("#mobile").attr("readonly",true);
             //初始化日期选择器
             $('.datetime').datetimepicker({
@@ -304,6 +305,14 @@
                 return false;
             }
         }
+        /**
+         * 日期选择回调
+         * @param obj
+         * @param date
+         */
+        function selectDateCallback(obj,date) {
+            vm.payData.time = date;
+        }
     </script>
     <style>
         .container{width: 1270px;}
@@ -324,29 +333,35 @@
         .control-label{width: 120px;float: left;text-align: center;line-height: 34px;}
         .div_input_one{height: 40px;width: 100%;margin-top: 10px; line-height: 34px;}
         .sub_main_one{min-height: 670px;}
-        .sub_main_two{height: 100px;border-top: 1px solid #ccc;height: 30%;display: none}
+        .sub_main_two{height: 100px;border-top: 1px solid #ccc;height: 30%;}
         .pay_input{width: 100px; float: left; margin-left: 4px;}
-        #show-input,.main_right{display: none}
     </style>
     <!--<div class="row dp-member-title-2">-->
     <!--<h4 class="col-md-4" style="padding-left:0">学员支付/开课录入</h4>-->
     <!--</div>-->
-    <form id="container">
-        <div class="sub_main">
+        <div id="container" class="sub_main">
+
+            <div class="row dp-member-title-2" style="margin-left: -3px;">
+                <h4 class="col-md-4" style="padding-left:0;font-weight:700;">
+                    报名信息：
+                </h4>
+            </div>
+            <div class="div_input_one">
+                <label class="col-md-2 control-label" for="input01">
+                    学员手机：
+                </label>
+                <form>
+                <input type="text" name="mobile" v-model="mobile" class="form-control fleft" maxlength="11" :readonly="hasUser"/>
+                    <input type="hidden" name="client_submit" value="PC" />
+                    <input type="text" style="display: none;">
+                <a class="common-button dblock fleft combg2 ml5 ajaxSubmit" url="{{route('admin.registration.has-registration')}}" callback="hasRegistration">下一步</a>
+                </form>
+            </div>
+
+            <form v-show="hasForm">
+            <input type="hidden" name="mobile" v-model="mobile" />
             <div class="sub_main_one">
                 <div class="main_left">
-                    <div class="row dp-member-title-2" style="margin-left: -3px;">
-                        <h4 class="col-md-4" style="padding-left:0;font-weight:700;">
-                            报名信息：
-                        </h4>
-                    </div>
-                    <div class="div_input_one">
-                        <label class="col-md-2 control-label" for="input01">
-                            学员手机：
-                        </label>
-                        <input type="text" id="mobile" name="mobile" value="" class="form-control fleft" maxlength="11" :readonly="hasUser"/>
-                        <a class="common-button dblock fleft combg2 ml5 ajaxLink" data="{mobile:$('#mobile').val(),client_submit:'PC'}" url="{{url('admin/registration/has-registration')}}" callback="hasRegistration">下一步</a>
-                    </div>
                     <div id="show-input">
                         <div class="div_input_one">
                             <label class="col-md-2 control-label" for="input01">
@@ -492,7 +507,7 @@
                             <input type="text" id="pay-amount" class="form-control" value="" placeholder="金额" style="width: 80px;" v-model="payData.amount" maxlength="8" onkeyup="this.value=this.value.replace(/[^0-9|\.]/,'')"/>
                         </div>
                         <div class="pay_input" style="width:165px;margin-right: 10px;">
-                            <input type="text" class="form-control datetime" value="" placeholder="日期" v-model="payData.time" style="width: 165px;">
+                            <input type="text" class="form-control select_date" value="" placeholder="日期" v-model="payData.time" callback="selectDateCallback" style="width: 165px;">
                         </div>
                         <div class="fa fa-plus add-pay-type" @click="addPayType" title="添加该支付方式"></div>
                     <!--<span class="help-block">*必填项</span>-->
@@ -519,9 +534,9 @@
                     </label>
                     <input type="text" name="amount_submitted" class="form-control" v-model="userPayInfo.amount_submitted" readonly />
                 </div>
-                </div>
-                </div>
-                </div>
+            </div>
+            </div>
+            </div>
 
             <div class="sub_main_two">
 
@@ -539,7 +554,8 @@
                     <button class="btn btn-primary ajaxSubmit" type="button" url="{{url('admin/registration/add-registration')}}">确认提交</button>
                 </div>
             </div>
+            </form>
         </div>
-    </form>
+
     <script src="/js/datetimepicker/build/jquery.datetimepicker.full.js"></script>
 @endsection

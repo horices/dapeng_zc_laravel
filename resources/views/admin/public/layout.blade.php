@@ -93,9 +93,13 @@ $(function(){
         });
     });
     $(".select_date").each(function(){
+        var _this = $(this);
         laydate.render({
-            elem: $(this)[0],
+            elem: _this[0],
             type:'datetime',
+            done: function(value, date, endDate){
+                Utils.getfn(_this.attr('callback'))(_this,value);
+            }
             //theme:'grid',
         });
     });
