@@ -243,7 +243,7 @@ class RosterModel extends BaseModel
         if(!isset($data['qq_group_id'])){
             $groupInfo = app('status')->getNextGroupInfo($data['roster_type']);
             if(!$groupInfo){
-                throw new UserValidateException("未找到可用的QQ群");
+                throw new UserValidateException("未找到可用的群信息");
             }
             $data['qq_group_id'] = $groupInfo['id'];
         }

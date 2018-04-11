@@ -22,10 +22,14 @@
      * @param obj
      */
     function addRosterCallback(jsonData,obj){
-        $(".showmsg").hide();
-        $("#success").show();
-        $("#qq_group").text(jsonData.data.qq_group);
-        new ClipboardJS('#clipboarder');
+        if(jsonData.code == {{ \App\Utils\Util::SUCCESS }}) {
+            $(".showmsg").hide();
+            $("#success").show();
+            $("#qq_group").text(jsonData.data.qq_group);
+            new ClipboardJS('#clipboarder');
+        }else{
+            CustomDialog.failDialog(jsonData.msg);
+        }
     }
 
     /**
@@ -68,14 +72,14 @@
         <div class="form-group">
 
             <div class="col-md-12">
-                <input type="text" id="qq" name="roster_no" class="form-control" maxlength="12" style="width:300px" placeholder="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"> <button class="btn btn-primary ajaxSubmit" data="{validate:1}" callback="checkRosterNoCallback" > 提交检查</button>
+                <input type="text" id="qq" name="roster_no" class="form-control" maxlength="12" style="width:300px" placeholder="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"> <button class="btn btn-primary ajaxSubmit" data="{validate:1}" callback="checkRosterNoCallback" showloading="true"> 提交检查</button>
             </div>
         </div>
         <div id="addQQ" class="showmsg success-notice showmsg1" style="display:none;">
             <p class="s1">QQ号码可以提交</p>
             <p class="s3"></p>
             <p class="s4" style="text-align:right">
-                <button class="btn btn-primary ajaxSubmit" callback="addRosterCallback">确认提交</button>
+                <button class="btn btn-primary ajaxSubmit" callback="addRosterCallback" showloading="true">确认提交</button>
             </p>
         </div>
 
