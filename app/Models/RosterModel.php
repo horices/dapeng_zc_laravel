@@ -47,7 +47,12 @@ class RosterModel extends BaseModel
     }
     function getGroupStatusTextAttribute(){
         if($this->group_status !== null) {
-            return app("status")->getGroupStatus()[$this->group_status];
+            $status = app("status")->getGroupStatus();
+            if($this->roster_type == 2){
+                $status[1] = '等待添加';
+                $status[2] = "已添加";
+            }
+            return $status[$this->group_status];
         }
     }
     function getAddtimeExportTextAttribute($v){

@@ -1,47 +1,16 @@
 @extends("admin.public.layout")
 @section("right_content")
-<link rel="stylesheet" href="/js/webuploader/webuploader.css" />
 <style>
-.act_list{ position:relative; background:#f00; zoom:1;}
-.act_list .sel{ margin:0; padding:0; width:80px; height:22px; line-height:22px; overflow:hidden; position:absolute; border:1px transparent solid; left:0; top:0;}
-.act_list .sel li a{ display:block; width:100%; height:22px; line-height:22px; margin:0; padding:0 0 0 10px; outline:0; text-decoration:none;}
-.act_list .sel_on{ height:auto; border:1px #C4C4C4 solid; background:#fff; z-index:10; box-shadow:0px 0px 6px #ccc; border-radius:3px;}
-.act_list .sel_on li a:hover{ background:#71A406; color:#fff; text-decoration:none;}
-.table th, td{word-break:break-all}
-.table{table-layout:fixed;}
-
-.gray{ color:#aaa;}
-.form-group a:hover{ color:#fff;}
-.group_00{}/*默认色*/
-.group_01{color:#3bbbd9;}/*蓝色*/
-.group_02{color:#00cc33;}/*绿色*/
-.group_03{color:#ff1e00;}/*黄色*/
-.group_04{color:#ff7f00;}/*红色*/
-@media (min-width: 992px){
-    .col-md-10{width: 85%}
+.grade {
+    display: none;
 }
-.flag_icon::before{
-    position:relative;
-    display:block;
-    position:absolute;
-    left:10px;
+.group_status_underline{
+    text-decoration: underline;
+    cursor:pointer;
 }
-.flag_icon_1::before{
-    content:url(/admin/images/flag_icon_new.gif);
-
-}
-.flag_icon_2::before{
-    content:url(/admin/images/flag_icon_active.gif);
-}
-
-.link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
-.link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
-
-.webuploader-pick{padding: 5px 15px !important;margin-top: 10px !important;display: inline !important;}
 </style>
 <script>
     $(function () {
-        $(".grade").hide();
         $(".grade{{$userInfo->grade}}").show();
     });
     function openCourseLog(roster){
@@ -259,17 +228,16 @@
                     <td title="{{ $roster->course_name }}" @if($roster->course_type) onclick="openCourseLog({{ $roster->toJson() }});" @endif style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
                         {{ $roster->course_type_text }}</td>
                     <td>
-                        @if($roster->roster_type == 1)
-                        <span class="group_status_{{ $roster->group_status }}" @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">{{ $roster->group_status_text }}</span>
-                        @elseif($roster->roster_type == 2)
+
+
                             @if($roster->group_status == 0)
-                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 9 && $userInfo->grade != 10) ajaxLink @endif" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:1}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为等待添加吗" style="cursor:pointer;">无</span>
+                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 9 && $userInfo->grade != 10 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:1}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为等待添加吗">无</span>
                             @elseif($roster->group_status == 1)
-                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 11 && $userInfo->grade != 12) ajaxLink @endif" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加嘛" style="cursor:pointer;">等待添加</span>
+                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 11 && $userInfo->grade != 12 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加嘛">等待添加</span>
                             @else
-                                <span class="group_status_{{ $roster->group_status }}" style="cursor:pointer;">已添加</span>
+                            <span class="group_status_{{ $roster->group_status }} group_status_type_{{ $roster->roster_type }}">{{ $roster->group_status_text }}</span>
                             @endif
-                        @endif
+
                     </td>
                     <td @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">
                     {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}
