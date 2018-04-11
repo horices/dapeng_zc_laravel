@@ -25,7 +25,7 @@ class UserPayLogModel extends BaseModel {
      * @var array
      */
     protected $dates = [
-        //'create_time'
+        'create_time'
     ];
     protected $appends = [
         'pay_type_text','adviser_name_reg','pay_time_text','is_bright'
@@ -70,16 +70,6 @@ class UserPayLogModel extends BaseModel {
      */
     public function getIsBrightAttribute(){
         return date("Y-m-d H:i:s",$this->create_time) > date("Y-m")."-16 00:00:00" ? 1 : 0;
-    }
-
-    /**
-     * 修改器 支付提交时间
-     * @param $value
-     * @return false|int
-     */
-    public function setPayTimeAttribute($value){
-        //dd($value,strtotime($value));
-        return strtotime($value);
     }
 
     /**
