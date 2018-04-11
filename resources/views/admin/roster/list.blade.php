@@ -1,5 +1,6 @@
 @extends("admin.public.layout")
 @section("right_content")
+<link rel="stylesheet" href="/js/webuploader/webuploader.css" />
 <style>
 .grade {
     display: none;
@@ -8,7 +9,9 @@
     text-decoration: underline;
     cursor:pointer;
 }
+.webuploader-pick{padding: 5px 15px !important;margin-top: 10px !important;display: inline !important;}
 </style>
+
 <script>
     $(function () {
         $(".grade{{$userInfo->grade}}").show();
