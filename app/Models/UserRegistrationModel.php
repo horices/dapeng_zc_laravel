@@ -23,7 +23,9 @@ class UserRegistrationModel extends BaseModel{
     protected $dateFormat = 'U';
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-
+    protected $dates = [
+        //'last_pay_time'
+    ];
     protected $appends = [
         "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text"
     ];

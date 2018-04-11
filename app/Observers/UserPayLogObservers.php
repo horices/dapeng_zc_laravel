@@ -25,7 +25,8 @@ class UserPayLogObservers {
 
     function created(UserPayLogModel $userPayLog){
         $query = UserRegistrationModel::find($userPayLog->registration_id);
-        $query->last_pay_time = $userPayLog->create_time;
+        //dd(strtotime($userPayLog->create_time));
+        $query->last_pay_time = strtotime($userPayLog->create_time);
         $query->save();
     }
 

@@ -25,7 +25,7 @@ class UserPayLogModel extends BaseModel {
      * @var array
      */
     protected $dates = [
-        'create_time'
+        //'create_time'
     ];
     protected $appends = [
         'pay_type_text','adviser_name_reg','pay_time_text','is_bright'
