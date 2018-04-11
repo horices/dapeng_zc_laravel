@@ -22,13 +22,15 @@
          * @param obj
          */
         function addRosterCallback(jsonData,obj){
-            console.log(jsonData);
-            console.log(jsonData.data.group.qrc_url);
-            $(".showmsg").hide();
-            $("#success").show();
-            $("#qrc_url").attr("src",jsonData.data.group.qrc_url);
-            $("#qq_group").text(jsonData.data.qq_group);
-            new ClipboardJS('#clipboarder');
+            if(jsonData.code == {{ \App\Utils\Util::SUCCESS }}){
+                $(".showmsg").hide();
+                $("#success").show();
+                $("#qrc_url").attr("src",jsonData.data.group.qrc_url);
+                $("#qq_group").text(jsonData.data.qq_group);
+                new ClipboardJS('#clipboarder');
+            }else{
+                CustomDialog.failDialog(jsonData.msg);
+            }
         }
 
         /**
@@ -80,7 +82,7 @@
             <p class="s1">微信号检测正常</p>
             <p class="s3"></p>
             <p class="s4" style="text-align:right">
-                <button class="btn btn-primary ajaxSubmit" callback="addRosterCallback">确认提交</button>
+                <button class="btn btn-primary ajaxSubmit" callback="addRosterCallback" showloading="true">确认提交</button>
             </p>
         </div>
 
