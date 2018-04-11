@@ -1,7 +1,7 @@
 @extends("admin.public.layout")
 @section("right_content")
 <div class="row search-row" style="padding:9px 0 15px 15px;">
-    <form class="form-inline" style="width:920px; height:auto;" method="get">
+    <form class="form-inline" style="width:920px; height:auto;" method="get" id="searchForm">
         <input type="hidden" name="user_id" value="{{ Request::get("user_id") }}" />
         <div class="form-tm" style="float:left; margin-left:10px;">
             <input type="text" name="roster_no" class="form-control" style="height:30px;width:120px;" placeholder="搜索量号码"
@@ -57,7 +57,7 @@
             <th style="width:60px;">群昵称</th>
             <th style="width:60px;">群号</th>
             <th style="width:85px;">课程顾问</th>
-            <th style="width:85px;">私聊次数</th>
+            <th style="width:85px;" class="linkSubmit" formTarget="#searchForm" data="{order:'count',direction:{{ (Request::get('direction')+1)%2 }} }">私聊次数</th>
             <th style="width:75px;">私聊深度</th>
             <th style="width:75px;">报名意向</th>
             <th>备注</th>
@@ -75,7 +75,7 @@
                 <td>{{ $followInfo->roster->group->group_name}}</td>
                 <td>{{ $followInfo->roster->group->qq_group }}</td>
                 <td>{{ $followInfo->adviser_name }}</td>
-                <td>{{ $followInfo->follow_count }}</td>
+                <td>{{ $followInfo->count }}</td>
                 <td class="showTip" src="{:U('getChart?type=deep_level&qq='.$l['qq'])}">
                     {{ $followInfo->deep_level_text }}
                 </td>

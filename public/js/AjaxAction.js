@@ -265,7 +265,13 @@
 		 */
 		_this.bindLinkSubmitAction = function (obj){
 		    var href=obj.attr("href");
-		    var form = obj.parents("form");
+		    var form;
+		    if(obj.attr("formTarget")){
+		    	form = $(obj.attr("formTarget"));
+		    	console.log(form);
+			}else{
+                form = obj.parents("form");
+			}
 		    var action = form.attr("action");
 		    if(href && href !=='#' && href !== ':;' && href !== 'javascript:;' && href !== 'javascript:void();' && href !== 'void();' && href !== 'void' && href !== "javascript:void(0)"){
 		        action = href;

@@ -43,7 +43,7 @@ class FollowController extends BaseController
     }
     //获取单个课程顾问的关单记录
     function getList(){
-        $query = RosterFollowModel::query()->withCount("followCount as follow_count");
+        $query = RosterFollowModel::query();
         $query->with(["roster.group",'creator']);
         $userId = Request::get("user_id");
         $rosterNo = Request::get("roster_no");
@@ -51,6 +51,8 @@ class FollowController extends BaseController
         $intention = Request::get("intention");
         $startDate = Request::get("startdate");
         $endDate = Request::get("enddate");
+        $order = Request::get("order");
+        $direction = Request::get("direction");
         if($userId){
             $where['adviser_id'] = $userId;
         }
@@ -69,9 +71,17 @@ class FollowController extends BaseController
         if($endDate !== null){
             $query->where("create_time","<",strtotime($endDate));
         }
+        if($order !== null && $direction !== null){
+            if($direction){
+                $direction = 'desc';
+            }else{
+                $direction = 'asc';
+            }
+            $query->orderBy($order,$direction);
+        }
         $query->where($where);
         //获取单个用户的销售统计
-        $list = $query->paginate();
+        $list = $query->select(DB::raw('*,count(*) as count'))->groupBy("roster_id")->paginate();
         return view("admin.roster.follow.list",[
             'leftNav'   =>  Request::get("leftNav","admin.roster.follow.index"),
             'list'  =>  $list
