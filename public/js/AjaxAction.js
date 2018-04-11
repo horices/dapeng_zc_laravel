@@ -167,6 +167,48 @@
                 CustomDialog.closeDialog();
             }
 		}
+		_this.defaultReturn = function(data,obj){
+            if(!data){
+                CustomDialog.failDialog("请求超时");
+                return ;
+            }
+            if(typeof data == "string"){
+                CustomDialog.failDialog(data);
+                return ;
+            }
+            var time = 0;
+            var url = data.url;
+            if(data.code){
+                CustomDialog.successDialog(data.msg);
+            }else{
+                CustomDialog.failDialog(data.msg);
+            }
+            time = 1500;
+            if(data.location === false || data.code == 0){
+                return ;
+            }
+            setTimeout(function(){
+                switch(url){
+                    case "back":
+                        history.back();
+                        return ;
+                        break;
+                }
+                if(url){
+                    if(location == 'ajax'){
+                        _this.ajaxLoadAction("<a url='"+url+"' storage='false'></a>");
+                    }else{
+                        top.location.href = url;
+                    }
+                }else{
+                    if(location == 'ajax'){
+                        _this.ajaxLoadAction("<a url='"+location.href+"' storage='false'></a>");
+                    }else{
+                        top.location.reload();
+                    }
+                }
+            },time);
+		}
 		/**
 		 * ajax 默认回调
 		 */
@@ -177,46 +219,7 @@
 		    		_this.getfn(callback)(data,obj);
 		            return ;
 		    }
-		    if(!data){
-		    	CustomDialog.failDialog("请求超时");
-		    	return ;
-		    }
-		    if(typeof data == "string"){
-		    		CustomDialog.failDialog(data);
-		            return ;
-		    }
-			var time = 0;
-			var url = data.url;
-			if(data.code){
-				CustomDialog.successDialog(data.msg);
-			}else{
-				CustomDialog.failDialog(data.msg);
-			}
-			time = 1500;
-			if(data.location === false || data.code == 0){
-				return ;
-			}
-			setTimeout(function(){
-				switch(url){
-					case "back":
-						history.back();
-						return ;
-					break;
-				}
-				if(url){
-		        	if(location == 'ajax'){
-		        		_this.ajaxLoadAction("<a url='"+url+"' storage='false'></a>");
-		        	}else{
-		        		top.location.href = url;
-		        	}
-		        }else{
-		        	if(location == 'ajax'){
-		        		_this.ajaxLoadAction("<a url='"+location.href+"' storage='false'></a>");
-		        	}else{
-		        		top.location.reload();
-		        	}
-		        }
-			},time);
+			_this.defaultReturn(data,obj);
 		}
 		/**
 		 * 绑定异步链接

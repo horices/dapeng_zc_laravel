@@ -312,6 +312,10 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
         })
     }
 
+    function loginCallback(json,obj){
+        AjaxAction.defaultReturn(json,obj);
+        $(".verifyCode").click();
+    }
 </script>
 </head>
 
@@ -369,7 +373,7 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                                 </div>
                                 <div class="form-item">
                                     <div class="form-cont">
-                                        <button type="button" class="ajaxSubmit passport-btn passport-btn-def xl w-full" tabindex="4">登录</button>
+                                        <button type="button" class="ajaxSubmit passport-btn passport-btn-def xl w-full" tabindex="4" showloading="true" callback="loginCallback">登录</button>
                                     </div>
                                 </div>
                             </form>
