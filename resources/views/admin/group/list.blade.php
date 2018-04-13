@@ -32,13 +32,13 @@
            </select>
        </div>
        <div class="form-group">
-        <div  class="form-but linkSubmit"><a class="common-button dblock combg1">搜索</a></div>
+        <div  class="form-but linkSubmit"><a class="common-button dblock combg1" showloading="true">搜索</a></div>
        </div>
        <div class="form-group">
         <div  class="form-but"><a class="common-button dblock combg2 ajaxLink"  href="{:U('Index/closeAllGroup')}" warning="确认关闭所有群么，关闭后无法提交数据!">一键关闭所有群</a></div>
        </div>
        <div class="form-group">
-        <a class="common-button combg5 linkSubmit" data="{export:1}">导出</a>
+        <a class="common-button combg5 linkSubmit" data="{export:1}" showloading="true">导出</a>
        </div>
    </form>
 </div>
