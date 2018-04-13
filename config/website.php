@@ -15,9 +15,9 @@ return [
     ],
     //学院名字
     'SCHOOL_NAME'   =>  [
-        'bzr.dapengjiaoyu.com'   =>  'SJ',
-        'zc.dapengjiaoyu.com'   =>  'SJ',
-        'ms.dapengjiaoyu.com'   =>  'MS',
+        'bzr.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
+        'zc.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
+        'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
     ],
     //大鹏主站URL
     'PC_URL'   =>  [
@@ -27,12 +27,12 @@ return [
     //展翅系统URL
     'ZC_URL'   =>  [
         //设计学院
-        'SJ'    =>  [
+        \App\Utils\Util::SCHOOL_NAME_SJ    =>  [
             \App\Utils\Util::DEV      =>  'http://test.bzr.dapengjiaoyu.com',
             \App\Utils\Util::MASTER    =>  'http://bzr.dapengjiaoyu.com',
         ],
         //美术学院
-        'MS'    =>  [
+        \App\Utils\Util::SCHOOL_NAME_MS    =>  [
             \App\Utils\Util::MASTER    =>  'http://ms.dapengjiaoyu.com',
             \App\Utils\Util::DEV      =>  'http://test.ms.dapengjiaoyu.com',
         ]
