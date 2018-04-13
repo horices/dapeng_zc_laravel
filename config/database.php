@@ -39,7 +39,7 @@ return [
             'prefix' => '',
         ],
 
-        'mysql' => [
+        'SJ' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
@@ -53,7 +53,20 @@ return [
             'strict' => false,
             'engine' => null,
         ],
-
+        'MS'    =>  [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_MS', '127.0.0.1'),
+            'port' => env('DB_PORT_MS', '3306'),
+            'database' => env('DB_DATABASE_MS', 'forge'),
+            'username' => env('DB_USERNAME_MS', 'forge'),
+            'password' => env('DB_PASSWORD_MS', ''),
+            'unix_socket' => env('DB_SOCKET_MS', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),
