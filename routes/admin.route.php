@@ -13,7 +13,7 @@ Route::get("group/add","GroupController@getAdd")->name("admin.group.add");
 Route::get("group/{group_id}","GroupController@getEdit")->name("admin.group.edit");
 Route::post("group/save","GroupController@postSave")->name("admin.group.save");
 Route::post("group/change_open_status","GroupController@postSave")->name("admin.group.change_open_status");
-
+Route::post("group/close-all-group","GroupController@postCloseAllGroup")->name("admin.group.close-all-group");
 //用户管理
 Route::get("user/list","UserController@getList")->name("admin.user.list");
 Route::get("user/add","UserController@getAdd")->name("admin.user.add");

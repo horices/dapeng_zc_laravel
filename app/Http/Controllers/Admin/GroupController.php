@@ -112,5 +112,21 @@ class GroupController extends BaseController
         $data['data'] = $query->take(5000)->get();
         return $this->export($data);
     }
+
+    /**
+     * 一键关闭所有群
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function postCloseAllGroup(){
+        $eff = GroupModel::where("id",">","0")->update(['is_open'=>0]);
+        if($eff){
+            $returnData['code'] = Util::SUCCESS;
+            $returnData['msg'] = "已经成功关闭所有群!";
+        }else{
+            $returnData['code'] = Util::FAIL;
+            $returnData['msg'] = "关闭失败！";
+        }
+        return Util::ajaxReturn($returnData);
+    }
 }
 
