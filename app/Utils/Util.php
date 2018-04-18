@@ -13,6 +13,8 @@ class Util{
     const TEST  = "TEST";
     const DEV = "DEV";
 
+    const SCHOOL_NAME_MS = 'MS';
+    const SCHOOL_NAME_SJ = 'SJ';
 
     /**
      * @note json返回数据
@@ -56,9 +58,10 @@ class Util{
     /**
      * 获取当前学院的名字
      * @param string $host
+     * @param string $default
      * @return mixed
      */
-    static function getSchoolName($host = "",$default = "SJ"){
+    static function getSchoolName($host = "",$default = self::SCHOOL_NAME_SJ){
         if(!$host)
             $host = $_SERVER['HTTP_HOST'];
         return collect(self::getWebSiteConfig("SCHOOL_NAME",false))->get($host,$default);
@@ -69,15 +72,6 @@ class Util{
      */
     public static function getDapengHost(){
         return self::getWebSiteConfig("PC_URL");
-    }
-
-    /**
-     * 获取展翅系统接口host地址
-     * @param string $schoolId
-     * @return mixed
-     */
-    public static function getSystemHost($schoolId = "sj"){
-        return self::getWebSiteConfig("ZC_URL.".Str::upper($schoolId));
     }
 
     public static function getWapHost(){
