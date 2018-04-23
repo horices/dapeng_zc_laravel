@@ -1,7 +1,7 @@
 @extends("admin.public.layout")
 @section("right_content")
 <div class="row search-row" style="padding:9px 0 15px 15px;">
-    <form class="form-inline" style="width:920px; height:auto;" method="get" id="searchForm">
+    <form class="form-inline" style=" height:auto;" method="get" id="searchForm">
         <input type="hidden" name="user_id" value="{{ Request::get("user_id") }}" />
         <div class="form-tm" style="float:left; margin-left:10px;">
             <input type="text" name="roster_no" class="form-control" style="height:30px;width:120px;" placeholder="搜索量号码"
