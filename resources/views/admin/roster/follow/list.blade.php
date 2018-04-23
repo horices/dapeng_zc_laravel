@@ -89,7 +89,7 @@
             </tr>
         @endforeach
         <tr>
-            <td colspan="10">
+            <td colspan="12">
                 <div class="pagenav">
                     <ul>{{ $list->appends(Request::input())->links() }}</ul>
                 </div>
