@@ -82,7 +82,7 @@
                             _this.userPayInfo.package_total_price = parseFloat(_this.userPayInfo.package_price)+parseFloat(_this.userPayInfo.package_attach_price);
                         }
 
-                        setPackageTotal(); //计算最终套餐价格
+                        //setPackageTotal(); //计算最终套餐价格
                     },
                     setRebate:function () {
                         var _this = this;
@@ -179,7 +179,7 @@
                             method      :   'post',
                             data        :   {'title':_this.userPayInfo.package_tmp_title},
                             success     :   function (data) {
-                                if(data.data.length > 0){
+                                if(data.code && data.data.length > 0){
                                     $(".course-package").show();
                                 }else{
                                     $(".course-package").hide();

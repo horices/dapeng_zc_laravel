@@ -47,7 +47,7 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="12" ><div class="pagenav"> <ul>{{$list->links()}} </ul></div></td>
+                <td colspan="12" ><div class="pagenav"> <ul>{{ $list->appends(Request::input())->links() }}</ul></div></td>
             </tr>
             @else
             <tr>
