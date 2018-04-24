@@ -59,6 +59,17 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-md-2 control-label" for="input01">在职状态</label>
+                <div class="col-md-8 ">
+                    <label class="btn btn-primary">
+                        <input type="radio" name="is_incumbency"  value="0" @if($user->is_incumbency == 0) checked @endif > 离职
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="is_incumbency" value="1" @if($user->is_incumbency == 1) checked @endif > 在职
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
                 <!-- Text input-->
                 <label class="col-md-2 control-label" for="input01">展翅系统账号</label>
                 <div class="col-md-8 controls">

@@ -33,6 +33,7 @@ class UserModel extends BaseModel
     protected $appends = [
         'status_text',
         'grade_text',       //级别描述
+        'incumbency_text'  //在职状态描述
     ];
     protected function getPerMaxNumWxAttribute($v){
         return $v ?? 1;
@@ -85,6 +86,15 @@ class UserModel extends BaseModel
             $this->attributes['dapeng_user_mobile'] = $v;
         }
     }
+
+    /**
+     * 获取用户在职状态
+     * @return string
+     */
+    function getIncumbencyTextAttribute(){
+        return $this->is_incumbency ? '在职' : '离职';
+    }
+
     /**
      * 检测用户名密码是否正确
      */
