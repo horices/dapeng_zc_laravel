@@ -24,7 +24,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label class="control-label">用户等级</label>
+            <label class="control-label">身份</label>
             <select name="grade" class="form-control">
                 <option value="">请选择</option>
                 @foreach($userGradeList as $key=> $grade)
@@ -52,9 +52,10 @@
             <tr>
                 <th>工号</th>
                 <th>姓名</th>
-                <th>手机号</th>
+                <th>展翅系统账号</th>
                 <th>主站手机号</th>
                 <th>状态</th>
+                <th>在职状态</th>
                 <th>用户身份</th>
                 <th style="padding-left:19px" width="80">操作</th>
             </tr>
@@ -73,14 +74,15 @@
                     @else
                     <span class="common-button combg3 ajaxLink" url="{{ route("admin.user.save") }}" showloading="true" data="{uid:{{ $user->uid }},status:1}" warning="确认要启用该账号么">{{$user->status_text}}</span>
                     @endif
-
                 </td>
+                <td>{{$user->incumbency_text}}</td>
                 <td>{{$user->grade_text}}</td>
                 <td>
-                    @if($user->grade < \App\Utils\Util::getUserInfo()['grade'])
+                    @if($user->grade > \App\Utils\Util::getUserInfo()['grade'])
                     <a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a>
                     @endif
                 </td>
+
                 <td>
                     @if(in_array($user->grade,['10','9']))
                         <a class="ajaxSubmit" data="{uid:{{$user->uid}}}" url="{{route('admin.user.open-course-head')}}">开课</a>
