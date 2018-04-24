@@ -9,12 +9,17 @@ use App\Utils\Util;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 
 class IndexController extends BaseController
 {
     function getIndex(){
+        $grade = $this->getUserInfo()['grade'];
+        $permission = $this->getPermission($grade);
+        return redirect(route($permission['default_route']));
         return view("admin.index.index");
     }
     

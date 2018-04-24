@@ -207,28 +207,34 @@ class BaseController extends Controller
             'allow'    =>  '*',
             'deny'  =>  [
                 //'admin.group.list'
-            ]
+            ],
+            'default_route'=>'admin.roster.add',
         ],
         '5' =>  [
             'allow'    =>  '*',
+            'default_route'=>'admin.roster.add',
         ],
         '9' =>  [
             'allow'    =>  '*',
+            'default_route'=>'admin.roster.list.user',
         ],
         '10' =>  [
             'allow'    =>  '*',
+            'default_route'=>'admin.roster.list.user',
         ],
         '11' =>  [
             'allow'    =>  '*',
             'deny'  =>  [
                 "admin.roster.follow.add"
-            ]
+            ],
+            'default_route'=>'admin.roster.list.user',
         ],
         '12' =>  [
             'allow'    =>  '*',
             'deny'  =>  [
                 "admin.roster.follow.add"
-            ]
+            ],
+            'default_route'=>'admin.roster.list.user',
         ],
 
     ];
@@ -330,6 +336,15 @@ class BaseController extends Controller
      */
     public function getFqType($key = ''){
         return $key ? self::$_FQ_TYPE[$key]: self::$_FQ_TYPE;
+    }
+
+    /**
+     * 获取角色权限数组
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getPermission($key = ''){
+        return $key ? self::$_USER_PERMISSION[$key] : self::$_USER_PERMISSION;
     }
 
     /**
