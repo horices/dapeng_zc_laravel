@@ -15,10 +15,16 @@ Route::post("group/save","GroupController@postSave")->name("admin.group.save");
 Route::post("group/change_open_status","GroupController@postSave")->name("admin.group.change_open_status");
 Route::post("group/close-all-group","GroupController@postCloseAllGroup")->name("admin.group.close-all-group");
 //用户管理
+Route::get("user/quantity-list","UserController@getQuantityList")->name("admin.user.quantity-list");
 Route::get("user/list","UserController@getList")->name("admin.user.list");
 Route::get("user/add","UserController@getAdd")->name("admin.user.add");
 Route::get("user/{uid}","UserController@getEdit")->name("admin.user.edit");
 Route::post("user/save","UserController@postSave")->name("admin.user.save");
+
+
+
+
+
 Route::post("user/open-course-head","UserController@postOpenCourseHead")->name("admin.user.open-course-head");
 
 //学员量管理

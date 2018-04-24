@@ -163,6 +163,12 @@ class BaseController extends Controller
             'flag'=> 'admin.roster.follow.index',  //默认选中标识
             'grade' =>  [4,5],          //权限显示
         ],
+        'adviser_quantity_list' =>   [
+            'text'=> '分量管理',   //文字描述
+            'route'=> "admin.user.quantity-list",    //链接地址
+            'flag'=> 'admin.user.quantity-list',  //默认选中标识
+            'grade' =>  [4,5],          //权限显示
+        ],
         'roster_follow_adviser' =>   [
             'text'=> '销售数据',   //文字描述
             'route'=> "admin.roster.follow.list.user",    //链接地址
@@ -173,7 +179,7 @@ class BaseController extends Controller
             'text'=> '添加支付',   //文字描述
             'route'=> "admin.registration.add",    //链接地址
             'flag'=> 'admin.registration.add',  //默认选中标识
-            'grade' =>  [4,5,9,10],          //需要展示的权限等级
+            'grade' =>  [9,10],          //需要展示的权限等级
         ],
         'pay_list' =>   [
             'text'=> '支付查询',   //文字描述

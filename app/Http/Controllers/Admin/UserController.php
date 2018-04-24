@@ -103,6 +103,30 @@ class UserController extends BaseController
     }
 
     /**
+     * 分量管理列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    function getQuantityList(Request $request){
+        $field_k = $request->get('field_k');
+        $field_v = $request->get('field_v');
+        $status = $request->get("status");
+        $qyery = UserModel::whereIn('grade',[9,10]);
+        if($status !== ""){
+            $qyery->where('status',$status);
+        }
+        if($field_k && $field_v){
+            $qyery->where($field_k,'like',$field_v.'%');
+        }
+        $list = $qyery->paginate();
+        return view("admin.user.quantity-list",[
+            'list' => $list,
+            'userInfo'  => $this->getUserInfo(),
+            'leftNav'   => \Illuminate\Support\Facades\Request::get("leftNav")
+        ]);
+    }
+
+    /**
      * 课程顾问开课
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
