@@ -140,7 +140,7 @@ class BaseController extends Controller
             'grade' =>  [9,10],          //需要展示的权限等级
         ],*/
         'roster_list_user' =>   [
-            'text'=> '我的数据',   //文字描述
+            'text'=> '数据统计',   //文字描述
             'route'=> "admin.roster.list.user",    //链接地址
             'flag'=> 'admin.roster.list.user',  //默认选中标识
             'grade' =>  [9,10,11,12],          //需要展示的权限等级
