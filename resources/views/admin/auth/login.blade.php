@@ -366,7 +366,7 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                                 <div class="form-item form-sevenday">
                                     <div class="form-cont clearfix">
                                         <label>
-                                            <input type="checkbox" class="passport-sevenday" checked />记住用户名
+                                            <input type="checkbox" name="remember_me" value="1" class="passport-sevenday" checked />记住用户名
                                         </label>
                                         <!--a class="forget-link">忘记密码</a-->
                                     </div>
