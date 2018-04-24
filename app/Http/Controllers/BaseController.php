@@ -134,10 +134,10 @@ class BaseController extends Controller
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'roster_list_one' =>   [
-            'text'=> '指定开课',   //文字描述
+            'text'=> '批量开课',   //文字描述
             'route'=> "admin.roster.list.one",    //链接地址
             'flag'=> 'admin.roster.list.one',  //默认选中标识
-            'grade' =>  [4,5,9,10],          //需要展示的权限等级
+            'grade' =>  [9,10],          //需要展示的权限等级
         ],
         'roster_list_user' =>   [
             'text'=> '数据统计',   //文字描述

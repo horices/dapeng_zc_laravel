@@ -1,215 +1,181 @@
-<extend name="Public/base" />
+@extends("admin.public.layout")
+@section("right_content")
+    <link rel="stylesheet" href="/js/webuploader/webuploader.css" />
+    <style>
+        .grade {
+            display: none;
+        }
+        .group_status_underline{
+            text-decoration: underline;
+            cursor:pointer;
+        }
+        .webuploader-pick{padding: 5px 15px !important;margin-top: 10px !important;display: inline !important;}
+    </style>
 
-<block name="style">
-<style>
-.act_list{ position:relative; background:#f00; zoom:1;}
-.act_list .sel{ margin:0; padding:0; width:80px; height:22px; line-height:22px; overflow:hidden; position:absolute; border:1px transparent solid; left:0; top:0;}
-.act_list .sel li a{ display:block; width:100%; height:22px; line-height:22px; margin:0; padding:0 0 0 10px; outline:0; text-decoration:none;}
-.act_list .sel_on{ height:auto; border:1px #C4C4C4 solid; background:#fff; z-index:10; box-shadow:0px 0px 6px #ccc; border-radius:3px;}
-.act_list .sel_on li a:hover{ background:#71A406; color:#fff; text-decoration:none;}
-.table th, td{word-break:break-all}
-.table{table-layout:fixed;}
+    <script>
+        function openCourseLog(roster){
+            AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
+                $("#courseList").empty().html(data);
+                console.log($(data).find("li").size());
+                if($(data).find("li").size()){
+                    layer.open({
+                        title:roster.roster_no+" 开通课程记录",
+                        type:1,
+                        shadeClose:true,
+                        area:['400px','200px'],
+                        skin: 'layui-layer-rim',
+                        content:$("#courseList")
+                    });
+                }
+            })
+        }
+        function openGroupLog(roster){
+            AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.group.log.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
+                $("#courseList").empty().html(data);
+                if($(data).find("li").size()>1){
+                    layer.open({
+                        title:roster.roster_no+" 群状态变更记录",
+                        type:1,
+                        shadeClose:true,
+                        area:['400px','200px'],
+                        skin: 'layui-layer-rim',
+                        content:$("#courseList")
+                    });
+                }
+            })
+        }
 
-.gray{ color:#aaa;}
-.form-group a:hover{ color:#fff;}
-.group_00{}/*默认色*/
-.group_01{color:#3bbbd9;}/*蓝色*/
-.group_02{color:#00cc33;}/*绿色*/
-.group_03{color:#ff1e00;}/*黄色*/
-.group_04{color:#ff7f00;}/*红色*/
-@media (min-width: 992px){
-    .col-md-10{width: 85%}
-}
-</style>
-</block>
+        $(function () {
+            var uploader = WebUploader.create({
+                auto: true,
+                // swf文件路径
+                swf: '/Public/js/webupload/Uploader.swf',
+                //默认值：'file'文件上传域的name
+                fileVal: 'download',
+                // 文件接收服务端。
+                server: "{{route('admin.roster.index.upload-excel')}}",
+                // 选择文件的按钮。可选。
+                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                pick: '#uploader',
+                // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+                resize: false,
+                //文件重复上传
+                duplicate: true,
+                formData:{
+                    _token:$('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-<block name="script">
-<script type="text/javascript">
-$(function(){
-	var currentGroupStatus = "{$Think.get.group_status|default=''}";
-	var courseType = "{$Think.get.course_type}";
-	var isReg = "{$Think.get.is_reg}";
-	$("select[name='group_status'] option[value='"+currentGroupStatus+"']").prop("selected","selected");
-	$("select[name='course_type'] option[value='"+courseType+"']").prop("selected","selected");
-	$("select[name='is_reg'] option[value='"+isReg+"']").prop("selected","selected");
-});
+            //上传成功回调 如果code == 2 则跳转到导出地址
+            uploader.on('uploadSuccess', function (file, response) {
+                layer.close();
+                AjaxAction.ajaxReturn(response);
+            });
+            //上传进度
+            uploader.on('uploadStart', function (file) {
+                layer.msg('正在导入数据，请稍候。。', {
+                    icon: 16
+                    , shade: 0.1,
+                    time: 99999999
+                });
+            });
+        })
 
-/**
- * 查看该QQ的开课记录
- */
-function openCourseList(obj){
-	var obj = $(obj);
-	var qq = obj.attr("qq");
-	$.post("{:U('getQQCourseList')}",{roster_id:obj.attr("roster_id")},function(data){
-		$("#courseList").empty().html(data);
-		if($(data).find("li").size()){
-			layer.open({
-				title:qq+" 开通课程记录",
-				type:1,
-				shadeClose:true,
-				area:['400px','200px'],
-				skin: 'layui-layer-rim',
-				content:$("#courseList")
-			});
-		}
-	});
-}
-/**
- * 查看该QQ的进群记录
- */
-function openGroupLog(obj){
-	var obj = $(obj);
-	var qq = obj.attr("qq");
-	$.post("{:U('getRosterGroupLogList')}",{roster_id:obj.attr("roster_id"),roster_type:obj.attr("type")},function(data){
-		$("#courseList").empty().html(data);
-		if($(data).find("li").size()>1){
-			layer.open({
-				title:qq+" 群记录",
-				type:1,
-				shadeClose:true,
-				area:['400px','200px'],
-				skin: 'layui-layer-rim',
-				content:$("#courseList")
-			});
-		}
-	});
-}
-</script>
-</block>
-
-<block name="content">
-<div id="content-container" class="container">
-    <div class="row row-2-10">
-    <include file="Public:nav" />
-        <div class="col-md-10 dp-member-content" style="padding:30px 30px;">
-
-			<style>
-            .link_1, .link_1:hover{ color:#0c3; text-decoration:none;}
-			.link_2, .link_2:hover{ background:#0c3; color:#fff; text-decoration:none; display:inline-block; padding:0 3px; border-radius:3px;}
-            </style>
-            
-            
-          <div class="row search-row" style="padding:9px 0 15px 15px;">
-                <form class="form-inline" role="form">
-                	<input type="hidden" name="subnavAction" value="{$Think.get.subnavAction}" />
-                    	<input type="hidden" name="adviser_id" value="{$Think.get.adviser_id}" />
-                        <input type="hidden" name="grade" value="{$Think.get.grade}" />
-                	<div class="form-group">
-                    	<select name="field_k" class="form-control">
-                        	<!--<option value="">请选择</option>-->
-                            <option value="account" selected>QQ/微信</option>
-                        </select>
-                    	<input type="text" name="field_v" class="form-control" id="name" placeholder="" value="{$_GET.field_v}">
-                    </div>
-                    
-                    <div class="form-group">
-                		<a href="{:U('')}" class="common-button combg2 linkSubmit">搜索</a>
-                		<!-- <a class="common-button combg4 linkSubmit" href="{:U('exportResult')}">
-                            导出
-                        </a> -->
+    </script>
 
 
-                    </div>
-                </form>
+    <div class="row search-row" style="padding:9px 0 15px 15px;">
+        <form class="form-inline" role="form">
+            <div class="form-group">
+                <select name="search_type" class="form-control">
+                    <option value="roster_no" selected>QQ/微信</option>
+                    {{--<option value="group_name" @if(Request::input('field_k') == 'group_name') selected @endif>班级代号</option>--}}
+                </select>
+                <input type="text" name="keywords" class="form-control" placeholder="" value="{{ Request::input("keywords") }}">
             </div>
-            <style>
-                .table th,td{text-align: center}
-            </style>
-            <if condition="$list">   
-            <div id="w0" class="grid-view">
-                <table class="table">
-                    <thead>
-                        <tr>
-                        	<th width="50">序号</th>
-                        	<th width="50">类型</th>
-                            <th width="100">账号</th>
-                            <th width="80">班级代号</th>
-                            <th width="95">群号/微信号</th>
-                            <th width="80">推广专员</th>
-                            <th width="80">课程顾问</th>
-                            <th width="80">提交时间</th>
-                            <th width="80">是否注册</th>
-                            <th width="80">开通课程</th>
-                            <th width="80">进群状态</th>
-                            <th width="80">进群时间</th>
-                            <th width="90">操作</th>
-
-                            <!-- <th style="padding-left:19px" width="80">操作</th> -->
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                            <foreach name="list" item="v">
-                                <tr title="{$v.qq_nickname}" style="<eq name='v.is_old' value='1'>opacity:0.5;</eq>">
-                                <td class="flag_icon flag_icon_{$v.flag_type}">{$key+1}
-                                </td>
-                                    <td><eq name="v.type" value="1">QQ<else/>微信</eq></td>
-                                    <td>
-                                        <eq name="v.type" value="1">{$v.qq}<else/>{$v.wx}</eq>
-                                    </td>
-                                    <td>{$v.group_name}</td>
-									<td>{$v.qq_group}</td>
-									<td>{$v.seoer_name}</td>
-									<td>{$v.adviser_name}</td>
-                                    <td>{:date('m-d', $v['addtime'])}<br>{:date('H:i', $v['addtime'])}</td>
-                                    <td><eq name="v.is_reg" value="1"><span style="color:#00cc33;">已注册</span><else />未注册</eq></td>
-                                    <td title="{$v.course_name}" onclick="openCourseList(this);" roster_id="{$v.id}" qq="{$v.account}" style="cursor:pointer;"><switch name="v.course_type"><case value="1"><span style="color:#3bbbd9;">试学课</span></case><case value="2"><span style="color:#00cc33;">正式课</span></case><default /><span style="color:#ff1e00;">未开通</span></switch></td>
-                                    <td>
-                                    <eq name="v.type" value="1">
-                                    	<span  class="group_0{$v.group_status}">{$groupStatusQQ[$v['group_status']]}</span>
-                                    <else />
-                                    <if condition="$v[group_status] eq 0" >
-                                    <span class="group_0{$v.group_status} ajaxLink" style="text-decoration:underline;cursor:pointer;"   href="{:U('setWxStatusTG')}" data="{roster_id:{$v.id},qq:'{$v.account}',group:'{$v.qq_group}'}" warning="您确定要将{$v.wx}添加状态更改为等待添加吗？"  roster_type="{$v.type}" roster_group_status="{$v.group_status}" roster_id="{$v.id}" style="cursor:pointer;" >{$groupStatusWx[$v['group_status']]}</span>
-                                    
-                                    <elseif condition="$v.group_status eq 1"/>
-                                    <span class="group_0{$v.group_status} ajaxLink" style="text-decoration:underline;cursor:pointer;"   href="{:U('setWxStatusGW')}" data="{roster_id:{$v.id},qq:'{$v.account}',group:'{$v.qq_group}'}" warning="您确定要将{$v.wx}添加状态更改为已添加吗？"  roster_type="{$v.type}" roster_group_status="{$v.group_status}" roster_id="{$v.id}" style="cursor:pointer;"  >{$groupStatusWx[$v['group_status']]}</span>
-                                    <else />
-                                    		<span class="group_0{$v.group_status}">{$groupStatusWx[$v['group_status']]}</span>
-                                    </if>
-                                    	<!--  <if condition="$v[group_status] ELT 1" >
-                                    		<span class="group_0{$v.group_status}" style="text-decoration:underline">{$groupStatusWx[$v['group_status']]}</span>
-                                    	<else />
-                                    		<span class="group_0{$v.group_status}">{$groupStatusWx[$v['group_status']]}</span>
-                                    	</if>-->
-                                    </eq>
-                                    </td>
-                                    <td onclick="openGroupLog(this);" roster_id="{$v.id}" qq="{$v.account}" type="{$v.type}" style="cursor:pointer;">
-                                    <if condition="$v['entertime']" >{:date('m-d', $v['entertime'])}<br>{:date('H:i', $v['entertime'])}
-                                    <else />
-                                    </if>
-                                    </td>
-                                    <td>
-                                        <empty name="v.dapeng_user_mobile">
-                                            <a href="javascript:;" onclick="alertOpenCourse('{$v.id}')">
-                                                开通
-                                            </a>
-                                            <else/>
-                                            <a class="ajaxLink" method="get" callback="reFun" data="{'phone':<?php echo $v[dapeng_user_mobile] ?>}" showLoading="1" href="{:U('Index/openCourse',['user_roster_id'=>$v[id]])}">开通</a>
-                                        </empty>
-                                        <a href="javascript:;" url="{$v[userRegUrl]}" wx="{$v[wx]}" qq="{$v[qq]}" class="link_4" >链接</a>
-
-                                    </td>
-                                </tr>	
-                            </foreach>
-                     
-                            <tr>
-                      
-                                <td colspan="14" ></td>
-                            </tr>
-                    </tbody>
-                </table>
-        </div>
-        <div class="pagenav"> <ul>{$pageNav} </ul></div>
-        <else />
-            <tr>
-            <notempty name="Think.get.field_v"><th colspan="14" >无账号信息 请重新搜索</th></notempty>
-                                
-                            </tr>
-        </if>
+            <div class="form-group">
+                <a href="" class="common-button combg2 linkSubmit search">搜索</a>
+            </div>
+        </form>
     </div>
-</div>
-</div>
+    <style>
+        .table th,td{text-align: center}
+    </style>
+    <div id="w0" class="grid-view">
+        <table class="table">
+            <thead>
+            <tr>
+                {{--<th width="50">序号</th>--}}
+                <th width="50">类型</th>
+                <th width="100">账号</th>
+                <th width="80">班级代号</th>
+                <th width="95">群号/微信号</th>
+                <th width="80">推广专员</th>
+                <th width="80">课程顾问</th>
+                <th width="80">提交时间</th>
+                <th width="80">是否注册</th>
+                <th width="80">开通课程</th>
+                <th width="80">进群状态</th>
+                <th width="80">进群时间</th>
+                <th width="80" class="grade grade4 grade5">销售数据</th>
+                <th width="90" class="grade grade4 grade5 grade9 grade10">操作</th>
 
+                <!-- <th style="padding-left:19px" width="80">操作</th> -->
+            </tr>
+            </thead>
+
+            <tbody>
+            @if($roster)
+                <tr title="{{ $roster->qq_nickname }}" style="@if($roster->is_old == 1) opacity:0.5; @endif">
+                    {{--<td class="flag_icon flag_icon_{{ $roster->flag_type }}">{{ $roster->id }}</td>--}}
+                    <td class="flag_icon flag_icon_{{ $roster->flag }}">{{ $roster->roster_type_text }}</td>
+                    <td>{{ $roster->roster_no }}</td>
+                    <td>{{ $roster->group->group_name }}</td>
+                    <td>{{ $roster->group->qq_group }}</td>
+                    <td>{{ $roster->inviter_name }}</td>
+                    <td>{{ $roster->last_adviser_name }}</td>
+                    <td>{!! $roster->addtime_text !!}</td>
+                    <td class="register_status_{{ $roster->is_reg }}">{{ $roster->is_reg_text }}</td>
+                    <td title="{{ $roster->course_name }}" @if($roster->course_type) onclick="openCourseLog({{ $roster->toJson() }});" @endif style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
+                        {{ $roster->course_type_text }}</td>
+                    <td>
+
+
+                        @if($roster->group_status == 0)
+                            <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 9 && $userInfo->grade != 10 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:1}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为等待添加吗">无</span>
+                        @elseif($roster->group_status == 1)
+                            <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 11 && $userInfo->grade != 12 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加嘛">等待添加</span>
+                        @else
+                            <span class="group_status_{{ $roster->group_status }} group_status_type_{{ $roster->roster_type }}">{{ $roster->group_status_text }}</span>
+                        @endif
+
+                    </td>
+                    <td @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">
+                        {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}
+                    </td>
+                    <td class="grade grade4 grade5">
+                        @if( $roster->is_old == 0)
+                            <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}">点击添加</a>
+                        @endif
+                    </td>
+                    <td class="grade grade4 grade5 grade9 grade10">
+                        @if($roster->dapeng_user_mobile)
+                            <a class="ajaxLink" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}">开通</a>
+                        @else
+                            <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
+                        @endif
+                        <a class="ajaxLink" data="{url:'{{$roster->reg_url_prama}}'}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" url="{{route('admin.roster.index.set-reg-url')}}" callback="registerUrl" >链接</a>
+                    </td>
+                </tr>
+            @else
+                <tr>
+                    <th colspan="14">暂无信息</th>
+                </tr>
+            @endif
+            </tbody>
+        </table>
+    </div>
+    <div id="courseList" style="display:none;"></div>
     <style>
         #open-course{width: 300px; height: 100px; padding-top: 30px;display: none;padding-left: 10px;}
         #open-course input{width: 200px; float: left}
@@ -218,27 +184,18 @@ function openGroupLog(obj){
     <!--弹窗 开通课程 -->
     <div id="open-course" class="form-group">
         <form method="get">
-            <input type="hidden" name="user_roster_id" value="" />
+            <input type="hidden" name="id" value="" />
             <input type="text" name="phone" class="form-control" placeholder="请输入开课学员手机号" value="" />
-            &nbsp;<a class="common-button combg1 ajaxSubmit" showLoading="1" method="get" callback="reFun" href="{:U('openCourse')}">提交</a>
+            &nbsp;<a class="common-button combg1 ajaxSubmit" showLoading="1" method="post" url="{{route('admin.roster.index.open-course')}}">提交</a>
         </form>
     </div>
-
+    <script src="/js/webuploader/webuploader.js"></script>
     <script>
-        function reFun(json,obj){
-            if(json.code == 1){
-                openSuccessDialog("开通成功！");
-                setTimeout(function () {
-                    window.location.reload();
-                },1500);
-            }else{
-                openFailDialog(json.msg);
-            }
-        }
 
         //开通课程弹窗
         function alertOpenCourse(user_roster_id){
-            $("input[name='user_roster_id']").val(user_roster_id);
+            $("#open-course").find("input[name='id']").val(user_roster_id);
+            //$("input[name='user_roster_id']").val(user_roster_id);
             layer.open({
                 type: 1,
                 title: "开通课程",
@@ -247,56 +204,19 @@ function openGroupLog(obj){
                 content: $("#open-course")
             });
         }
-
-        function addGroup(json,obj){
-            if(json.code == 1){
-                openSuccessDialog(json.msg);
-                $('#addgroup').html('已加').css('color','#909090').attr('href', 'javascript:;').unbind();
-            }else{
-                openFailDialog(json.msg);
-            }
-
-
+        function registerUrl(json,obj) {
+            var wx  =  $(obj).attr("wx");
+            var qq  =  $(obj).attr("qq");
+            var str = wx ? "微信号<b>"+wx+"</b>的专属注册链接" : "QQ号<b>"+qq+"</b>的专属注册链接";
+            //页面层-自定义
+            layer.open({
+                type        : 1,
+                area        : ['30%','150px'],
+                title       : str,
+                closeBtn    : 1,
+                shadeClose  : true,
+                content     : "<input type='text' value='"+json.data.reg_url+"' style='height: 50px;margin:5px 0px 0px 10px;'/>"
+            });
         }
     </script>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">查看详情</h4>
-            </div>
-            <div class="modal-body"> ... </div>
-        </div>
-    </div>
-</div>
-<div style="display:none;" id="courseList">
-</div>
-    <script>
-        $(".link_4").click(function(){
-            var url = $(this).attr("url");
-            var wx  =  $(this).attr("wx");
-            var qq  =  $(this).attr("qq");
-            var str = wx ? "微信号<b>"+wx+"</b>的专属注册链接" : "QQ号<b>"+qq+"</b>的专属注册链接";
-            //url_con = "";
-            $.ajax({
-                url         :   "{:U('setRegUrl')}",
-                data        :   url,
-                method      :   "post",
-                dataType    :   "json",
-                success     :   function(data){
-                    //页面层-自定义
-                    layer.open({
-                        type        : 1,
-                        area        : ['30%','150px'],
-                        title       : str,
-                        closeBtn    : 1,
-                        shadeClose  : true,
-                        content     : "<input type='text' value='"+data.data.url+"' style='height: 50px;margin:5px 0px 0px 10px;'/>"
-                    });
-                }
-            });
-        });
-    </script>
-</block>
+@endsection

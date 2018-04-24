@@ -207,7 +207,7 @@
                     </td>
                     <!--                                     <td><a href="{:U('my_data?subnavAction=adviser_statistics&adviser_id='.$l['uid'],$_GET)}">查看</a></td> -->
                     <!--                                     <td><a href="{:U('data_all?subnavAction=adviser_statistics&adviser_name='.$l['name'],$_GET)}">查看</a></td> -->
-                    <td><a href="{{ route("admin.roster.list",\Illuminate\Support\Facades\Input::merge([$user_id_str=>$user->uid,'show_statistics'=>1])->all()) }}">查看</a></td>
+                    <td><a href="{{ route("admin.roster.list",\Illuminate\Support\Facades\Input::merge([$user_id_str=>$user->uid,'show_statistics'=>1])->merge($url_data)->all()) }}">查看</a></td>
                 </tr>
             @endforeach
             <tr>
