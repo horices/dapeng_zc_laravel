@@ -77,7 +77,7 @@
             <div class="" style="float:left; height:30px;">
                 <select name="searchType" class="form-control" style="width:80px; padding:3px;">
                     <option value="name">姓名</option>
-                    <option value="qq">QQ号</option>
+                    {{--<option value="qq">QQ号</option>--}}
                     <option value="mobile">手机号</option>
                 </select>
                 <input type="text" name="keywords" class="form-control"
@@ -95,30 +95,30 @@
                 </select>
             </div>
             <div style="float:left; margin-left:10px;">
-                <select name="dateType" class="form-control" style="padding:3px;">
+                {{--<select name="dateType" class="form-control" style="padding:3px;">
                     <option value="addtime">提交时间</option>
-                    {{--   <option value="ur.reg_time">注册时间</option>
+                       <option value="ur.reg_time">注册时间</option>
                        <option value="ur.trial_time">开通试学时间</option>
-                       <option value="ur.formal_time">开通正课时间</option>--}}
-                </select>
-
+                       <option value="ur.formal_time">开通正课时间</option>
+                </select>--}}
+                <input type="hidden" name="dateType" value="addtime" />
+                <label>
+                提交时间:
+                </label>
                 <input type="text" name="startdate" class="form-control select_date" id="startdate" style="height:30px;"
                        placeholder="开始时间" value="{{ Request::input('startdate') }}">
                 <label>&nbsp;至&nbsp;</label>
                 <input type="text" name="enddate" class="form-control select_date" id="enddate" style="height:30px;"
                        placeholder="结束时间" value="{{ Request::input('enddate') }}">
             </div>
-            <div class="form-control" style="">
-    <span class="but-ss">
-    <a class="common-button combg1 linkSubmit">搜索</a>
-    </span>
-            </div>
-            <div class="form-control" style="">
-<span class="but-ss fleft" style="line-height:25px; ">
-<a class="common-button combg1 linkSubmit" data="{export:1}" style="">
-    导出
-</a>
-</span>
+
+            <div class="form-but" style="float:left;  color:#fff;  width:122px; margin:3px;  "><span class="but-ss" style=" height:auto;text-align:center; line-height:25px; ">
+                <a class="common-button combg1 linkSubmit">搜索</a>
+
+                <a class="common-button combg1 linkSubmit" data="{export:1}" style="">
+                    导出
+                </a>
+                </span>
             </div>
 
     </div>

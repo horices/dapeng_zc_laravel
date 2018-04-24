@@ -22,9 +22,16 @@ class FollowController extends BaseController
         $searchType = Request::get("search_type");
         $keywords = Request::get("keywords");
         //查询所有用户
-        $query = UserModel::adviser()->status()->with(['lastRosterFollowOne'])->withCount(['rosterFollow'=>function($query){
-            $startDate = Request::get("startdate");
-            $endDate = Request::get("enddate");
+        $startDate = Request::get("startdate");
+        $endDate = Request::get("enddate");
+        $query = UserModel::adviser()->status()->with(['lastRosterFollowOne'=>function($query) use ($startDate,$endDate){
+            if($startDate){
+                $query->where("create_time",">=",strtotime($startDate));
+            }
+            if($endDate){
+                $query->where("create_time","<",strtotime($endDate));
+            }
+        }])->withCount(['rosterFollow'=>function($query) use ($startDate,$endDate){
             if($startDate){
                 $query->where("create_time",">=",strtotime($startDate));
             }

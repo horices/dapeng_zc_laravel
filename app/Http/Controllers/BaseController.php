@@ -140,7 +140,7 @@ class BaseController extends Controller
             'grade' =>  [4,5,9,10],          //需要展示的权限等级
         ],
         'roster_list_user' =>   [
-            'text'=> '我的数据',   //文字描述
+            'text'=> '数据统计',   //文字描述
             'route'=> "admin.roster.list.user",    //链接地址
             'flag'=> 'admin.roster.list.user',  //默认选中标识
             'grade' =>  [9,10,11,12],          //需要展示的权限等级
@@ -164,7 +164,7 @@ class BaseController extends Controller
             'grade' =>  [4,5],          //权限显示
         ],
         'roster_follow_adviser' =>   [
-            'text'=> '我的销售',   //文字描述
+            'text'=> '销售数据',   //文字描述
             'route'=> "admin.roster.follow.list.user",    //链接地址
             'flag'=> 'admin.roster.follow.list.user',  //默认选中标识
             'grade' =>  [9,10],          //权限显示

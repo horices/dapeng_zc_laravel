@@ -358,7 +358,7 @@
                 </form>
             </div>
 
-            <form v-show="hasForm">
+            <form v-show="hasForm" style="display: none">
             <input type="hidden" name="mobile" v-model="mobile" />
             <div class="sub_main_one">
                 <div class="main_left">
