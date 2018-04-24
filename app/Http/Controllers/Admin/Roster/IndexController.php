@@ -97,10 +97,6 @@ class IndexController extends BaseController
         $keywords = Input::get("keywords");
         if($seachType && $keywords !== null){
             if($seachType == "roster_no"){
-                if($keywords == "default"){
-                    $keywords = "1231default";  //QQ中必须为全数字，微信不能以数字开头;所以这个号是可被查询到的
-                    $request->merge(['keywords'=>'']);
-                }
                 $query->where(function($query) use ($keywords){
                     $query->where("qq",$keywords)->orWhere("wx",$keywords);
                 });
@@ -432,11 +428,22 @@ class IndexController extends BaseController
      */
     function getSelectOne(Request $request){
         $keywords = $request->input("keywords");
-        if(!$keywords){
-            $keywords = "default";
+        $roster = "";
+        //查询所有列表
+        $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
+            $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status",">",0)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
+        }]);
+        if($keywords){
+            $query->where(function($query) use ($keywords){
+                $query->where("qq",$keywords)->orWhere("wx",$keywords);
+            });
+            $roster = $query->first();
         }
-        $request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords,'show_statistics'=>1,'form_ele'=>'.search_type,.search']);
-        return Route::respondWithRoute("admin.roster.list");
+        //$request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords,'show_statistics'=>1,'form_ele'=>'.search_type,.search']);
+        return view("admin.roster.select-one",[
+            'roster'=>  $roster
+        ]);
+        //return Route::respondWithRoute("admin.roster.list");
     }
 }
 
