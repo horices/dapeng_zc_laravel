@@ -105,7 +105,7 @@
             <div class="form-group hide roster_type">
                 <label class="control-label">来源类型</label>
                 <select name="roster_type" class="form-control">
-                    <option value="">不限</option>
+                    <option value="">请选择</option>
                     @foreach($rosterType  as $k=>$v)
                     <option value="{{ $k }}"  @if(Request::input("roster_type") == $k) selected @endif>{{ $v }}</option>
                     @endforeach
@@ -115,7 +115,7 @@
             <div class="form-group hide is_reg">
                 <label class="control-label">是否注册</label>
                 <select name="is_reg" class="form-control">
-                    <option value="">全部</option>
+                    <option value="">请选择</option>
                     @foreach($registerStatus  as $k=>$v)
                         <option value="{{ $k }}"  @if(Request::input("is_reg") === strval($k)) selected @endif>{{ $v }}</option>
                     @endforeach
@@ -124,7 +124,7 @@
             <div class="form-group hide course_type">
                 <label class="control-label">开通课程</label>
                 <select name="course_type" class="form-control">
-                    <option value="">全部</option>
+                    <option value="">请选择</option>
                     @foreach($courseType as $k=>$v)
                     <option value="{{ $k }}" @if(Request::input('course_type') === strval($k)) selected @endif>{{ $v }}</option>
                     @endforeach
@@ -133,7 +133,7 @@
             <div class="form-group hide group_status">
                 <label class="control-label">进群状态</label>
                 <select name="group_status" class="form-control">
-                    <option value="">全部</option>
+                    <option value="">请选择</option>
                     @foreach($groupStatus as $k=>$v)
                     <option value="{{ $k }}" @if(Request::input('group_status') === strval($k)) selected @endif>{{ $v }}</option>
                     @endforeach
@@ -151,7 +151,12 @@
                 <label class="control-label">提交时间</label>
                 <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" /> 至
                 <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" />
+
+                <input type="text" placeholder="课程顾问" name="adviser_name" class="form-control" style="width: 100px;" value="{{ Request::input("adviser_name") }}" />
+
+                <input type="text" placeholder="推广专员" name="seoer_name" class="form-control" style="width: 100px;" value="{{ Request::input("enddate") }}" />
             </div>
+
 {{--            <div class="form-group">
                 <input type="text" name="seoer_name" class="form-control" style="width:140px;" value="{{ Request::input("seoer_name") }}" placeholder="推广专员名称" />
                 <input type="text"  name="adviser_name" class="form-control" style="width:140px;" value="{{ Request::input("adviser_name") }}" placeholder="课程顾问名称" />

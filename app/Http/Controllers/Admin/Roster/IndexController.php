@@ -122,6 +122,8 @@ class IndexController extends BaseController
         $seoerId = Input::get("seoer_id");
         $adviserId = Input::get("adviser_id");
         $showStatistics = Input::get("show_statistics");
+        $adviserName = Input::get("adviser_name");
+        $seoerName = Input::get("seoer_name");
         $where = [];
         if($type !== null){
             $where['type'] = $type;
@@ -161,6 +163,23 @@ class IndexController extends BaseController
             });
             $leftNav = 'admin.roster.statistics.adviser';
         }
+        //课程顾问姓名搜索
+        if($adviserName){
+            $query->whereHas("adviser",function ($query)use ($adviserName){
+                $query->adviser()->where([
+                    ['name','like',$adviserName."%"]
+                ]);
+            });
+        }
+        //推广专员姓名搜索
+        if($seoerName){
+            $query->whereHas("seoer",function ($query)use ($seoerName){
+                $query->seoer()->where([
+                    ['name','like',"{$seoerName}%"]
+                ]);
+            });
+        }
+
         $query->where($where);
         if(Input::get('export') == 1){
             return $this->exportRosterList($query);
