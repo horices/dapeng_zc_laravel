@@ -146,17 +146,20 @@ class IndexController extends BaseController
         }
         $statistics = [];
         $statistics['statistics'] = '';
+        $leftNav = 'admin.roster.list';
         if($seoerId !==  null){
             $query->where('inviter_id',$seoerId);
             $statistics = $this->getStatistics(['inviter_id'],function($query) use($seoerId) {
                 $query->where("inviter_id", $seoerId);
             });
+            $leftNav = 'admin.roster.statistics.seoer';
         }
         if($adviserId !== null){
             $query->where('last_adviser_id',$adviserId);
             $statistics = $this->getStatistics(['last_adviser_id'],function($query) use($adviserId) {
                 $query->where("last_adviser_id", $adviserId);
             });
+            $leftNav = 'admin.roster.statistics.adviser';
         }
         $query->where($where);
         if(Input::get('export') == 1){
@@ -170,7 +173,8 @@ class IndexController extends BaseController
         return view("admin.roster.list",[
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
-            "statistics"    => $statistics['statistics']
+            "statistics"    => $statistics['statistics'],
+            'leftNav'      =>  $leftNav
         ]);
     }
 
