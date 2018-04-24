@@ -42,7 +42,8 @@ class StatisticsController extends BaseController
             'list'  => $list,
             'user_id_str'  =>  'seoer_id',
             'statistics'    => $statistics['statistics'],
-            'user_statistics'    => $statistics['user_statistics']
+            'user_statistics'    => $statistics['user_statistics'],
+            'url_data'  =>  ['leftNav'=>"admin.roster.statistics.seoer"]
         ]);
     }
     /**
@@ -76,7 +77,8 @@ class StatisticsController extends BaseController
             'list'  => $list,
             'user_id_str'   => "adviser_id",
             'statistics'    => $statistics['statistics'],
-            'user_statistics'    => $statistics['user_statistics']
+            'user_statistics'    => $statistics['user_statistics'],
+            'url_data'  =>  ['leftNav'=>"admin.roster.statistics.adviser"]
         ]);
     }
 }

@@ -174,7 +174,8 @@ class IndexController extends BaseController
         return view("admin.roster.list",[
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
-            "statistics"    => $statistics['statistics']
+            "statistics"    => $statistics['statistics'],
+            'leftNav'   => \Illuminate\Support\Facades\Request::get("leftNav")
         ]);
     }
 
