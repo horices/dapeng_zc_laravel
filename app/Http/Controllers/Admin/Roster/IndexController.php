@@ -97,6 +97,10 @@ class IndexController extends BaseController
         $keywords = Input::get("keywords");
         if($seachType && $keywords !== null){
             if($seachType == "roster_no"){
+                if($keywords == "default"){
+                    $keywords = "1231default";  //QQ中必须为全数字，微信不能以数字开头;所以这个号是可被查询到的
+                    $request->merge(['keywords'=>'']);
+                }
                 $query->where(function($query) use ($keywords){
                     $query->where("qq",$keywords)->orWhere("wx",$keywords);
                 });
