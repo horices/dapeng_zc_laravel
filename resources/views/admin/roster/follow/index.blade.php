@@ -6,7 +6,7 @@
             <div class="" style="float:left; height:30px;">
                 <select name="search_type" class="form-qq" style="width:80px; padding:3px;">
                     <option value="name" @if(Request::get('search_type') == 'name') selected @endif>姓名</option>
-                    <option value="qq" @if(Request::get('search_type') == 'qq') selected @endif>QQ号</option>
+                    {{--<option value="qq" @if(Request::get('search_type') == 'qq') selected @endif>QQ号</option>--}}
                     <option value="mobile" @if(Request::get('search_type') == 'mobile') selected @endif>手机号</option>
                 </select>
                 <input type="text" name="keywords" class="form-control"
@@ -15,9 +15,7 @@
             </div>
             <div class="form-tm" style="float:left; margin-left:10px;">
                 <label>
-                    <select name="dateType" style="padding:3px;">
-                        <option value="create_time">私聊时间</option>
-                    </select>&nbsp;</label>
+                    私聊时间：</label>
                 <input type="text" name="startdate" class="form-control select_date" style="height:30px;"
                        placeholder="开始时间" value="{{ Request::get('startdate') }}">
                 <label>&nbsp;至&nbsp;</label>
