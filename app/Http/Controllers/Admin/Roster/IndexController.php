@@ -108,6 +108,14 @@ class IndexController extends BaseController
                     'enddate'   =>  null,
                     'seoer_id'=>$request->get("seoer_id")
                 ]);*/
+            }elseif ($seachType == "group_name"){
+                $query->whereHas("group",function ($group) use($keywords) {
+                    $group->where('group_name',$keywords);
+                });
+            }elseif ($seachType == "qq_group"){
+                $query->whereHas("group",function ($group) use($keywords) {
+                    $group->where('qq_group',$keywords);
+                });
             }else{
                 $where[$seachType] = $keywords;
             }
@@ -148,20 +156,17 @@ class IndexController extends BaseController
         }
         $statistics = [];
         $statistics['statistics'] = '';
-        $leftNav = 'admin.roster.list';
         if($seoerId !==  null){
             $query->where('inviter_id',$seoerId);
             $statistics = $this->getStatistics(['inviter_id'],function($query) use($seoerId) {
                 $query->where("inviter_id", $seoerId);
             });
-            $leftNav = 'admin.roster.statistics.seoer';
         }
         if($adviserId !== null){
             $query->where('last_adviser_id',$adviserId);
             $statistics = $this->getStatistics(['last_adviser_id'],function($query) use($adviserId) {
                 $query->where("last_adviser_id", $adviserId);
             });
-            $leftNav = 'admin.roster.statistics.adviser';
         }
         //课程顾问姓名搜索
         if($adviserName){
@@ -173,7 +178,7 @@ class IndexController extends BaseController
         }
         //推广专员姓名搜索
         if($seoerName){
-            $query->whereHas("seoer",function ($query)use ($seoerName){
+            $query->whereHas("seoer",function ($query) use ($seoerName){
                 $query->seoer()->where([
                     ['name','like',"{$seoerName}%"]
                 ]);
@@ -193,7 +198,7 @@ class IndexController extends BaseController
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
             "statistics"    => $statistics['statistics'],
-            'leftNav'      =>  $leftNav
+            'leftNav'   => \Illuminate\Support\Facades\Request::get("leftNav")
         ]);
     }
 

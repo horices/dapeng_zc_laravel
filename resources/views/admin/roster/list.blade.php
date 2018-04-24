@@ -95,6 +95,9 @@
             <div class="form-group ">
                 <select name="search_type" class="form-control">
                     <option value="roster_no" selected>QQ/微信</option>
+                    {{--<option value="qq_nickname" @if(Request::input("search_type") == 'qq_nickname') selected @endif>QQ昵称</option>--}}
+                    <option value="group_name" @if(Request::input("search_type") == 'group_name') selected @endif>班级代号</option>
+                    <option value="qq_group" @if(Request::input("search_type") == 'qq_group') selected @endif>群号/顾问微信号</option>
                     {{--<option value="group_name" @if(Request::input('field_k') == 'group_name') selected @endif>班级代号</option>--}}
                 </select>
                 <input type="text" name="keywords" class="form-control" placeholder="" value="{{ Request::input("keywords") }}">
