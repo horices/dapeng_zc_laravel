@@ -6,26 +6,33 @@ use App\Http\Requests\RegRequest;
 use App\Http\Requests\SendSMSRequest;
 use App\Models\UserHeadMasterModel;
 use App\Models\UserModel;
-use Illuminate\Auth\AuthenticationException;
 use App\Utils\Util;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\URL;
-use Mews\Captcha\Facades\Captcha;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Route;
 
 class AuthController extends  BaseController{
     /**
      * 登陆
      */
     function getLogin(){
+        if($userInfo = Cookie::get("userInfo")){
+            $this->login($userInfo);
+            return redirect()->route("admin.index.index");
+        }
         return view("admin.auth.login");
     }
     function postLogin(LoginForm $request){
-
         $user = UserModel::checkLogin($request->input("username"), $request->input("password"));
         $this->login($user);
+        //记住用户名,30天
+        if($request->get("remember_me") == 1){
+            Cookie::queue("userInfo",$user,60*24*30);
+        }
         //返回登陆成功的信息
         return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功","url"=>url("/admin/index/index")]);
+        //return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功"]);
     }
 
     /**
@@ -61,6 +68,7 @@ class AuthController extends  BaseController{
         if($request->session()->has("userInfo")){
             $request->session()->flush();
         }
+        Cookie::queue(Cookie::forget("userInfo"));
         return response()->redirectToRoute("admin.index.index");
     }
 }

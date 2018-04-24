@@ -31,11 +31,11 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth:
 });
 //通知接口地址(大鹏主站开课通知,QQ群机器人通知)
 Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
-    Route::post("Index/index.html","DapengNotifyController@reg")->middleware(\App\Http\Middleware\NotifyValidate::class);
-    Route::post("Index/openCourse.html","DapengNotifyController@openCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
-    Route::post("Index/closeCourse.html","DapengNotifyController@closeCourse")->middleware(\App\Http\Middleware\NotifyValidate::class);
-    Route::post("QQGroupRebotEvent/index.html","QQGroupEventNotifyController@index");
-    Route::post("git/coding","GitNotifyController@coding");
+    Route::post("Index/index.html","DapengNotifyController@reg")->middleware(\App\Http\Middleware\NotifyValidate::class)->name("notify.dapeng.reg");
+    Route::post("Index/openCourse.html","DapengNotifyController@openCourse")->middleware(\App\Http\Middleware\NotifyValidate::class)->name("notify.dapeng.course.open");
+    Route::post("Index/closeCourse.html","DapengNotifyController@closeCourse")->middleware(\App\Http\Middleware\NotifyValidate::class)->name("notify.dapeng.course.close");
+    Route::post("QQGroupRebotEvent/index.html","QQGroupEventNotifyController@index")->name("notify.dapeng.index");;
+    Route::post("git/coding","GitNotifyController@coding")->name("notify.git.coding");
 });
 //向外提供接口的地址(外部添加新量和修改部分信息)
 Route::group(['prefix'=>'Api','namespace'=>"Api"], function(){
