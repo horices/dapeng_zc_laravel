@@ -15,6 +15,9 @@
 <script>
     $(function () {
         $(".grade{{$userInfo->grade}}").show();
+        //判断是否需要隐藏其它的搜索条件，批量开课时，只允许搜索QQ这这个条件
+        var menu = "{{ Request::input('form_ele') }}" || ".hide";
+        $(menu).removeClass("hide");
     });
     function openCourseLog(roster){
         AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
@@ -92,14 +95,14 @@
                 <input type="hidden" name="seoer_id" value="{{ Request::input("seoer_id") }}" />
             <input type="hidden" name="adviser_id" value="{{ Request::input("adviser_id") }}" />
             <input type="hidden" name="show_statistics" value="{{ Request::input("show_statistics") }}" />
-            <div class="form-group">
+            <div class="form-group hide search_type ">
                 <select name="search_type" class="form-control">
                     <option value="roster_no" selected>QQ/微信</option>
                     {{--<option value="group_name" @if(Request::input('field_k') == 'group_name') selected @endif>班级代号</option>--}}
                 </select>
                 <input type="text" name="keywords" class="form-control" placeholder="" value="{{ Request::input("keywords") }}">
             </div>
-            <div class="form-group">
+            <div class="form-group hide roster_type">
                 <label class="control-label">来源类型</label>
                 <select name="roster_type" class="form-control">
                     <option value="">不限</option>
@@ -109,7 +112,7 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group hide is_reg">
                 <label class="control-label">是否注册</label>
                 <select name="is_reg" class="form-control">
                     <option value="">全部</option>
@@ -118,7 +121,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group hide course_type">
                 <label class="control-label">开通课程</label>
                 <select name="course_type" class="form-control">
                     <option value="">全部</option>
@@ -127,7 +130,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group hide group_status">
                 <label class="control-label">进群状态</label>
                 <select name="group_status" class="form-control">
                     <option value="">全部</option>
@@ -136,7 +139,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group hide flag">
                 <label class="control-label">新活状态</label>
                 <select name="flag" class="form-control">
                     <option value="" >请选择</option>
@@ -144,7 +147,7 @@
                     <option value="2" @if(\Illuminate\Support\Facades\Input::get("flag") == 2) selected @endif>活量</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group hide addtime">
                 <label class="control-label">提交时间</label>
                 <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" /> 至
                 <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" />
@@ -154,11 +157,11 @@
                 <input type="text"  name="adviser_name" class="form-control" style="width:140px;" value="{{ Request::input("adviser_name") }}" placeholder="课程顾问名称" />
             </div>--}}
             <div class="form-group">
-                <a href="" class="common-button combg2 linkSubmit">搜索</a>
-                <a class="common-button combg4 linkSubmit grade grade4 grade5" showLoading="true" data="{export:1,test:2}" href="{{ route("admin.roster.list",['export'=>1]) }}" >
+                <a href="" class="common-button combg2 linkSubmit hide search">搜索</a>
+                <a class="common-button combg4 linkSubmit hide export grade grade4 grade5" showLoading="true" data="{export:1,test:2}" href="{{ route("admin.roster.list",['export'=>1]) }}" >
                     导出
                 </a>
-                <a id="uploader" class="grade grade4 grade5">
+                <a id="uploader" class="grade grade4 grade5 hide import">
                     导入
                 </a>
 

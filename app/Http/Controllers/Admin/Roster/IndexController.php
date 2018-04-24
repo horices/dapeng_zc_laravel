@@ -101,13 +101,13 @@ class IndexController extends BaseController
                     $query->where("qq",$keywords)->orWhere("wx",$keywords);
                 });
                 //搜索指定的QQ号或微信号时，自动清除其它条件，除推广专员，其它人搜索没有条件限制
-                $request->replace([
+                /*$request->replace([
                     'search_type'  =>   $seachType,
                     'keywords'  => $keywords,
                     'startdate' =>  null,
                     'enddate'   =>  null,
                     'seoer_id'=>$request->get("seoer_id")
-                ]);
+                ]);*/
             }else{
                 $where[$seachType] = $keywords;
             }
@@ -430,7 +430,7 @@ class IndexController extends BaseController
         if(!$keywords){
             $keywords = "default";
         }
-        $request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords]);
+        $request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords,'show_statistics'=>1,'form_ele'=>'.search_type,.search']);
         return Route::respondWithRoute("admin.roster.list");
     }
 }
