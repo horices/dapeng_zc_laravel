@@ -43,12 +43,18 @@ class UserController extends BaseController
         $user = UserModel::withoutGlobalScope('status')->where("uid",$id)->first();
         return view("admin.user.add",[
             'user'  =>  $user,
+            'userGradeList'=>collect($this->getUserGradeList())->filter(function($v,$k){
+                return $k>5;
+            }),
             'leftNav' => "admin.user.list"
         ]);
     }
     function getAdd(UserModel $user){
         return view("admin.user.add",[
             'user'=>$user,
+            'userGradeList'=>collect($this->getUserGradeList())->filter(function($v,$k){
+                return $k>5;
+            }),
             'leftNav' => "admin.user.list"
         ]);
     }
