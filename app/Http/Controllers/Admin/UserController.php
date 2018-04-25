@@ -129,7 +129,7 @@ class UserController extends BaseController
         return view("admin.user.quantity-list",[
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
-            'leftNav'   => \Illuminate\Support\Facades\Request::get("leftNav")
+            'leftNav'   => 'admin.user.quantity-list'
         ]);
     }
 
@@ -141,7 +141,8 @@ class UserController extends BaseController
     function getQuantityEdit(Request $request){
         $info = UserModel::find($request->get('uid'));
         return view("admin.user.quantity-detail",[
-           'r'  => $info
+           'r'          => $info,
+            'leftNav'   =>  'admin.user.quantity-list'
         ]);
     }
 

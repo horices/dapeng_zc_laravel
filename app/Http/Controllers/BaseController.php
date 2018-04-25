@@ -199,6 +199,18 @@ class BaseController extends Controller
             'flag'=> 'admin.pay.rebate',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
+        'intelligent_roster' =>   [
+            'text'=> '智推数据',   //文字描述
+            'route'=> "admin.roster.list.intelligent",    //链接地址
+            'flag'=> 'admin.roster.list.intelligent',  //默认选中标识
+            'grade' =>  [4,5],          //需要展示的权限等级
+        ],
+        'intelligent_roster_statistics' =>   [
+            'text'=> '智推统计',   //文字描述
+            'route'=> "admin.roster.statistics.intelligent",    //链接地址
+            'flag'=> 'admin.roster.statistics.intelligent',  //默认选中标识
+            'grade' =>  [4,5],          //需要展示的权限等级
+        ],
         'accounts' =>   [
             'text'=> '个人中心',   //文字描述
             'route'=> "admin.public.account",    //链接地址

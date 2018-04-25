@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin\Roster;
 
 use App\Http\Controllers\Admin\BaseController;
-use App\Models\RosterModel;
 use App\Models\UserModel;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 class StatisticsController extends BaseController
 {
@@ -18,14 +17,21 @@ class StatisticsController extends BaseController
         $user = UserModel::query();
         $searchType = Input::get("searchType");
         $keywords = Input::get("keywords");
+        $seoerGrade = Input::get("seoer_grade",12);
         if($searchType && $keywords !== null){
             $user->where($searchType,$keywords);
         }
-        $user->where('status',1)->seoer();
+        $user->where('status',1);
+
+        if($seoerGrade){
+            $user->where('grade',$seoerGrade);
+        }else{
+            $user->seoer();
+        }
+        $uids = $user->get()->pluck('uid')->toArray();
         if(Input::get('export') == 1){
-            $uids = $user->get()->pluck('uid')->toArray();
-            $temp = $this->getStatistics(["inviter_id"],function($query) use ($uids){
-                //$query->whereIn('inviter_id',$uids);
+            $temp = $this->getStatistics(["inviter_id"],function($query) use ($uids,$seoerGrade){
+                $query->whereIn('inviter_id',$uids);
             });
             //查询所有的推广专员,并补全每个专员的统计信息
             $users = $user->select("uid","name")->get()->keyBy('uid')->transform(function($v,$k) use($temp){
@@ -33,9 +39,10 @@ class StatisticsController extends BaseController
             });
             return $this->exportStatisticsList($users);
         }
+
         $list = $user->paginate();
-        $statistics = $this->getStatistics(["inviter_id"],function ($tquery) use ($list){
-           //$tquery->whereIn("inviter_id",$list->pluck('uid'));
+        $statistics = $this->getStatistics(["inviter_id"],function ($tquery) use ($uids){
+            $tquery->whereIn('inviter_id',$uids);
         });
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.seoer",
@@ -81,4 +88,10 @@ class StatisticsController extends BaseController
             'url_data'  =>  ['leftNav'=>"admin.roster.statistics.adviser"]
         ]);
     }
+
+    function getIntelligentStatistics(Request $request){
+        $request->merge(['seoer_grade'=>11]);
+        return Route::respondWithRoute("admin.roster.statistics.seoer");
+    }
+
 }

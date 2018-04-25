@@ -43,8 +43,14 @@ Route::get("roster/user/addwx","Roster\IndexController@getUserAddWx")->name("adm
 Route::post("roster/user/add","Roster\IndexController@postUserAdd")->name("admin.roster.user.add.post");
 Route::get("roster/statistics/seoer","Roster\StatisticsController@getSeoerStatistics")->name("admin.roster.statistics.seoer");
 Route::get("roster/statistics/adviser","Roster\StatisticsController@getAdviserStatistics")->name("admin.roster.statistics.adviser");
+//智能推广统计
+Route::get("roster/statistics/intelligent","Roster\StatisticsController@getIntelligentStatistics")->name("admin.roster.statistics.intelligent");
+
 Route::get("roster/list/user","Roster\IndexController@getUserList")->name("admin.roster.list.user");
 Route::get("roster/list/one","Roster\IndexController@getSelectOne")->name("admin.roster.list.one");
+//智能推广
+Route::get("roster/list/intelligent","Roster\IndexController@getIntelligent")->name("admin.roster.list.intelligent");
+
 
 //关单信息管理
 Route::get("roster/follow/index","Roster\FollowController@getIndex")->name("admin.roster.follow.index");

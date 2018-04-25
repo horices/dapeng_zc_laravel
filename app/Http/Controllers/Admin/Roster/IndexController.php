@@ -132,6 +132,8 @@ class IndexController extends BaseController
         $showStatistics = Input::get("show_statistics");
         $adviserName = Input::get("adviser_name");
         $seoerName = Input::get("seoer_name");
+        //智能推广
+        $seoerGrade = Input::get("seoer_grade",12);
         $where = [];
         if($type !== null){
             $where['type'] = $type;
@@ -176,14 +178,23 @@ class IndexController extends BaseController
                 ]);
             });
         }
+
         //推广专员姓名搜索
-        if($seoerName){
-            $query->whereHas("seoer",function ($query) use ($seoerName){
-                $query->seoer()->where([
+
+        if($seoerName || $seoerGrade){
+            $query->whereHas("seoer",function ($query) use ($seoerName,$seoerGrade){
+                if(!$seoerGrade){
+                    $query->seoer();
+                }else{
+                    $query->where('grade',$seoerGrade);
+                }
+                $query->where([
                     ['name','like',"{$seoerName}%"]
                 ]);
             });
         }
+
+
 
         $query->where($where);
         if(Input::get('export') == 1){
@@ -455,10 +466,31 @@ class IndexController extends BaseController
      */
     function getSelectOne(Request $request){
         $keywords = $request->input("keywords");
-        if(!$keywords){
-            $keywords = "default";
+        $roster = "";
+        //查询所有列表
+        $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
+            $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status",">",0)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
+        }]);
+        if($keywords){
+            $query->where(function($query) use ($keywords){
+                $query->where("qq",$keywords)->orWhere("wx",$keywords);
+            });
+            $roster = $query->first();
         }
-        $request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords,'show_statistics'=>1,'form_ele'=>'.search_type,.search']);
+        //$request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords,'show_statistics'=>1,'form_ele'=>'.search_type,.search']);
+        return view("admin.roster.select-one",[
+            'roster'=>  $roster
+        ]);
+        //return Route::respondWithRoute("admin.roster.list");
+    }
+
+    /**
+     * 查询指定 智能推广的数据
+     * @param Request $request
+     * @return mixed
+     */
+    function getIntelligent(Request $request){
+        $request->merge(['seoer_grade'=>11]);
         return Route::respondWithRoute("admin.roster.list");
     }
 }
