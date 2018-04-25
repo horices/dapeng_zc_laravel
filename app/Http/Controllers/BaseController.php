@@ -245,14 +245,14 @@ class BaseController extends Controller
             'deny'  =>  [
                 "admin.roster.follow.add"
             ],
-            'default_route'=>'admin.roster.list.user',
+            'default_route'=>'admin.roster.user.add',
         ],
         '12' =>  [
             'allow'    =>  '*',
             'deny'  =>  [
                 "admin.roster.follow.add"
             ],
-            'default_route'=>'admin.roster.list.user',
+            'default_route'=>'admin.roster.user.add',
         ],
 
     ];
