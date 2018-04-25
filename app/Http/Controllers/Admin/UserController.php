@@ -7,6 +7,7 @@ use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
 use App\Http\Requests\UserRequest;
 use App\Models\UserModel;
+use DebugBar\DebugBar;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
@@ -69,7 +70,8 @@ class UserController extends BaseController
             if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
                 $returnData['msg'] = "修改成功";
-                $returnData['url'] = route("admin.user.list");
+                $routeUrl = $request->get('route_url') ? route($request->get('route_url')) : route("admin.user.list");
+                $returnData['url'] = $routeUrl;
             }else{
                 $returnData['code'] = Util::FAIL ;
                 $returnData['msg'] = "修改失败".$user->errors;
@@ -108,11 +110,16 @@ class UserController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getQuantityList(Request $request){
+//        \Debugbar::enable();
         $field_k = $request->get('field_k');
         $field_v = $request->get('field_v');
         $status = $request->get("status");
-        $qyery = UserModel::whereIn('grade',[9,10]);
-        if($status !== ""){
+        $qyery = UserModel::withCount(['groups as groups_qq_count'=>function($group){
+            $group->where('type',1);
+        },'groups as groups_wx_count'=>function($group){
+            $group->where('type',2);
+        }])->whereIn('grade',[9,10]);
+        if($status){
             $qyery->where('status',$status);
         }
         if($field_k && $field_v){
@@ -123,6 +130,18 @@ class UserController extends BaseController
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
             'leftNav'   => \Illuminate\Support\Facades\Request::get("leftNav")
+        ]);
+    }
+
+    /**
+     * 修改顾问分量
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    function getQuantityEdit(Request $request){
+        $info = UserModel::find($request->get('uid'));
+        return view("admin.user.quantity-detail",[
+           'r'  => $info
         ]);
     }
 

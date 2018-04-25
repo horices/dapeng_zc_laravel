@@ -16,6 +16,7 @@ Route::post("group/change_open_status","GroupController@postSave")->name("admin.
 Route::post("group/close-all-group","GroupController@postCloseAllGroup")->name("admin.group.close-all-group");
 //用户管理
 Route::get("user/quantity-list","UserController@getQuantityList")->name("admin.user.quantity-list");
+Route::get("user/quantity-edit","UserController@getQuantityEdit")->name("admin.user.quantity-edit");
 Route::get("user/list","UserController@getList")->name("admin.user.list");
 Route::get("user/add","UserController@getAdd")->name("admin.user.add");
 Route::get("user/{uid}","UserController@getEdit")->name("admin.user.edit");

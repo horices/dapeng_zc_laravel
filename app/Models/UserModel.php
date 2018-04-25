@@ -34,8 +34,6 @@ class UserModel extends BaseModel
         'status_text',
         'grade_text',       //级别描述
         'incumbency_text',  //在职状态描述
-        'own_qq_group', //管理的qq群数量
-        'own_wx_group', //管理的wx群数量
     ];
     protected function getPerMaxNumWxAttribute($v){
         return $v ?? 1;
@@ -97,26 +95,6 @@ class UserModel extends BaseModel
         return $this->is_incumbency ? '在职' : '离职';
     }
 
-    /**
-     * 获取管理的QQ群数量
-     * @return mixed
-     */
-    function getOwnQqGroupAttribute(){
-        return $this->groups->where([
-            ['type',1],
-            ['leader_id',$this->uid]
-        ])->count();
-    }
-    /**
-     * 获取管理的WX群数量
-     * @return mixed
-     */
-    function getOwnWxGroupAttribute(){
-        return $this->groups->where([
-            ['type',2],
-            ['leader_id',$this->uid]
-        ])->count();
-    }
 
     /**
      * 检测用户名密码是否正确
