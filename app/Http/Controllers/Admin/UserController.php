@@ -33,6 +33,7 @@ class UserController extends BaseController
         if(Input::get('export') == 1){
             return $this->exportUserList($query);
         }
+
         //获取最新20条记录
         $list = $query->orderBy("uid","desc")->paginate();
         return view("admin.user.list",[

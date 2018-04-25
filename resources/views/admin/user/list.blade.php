@@ -11,7 +11,8 @@
         <div class="form-group">
             <select name="field_k" class="form-control">
                 <option value="name" {{ Request::input('field_k') == 'name'?'selected':'' }}>姓名</option>
-                <option value="mobile" {{ Request::input('field_k') == 'mobile'?'selected':'' }}>手机号</option>
+                <option value="mobile" {{ Request::input('field_k') == 'mobile'?'selected':'' }}>展翅手机号</option>
+                <option value="dapeng_user_mobile" {{ Request::input('field_k') == 'dapeng_user_mobile'?'selected':'' }}>主站手机号</option>
             </select>
             <input type="text" name="field_v" class="form-control" id="name" placeholder="" value="{{Request::input('field_v')}}">
         </div>
