@@ -154,7 +154,7 @@
 
                 <input type="text" placeholder="课程顾问" name="adviser_name" class="form-control" style="width: 100px;" value="{{ Request::input("adviser_name") }}" />
 
-                <input type="text" placeholder="推广专员" name="seoer_name" class="form-control" style="width: 100px;" value="{{ Request::input("enddate") }}" />
+                <input type="text" placeholder="推广专员" name="seoer_name" class="form-control" style="width: 100px;" value="{{ Request::input("seoer_name") }}" />
             </div>
 
 {{--            <div class="form-group">
