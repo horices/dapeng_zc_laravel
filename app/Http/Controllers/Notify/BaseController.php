@@ -14,9 +14,9 @@ class BaseController extends Controller
         /**
          * 当前学院没设计学院时，需要对该通知进行转发
          */
-        dd(route(Route::currentRouteName(),['a'=>1],false));
+        /*dd(route(Route::currentRouteName(),['a'=>1],false));
         dd(Request::fullUrl());
-        dd($curl->post()->response);
+        dd($curl->post()->response);*/
 
     }
 
