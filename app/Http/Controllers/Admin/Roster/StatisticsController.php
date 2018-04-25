@@ -17,7 +17,7 @@ class StatisticsController extends BaseController
         $user = UserModel::query();
         $searchType = Input::get("searchType");
         $keywords = Input::get("keywords");
-        $seoerGrade = Input::get("seoer_grade",12);
+        $seoerGrade = Input::get("seoer_grade");
         if($searchType && $keywords !== null){
             $user->where($searchType,$keywords);
         }
