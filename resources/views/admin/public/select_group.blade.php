@@ -68,8 +68,9 @@ margin-left:0px;
 <body style=" margin:0; padding:0;  font-family:Microsoft YaHei;">
 <div class="tc">
 <div class="top">
-<form role="form">
+<form role="form" {{--action="{{Request::getRequestUri()}}"--}}>
 <input type="hidden" name="p" value="1" />
+<input type="hidden" name="type" value="{{Request::input('type')}}" />
 <div class="form-group">
 <input type="text" class="form-control" name="group" 
  placeholder="群号" value="{{ Request::input('group') }}">
