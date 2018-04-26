@@ -482,7 +482,8 @@ class IndexController extends BaseController
         }
         //$request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords,'show_statistics'=>1,'form_ele'=>'.search_type,.search']);
         return view("admin.roster.select-one",[
-            'roster'=>  $roster
+            'roster'=>  $roster,
+            'userInfo'  => $this->getUserInfo()
         ]);
         //return Route::respondWithRoute("admin.roster.list");
     }

@@ -13,6 +13,9 @@
     </style>
 
     <script>
+        $(function () {
+            $(".grade{{$userInfo->grade}}").show();
+        });
         function openCourseLog(roster){
             AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
                 $("#courseList").empty().html(data);
