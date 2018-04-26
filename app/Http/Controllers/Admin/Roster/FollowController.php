@@ -70,7 +70,10 @@ class FollowController extends BaseController
             $where['intention'] = $intention;
         }
         if($rosterNo !== null){
-            $where['qq'] = $rosterNo;
+            $query->whereHas('roster',function ($roster) use ($rosterNo){
+                $roster->where("qq",$rosterNo)->orWhere("wx",$rosterNo);
+            });
+            //$where['qq'] = $rosterNo;
         }
         if($startDate !== null){
             $query->where("create_time",">=",strtotime($startDate));
