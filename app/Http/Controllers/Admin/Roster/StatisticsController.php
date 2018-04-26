@@ -30,7 +30,7 @@ class StatisticsController extends BaseController
         }
         $uids = $user->get()->pluck('uid')->toArray();
         if(Input::get('export') == 1){
-            $temp = $this->getStatistics(["inviter_id"],function($query) use ($uids,$seoerGrade){
+            $temp = $this->getStatistics(["inviter_id"],function($query) use ($uids){
                 $query->whereIn('inviter_id',$uids);
             });
             //查询所有的推广专员,并补全每个专员的统计信息
@@ -41,8 +41,8 @@ class StatisticsController extends BaseController
         }
 
         $list = $user->paginate();
-        $statistics = $this->getStatistics(["inviter_id"],function ($tquery) use ($uids){
-            $tquery->whereIn('inviter_id',$uids);
+        $statistics = $this->getStatistics(["inviter_id"],function ($query) use ($uids){
+            $query->whereIn('inviter_id',$uids);
         });
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.seoer",
@@ -64,10 +64,10 @@ class StatisticsController extends BaseController
             $user->where($searchType,$keywords);
         }
         $user->where('status',1)->adviser();
+        $uids = $user->get()->pluck('uid')->toArray();
         if(Input::get('export') == 1){
-            $uids = $user->get()->pluck('uid')->toArray();
             $temp = $this->getStatistics(["last_adviser_id"],function($query) use ($uids){
-                //$query->whereIn('last_adviser_id',$uids);
+                $query->whereIn('last_adviser_id',$uids);
             });
             //查询所有的推广专员,并补全每个专员的统计信息
             $users = $user->select("uid","name")->get()->keyBy('uid')->transform(function($v,$k) use($temp){
@@ -76,8 +76,8 @@ class StatisticsController extends BaseController
             return $this->exportStatisticsList($users);
         }
         $list = $user->paginate();
-        $statistics = $this->getStatistics(["last_adviser_id"],function ($tquery) use ($list){
-            //$tquery->whereIn("last_adviser_id",$list->pluck('uid'));
+        $statistics = $this->getStatistics(["last_adviser_id"],function ($query) use ($uids){
+            $query->whereIn("last_adviser_id",$uids);
         });
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.adviser",
