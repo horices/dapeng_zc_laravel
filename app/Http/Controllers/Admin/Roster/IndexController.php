@@ -86,9 +86,9 @@ class IndexController extends BaseController
      */
     function getList(Request $request){
         //若没有选择时间，则默认选择当天时间
-        if(!$request->get("startdate")){
-            $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
-        }
+//        if(!$request->get("startdate")){
+//            $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
+//        }
         //查询所有列表
         $query = RosterModel::query()->with(['group',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status",">",0)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
@@ -133,7 +133,7 @@ class IndexController extends BaseController
         $adviserName = Input::get("adviser_name");
         $seoerName = Input::get("seoer_name");
         //智能推广
-        $seoerGrade = Input::get("seoer_grade");
+        $seoerGrade = Input::get("seoer_grade",12);
         $where = [];
         if($type !== null){
             $where['type'] = $type;

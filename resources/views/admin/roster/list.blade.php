@@ -83,7 +83,14 @@
             });
         });
     })
-
+    /**
+     * 日期选择回调
+     * @param obj
+     * @param date
+     */
+    function selectDateCallback(obj,date) {
+        $(obj).val(date);
+    }
 </script>
             
             
@@ -149,8 +156,8 @@
             </div>
             <div class="form-group">
                 <label class="control-label">提交时间</label>
-                <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" /> 至
-                <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" />
+                <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" callback="selectDateCallback" /> 至
+                <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" callback="selectDateCallback" />
 
                 <input type="text" placeholder="课程顾问" name="adviser_name" class="form-control" style="width: 100px;" value="{{ Request::input("adviser_name") }}" />
 
