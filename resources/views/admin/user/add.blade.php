@@ -9,7 +9,7 @@
         $("select[name='grade']").change(function(){
             changeGrade($(this).val());
         });
-        changeGrade({{ $user->grade }});
+        changeGrade($("select[name='grade']").val());
     });
 </script>
 <div class="row dp-member-title-2">

@@ -23,10 +23,7 @@
                 </select>&nbsp;
             </label>
 
-            <label>
-                <select name="dateType" style="padding:3px;">
-                    <option value="create_time">私聊时间</option>
-                </select>&nbsp;</label>
+            <label>私聊时间：</label>
             <input type="text" name="startdate" class="form-control select_date" id="startdate" style="height:30px;"
                    placeholder="开始时间" value="{{ Request::get("startdate") }}">
             <label>&nbsp;至&nbsp;</label>
