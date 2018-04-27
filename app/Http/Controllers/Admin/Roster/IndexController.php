@@ -136,7 +136,7 @@ class IndexController extends BaseController
         $adviserName = Input::get("adviser_name");
         $seoerName = Input::get("seoer_name");
         //智能推广
-        $seoerGrade = Input::get("seoer_grade",12);
+        $seoerGrade = Input::get("seoer_grade");
         $where = [];
         if($type !== null){
             $where['type'] = $type;
@@ -191,9 +191,11 @@ class IndexController extends BaseController
                 }else{
                     $query->where('grade',$seoerGrade);
                 }
-                $query->where([
-                    ['name','like',"{$seoerName}%"]
-                ]);
+                if($seoerName){
+                    $query->where([
+                        ['name','like',"{$seoerName}%"]
+                    ]);
+                }
             });
         }
 

@@ -129,7 +129,7 @@ class BaseController extends Controller
         ],
         'roster_list' =>   [
             'text'=> '所有数据',   //文字描述
-            'route'=> "admin.roster.list",    //链接地址
+            'route'=> ["admin.roster.list",['seoer_grade'=>12]],    //链接地址
             'flag'=> 'admin.roster.list',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],

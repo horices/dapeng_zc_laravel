@@ -99,6 +99,7 @@
                 <input type="hidden" name="seoer_id" value="{{ Request::input("seoer_id") }}" />
             <input type="hidden" name="adviser_id" value="{{ Request::input("adviser_id") }}" />
             <input type="hidden" name="show_statistics" value="{{ Request::input("show_statistics") }}" />
+            <input type="hidden" name="seoer_grade" value="{{ Request::input("seoer_grade") }}" />
             <div class="form-group ">
                 <select name="search_type" class="form-control">
                     <option value="roster_no" selected>QQ/微信</option>
