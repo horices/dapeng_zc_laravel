@@ -13,7 +13,7 @@ class StatisticsController extends BaseController
     /**
      * 获取推广专员统计
      */
-    function getSeoerStatistics(){
+    function getSeoerStatistics(Request $request){
         $user = UserModel::query();
         $searchType = Input::get("searchType");
         $keywords = Input::get("keywords");
@@ -46,13 +46,15 @@ class StatisticsController extends BaseController
         });
         //左侧导航高亮
         $leftNav = Input::get("leftNav") ? Input::get("leftNav") : "admin.roster.statistics.seoer";
+        //$leftNav = $request->get("leftNav") ? $request->get("leftNav") : "admin.roster.statistics.seoer";
+
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => $leftNav,
             'list'  => $list,
             'user_id_str'  =>  'seoer_id',
             'statistics'    => $statistics['statistics'],
             'user_statistics'    => $statistics['user_statistics'],
-            'url_data'  =>  ['leftNav'=>"admin.roster.statistics.seoer"]
+            'url_data'  =>  ['leftNav'=>$leftNav]
         ]);
     }
     /**
