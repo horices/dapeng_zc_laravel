@@ -51,7 +51,7 @@ class BaseController extends Controller
         1 =>  '等待进群',
         2 =>  '已进群',
         3 =>  '已退群',
-        4   =>  '已拒绝',
+        //4   =>  '已拒绝',
         5   =>  '已被踢'
     ];
     //用户身份级别
