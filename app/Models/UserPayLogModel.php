@@ -28,7 +28,7 @@ class UserPayLogModel extends BaseModel {
         'create_time'
     ];
     protected $appends = [
-        'pay_type_text','adviser_name_reg','pay_time_text','is_bright'
+        'pay_type_text','adviser_name_reg','pay_time_text'
     ];
     //支付方式
     public $payType = [
@@ -62,14 +62,6 @@ class UserPayLogModel extends BaseModel {
      */
     public function getPayTimeTextAttribute(){
         return date("Y-m-d H:i:s",$this->pay_time);
-    }
-
-    /**
-     * 是否记录高亮显示
-     * @return int
-     */
-    public function getIsBrightAttribute(){
-        return date("Y-m-d H:i:s",$this->create_time) > date("Y-m")."-16 00:00:00" ? 1 : 0;
     }
 
     /**

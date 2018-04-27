@@ -27,7 +27,7 @@ class UserRegistrationModel extends BaseModel{
         //'last_pay_time'
     ];
     protected $appends = [
-        "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text"
+        "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text","is_bright"
     ];
     //报名分期付款方式
     public $fqType = [
@@ -76,6 +76,14 @@ class UserRegistrationModel extends BaseModel{
     public function getLastPayTimeTextAttribute(){
         //$pay_time = UserPayLogModel::where("registration_id",$this->id)->orderBy("id","desc")->value("pay_time");
         return date("Y-m-d H:i:s",$this->last_pay_time);
+    }
+
+    /**
+     * 是否记录高亮显示
+     * @return int
+     */
+    public function getIsBrightAttribute(){
+        return $this->create_time > date("Y-m")."-16 00:00:00" ? 1 : 0;
     }
 
     /**
