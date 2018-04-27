@@ -44,8 +44,10 @@ class StatisticsController extends BaseController
         $statistics = $this->getStatistics(["inviter_id"],function ($query) use ($uids){
             $query->whereIn('inviter_id',$uids);
         });
+        //左侧导航高亮
+        $leftNav = Input::get("leftNav") ? Input::get("leftNav") : "admin.roster.statistics.seoer";
         return view("admin.roster.statistics.statistics",[
-            'leftNav'   => "admin.roster.statistics.seoer",
+            'leftNav'   => $leftNav,
             'list'  => $list,
             'user_id_str'  =>  'seoer_id',
             'statistics'    => $statistics['statistics'],
@@ -90,7 +92,7 @@ class StatisticsController extends BaseController
     }
 
     function getIntelligentStatistics(Request $request){
-        $request->merge(['seoer_grade'=>11]);
+        $request->merge(['seoer_grade'=>11,'leftNav'=>'admin.roster.statistics.intelligent']);
         return Route::respondWithRoute("admin.roster.statistics.seoer");
     }
 
