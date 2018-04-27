@@ -94,7 +94,7 @@
         </tr>
         @if(!$list->count())
             <tr>
-                <td colspan="8">暂无信息</td>
+                <td colspan="12">暂无信息</td>
             </tr>
         @endif
         </tbody>
