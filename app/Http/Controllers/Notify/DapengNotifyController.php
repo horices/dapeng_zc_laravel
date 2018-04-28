@@ -43,6 +43,13 @@ class DapengNotifyController extends BaseController
             'user_type' => $roster->type,
             'course_type'=>app('status')->getCourseTypeColumnValue(Input::get('type'))
         ]);
+        //修改注册状态和时间
+        if(!$roster->dapeng_reg_time){
+            $roster->is_reg = 1;
+            $roster->dapeng_reg_time = $request->get("dapeng_reg_time");
+            $roster->save();
+        }
+
         if(!RosterCourseLogModel::create(Input::get())){
             Log::error("开课通知处理失败");
         }
