@@ -46,7 +46,7 @@ class DapengNotifyController extends BaseController
         //修改注册状态和时间
         if(!$roster->dapeng_reg_time){
             $roster->is_reg = 1;
-            $roster->dapeng_reg_time = $request->get("dapeng_reg_time");
+            $roster->dapeng_reg_time = ceil($request->get("dapeng_reg_time",time()*1000)/1000);
             $roster->save();
         }
 
