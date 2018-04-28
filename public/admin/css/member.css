@@ -1,5 +1,5 @@
 @media (min-width:1120px) {
-.container { width: 1280px; }
+.container { width: 1240px; }
 }
 @media (min-width:992px) {
 /** 课程页 左侧770像素 **/
@@ -49,7 +49,7 @@ textarea{resize: none;}
 /** 顶部导航 { **/
 .dp-nav { background: #282836; border-radius: 0; }
 .dp-nav a { color: #494657; }
-.dp-nav > div { width: 1310px; margin: auto; padding: 0px; }
+.dp-nav > div { width: 1240px; margin: auto; padding: 0px; }
 .navbar{ min-height:60px;}
 .dp-nav .search { width: 125px; margin-right: 17px; }
 .dp-nav .search i { top: -3px; color: #B5B5BF; left: 5px; }
@@ -760,7 +760,7 @@ em.error{ color:#f00; font-style:normal;}
 
 .container .dp-side-menu-2{ background:none; padding-top:30px;}
 .container .dp-side-menu-2 li{ background:none;}
-.container .dp-side-menu-2 li a{ background:none; border:none; font-size:16px;}
+.container .dp-side-menu-2 li a{ background:none; border:none; font-size:16px; text-align: right}
 .container .dp-side-menu-2 li a.cur{ color:#0c3;}
 
 .dp-member-content{ box-shadow:0px 0px 6px #ddd;}

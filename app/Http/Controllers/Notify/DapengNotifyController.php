@@ -24,7 +24,7 @@ class DapengNotifyController extends BaseController
         $qq = Input::get("qq");
         $roster = RosterModel::where('qq',$qq)->orderBy("addtime","desc")->first();
         $roster->is_reg = 1;
-        $roster->dapeng_reg_time = Input::get("dapeng_reg_time",time());
+        $roster->dapeng_reg_time = ceil(Input::get("dapeng_reg_time",time()*1000)/1000);
         if(!$roster->save()){
             Log::error("更新用户注册状态失败");
         }

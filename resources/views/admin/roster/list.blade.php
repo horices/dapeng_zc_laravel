@@ -10,6 +10,7 @@
     cursor:pointer;
 }
 .webuploader-pick{padding: 5px 15px !important;margin-top: 10px !important;display: inline !important;}
+.form-group{margin-right: 0px !important;}
 </style>
 
 <script>
@@ -100,7 +101,7 @@
             <input type="hidden" name="adviser_id" value="{{ Request::input("adviser_id") }}" />
             <input type="hidden" name="show_statistics" value="{{ Request::input("show_statistics") }}" />
             <input type="hidden" name="seoer_grade" value="{{ Request::input("seoer_grade") }}" />
-            <div class="form-group ">
+            <div class="form-group">
                 <select name="search_type" class="form-control">
                     <option value="roster_no" selected>QQ/微信</option>
                     {{--<option value="qq_nickname" @if(Request::input("search_type") == 'qq_nickname') selected @endif>QQ昵称</option>--}}
@@ -108,7 +109,7 @@
                     <option value="qq_group" @if(Request::input("search_type") == 'qq_group') selected @endif>群号/顾问微信号</option>
                     {{--<option value="group_name" @if(Request::input('field_k') == 'group_name') selected @endif>班级代号</option>--}}
                 </select>
-                <input type="text" name="keywords" class="form-control" placeholder="" value="{{ Request::input("keywords") }}">
+                <input type="text" name="keywords" class="form-control" style="width: 120px;" value="{{ Request::input("keywords") }}">
             </div>
             <div class="form-group">
                 <label class="control-label">来源类型</label>
@@ -156,7 +157,13 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="control-label">提交时间</label>
+
+                <select name="dateType" class="form-control">
+                    <option value="addtime" @if(Request::input('dateType') == 'addtime') selected @endif>提交时间</option>
+                    <option value="dapeng_reg_time" @if(Request::input('dateType') == 'dapeng_reg_time') selected @endif>注册时间</option>
+                </select>&nbsp;
+
+
                 <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" callback="selectDateCallback" /> 至
                 <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" callback="selectDateCallback" />
 

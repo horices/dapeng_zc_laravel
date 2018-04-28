@@ -130,6 +130,7 @@ class IndexController extends BaseController
         $flag = Input::get("flag");
         $startDate = Input::get("startdate");
         $endDate = Input::get("enddate");
+        $dateType = Input::get("dateType",'addtime');
         $seoerId = Input::get("seoer_id");
         $adviserId = Input::get("adviser_id");
         $showStatistics = Input::get("show_statistics");
@@ -154,10 +155,10 @@ class IndexController extends BaseController
             $where['flag'] = $flag;
         }
         if($startDate !== null){
-            $query->whereRaw("addtime >= ".strtotime($startDate));
+            $query->whereRaw($dateType." >= ".strtotime($startDate));
         }
         if($endDate !== null){
-            $query->whereRaw("addtime <= ".strtotime($endDate));
+            $query->whereRaw($dateType." <= ".strtotime($endDate));
         }
         $statistics = [];
         $statistics['statistics'] = '';

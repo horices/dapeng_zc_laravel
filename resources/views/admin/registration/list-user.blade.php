@@ -2,7 +2,7 @@
 @section("right_content")
 
 <style>
-    .container{width: 1280px}
+    .container{width: 1240px}
     .act_list{ position:relative; background:#f00; zoom:1;}
     .act_list .sel{ margin:0; padding:0; width:80px; height:22px; line-height:22px; overflow:hidden; position:absolute; border:1px transparent solid; left:0; top:0;}
     .act_list .sel li a{ display:block; width:100%; height:22px; line-height:22px; margin:0; padding:0 0 0 10px; outline:0; text-decoration:none;}
