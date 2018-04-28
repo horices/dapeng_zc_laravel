@@ -363,6 +363,8 @@ class IndexController extends BaseController
         if($res['code'] == Util::FAIL){
             throw new DapengApiException($res['msg']);
         }
+        $rosterData->dapeng_reg_time = $res['data']['dapeng_reg_time'];
+        $rosterData->is_reg = 1;
         $rosterData->dapeng_user_mobile = $studentMobile;
         $rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
         $rosterData->save();
