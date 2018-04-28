@@ -28,8 +28,8 @@ class StatisticsController extends BaseController
         }else{
             $user->seoer();
         }
-        $uids = $user->get()->pluck('uid')->toArray();
         if(Input::get('export') == 1){
+            $uids = $user->get()->pluck('uid')->toArray();
             $temp = $this->getStatistics(["inviter_id"],function($query) use ($uids){
                 $query->whereIn('inviter_id',$uids);
             });
@@ -41,6 +41,7 @@ class StatisticsController extends BaseController
         }
 
         $list = $user->paginate();
+        $uids = $list->pluck('uid')->toArray();
         $statistics = $this->getStatistics(["inviter_id"],function ($query) use ($uids){
             $query->whereIn('inviter_id',$uids);
         });
@@ -68,8 +69,9 @@ class StatisticsController extends BaseController
             $user->where($searchType,$keywords);
         }
         $user->where('status',1)->adviser();
-        $uids = $user->get()->pluck('uid')->toArray();
+
         if(Input::get('export') == 1){
+            $uids = $user->get()->pluck('uid')->toArray();
             $temp = $this->getStatistics(["last_adviser_id"],function($query) use ($uids){
                 $query->whereIn('last_adviser_id',$uids);
             });
@@ -80,6 +82,7 @@ class StatisticsController extends BaseController
             return $this->exportStatisticsList($users);
         }
         $list = $user->paginate();
+        $uids = $list->pluck('uid')->toArray();
         $statistics = $this->getStatistics(["last_adviser_id"],function ($query) use ($uids){
             $query->whereIn("last_adviser_id",$uids);
         });

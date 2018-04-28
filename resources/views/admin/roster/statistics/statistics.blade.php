@@ -96,10 +96,10 @@
             </div>
             <div style="float:left; margin-left:10px;">
                 <select name="dateType" class="form-control" style="padding:3px;">
-                    <option value="addtime">提交时间</option>
-                       <option value="ur.reg_time">注册时间</option>
-                       <option value="ur.trial_time">开通试学时间</option>
-                       <option value="ur.formal_time">开通正课时间</option>
+                    <option value="addtime" @if(Request::input('dateType') == 'addtime') selected @endif>提交时间</option>
+                       <option value="dapeng_reg_time" @if(Request::input('dateType') == 'dapeng_reg_time') selected @endif>注册时间</option>
+                       <option value="trial_time" @if(Request::input('dateType') == 'trial_time') selected @endif>开通试学时间</option>
+                       <option value="formal_time" @if(Request::input('dateType') == 'formal_time') selected @endif>开通正课时间</option>
                 </select>
                 <input type="text" name="startdate" class="form-control select_date" id="startdate" style="height:30px;"
                        placeholder="开始时间" value="{{ Request::input('startdate') }}">

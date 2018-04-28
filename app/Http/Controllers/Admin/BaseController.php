@@ -159,6 +159,7 @@ class BaseController extends Controller{
         $courseType = Input::get("course_type");
         $groupStatus = Input::get("group_status");
         $flag = Input::get("flag");
+        $dateType = Input::get("dateType",'addtime');
         $field = collect($column)->merge(['is_reg','course_type','group_status'])->filter();
         $where = [];
         if($searchType && $keywords !== null){
@@ -186,10 +187,10 @@ class BaseController extends Controller{
         }
         $roster->where($where);
         if($startDate){
-            $roster->where('addtime','>=',strtotime($startDate));
+            $roster->where($dateType,'>=',strtotime($startDate));
         }
         if($endDate){
-            $roster->where('addtime','<',strtotime($endDate));
+            $roster->where($dateType,'<',strtotime($endDate));
         }
         $query = $roster->select($field->merge([DB::raw("count(*) as num")])->toArray())->groupBy($field->toArray());
         if($rosterWhere){
