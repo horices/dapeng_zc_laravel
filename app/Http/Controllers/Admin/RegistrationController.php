@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Api\DapengUserApi;
+use App\Utils\Api\DapengUserApi;
 use App\Exceptions\UserValidateException;
 use App\Http\Requests\RegistrationForm;
 use App\Models\CoursePackageModel;

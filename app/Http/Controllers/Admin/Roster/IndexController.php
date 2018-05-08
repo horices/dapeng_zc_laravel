@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Admin\Roster;
 
 
-use App\Api\DapengUserApi;
+use App\Utils\Api\DapengUserApi;
 use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Admin\BaseController;

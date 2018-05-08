@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Api\DapengUserApi;
+use App\Utils\Api\DapengUserApi;
 use App\Events\RevisingAdvisor;
 use App\Exceptions\UserValidateException;
 use App\Utils\Util;

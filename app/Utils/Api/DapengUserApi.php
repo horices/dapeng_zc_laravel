@@ -6,7 +6,7 @@
  * Time: 10:33
  */
 
-namespace App\Api;
+namespace App\Utils\Api;
 
 
 use App\Utils\Util;

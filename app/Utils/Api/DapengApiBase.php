@@ -1,10 +1,8 @@
 <?php
-namespace App\Api;
+namespace App\Utils\Api;
 
-use Curl\Curl;
-use Illuminate\Support\Facades\Log;
-use Monolog\Logger;
 use App\Utils\Util;
+use Curl\Curl;
 
 class DapengApiBase {
     private static $apiKey = '8934031001776A04444F72154425DDBC';

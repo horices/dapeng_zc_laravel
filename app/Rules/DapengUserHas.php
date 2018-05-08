@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Api\DapengUserApi;
+use App\Utils\Api\DapengUserApi;
 use App\Utils\Util;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Session;

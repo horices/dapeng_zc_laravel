@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Api\DapengUserApi;
+use App\Utils\Api\DapengUserApi;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
 use App\Utils\Util;

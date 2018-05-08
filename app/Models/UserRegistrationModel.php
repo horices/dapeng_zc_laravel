@@ -9,9 +9,9 @@
 namespace App\Models;
 
 
-use App\Api\DapengUserApi;
 use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
+use App\Utils\Api\DapengUserApi;
 use App\Utils\Util;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
