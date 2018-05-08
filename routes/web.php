@@ -42,6 +42,7 @@ Route::group(['prefix'=>'Api','namespace'=>"Api"], function(){
     Route::get("User/getInfo","RosterController@getInfo");
     Route::post("User/addQQ","RosterController@add");
     Route::post("User/setInfo","RosterController@setInfo");
+    Route::post("User/checkRosterStatus","RosterController@checkRosterStatus");
 });
 //Auth::routes();
 

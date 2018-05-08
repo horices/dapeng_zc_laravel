@@ -5,6 +5,7 @@ use App\Models\RosterCourseLogModel;
 use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
 use App\Utils\Util;
+use Curl\Curl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
@@ -17,6 +18,16 @@ use Illuminate\Support\Facades\Log;
  */
 class DapengNotifyController extends BaseController
 {
+    /**
+     * 初始化实例对象,转发请求,因为每个通知的签名验证方式不统一，所以需要单独进行转发
+     * DapengNotifyController constructor.
+     * @param Curl $curl
+     */
+    function __construct(Curl $curl)
+    {
+        parent::__construct($curl);
+    }
+
     /**
      * 注册通知
      */

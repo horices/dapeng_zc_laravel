@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\UserException;
 use App\Http\Controllers\Controller;
 use App\Models\RosterModel;
+use App\Models\UserModel;
 use App\Utils\Util;
+use Faker\Provider\bn_BD\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class RosterController extends BaseController
 {
@@ -54,5 +58,35 @@ class RosterController extends BaseController
             Log::error("保存roster信息失败");
         }
         return Util::ajaxReturn(Util::SUCCESS,"success","修改成功");
+    }
+
+    /**
+     * 判断一个量否可以被提交
+     * @params array $data 需要验证的数据
+     *               keys:  roster_type:[1:qq,2:微信]
+     *                      roster_no: 量的号码
+     */
+    function checkRosterStatus(Request $request){
+        $data['roster_type'] = $request->get("roster_type");
+        $data['roster_no'] = $request->get("roster_no");
+        $code = Util::SUCCESS;
+        $msg = "可以正常添加";
+        //验证时，需要验证seoer身份，这里随意补全一个推广专员的身份
+        $seoer = UserModel::seoer()->first();
+        $data['seoer_id'] = $seoer->uid;
+        try{
+            // 对验证进行异常捕获，有异常表示数据错误，不能正常提交
+            RosterModel::validateRosterData($data);
+        }catch (UserException $e){
+            $code = Util::FAIL;
+            $msg = $e->getMessage();
+        }catch (ValidationException $e){
+            $code = Util::FAIL;
+            $msg = collect($e->errors())->first()[0];
+        }catch (\Exception $e){
+            $code = Util::FAIL;
+            $msg = "未知错误:".$e->getMessage();
+        }
+        return Util::ajaxReturn($code,$msg);
     }
 }
