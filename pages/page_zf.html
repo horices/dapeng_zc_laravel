@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <title>无标题文档</title> 
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/member.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/style.css" /> 
+  <script src="js/bootstrap.min.js"></script> 
+  <script src="js/jquery-1.8.3.min.js"></script> 
+  <script src="js/bootstrap-datetimepicker.min.js"></script> 
+  <script src="js/bootstrap-datetimepicker.zh-CN.js"></script> 
+ </head>
+	<body class="" id="bodyColor" style="background-color:#f0f0f0;">
+<div class="navbar dp-nav">
+    <div class="container">
+        <div class="container-gap">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand logo" href="#"> <img src="img/member_logo.png" alt="大鹏教育-高品质的设计师在线教育"> </a>
+            </div>
+            <div class="navbar-collapse collapse dp-collapse">
+                
+                <ul class="nav navbar-nav navbar-right dp-navbar">
+                    <li class="dropdown hidden-lt-ie8">
+                    	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">小顾问 (课程顾问)<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
+                        <ul class="dp-dropdown-menu dropdown-menu">
+                            <div class="border-top"></div>
+                            <li><a href="http://test.bzr.dapengjiaoyu.com/admin/index/account">个人中心</a></li>
+                            <li class="divider"></li>
+                            <li><a href="http://test.bzr.dapengjiaoyu.com/admin/auth/logout" class="">退出登陆</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="http://123.56.200.151/signin" class="" target="_blank">橱窗管理系统登录</a></li>
+                </ul>
+            </div>
+            <!--/.navbar-collapse -->
+        </div>
+    </div>
+</div>
+<div id="content-container" class="container">
+    <div class="row row-2-10">
+        <div class="col-md-2 nav-left">
+        <div class="panel panel-default dp-cxx-menu dp-beijing-color">
+	<div class="panel-body" style="padding-left: 0px; padding-right: 0px;">
+		<div class="list-group-block">
+			<div class="list-group-panel">
+				<ul class="list-group dp-side-menu-2" id="subnav">
+										<li><a class="list-group-item" flag="admin.roster.list.one" href="http://test.bzr.dapengjiaoyu.com/admin/roster/list/one">批量开课</a></li>
+										<li><a class="list-group-item" flag="admin.roster.list.user" href="http://test.bzr.dapengjiaoyu.com/admin/roster/list/user">数据统计</a></li>
+										<li><a class="list-group-item" flag="admin.roster.follow.list.user" href="http://test.bzr.dapengjiaoyu.com/admin/roster/follow/user/list">销售数据</a></li>
+										<li><a class="list-group-item cur" flag="admin.registration.add" href="http://test.bzr.dapengjiaoyu.com/admin/registration/add">添加支付</a></li>
+										<li><a class="list-group-item" flag="admin.registration.list" href="http://test.bzr.dapengjiaoyu.com/admin/registration/list-user">支付查询</a></li>
+										<li><a class="list-group-item" flag="admin.public.account" href="http://test.bzr.dapengjiaoyu.com/admin/index/account">个人中心</a></li>
+									</ul>
+			</div>
+		</div>
+	</div>
+</div>
+        </div>
+      <form class="col-md-10 dp-member-content " style="padding: 30px; "> 
+     <div class="sub_main "> 
+      <div class="sub_main_one "> 
+       <div class="main_left pull-left"> 
+        <div class="row dp-member-title-2 " style="margin-left: -3px; "> 
+         <h4 class="col-md-4 " style="padding-left: 0px; font-weight: 700; "> 报名信息： </h4> 
+        </div> 
+        <div class="div_input_one "> 
+         <label for="input01 " class="col-md-2 control-label "> 学员手机： </label> 
+         <input type="text " id="mobile " name="mobile " value=" " maxlength="11 " class="form-control pull-left " readonly> 
+         <a data="{mobile:$( '#mobile').val(),client_submit: 'PC'} " href="javascript:; " callback="hasRegistration " class="common-button dblock fleft combg2 ml5 ajaxLink " linkurl="/Member/Adviser/hasRegistration.html " processing="false " isclicked="0 ">下一步</a> 
+        </div> 
+        <div id="show-input " style="display: block; "> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 学员QQ： </label> 
+          <input type="text " name="qq " class="form-control " readonly> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 学员微信： </label> 
+          <input type="text " name="qq " class="form-control " readonly> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 学员姓名： </label> 
+          <input type="text " name="name " class="form-control " readonly> 
+         </div> 
+         <hr> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 学员名称： </label> 
+          <select class="form-control"> <option>美术学院</option> <option>设计学院</option> </select> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 报名套餐： </label> 
+          <input id="package-title " type="text " name="package_title " class="form-control pull-left " style="width: 300px; " readonly> 
+         </div> 
+         <div class="course-package " style="display: none; "> 
+          <input type="hidden " name="package_id " value="2 "> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 已选主套餐： </label> 
+          <p class="tc_list">室内设计就业套餐</p> 
+         </div> 
+         <div class="div_input_one fj_tc"> 
+          <label for="input01 " class="col-md-2 control-label "> 附加套餐： </label> 
+          <p class="tc_list pull-left">选择附加套餐课程</p>
+          <div class="fj_list">
+          	<h3>已选附加课程：</h3>
+          	<p>平面设计高手特训（500元）</p>
+            <p>平面设计高手特训（500元）</p>
+            <p>平面设计高手特训（500元）</p>	
+          </div> 
+         </div> 
+         <div class="div_input_one fj_tc"> 
+          <label for="input01" class="col-md-2 control-label "> 赠送课程： </label> 
+         <p class="tc_list pull-left">选择赠送课程</p>
+         <div class="fj_list">
+         	<h3 class="pull-left">已选赠送课程：</h3>
+            <span>CAD、</span>
+            <span>CAD、</span>
+            <span>CAD、</span>
+         </div> 
+         </div> 
+         <div class="div_input_one"> 
+          <label for="input01 " class="col-md-2 control-label "> 优惠活动： </label> 
+          <select name="rebate_id " class="form-control fleft pull-left "><option value="0 ">选择优惠活动</option> <option value="9 ">活动现金优惠（400）</option><option value="10 ">活动现金优惠（100）</option><option value="12 ">活动现金优惠（300）</option><option value="15 ">活动现金优惠（450）</option><option value="17 ">活动现金优惠（70）</option><option value="27 ">testxu02</option><option value="29 ">大抢购</option><option value="30 ">优惠活动买就送0111</option><option value="33 ">哈哈哈好好</option></select> 
+          
+          <input type="text" name="rebate_price " class="form-control rebate_price  pull-left " value="70.00 "> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01" class="col-md-2 control-label "> 套餐总金额： </label> 
+          <p class="pull-left num_price">529.00</p> 
+          
+         </div> 
+         <div class="pay_mess"> 
+          <div class="pay_mess_main"> 
+           <div class="pay_mess_l pull-left"> 
+            <div class="row dp-member-title-2 "> 
+             <h4 class="col-md-4 "> 支付信息： </h4> 
+            </div> 
+            <!--<div class="div_input_one ">
+         <label for="input01 " class="col-md-2 control-label "> 是否分期： </label>
+         <div class="in_radio pull-left">
+         <input type="radio" name="fq_type " value=" " disabled="disabled " />无分期 
+         <input type="radio" name="fq_type " value="CASH " disabled="disabled " />现金分期&nbsp; 
+         <input type="radio" name="fq_type " value="HUABEI " disabled="disabled " />花呗分期&nbsp; 
+         <input type="radio" name="fq_type " value="MYFQ " disabled="disabled " />蚂蚁分期&nbsp; 
+        </div> 
+        </div>--> 
+            <div class="div_input_one "> 
+             <div class="pay_input pull-left zf_title col-md-2">
+               支付方式： 
+             </div> 
+             <div class="pay_input"> 
+              <select id="pay-type " class="form-control user-pay-input"> <option value=" " selected="selected">方式</option> <option value="ALIPAY ">支付宝</option> <option value="WEIXIN ">微信</option> <option value="HUABEI ">花呗</option> <option value="HUABEIFQ ">花呗分期</option> <option value="MAYIFQ ">蚂蚁分期</option> <option value="BANKZZ ">银行转账</option> </select> 
+             </div> 
+             <div class="pay_input"> 
+              <div class="pay_input pull-left zf_title col-md-2">
+                支付金额： 
+              </div> 
+              <input type="text" id="pay-amount" placeholder="金额" value=" " maxlength="8" class="form-control"> 
+             </div> 
+             <div class="pay_input "> 
+              <div class="pay_input pull-left zf_title col-md-2">
+                支付日期： 
+              </div> 
+              <div class="input-group date form_datetime " data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1"> 
+               <input class="form-control form_width_3" size="16" type="日期" value="日期" readonly> 
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> 
+               <!--<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>--> 
+              </div> 
+              <input type="hidden" id="dtp_input1" value=""> 
+              <br> 
+             </div> 
+            </div> 
+           </div> 
+           <div class="pay_add pull-right"> 
+            <div title="添加该支付方式 " class=" add-pay-type pull-left text-center"> 
+             <span>+</span> 
+             <p>点击添加</p> 
+            </div> 
+           </div> 
+          </div> 
+          <div class="pay_input "> 
+           <div class="pay_input zf_title col-md-2">
+             支付记录： 
+           </div> 
+           <div class="jl_list pull-left"> 
+            <div class="jl_list_sun"> 
+             <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p> 
+             <span class="glyphicon glyphicon-minus"></span> 
+            </div> 
+            <div class="jl_list_sun"> 
+             <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p> 
+             <span class="glyphicon glyphicon-minus"></span> 
+            </div> 
+            <div class="jl_list_sun"> 
+             <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p> 
+             <span class="glyphicon glyphicon-minus"></span> 
+            </div> 
+           </div> 
+          </div> 
+         </div> 
+        </div> 
+       </div> 
+        
+       <div class="main_right pull-left"> 
+        <div id="show-input" class="add_menu"> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 学员名称： </label> 
+          <select class="form-control"> <option>美术学院</option> <option>设计学院</option> </select> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 报名套餐： </label> 
+          <input id="package-title " type="text " name="package_title " class="form-control pull-left " style="width: 300px; " readonly> 
+         </div> 
+         <div class="course-package " style="display: none; "> 
+          <input type="hidden " name="package_id " value="2 "> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01 " class="col-md-2 control-label "> 已选主套餐： </label> 
+          <p class="tc_list">室内设计就业套餐</p> 
+         </div> 
+         <div class="div_input_one fj_tc"> 
+          <label for="input01 " class="col-md-2 control-label "> 附加套餐： </label> 
+          <p class="tc_list pull-left">选择附加套餐课程</p> 
+         </div> 
+         <div class="div_input_one fj_tc"> 
+          <label for="input01" class="col-md-2 control-label "> 赠送课程： </label> 
+         <p class="tc_list pull-left">选择附加赠送课程</p> 
+          
+         </div> 
+         <div class="div_input_one"> 
+          <label for="input01 " class="col-md-2 control-label "> 优惠活动： </label> 
+          <select name="rebate_id " class="form-control fleft "><option value="0 ">选择优惠活动</option> <option value="9 ">活动现金优惠（400）</option><option value="10 ">活动现金优惠（100）</option><option value="12 ">活动现金优惠（300）</option><option value="15 ">活动现金优惠（450）</option><option value="17 ">活动现金优惠（70）</option><option value="27 ">testxu02</option><option value="29 ">大抢购</option><option value="30 ">优惠活动买就送0111</option><option value="33 ">哈哈哈好好</option></select> 
+          <input type="hidden" name="rebate_title " value="活动现金优惠（70） "> 
+          <input type="hidden" name="rebate_price " value="70.00 "> 
+         </div> 
+         <div class="div_input_one "> 
+          <label for="input01" class="col-md-2 control-label "> 套餐总金额： </label> 
+          <input id="package-price" type="text" name="package_total_price " readonly class="form-control "> 
+         </div> 
+         <div class="pay_mess"> 
+          <div class="pay_mess_main"> 
+           <div class="pay_mess_l pull-left"> 
+            <div class="row dp-member-title-2 "> 
+             <h4 class="col-md-4 "> 支付信息： </h4> 
+            </div> 
+            <!--<div class="div_input_one ">
+         <label for="input01 " class="col-md-2 control-label "> 是否分期： </label>
+         <div class="in_radio pull-left">
+         <input type="radio" name="fq_type " value=" " disabled="disabled " />无分期 
+         <input type="radio" name="fq_type " value="CASH " disabled="disabled " />现金分期&nbsp; 
+         <input type="radio" name="fq_type " value="HUABEI " disabled="disabled " />花呗分期&nbsp; 
+         <input type="radio" name="fq_type " value="MYFQ " disabled="disabled " />蚂蚁分期&nbsp; 
+        </div> 
+        </div>--> 
+            <div class="div_input_one "> 
+             <div class="pay_input pull-left zf_title col-md-2">
+               支付方式： 
+             </div> 
+             <div class="pay_input"> 
+              <select id="pay-type " class="form-control user-pay-input"> <option value=" " selected="selected">方式</option> <option value="ALIPAY ">支付宝</option> <option value="WEIXIN ">微信</option> <option value="HUABEI ">花呗</option> <option value="HUABEIFQ ">花呗分期</option> <option value="MAYIFQ ">蚂蚁分期</option> <option value="BANKZZ ">银行转账</option> </select> 
+             </div> 
+             <div class="pay_input"> 
+              <div class="pay_input pull-left zf_title col-md-2">
+                支付金额： 
+              </div> 
+              <input type="text" id="pay-amount" placeholder="金额" value=" " maxlength="8" class="form-control"> 
+             </div> 
+             <div class="pay_input "> 
+              <div class="pay_input pull-left zf_title col-md-2">
+                支付日期： 
+              </div> 
+              <div class="input-group date form_datetime " data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1"> 
+               <input class="form-control form_width_3" size="16" type="日期" value="日期" readonly> 
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> 
+               <!--<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>--> 
+              </div> 
+              <input type="hidden" id="dtp_input1" value=""> 
+              <br> 
+             </div> 
+            </div> 
+           </div> 
+           <div class="pay_add pull-right"> 
+            <div title="添加该支付方式 " class="fa fa-plus add-pay-type pull-left text-center"> 
+             <span>+</span> 
+             <p>点击添加</p> 
+            </div> 
+           </div> 
+          </div> 
+          <div class="pay_input "> 
+           <div class="pay_input zf_title col-md-2">
+             支付记录： 
+           </div> 
+           <div class="jl_list pull-left"> 
+            <div class="jl_list_sun"> 
+             <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p> 
+             <span class="glyphicon glyphicon-minus"></span> 
+            </div> 
+            <div class="jl_list_sun"> 
+             <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p> 
+             <span class="glyphicon glyphicon-minus"></span> 
+            </div> 
+            <div class="jl_list_sun"> 
+             <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p> 
+             <span class="glyphicon glyphicon-minus"></span> 
+            </div> 
+           </div> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="add_tc"> 
+         <span>+</span> 
+         <p>继续添加报名套餐信息</p> 
+        </div> 
+        <div class="add_tc"> 
+         <span>-</span> 
+         <p>继续删除报名套餐信息</p> 
+        </div> 
+        <div class="div_input_one "> 
+         <label for="input01 " class="col-md-2 control-label "> 是否导学： </label> 
+         <div class="in_radio pull-left"> 
+          <input type="radio" name="is_open " value="0 " checked="checked " "="">是 
+          <input type="radio" name="is_open " value="1 "> 否 
+         </div> 
+        </div> 
+        <div class="sub_main_two "> 
+         <div class="div_input_one text-left"> 
+          <button type="button" href="javascript:; " class="btn btn-primary">确认提交</button> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+    </form>  
+    </div>
+</div>
+<div class="dp-footer">
+    <div class="wrap">
+        <div class="container">
+            <ul class="nav navbar-nav">
+                <li><i class="img1"></i><span>在线直播授课</span></li>
+                <li><i class="img2"></i><span>全选在线教法</span></li>
+                <li><i class="img3"></i><span>一线设计讲师</span></li>
+                <li><i class="img4"></i><span>创新课程体系</span></li>
+            </ul>
+            <div class="pull-right nav-r">
+                <p class="consult">客服咨询：400 668 1033</p>
+                <p class="time">周一至周日9:00-18:00 /仅收市话费</p>
+            </div>
+        </div>
+    </div>
+    <div class="container main">
+        <div class="row more">
+            <div class="col-sm-2 float-l">
+                <h3>我想学</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/ih7eniy2">设计功能精通班</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/ih7bjlfu">设计师高级精英班</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/ih7c6ip8">设计师就业直通班</a> </li>
+                </ul>
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>我想了解</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/explore/?type=OPEN">朋友说</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/explore/?type=OPEN">大鹏炫技</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/explore/?type=OPEN">精品课程</a> </li>
+                </ul>
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>获得证书</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/certificate">ADOBE认证</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/certificate">工信部证书</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/certificate">CCID认证</a> </li>
+                </ul>
+                <!--底部导航 健康产品-->
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>了解大鹏</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/about">大鹏简介</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/about">媒体报道</a> </li>
+                    <li> <a href="/#praise">学员评价</a> </li>
+                </ul>
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>关注大鹏</h3>
+                <ul>
+                    <li> <a target="_blank" href="#">微信公众号</a> </li>
+                    <li> <a target="_blank" href="#">微博#大鹏#</a> </li>
+                    <li> <a target="_blank" href="#">优酷视频</a> </li>
+                </ul>
+            </div>
+            <div class="qr-group">
+                <div>
+                    <i class="app-qr"></i><span class="">下载手机APP</span>
+                </div>
+                <div>
+                    <i class="wx-qr"></i><span class="">关注微信公号</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="f-wrap p-wrap">
+            <ul class="clearfix">
+                <li><a href="/page/about#joinus" target="_blank">加入我们</a></li>
+                <li><a href="/page/about#contactus">联系我们</a></li>
+                <li><a href="/page/help" target="_blank">帮助中心</a></li>
+            </ul>
+            <div class="copyright">
+                Copyright © 2013-2015 大鹏教育　|　京ICP备14053618号
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="layui-layer-move"></div>
+
+ <!--支付信息弹窗-->
+  <div class=" tc_pay"> 
+        <div class="tc_pay_l pull-left"> 
+         <div class="row dp-member-title-2 "> 
+          <h4 class="col-md-4 "> 支付信息： </h4> 
+         </div> 
+         <div class="div_input_one "> 
+          <div class="pay_input pull-left zf_title col-md-2">
+            支付方式： 
+          </div> 
+          <div class="pay_input"> 
+           <select id="pay-type " class="form-control user-pay-input"> <option value=" " selected="selected">方式</option> <option value="ALIPAY ">支付宝</option> <option value="WEIXIN ">微信</option> <option value="HUABEI ">花呗</option> <option value="HUABEIFQ ">花呗分期</option> <option value="MAYIFQ ">蚂蚁分期</option> <option value="BANKZZ ">银行转账</option> </select> 
+          </div> 
+          <div class="pay_input"> 
+           <div class="pay_input pull-left zf_title col-md-2">
+             支付金额： 
+           </div> 
+           <input type="text" id="pay-amount" placeholder="金额" value=" " maxlength="8" class="form-control" /> 
+          </div> 
+          <div class="pay_input "> 
+           <div class="pay_input pull-left zf_title col-md-2">
+             支付日期： 
+           </div> 
+           <div class="input-group date form_datetime " data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1"> 
+            <input class="form-control form_width_3" size="16" type="日期" value="日期" readonly /> 
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> 
+            <!--<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>--> 
+           </div> 
+           <input type="hidden" id="dtp_input1" value="" /> 
+           <br /> 
+          </div> 
+          <div class="pay_input"> 
+           <div class="pay_input zf_title col-md-2">
+             支付记录： 
+           </div> 
+           <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p> 
+          </div> 
+         </div> 
+        </div> 
+        <div class="pay_add pull-right"> 
+         <div title="添加该支付方式 " class="add-pay-type text-center"> 
+          <span>+</span> 
+          <p>点击添加</p> 
+         </div> 
+        </div> 
+       </div>
+  <!--选择附加套餐弹窗-->
+  <div class="select_tc show"> 
+   <div class="se_top"> 
+    <h3 class="pull-left">选择附加套餐</h3> 
+    <span class="glyphicon glyphicon-remove-circle pull-right"></span> 
+   </div> 
+   <form class="se_form"> 
+    <input type="search" placeholder="课程名称" class=" form-control pull-left" /> 
+    <button type="button" class="btn btn-primary">搜索</button> 
+    <div class="se_table"> 
+     <table> 
+      <tbody>
+       <tr> 
+        <td>勾选</td> 
+        <td>课程名称</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="radio" value="1" id="check1" /> 
+          <label for="check1"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check2" /> 
+          <label for="check2"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check3" /> 
+          <label for="check3"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check4" /> 
+          <label for="check4"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check5" /> 
+          <label for="check5"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check6" /> 
+          <label for="check6"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check6" /> 
+          <label for="check6"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check7" /> 
+          <label for="check7"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check8" /> 
+          <label for="check8"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check9" /> 
+          <label for="check9"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check10" /> 
+          <label for="check10"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+       <tr> 
+        <td> 
+         <div class="check_box"> 
+          <input type="checkbox" value="1" id="check11" /> 
+          <label for="check11"></label> 
+         </div> </td> 
+        <td>化妆+盘发</td> 
+       </tr> 
+      </tbody>
+     </table> 
+    </div> 
+    <button type="button" class="btn btn-success pull-right btn-qz">确认</button> 
+   </form> 
+  </div> 
+  <script type="text/javascript">
+         $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+    </script>  
+	</body>
+</html>

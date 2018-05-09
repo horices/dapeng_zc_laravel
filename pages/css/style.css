@@ -1,0 +1,118 @@
+@charset "utf-8";
+/* CSS Document */
+input,button{ outline:none}
+input[type="hidden" i] {
+    display: none;
+}
+
+.form-control {
+    width: 200px;
+}
+.combg2 {
+    background: #0591b2;
+}
+
+.common-button {
+    width: auto;
+    text-align: center;
+    color: #FFF;
+    font: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 12px;
+    font-size: 14px;
+    line-height: 26px;
+}
+.ml5 {
+    margin-left: 5px;
+}
+
+.div_input_one {  
+    width: 100%;
+    margin: 10px 0;
+	overflow:hidden
+}
+.fj_tc>p{ color: #ff8226; cursor: pointer;}
+.main_left { width:50%; border-right: 1px solid #ccc;}
+.main_right {width:50%; text-align: center;}
+.div_input_one .zc_check>p{ margin: 0 5px; line-height: 34px;}
+.div_input_one .zc_check input[type=checkbox]{ margin: 11px 0;}
+.div_input_one .tc_list{ line-height:32px; text-align:left}
+.div_input_one .fj_list{ clear:both; margin-left:120px; overflow:hidden}
+.div_input_one .fj_list h3{ font-size:14px; font-weight:600; margin:0}
+.div_input_one .fj_list p,.div_input_one .fj_list span{ color:#3fb13f}
+.div_input_one .fj_list h3,.div_input_one .fj_list p,.div_input_one .fj_list span{ line-height:25px;}
+.div_input_one .fj_list span{ float:left;}
+.div_input_one .in_radio,.div_input_one .num_price{ line-height: 34px;}
+.div_input_one .in_radio input[type=radio]{ margin: 5px 5px;}
+.pay_input,.sub_main_two,.pay_mess_main{ overflow: hidden;}
+.dp-member-title-2{padding-left: 0px; margin:0px; }
+.dp-member-title-2 h4{font-weight: 700; padding: 0;}
+.tc_pay{ background: #fff; z-index: 1000; padding: 20px;}
+.body_zz{ width: 100%;height: 100%; background: rgba(0,0,0,0.3); top: 0;left: 0; z-index: 100;}
+.tc_pay .control-label{ width: 100px; text-align: right; padding: 0;}
+.add-pay-type {
+    width:80px;
+    line-height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+}
+.control-label {
+    
+    float: left;
+    text-align: center;
+    line-height: 34px;
+    display: block;
+}
+.control-label,.pay_mess .zf_title ,.tc_pay .zf_title{width: 120px;}
+.rebate_price{ width: 80px; margin-left:10px;}
+.pay_mess .zf_title{ font-weight: 600; text-align: center;}
+.wz_ts{height: 30px; color: red;}
+.tc_pay .pay_input input[type=text],.pay_input select,.pay_mess #pay-amount { width: 110px; margin-right: 5px;}
+.input-group,.pay_mess select,.pay_mess #pay-amount,.tc_pay select,.tc_pay #pay-amount{ width: 190px;}
+.pay_mess .pay_input,.tc_pay .pay_input{ margin-bottom:15px;}
+.pay_mess .pay_add{ margin: 80px 100px 0 0;overflow: hidden;}
+.add-pay-type span,.add_tc span,.tc_fj .btn_add{ display:inline-block;width: 30px;height: 30px; border: 1px solid #777;color: #777; border-radius: 50%;margin-bottom: 10px; line-height: 30px; text-align: center; font-size: 25px;}
+.sub_main_two button{margin-left: 25px;}
+.tc_pay .pay_add{ margin: 50px 30px 0 0;}
+.jl_list p{ padding:5px 10px; background:#eee; border-radius:3px; margin-right:20px}
+.jl_list span{ margin:5px 0; display:block; float:left}
+.an_list{  margin-left:120px; -webkit-padding-start:0px; border:1px solid #ccc; border-radius:5px; position:absolute; top:40px; left:0px; background:#fff}
+.another{ position:relative}
+.an_list,.an_list li{width:200px;}
+.an_list li{ height:30px; line-height:30px; padding:0 10px; text-align:left}
+.an_list li span{ float:right; margin-right:10px; line-height:30px; display:none}
+.an_list li span.show{ display:block}
+.select_tc{ width:700px;height:460px;background: #fff; z-index: 10000;}
+.select_tc h3,.select_tc span{font-size: 16px; color: #555; padding:0 15px;}
+.select_tc span{ line-height:50px}
+.select_tc .se_top{ background:#eee; height:50px;}
+.se_form{ padding:15px 30px }
+.se_form button{ margin:0 10px}
+.se_form table{ width:100%; margin: 20px 0;  }
+.se_form .se_table{height:300px;overflow-y:scroll; overflow-x:hidden; width:100%; margin-top:20px;}
+.se_form table tr{ border-bottom:1px solid #eee}
+.se_form table td{ text-align:left; height:35px; line-height:35px}
+.se_form table td:nth-child(1){ width:30%}
+.se_form table td input[type="checkbox"],.se_form table td input[type="radio"]{background:none;  }
+.se_form table td .check_box,.se_form table td label,.se_form table td input[type="checkbox"],.se_form table td input[type="radio"]{width:24px; height:24px;}
+.se_form table td input[type="checkbox"]:checked,.se_form table td input[type="radio"]:checked,.se_form table td input[type="checkbox"],.se_form table td input[type="radio"]{opacity:0}
+.se_form table td .check_box{ position:relative; display:inline-block; margin-top:15px}
+.se_form table td label,.se_form table td input[type="checkbox"],.se_form table td input[type="radio"]{ position:absolute; top:0; left:0}
+.se_form table td label{background-image:url(../img/check.png); background-size:cover;}
+.se_form table td input[type="checkbox"]:checked+label,.se_form table td input[type="radio"]:checked+label{ background-image:url(../img/checked.png);background-size:cover;
+	}
+.se_form .btn-qz{ padding:6px 35px; margin:30px 0}
+
+
+.form-horizontal .div_input_one{margin:0 -15px 25px -15px; }
+.form-horizontal .div_input_one label{ margin-right:15px}
+.form-horizontal .control-label{ padding-top:0}
+.tc_fj input{ width:150px; margin-right:10px}
+.sent_course input{ width:310px}
+.form-horizontal .form_datetime{ margin: 0 15px;}
+.form-horizontal .btn-primary{ margin:50px 0 0 20px; padding: 6px 35px;}
+.form-horizontal .controls p{ line-height: 36px; margin: 0 10px;}
+.form-horizontal .controls .btn_add{ margin-top: 2px;}
+.container .dp-side-menu-2 li a{ text-align:right}
+

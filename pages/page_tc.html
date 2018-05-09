@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> 
+  <title>无标题文档</title> 
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/member.css" /> 
+  <link rel="stylesheet" type="text/css" href="css/style.css" /> 
+  <script src="js/bootstrap.min.js"></script> 
+  <script src="js/jquery-1.8.3.min.js"></script> 
+  <script src="js/bootstrap-datetimepicker.min.js"></script> 
+  <script src="js/bootstrap-datetimepicker.zh-CN.js"></script> 
+ </head> 
+	<body class="" id="bodyColor" style="background-color:#f0f0f0;">
+<div class="navbar dp-nav">
+    <div class="container">
+        <div class="container-gap">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand logo" href="#"> <img src="img/member_logo.png" alt="大鹏教育-高品质的设计师在线教育"> </a>
+            </div>
+            <div class="navbar-collapse collapse dp-collapse">
+                
+                <ul class="nav navbar-nav navbar-right dp-navbar">
+                    <li class="dropdown hidden-lt-ie8">
+                    	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">张良 (管理员)<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
+                        <ul class="dp-dropdown-menu dropdown-menu">
+                            <div class="border-top"></div>
+                            <li><a href="http://test.bzr.dapengjiaoyu.com/admin/index/account">个人中心</a></li>
+                            <li class="divider"></li>
+                            <li><a href="http://test.bzr.dapengjiaoyu.com/admin/auth/logout" class="">退出登陆</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="http://123.56.200.151/signin" class="" target="_blank">橱窗管理系统登录</a></li>
+                </ul>
+            </div>
+            <!--/.navbar-collapse -->
+        </div>
+    </div>
+</div>
+<div id="content-container" class="container">
+    <div class="row row-2-10">
+        <div class="col-md-2 nav-left">
+        <div class="panel panel-default dp-cxx-menu dp-beijing-color">
+	<div class="panel-body" style="padding-left: 0px; padding-right: 0px;">
+		<div class="list-group-block">
+			<div class="list-group-panel">
+				<ul class="list-group dp-side-menu-2" id="subnav">
+										<li><a class="list-group-item" flag="admin.roster.add" href="http://test.bzr.dapengjiaoyu.com/admin/roster/add">添加新量</a></li>
+										<li><a class="list-group-item" flag="admin.group.list" href="http://test.bzr.dapengjiaoyu.com/admin/group/list">群管理</a></li>
+										<li><a class="list-group-item" flag="admin.user.list" href="http://test.bzr.dapengjiaoyu.com/admin/user/list">成员管理</a></li>
+										<li><a class="list-group-item" flag="admin.roster.list" href="http://test.bzr.dapengjiaoyu.com/admin/roster/list?seoer_grade=12">所有数据</a></li>
+										<li><a class="list-group-item" flag="admin.roster.statistics.seoer" href="http://test.bzr.dapengjiaoyu.com/admin/roster/statistics/seoer">推广统计</a></li>
+										<li><a class="list-group-item" flag="admin.roster.statistics.adviser" href="http://test.bzr.dapengjiaoyu.com/admin/roster/statistics/adviser">顾问统计</a></li>
+										<li><a class="list-group-item" flag="admin.roster.follow.index" href="http://test.bzr.dapengjiaoyu.com/admin/roster/follow/index">销售数据</a></li>
+										<li><a class="list-group-item" flag="admin.user.quantity-list" href="http://test.bzr.dapengjiaoyu.com/admin/user/quantity-list">分量管理</a></li>
+										<li><a class="list-group-item" flag="admin.registration.list" href="http://test.bzr.dapengjiaoyu.com/admin/registration/list-user">支付查询</a></li>
+										<li><a class="list-group-item cur" flag="admin.pay.package" href="http://test.bzr.dapengjiaoyu.com/admin/pay/package/list">支付套餐</a></li>
+										<li><a class="list-group-item" flag="admin.pay.rebate" href="http://test.bzr.dapengjiaoyu.com/admin/pay/rebate/list">优惠活动</a></li>
+										<li><a class="list-group-item" flag="admin.roster.list.intelligent" href="http://test.bzr.dapengjiaoyu.com/admin/roster/list/intelligent">智推数据</a></li>
+										<li><a class="list-group-item" flag="admin.roster.statistics.intelligent" href="http://test.bzr.dapengjiaoyu.com/admin/roster/statistics/intelligent">智推统计</a></li>
+										<li><a class="list-group-item" flag="admin.public.account" href="http://test.bzr.dapengjiaoyu.com/admin/index/account">个人中心</a></li>
+									</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$("#subnav li").removeClass("cur").find("a[flag='admin.pay.package']").addClass("cur");
+});
+</script>
+<style>
+	@media (min-width: 992px){
+		.nav-left{padding-left: 0px; width: 15%}
+		.nav-left a{padding-left: 8px;}
+	}
+</style>
+        </div>
+        <div class="col-md-10 dp-member-content" style="padding:30px 30px;">
+            <div class="row dp-member-title-2">
+        <div class="btn-back">
+            <a href="http://test.bzr.dapengjiaoyu.com/admin/pay/package/list">&lt;&lt;返回</a>
+        </div>
+        <h4 class="col-md-4" style="padding-left:0"> 新增课程套餐</h4>
+    </div>
+    <div class="row dp-member-body-2"> 
+      <form class="form-horizontal" onsubmit="return beforeOnSubmitAction(this);"> 
+       <fieldset> 
+       <div class="div_input_one"> 
+          <label for="input01 " class="col-md-2 control-label "> 学员名称： </label> 
+          <select class="form-control"> <option>美术学院</option> <option>设计学院</option> </select> 
+         </div>
+        <div class="form-group"> 
+         <label class="col-md-2 control-label" for="input01">套餐名称：</label> 
+         <div class="col-md-8 controls"> 
+          <input type="text" name="title" class="form-control"> 
+          <p class="help-block"></p> 
+         </div> 
+        </div> 
+        <div class="form-group"> 
+         <!-- Text input--> 
+         <label class="col-md-2 control-label" for="input01">套餐金额：</label> 
+         <div class="col-md-8 controls"> 
+          <input type="number" name="price" value="" class="form-control"> 
+          <p class="help-block"></p> 
+         </div> 
+        </div> 
+		<div class="form-group tc_fj"> 
+         <!-- Text input--> 
+         <label class="col-md-2 control-label" for="input01">附加课程：</label> 
+         <div class="col-md-8 controls"> 
+          <input type="text" name="course" value="" class="form-control pull-left">
+          <input type="number" name="price" value="" class="form-control pull-left">  
+          <span class="pull-left btn_add">+</span>
+          <p class="pull-left">点击添加附加课程</p>
+          <div class="add_tc pull-left">
+          <input type="text" name="course" value="" placeholder="请输入附加课程名称" class="form-control pull-left">
+          <input type="number" name="price" value="" placeholder="请输入金额" class="form-control  pull-left">  
+          <span class="pull-left btn_add">-</span>
+          <p class="pull-left">点击删除附加课程</p>
+          </div> 
+         </div> 
+        </div>
+        
+        <div class="form-group tc_fj sent_course"> 
+         <!-- Text input--> 
+         <label class="col-md-2 control-label" for="input01">赠送课程：</label> 
+         <div class="col-md-8 controls"> 
+          <input type="text" name="course" value="" class="form-control pull-left">
+          <span class="pull-left btn_add">+</span>
+          <p class="pull-left">点击添加赠送课程</p>
+          <div class="add_tc pull-left">
+          <input type="text" name="course" value="" placeholder="请输入赠送课程名称" class="form-control pull-left">
+          <span class="pull-left btn_add">-</span>
+          <p class="pull-left">点击删除赠送课程</p>
+          </div> 
+         </div> 
+        </div>
+        
+        <div class="form-group tc_fj "> 
+         <!-- Text input--> 
+         <label class="col-md-2 control-label" for="input01">优惠活动：</label> 
+         <div class="col-md-8 controls"> 
+          <input type="text" name="course" value="" placeholder="请输入活动名称" class="form-control pull-left">
+          <input type="number" name="course" value="" placeholder="金额" class="form-control pull-left">
+         </div> 
+        </div>
+        
+        <div class="form-group tc_fj "> 
+         <!-- Text input--> 
+         <label class="col-md-2 control-label" for="input01">优惠活动：</label> 
+         <div class="input-group date form_datetime pull-left" data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1"> 
+               <input class="form-control form_width_3" size="16" type="开始时间" value="开始时间" readonly> 
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> 
+               <!--<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>--> 
+              </div>
+          <div class="input-group date form_datetime " data-date="1979-09-16T05:25:07Z" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1"> 
+               <input class="form-control form_width_3" size="16" type="结束时间" value="结束时间" readonly> 
+               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> 
+               <!--<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>--> 
+              </div>    
+        </div>
+        <button class="btn btn-primary ajaxSubmit" href="javascript:;" type="button" submiturl="/Member/Course/addPackage.html">确认提交</button> 
+       </fieldset> 
+      </form> 
+     </div>
+            </div>
+    </div>
+</div>
+<div class="dp-footer">
+    <div class="wrap">
+        <div class="container">
+            <ul class="nav navbar-nav">
+                <li><i class="img1"></i><span>在线直播授课</span></li>
+                <li><i class="img2"></i><span>全选在线教法</span></li>
+                <li><i class="img3"></i><span>一线设计讲师</span></li>
+                <li><i class="img4"></i><span>创新课程体系</span></li>
+            </ul>
+            <div class="pull-right nav-r">
+                <p class="consult">客服咨询：400 668 1033</p>
+                <p class="time">周一至周日9:00-18:00 /仅收市话费</p>
+            </div>
+        </div>
+    </div>
+    <div class="container main">
+        <div class="row more">
+            <div class="col-sm-2 float-l">
+                <h3>我想学</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/ih7eniy2">设计功能精通班</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/ih7bjlfu">设计师高级精英班</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/ih7c6ip8">设计师就业直通班</a> </li>
+                </ul>
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>我想了解</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/explore/?type=OPEN">朋友说</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/explore/?type=OPEN">大鹏炫技</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/course/explore/?type=OPEN">精品课程</a> </li>
+                </ul>
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>获得证书</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/certificate">ADOBE认证</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/certificate">工信部证书</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/certificate">CCID认证</a> </li>
+                </ul>
+                <!--底部导航 健康产品-->
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>了解大鹏</h3>
+                <ul>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/about">大鹏简介</a> </li>
+                    <li> <a target="_blank" href="http://www.dapengjiaoyu.com/page/about">媒体报道</a> </li>
+                    <li> <a href="/#praise">学员评价</a> </li>
+                </ul>
+            </div>
+            <div class="col-sm-2 float-l">
+                <h3>关注大鹏</h3>
+                <ul>
+                    <li> <a target="_blank" href="#">微信公众号</a> </li>
+                    <li> <a target="_blank" href="#">微博#大鹏#</a> </li>
+                    <li> <a target="_blank" href="#">优酷视频</a> </li>
+                </ul>
+            </div>
+            <div class="qr-group">
+                <div>
+                    <i class="app-qr"></i><span class="">下载手机APP</span>
+                </div>
+                <div>
+                    <i class="wx-qr"></i><span class="">关注微信公号</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="f-wrap p-wrap">
+            <ul class="clearfix">
+                <li><a href="/page/about#joinus" target="_blank">加入我们</a></li>
+                <li><a href="/page/about#contactus">联系我们</a></li>
+                <li><a href="/page/help" target="_blank">帮助中心</a></li>
+            </ul>
+            <div class="copyright">
+                Copyright © 2013-2015 大鹏教育　|　京ICP备14053618号
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
