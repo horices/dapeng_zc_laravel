@@ -8,8 +8,8 @@
         <div class="form-group">
             <select name="type" class="form-control">
                 <option value="">学院名称</option>
-                <option @if(Request::input('type') == 0) selected @endif value="0">主套餐</option>
-                <option value="1" @if(Request::input('type') == 1) selected @endif>附加套餐</option>
+                <option value="SJ" @if(Request::input('school_id') == 'SJ') selected @endif>设计学院</option>
+                <option value="MS" @if(Request::input('school_id') == 'MS') selected @endif>美术学院</option>
             </select>
             <input type="text" name="title" class="form-control" placeholder="套餐标题" value="{{Request::input('title')}}" style="width: 110px;"/>
             <a class="common-button combg1 linkSubmit">搜索</a>

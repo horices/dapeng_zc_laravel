@@ -27,9 +27,9 @@ class PackageController extends BaseController {
         if(!empty($title)){
             $CoursePackageModel->where('title','like','%'.$title.'%');
         }
-        $type = $request->get("type");
-        if($type != ''){
-            $CoursePackageModel->where('type',$type);
+        $schoolId= $request->get("school_id");
+        if($schoolId != ''){
+            $CoursePackageModel->where('school_id',$schoolId);
         }
         $list = $CoursePackageModel->orderBy('id','desc')->paginate(15);
         return view("admin.pay.package.list",[
