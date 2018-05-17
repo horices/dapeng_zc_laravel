@@ -1,5 +1,5 @@
 @media (min-width:1120px) {
-.container { width: 1240px; }
+.container { width: 1340px; }
 }
 @media (min-width:992px) {
 /** 课程页 左侧770像素 **/
@@ -49,7 +49,7 @@ textarea{resize: none;}
 /** 顶部导航 { **/
 .dp-nav { background: #282836; border-radius: 0; }
 .dp-nav a { color: #494657; }
-.dp-nav > div { width: 1240px; margin: auto; padding: 0px; }
+.dp-nav > div { width: 1310px; margin: auto; padding: 0px; }
 .navbar{ min-height:60px;}
 .dp-nav .search { width: 125px; margin-right: 17px; }
 .dp-nav .search i { top: -3px; color: #B5B5BF; left: 5px; }
@@ -349,7 +349,7 @@ width: 80%; background-color: #434343; border: 0px; color: #919191; font-weight:
 .dp-vodCourse .expression-frame ul li { padding-bottom: 5px; }
 .dp-vodCourse .expression-frame ul span { width: 100%; display: block; color: #fff; cursor: pointer; }
 .dp-vodCourse .expression-frame .border-bottom:before { content: '\20'; display: block; width: 0; height: 0; top: -10px; position: relative; float: right; margin-right: 46%; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #333333; }
-/*.dp-vodCourse .pagination { }
+.dp-vodCourse .pagination { }
 .dp-vodCourse .pagination > li:first-child > a, .dp-vodCourse .pagination > li:first-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .dp-vodCourse .pagination > .active > a, .dp-vodCourse .pagination > .active > span { background: #00D753 none repeat scroll 0% 0%; }
 .dp-vodCourse .pagination > .active > a:hover, .dp-vodCourse .pagination > .active > span:hover { color: #686880; }
@@ -357,7 +357,7 @@ width: 80%; background-color: #434343; border: 0px; color: #919191; font-weight:
 .dp-vodCourse .pagination .pageNext > a, .dp-vodCourse .pagination .pageNext > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .dp-vodCourse .pagination > li:last-child > a, .pagination > li:last-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; margin-left: 10px; }
 .dp-vodCourse .pagination li:nth-last-child(2) > a, .pagination li:nth-last-child(2) > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
-.dp-vodCourse .pagination li:nth-last-child(1) > a { height: 28px !important; top: -3px; }*/
+.dp-vodCourse .pagination li:nth-last-child(1) > a { height: 28px !important; top: -3px; }
 /** } 点播页面 **/
 
 
@@ -683,9 +683,9 @@ ul.chat li.right .message .text { max-width: 220px; table-layout: fixed; word-wr
 /*******  }  课程页 跟随滚动菜单   **********/
 
 /** 分页 {**/
-/*.pagination a { color: #686880 !important; }
+.pagination a { color: #686880 !important; }
 .pagination a:hover { color: #FFF; background: #00D753 !important; }
-.pagination .disabled a:hover { color: #686880 !important; border: 1px solid #686880; background: #fff !important; }*/
+.pagination .disabled a:hover { color: #686880 !important; border: 1px solid #686880; background: #fff !important; }
 /** } 分页 **/
 
 
@@ -726,14 +726,12 @@ ul.chat li.right .message .text { max-width: 220px; table-layout: fixed; word-wr
 .dp-wdkc-menu .live-tab { background-color: #f7931e; }
 .dp-wdkc-menu .course-tab { background-color: #36c3ff; }
 /***分页样式****/
-/*
 .pagination>li>a, .pagination>li>span { font-size: 18px; line-height: 18px; padding: 2px 6px; border-radius: 13px; color: #686880; border: none; margin-left: 6px; }
 .pagination>li:first-child>a, .pagination>li:first-child>span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .pagination>li:last-child>a, .pagination>li:last-child>span { display: none !important; border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; margin-left: 10px; }
 .pagination .pageNext>a, .pagination .pageNext>span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .pagination>.active>a, .pagination>.active>span { background: #00d753; }
 .pagination a:hover { color: #FFF; background: #00D753 !important; }
-*/
 
 .list-group-panel { }
 .list-group-panel .list-group-heading { color: #999; padding: 5px 0;/*margin-bottom: 5px;*/}
@@ -760,7 +758,7 @@ em.error{ color:#f00; font-style:normal;}
 
 .container .dp-side-menu-2{ background:none; padding-top:30px;}
 .container .dp-side-menu-2 li{ background:none;}
-.container .dp-side-menu-2 li a{ background:none; border:none; font-size:16px; text-align: right}
+.container .dp-side-menu-2 li a{ background:none; border:none; font-size:16px;}
 .container .dp-side-menu-2 li a.cur{ color:#0c3;}
 
 .dp-member-content{ box-shadow:0px 0px 6px #ddd;}
@@ -779,8 +777,5 @@ em.error{ color:#f00; font-style:normal;}
 .act_list .sel li a{ display:block; width:100%; height:22px; line-height:22px; margin:0; padding:0 0 0 10px; outline:0; text-decoration:none;}
 .act_list .sel_on{ height:auto; border:1px #C4C4C4 solid; background:#fff; z-index:10; box-shadow:0px 0px 6px #ccc; border-radius:3px;}
 .act_list .sel_on li a:hover{ background:#71A406; color:#fff; text-decoration:none;}
-.gray{ color:#aaa;}
 
-/*支付用户记录列表，高亮css*/
-.table>tbody>tr.bg_color{background:#ffd9b3}
-.table>tbody>tr.bg_color td{color:#874f18}
+.gray{ color:#aaa;}
