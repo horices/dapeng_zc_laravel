@@ -83,7 +83,7 @@ class UserRegistrationModel extends BaseModel{
      * @return int
      */
     public function getIsBrightAttribute(){
-        return $this->create_time > date("Y-m")."-16 00:00:00" ? 1 : 0;
+        return strtotime($this->create_time) > strtotime("2018-4-16 00:00:00") ? 1 : 0;
     }
 
     /**

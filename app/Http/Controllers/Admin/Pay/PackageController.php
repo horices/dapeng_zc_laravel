@@ -27,9 +27,9 @@ class PackageController extends BaseController {
         if(!empty($title)){
             $CoursePackageModel->where('title','like','%'.$title.'%');
         }
-        $type = $request->get("type");
-        if($type != ''){
-            $CoursePackageModel->where('type',$type);
+        $schoolId= $request->get("school_id");
+        if($schoolId != ''){
+            $CoursePackageModel->where('school_id',$schoolId);
         }
         $list = $CoursePackageModel->orderBy('id','desc')->paginate(15);
         return view("admin.pay.package.list",[
@@ -40,9 +40,11 @@ class PackageController extends BaseController {
     }
 
     function getAdd(CoursePackageModel $package){
+        $package->school_id = 'SJ';
         return view("admin.pay.package.detail",[
-            'r' =>  $package,
-            'leftNav'           => "admin.pay.package"
+            'r'              =>  $package,
+            'course_attach'  =>  '',
+            'leftNav'        => "admin.pay.package"
         ]);
     }
 
@@ -52,10 +54,12 @@ class PackageController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getEdit(Request $request){
-        $packageId = $request->get("package_id");
-        $detail = CoursePackageModel::where("package_id",$packageId)->orderBy("id","desc")->first();
+        $packageId = $request->get("id");
+        $detail = CoursePackageModel::where("id",$packageId)->orderBy("id","desc")->first();
+        //dd(collect($detail->course_attach)->toArray());
         return view("admin.pay.package.detail",[
-            'r'                 =>  $detail,
+            'r'                 =>  $detail->toJson(),
+            'course_attach'     =>  $detail->course_attach,
             'leftNav'           => "admin.pay.package"
         ]);
     }
@@ -67,18 +71,24 @@ class PackageController extends BaseController {
      * @throws UserValidateException
      */
     function postSave(Request $request){
-        //修改数据
-        if ($request->has('id') && $request->input('id')) {
-            $eff = CoursePackageModel::updateData($request->input());
-            if($eff){
-                return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
+        $post= $request->post();
+        foreach ($post as $key=>$val){
+            if(is_array($val)){
+                $post[$key] = array_filter($val);
             }
-
+        }
+        $eff = 0;
+        if(isset($post['id']) && $post['id']){
+            $eff = CoursePackageModel::updateData($post);
         }else{
-            $eff = CoursePackageModel::addData($request->input());
-            if($eff){
-                return response()->json(['code'=>Util::SUCCESS,'msg'=>'新增成功！']);
-            }
+            $eff = CoursePackageModel::addData($post);
+        }
+        if($eff){
+            $msg = isset($post['id']) && $post['id'] ? '修改成功！' : '新增成功！';
+            return response()->json(['code'=>Util::SUCCESS,'msg'=>$msg]);
+        }else{
+            $msg = isset($post['id']) && $post['id'] ? '修改失败！' : '新增失败！';
+            throw new UserValidateException($msg);
         }
     }
 

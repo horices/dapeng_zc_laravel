@@ -9,6 +9,7 @@
 namespace App\Models;
 
 
+use App\Exceptions\UserValidateException;
 use App\Utils\Util;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,32 +20,30 @@ class CoursePackageModel extends BaseModel {
     protected $dateFormat = 'U';
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    //赠送课程
-    public static $giveList = [
-        0=>['id'=>0,'text'=>'无','checked'=>false],
-        1=>['id'=>1,'text'=>'英语口语','checked'=>false],
-        2=>['id'=>2,'text'=>'AE','checked'=>false],
-        3=>['id'=>'3','text'=>'转手绘','checked'=>false],
-        4=>['id'=>'4','text'=>'H5','checked'=>false],
-        5=>['id'=>'5','text'=>'JAVA','checked'=>false],
-        6=>['id'=>'6','text'=>'手绘','checked'=>false],
-        7=>['id'=>'7','text'=>'素描','checked'=>false],
-        8=>['id'=>'8','text'=>'色彩','checked'=>false],
-        9=>['id'=>'9','text'=>'广告','checked'=>false],
-        10=>['id'=>'10','text'=>'摄影','checked'=>false],
-        11=>['id'=>'11','text'=>'美妆','checked'=>false],
+
+    protected $appends = [
+        'school_text',
+        'course_attach_data'
     ];
 
     /**
-     * 获取套餐标题
-     * @param $value
-     * @return string]
+     * 获取学院标题
+     * @return \Illuminate\Config\Repository|mixed
      */
-    public function getTitleAttribute($value){
-        if($this->status == "DEL")
-            return $value."(已删)";
-        else
-            return $value;
+    public function getSchoolTextAttribute(){
+        $this->school_id = $this->school_id ? $this->school_id : 'SJ';
+        return Util::getSchoolNameText($this->school_id);
+    }
+
+    /**
+     * 获取附加的套餐信息
+     * @return mixed
+     */
+    public function getCourseAttachDataAttribute(){
+        if($this->course_attach){
+            return json_decode($this->course_attach,1);
+        }
+        return [];
     }
 
     /**
@@ -60,20 +59,50 @@ class CoursePackageModel extends BaseModel {
      * @param $data
      * @return mixed
      */
-    static function addData($data){
-        $validator = Validator::make($data,[
-            'title'     =>  'required',
-            'price'     =>  'required|numeric',
+    static function addData($post){
+        $validator = Validator::make($post,[
+            'attach_title'          =>  'required',
+            'attach_price'          =>  'required',
+            'give_title'            =>  'required',
+            'rebate_price'          =>   'required_with:rebate_title',
+            'rebate_start_date'     =>   'required_with:rebate_title',
+            'rebate_end_date'       =>   'required_with:rebate_title',
         ],[
-            'title.required'    =>  '请输入套餐标题！',
-            'price.required'    =>  '请输入套餐金额！',
-            'price.numeric'     =>  '请输入正确的金额！'
+            'attach_title.required'    =>  '请填写附加课程！',
+            'give_title.required'      =>  '请填写赠送课程！',
+            'attach_price.required'    =>  '请输入正确的附加课程金额！',
+            'rebate_price.required_with'=>  '请填写优惠金额！',
+            'rebate_start_date.required_with'=>  '请填写优惠开启时间！',
+            'rebate_end_date.required_with'=>  '请填写优惠结束时间！',
         ]);
         //执行验证
         $validator->validate();
-        $eff = self::create($data);
-        $eff->package_id = $eff->id;
-        return $eff->save();
+
+        $data = [];
+        foreach ($post['attach_title'] as $key=>$val){
+            $data['attach'][$key] = [
+                'title' =>  $val,
+                'price' =>  $post['attach_price'][$key]
+            ];
+        }
+        if(isset($post['give_title'])){
+            foreach ($post['give_title'] as $key=>$val){
+                $data['give'][$key] = ['title'=>$val];
+            }
+        }
+
+        //判断优惠活动
+        if($post['rebate_title']){
+            $data['rebate'] = [
+                'title'         =>  $post['rebate_title'],
+                'price'         =>  $post['rebate_price'],
+                'start_date'    =>  $post['rebate_start_date'],
+                'end_date'      =>  $post['rebate_end_date'],
+            ];
+        }
+        unset($post['attach_title'],$post['attach_price']);
+        $post['course_attach'] = json_encode($data,JSON_UNESCAPED_UNICODE);
+        return self::create($post);
     }
 
     /**
@@ -81,30 +110,57 @@ class CoursePackageModel extends BaseModel {
      * @param $data
      * @return mixed
      */
-    static function updateData($data){
-        $validator = Validator::make($data,[
-            'id'        =>  'sometimes|numeric|exists:course_package,id',
-            'title'     =>  'required',
-            'price'     =>  'required|numeric',
+    static function updateData($post){
+        $validator = Validator::make($post,[
+            'attach_title'          =>  'sometimes|required',
+            'attach_price'          =>  'sometimes|required',
+            'give_title'            =>  'sometimes|required',
+            'rebate_price'          =>   'sometimes|required_with:rebate_title',
+            'rebate_start_date'     =>   'sometimes|required_with:rebate_title',
+            'rebate_end_date'       =>   'sometimes|required_with:rebate_title',
         ],[
-            'id.numeric'        =>  '请选择要修改的套餐！',
-            'id.exists'         =>  '请选择要修改的套餐！',
-            'title.required'    =>  '请输入套餐标题！',
-            'price.required'    =>  '请输入套餐金额！',
-            'price.numeric'     =>  '请输入正确的金额！'
+            'attach_title.required'    =>  '请填写附加课程！',
+            'give_title.required'      =>  '请填写赠送课程！',
+            'attach_price.required'    =>  '请输入正确的附加课程金额！',
+            'rebate_price.required_with'=>  '请填写优惠金额！',
+            'rebate_start_date.required_with'=>  '请填写优惠开启时间！',
+            'rebate_end_date.required_with'=>  '请填写优惠结束时间！',
         ]);
         //执行验证
         $validator->validate();
-        $data['uid'] = Util::getUserInfo()['uid'];
-        $detail = self::find($data['id']);
-        return DB::transaction(function () use($data,$detail){
-            $detail->status = 'MOD';
-            $detail->save();
-            $data['status'] = "USE";
-            $data['package_id'] = $detail->package_id;
-            unset($data['id']);
-            return self::create($data);
-        });
+        //附加信息整理json
+        $data = [];
+        foreach ($post['attach_title'] as $key=>$val){
+            $data['attach'][$key] = [
+                'title' =>  $val,
+                'price' =>  $post['attach_price'][$key]
+            ];
+        }
+        if(isset($post['give_title'])){
+            foreach ($post['give_title'] as $key=>$val){
+                $data['give'][$key] = ['title'=>$val];
+            }
+        }
+
+        //判断优惠活动
+        if($post['rebate_title']){
+            $data['rebate'] = [
+                'title'         =>  $post['rebate_title'],
+                'price'         =>  $post['rebate_price'],
+                'start_date'    =>  $post['rebate_start_date'],
+                'end_date'      =>  $post['rebate_end_date'],
+            ];
+        }
+        unset($post['attach_title'],$post['attach_price']);
+        $post['course_attach'] = json_encode($data,JSON_UNESCAPED_UNICODE);
+
+        $post['uid'] = Util::getUserInfo()['uid'];
+        $detail = self::find($post['id']);
+        if(!$detail){
+            throw new UserValidateException("未找到套餐信息！");
+        }
+        //$query = self::query();
+        return $detail->update($post);
     }
 
 

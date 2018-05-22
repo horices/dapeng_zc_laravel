@@ -7,9 +7,9 @@
         </div>
         <div class="form-group">
             <select name="type" class="form-control">
-                <option value="">套餐类型</option>
-                <option @if(Request::input('type') == 0) selected @endif value="0">主套餐</option>
-                <option value="1" @if(Request::input('type') == 1) selected @endif>附加套餐</option>
+                <option value="">学院名称</option>
+                <option value="SJ" @if(Request::input('school_id') == 'SJ') selected @endif>设计学院</option>
+                <option value="MS" @if(Request::input('school_id') == 'MS') selected @endif>美术学院</option>
             </select>
             <input type="text" name="title" class="form-control" placeholder="套餐标题" value="{{Request::input('title')}}" style="width: 110px;"/>
             <a class="common-button combg1 linkSubmit">搜索</a>
@@ -22,9 +22,12 @@
         <thead>
         <tr>
             <th>序号</th>
-            <th>标题</th>
-            <th>金额</th>
-            <th>类型</th>
+            <th>学院名称</th>
+            <th>套餐名称</th>
+            <th>附加课程</th>
+            <th>赠送课程</th>
+            <th>优惠活动</th>
+            <th>套餐金额</th>
             <th>创建时间</th>
             <th>操作</th>
         </tr>
@@ -34,14 +37,33 @@
                 @foreach($list as $k=>$v)
                 <tr style="<eq name='v.is_old' value='1'>opacity:0.5;</eq>">
                     <td>{{$k+1}}</td>
+                    <td>{{$v->school_text}}</td>
                     <td>{{$v->title}}</td>
-                    <td>{{$v->price}}</td>
                     <td>
-                        {{$v->type_text}}
+                        @if(isset($v->course_attach_data['attach']))
+                            @foreach($v->course_attach_data['attach'] as $i=>$l)
+                                {{$l['title']}}<br/>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td>
+                        @if(isset($v->course_attach_data['give']))
+                            @foreach($v->course_attach_data['give'] as $i=>$l)
+                                {{$l['title']}}<br/>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td>
+                        @if(isset($v->course_attach_data['rebate']))
+                            {{$v->course_attach_data['rebate']['title']}}
+                        @endif
+                    </td>
+                    <td>
+                        {{$v->price}}
                     </td>
                     <td>{{$v->create_time}}</td>
                     <td>
-                        <a href="{{route('admin.pay.package.edit',['package_id'=>$v->package_id])}}">修改</a>|
+                        <a href="{{route('admin.pay.package.edit',['id'=>$v->id])}}">修改</a>|
                         <a url="{{route('admin.pay.package.delete')}}" warning = '确认删除？' data="{id:{{$v->id}}}" class="ajaxLink">删除</a>
                     </td>
                 </tr>

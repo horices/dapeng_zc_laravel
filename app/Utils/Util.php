@@ -66,6 +66,19 @@ class Util{
             $host = $_SERVER['HTTP_HOST'];
         return collect(self::getWebSiteConfig("SCHOOL_NAME",false))->get($host,$default);
     }
+
+    /**
+     * 获取学员标题
+     * @param string $key
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    static function getSchoolNameText($key = ''){
+        if($key){
+            return self::getWebSiteConfig('SCHOOL_NAME_TEXT.'.$key,false);
+        }else{
+            return self::getWebSiteConfig('SCHOOL_NAME_TEXT',false);
+        }
+    }
     /**
      *  获取大鹏主站的接口host地址
      * @return mixed

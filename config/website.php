@@ -19,6 +19,11 @@ return [
         'zc.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
     ],
+    //学院标题
+    'SCHOOL_NAME_TEXT'  =>  [
+        \App\Utils\Util::SCHOOL_NAME_SJ =>  '设计学院',
+        \App\Utils\Util::SCHOOL_NAME_MS =>  '美术学院',
+    ],
     //大鹏主站URL
     'PC_URL'   =>  [
         \App\Utils\Util::MASTER    =>  'http://www.dapengjiaoyu.com',
