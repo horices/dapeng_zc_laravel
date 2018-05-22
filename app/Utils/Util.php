@@ -56,6 +56,14 @@ class Util{
     }
 
     /**
+     * 获取当前分支 MASTER,DEV,TEST
+     * @return mixed
+     */
+    static function getCurrentBranch($default = Util::DEV){
+        $host = $_SERVER['HTTP_HOST'];
+        return collect(config("website.HOST_ALL"))->get($host,$default);
+    }
+    /**
      * 获取当前学院的名字
      * @param string $host
      * @param string $default

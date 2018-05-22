@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Notify;
+use App\Exceptions\UserException;
+use App\Exceptions\UserNotifyException;
 use App\Models\RosterCourseLogModel;
 use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
@@ -9,6 +11,8 @@ use Curl\Curl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 
 /**
@@ -23,9 +27,32 @@ class DapengNotifyController extends BaseController
      * DapengNotifyController constructor.
      * @param Curl $curl
      */
-    function __construct(Curl $curl)
+    function __construct(Curl $curl,Request $request)
     {
         parent::__construct($curl);
+        //校验签名是否正确
+        if($this->checkSign($request->get("sign")) === false){
+            throw new UserNotifyException("签名错误");
+        }
+        $baseUrl = URL::route(Route::currentRouteName(),[],false);
+        //设计学院正式站
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){
+            //通知设计学院测试站
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_SJ.".".Util::DEV,false);
+            $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
+            $curl->post($host.$baseUrl,$request->all())->response;
+            //通知美术学院正式站
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::MASTER,false);
+            $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
+            $curl->post($host.$baseUrl,$request->all())->response;
+        }
+        //美术学院正式站
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_MS && Util::getCurrentBranch() == Util::MASTER){
+            //通知美术学院测试站
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::DEV,false);
+            $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
+            $curl->post($host.$baseUrl,$request->all())->response;
+        }
     }
 
     /**
@@ -83,5 +110,34 @@ class DapengNotifyController extends BaseController
             Log::error("开课通知处理失败");
         }
         return Util::ajaxReturn(Util::SUCCESS,"success");
+    }
+
+    /**
+     * 生成一个新的签名
+     * @param array $data
+     *                  qq: QQ号
+     *                  url: 完整的URL地址
+     * @return string|void
+     */
+    function makeSign(array $data = [])
+    {
+        $data = collect($data);
+        $qq = $data->get("qq",\Illuminate\Support\Facades\Request::get("qq"));
+        $url =  $data->get("url",URL::route(Route::currentRouteName()));
+        if(!$qq){
+            throw new UserNotifyException("未找到QQ号");
+        }
+        return md5($url.'|'.$qq.'|dapeng');
+    }
+
+    /**
+     * 校验签名是否正确
+     * @param $sign
+     * @return bool
+     * @throws UserNotifyException
+     */
+    function checkSign($sign){
+        //确保地址栏中不能有其它参数
+        return $sign == $this->makeSign(['url'=>URL::full()]) && $sign == $this->makeSign();
     }
 }

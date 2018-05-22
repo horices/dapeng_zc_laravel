@@ -19,12 +19,4 @@ class BaseController extends Controller
         dd($curl->post()->response);*/
 
     }
-
-    /**
-     * 生成签名
-     */
-    function makeSign(){
-        dd(route('','',"http://www.baidu.com"));
-    }
-
 }
