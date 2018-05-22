@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Exceptions\UserValidateException;
+use App\Http\Controllers\Admin\AuthController;
 use Closure;
 use Illuminate\Support\Facades\View;
 
@@ -18,7 +19,13 @@ class BackendAuth
     public function handle($request, Closure $next)
     {
         if(!$request->session()->get("userToken")){
-            return redirect(route("admin.auth.login"));
+            if($request->cookies->get("userInfo")){
+                //自动登陆
+                app(AuthController::class)->login($request->cookies->get("userInfo"));
+            }else{
+                return redirect(route("admin.auth.login"));
+            }
+
         }
         $userInfo = app('status')->getUserInfo();
         if(app('status')->checkUserPermission(collect($request->route()->getAction())->get('as',''),$userInfo->grade) === false){

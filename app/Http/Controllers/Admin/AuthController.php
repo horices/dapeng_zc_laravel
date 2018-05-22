@@ -25,11 +25,7 @@ class AuthController extends  BaseController{
     }
     function postLogin(LoginForm $request){
         $user = UserModel::checkLogin($request->input("username"), $request->input("password"));
-        $this->login($user);
-        //记住用户名,30天
-        if($request->get("remember_me") == 1){
-            Cookie::queue("userInfo",$user,60*24*30);
-        }
+        $this->login($user,$request->get("remember_me"));
         //返回登陆成功的信息
         return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功","url"=>url("/admin/index/index")]);
         //return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功"]);
@@ -55,11 +51,15 @@ class AuthController extends  BaseController{
     /**
      * 将指定的用户登入到系统中
      * @param array $userInfo
+     * @param tinyint $rememberMe 是否需要存储
      */
-    function login(UserModel $userInfo){
+    function login(UserModel $userInfo,$rememberMe = 0){
         if(!$userInfo || !$userInfo->uid){
             throw new AuthenticationException("您还不入登入系统中");
         }
+        //记住用户名,30天
+        if($rememberMe)
+            Cookie::queue("userInfo",$userInfo,60*24*30);
         session(['userToken'=>$userInfo->uid]);
         session(['userInfo'=>$userInfo]);
     }
