@@ -86,7 +86,7 @@
 
                 <td>
                     @if(in_array($user->grade,['10','9']))
-                        <a class="ajaxSubmit" data="{uid:{{$user->uid}}}" url="{{route('admin.user.open-course-head')}}">开课</a>
+                        <a class="ajaxSubmit" data="{uid:{{$user->uid}}}" showloading="true" url="{{route('admin.user.open-course-head')}}">开课</a>
                     @endif
                 </td>
             </tr>
