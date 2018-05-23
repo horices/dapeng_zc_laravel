@@ -37,10 +37,10 @@
                 <label class="col-md-2 control-label" for="input01">在职状态</label>
                 <div class="col-md-8 ">
                     <label class="btn btn-primary">
-                        <input type="radio" name="is_incumbency"  value="0" @if($user->is_incumbency == 0) checked @endif > 离职
+                        <input type="radio" name="is_incumbency" value="1" @if($user->is_incumbency == 1) checked @endif checked> 在职
                     </label>
                     <label class="btn btn-primary">
-                        <input type="radio" name="is_incumbency" value="1" @if($user->is_incumbency == 1) checked @endif @if(!$user->uid) checked @endif> 在职
+                        <input type="radio" name="is_incumbency"  value="0" @if($user->is_incumbency === 0) checked @endif > 离职
                     </label>
                 </div>
             </div>
