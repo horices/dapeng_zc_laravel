@@ -64,7 +64,7 @@ input[type="hidden" i] {
     line-height: 34px;
     display: block;
 }
-.control-label,.pay_mess .zf_title ,.tc_pay .zf_title{width: 120px;}
+.pay_mess .zf_title ,.tc_pay .zf_title{width: 120px;}
 .rebate_price{ width: 80px; margin-left:10px;}
 .pay_mess .zf_title{ font-weight: 600; text-align: center;}
 .wz_ts{height: 30px; color: red;}

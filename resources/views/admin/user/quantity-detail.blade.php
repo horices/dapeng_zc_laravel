@@ -3,7 +3,7 @@
 
     <div class="row dp-member-title-2">
         <h4 class="col-md-4" style="padding-left:0">
-            课程顾问<notempty name="r.uid">分量编辑<else />添加</notempty>
+            课程顾问分量调整
         </h4>
     </div>
 
@@ -89,7 +89,7 @@
                     <!-- Text input-->
                     <label class="col-md-2 control-label" for="input01">默认分配微信数量</label>
                     <div class="col-md-8 controls">
-                        <input type="text" name="per_max_num_wx" class="form-control" style="width:200px" maxlength='11' placeholder="" value="{{$r->per_max_num_qq}}">
+                        <input type="text" name="per_max_num_wx" class="form-control" style="width:200px" maxlength='11' placeholder="" value="{{$r->per_max_num_wx}}">
                         <p class="help-block"></p>
                     </div>
                 </div>
