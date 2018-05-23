@@ -277,7 +277,7 @@ padding-left: 25px; padding-right: 25px; }
 /***********************/
 
 
-.dp-member-content{ background:#fff; min-height:600px; margin:25px 0 30px; padding:0 30px;}
+.dp-member-content{ background:#fff; min-height:600px; margin:25px 0 30px; padding:0 30px;width:90%;}
 .dp-member-title { margin:6px 0 30px; border-bottom:1px #ccc solid; padding:6px 0 0;}
 
 .navbar a{ outline:0;}

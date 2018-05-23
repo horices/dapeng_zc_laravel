@@ -18,7 +18,7 @@ $(function(){
 </script>
 <style>
 	@media (min-width: 992px){
-		.nav-left{padding-left: 0px; width: 15%}
+		.nav-left{padding-left: 0px; width: 10%}
 		.nav-left a{padding-left: 8px;}
 	}
 </style>
