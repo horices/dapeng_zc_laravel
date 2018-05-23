@@ -27,7 +27,7 @@ class AuthController extends  BaseController{
         $user = UserModel::checkLogin($request->input("username"), $request->input("password"));
         $this->login($user,$request->get("remember_me"));
         //返回登陆成功的信息
-        return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功","url"=>url("/admin/index/index")]);
+        return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功","url"=>route("admin.index.index")]);
         //return response()->json(['code'=>Util::SUCCESS,"msg"=>"登陆成功"]);
     }
 

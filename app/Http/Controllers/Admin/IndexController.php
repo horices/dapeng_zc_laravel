@@ -17,8 +17,8 @@ use Illuminate\Support\Str;
 class IndexController extends BaseController
 {
     function getIndex(){
-        $grade = $this->getUserInfo()['grade'];
-        $permission = $this->getPermission($grade);
+        $userInfo = $this->getUserInfo();
+        $permission = $this->getPermission($userInfo['grade']);
         return redirect(route($permission['default_route']));
         return view("admin.index.index");
     }

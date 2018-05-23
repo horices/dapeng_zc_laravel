@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
  
 use App\Models\GroupModel;
 use App\Models\UserModel;
+use App\Utils\Util;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -362,6 +363,10 @@ class BaseController extends Controller
      * @return array|mixed
      */
     public function getPermission($key = ''){
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
+            self::$_USER_PERMISSION['11']['default_route'] = "admin.roster.user.addwx";
+            self::$_USER_PERMISSION['12']['default_route'] = "admin.roster.user.addwx";
+        }
         return $key ? self::$_USER_PERMISSION[$key] : self::$_USER_PERMISSION;
     }
 
