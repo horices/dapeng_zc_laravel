@@ -89,6 +89,7 @@ class IndexController extends BaseController
 //        if(!$request->get("startdate")){
 //            $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
 //        }
+        $where = [];
         if(!$request->has("startdate")){
             $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
         }
@@ -138,7 +139,7 @@ class IndexController extends BaseController
         $seoerName = Input::get("seoer_name");
         //智能推广
         $seoerGrade = Input::get("seoer_grade");
-        $where = [];
+
         if($type !== null){
             $where['type'] = $type;
         }
