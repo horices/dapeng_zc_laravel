@@ -94,7 +94,6 @@ class DapengUserApi extends DapengApiBase {
      * @return mixed
      */
     static function openCourse($data){
-        Log::info("开课参数：".$data);
         return self::api(self::$url['openCourse'],$data,"post");
     }
 }

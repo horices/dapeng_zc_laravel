@@ -108,7 +108,7 @@ class RosterModel extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     function adviser(){
-        return $this->belongsTo(UserModel::class,'last_adviser_id','uid');
+        return $this->belongsTo(UserModel::class,'adviser_id','uid')->withDefault();
     }
     /**
      * 群日志
