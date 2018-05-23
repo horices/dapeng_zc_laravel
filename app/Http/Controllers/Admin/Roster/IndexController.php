@@ -345,8 +345,7 @@ class IndexController extends BaseController
             $studentMobile = $request->phone;
         }
         //所属课程顾问信息
-        $userData = UserModel::find($rosterData->last_adviser_id);
-
+        $userData = UserModel::find($rosterData->adviser->uid);
         //获取主站信息
         $dapengUserInfo = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$studentMobile]);
         if($dapengUserInfo['code'] == Util::FAIL){

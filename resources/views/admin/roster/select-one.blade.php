@@ -136,7 +136,7 @@
                     <td>{{ $roster->group->group_name }}</td>
                     <td>{{ $roster->group->qq_group }}</td>
                     <td>{{ $roster->inviter_name }}</td>
-                    <td>{{ $roster->last_adviser_name }}</td>
+                    <td>{{ $roster->adviser->name }}</td>
                     <td>{!! $roster->addtime_text !!}</td>
                     <td class="register_status_{{ $roster->is_reg }}">{{ $roster->is_reg_text }}</td>
                     <td title="{{ $roster->course_name }}" @if($roster->course_type) onclick="openCourseLog({{ $roster->toJson() }});" @endif style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
