@@ -120,7 +120,7 @@
             @if (count($list) > 0)
                 @foreach ($list as $v)
                     <tr class="listCurrent @if($v->is_bright == 1) bg_color @endif">
-                        <td>{{$v->id}}</td>
+                        <td>{{ $loop->index + 1 }}</td>
                         <td>{{$v->adviser_name}}</td>
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
