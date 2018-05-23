@@ -291,7 +291,7 @@
             </tbody>
         </table>
 </div>
-<div class="pagenav"> <ul>{{ $list->appends(\Illuminate\Support\Facades\Request::input())->links() }} </ul></div>
+<div class="pagenav">{{ $list->appends(\Illuminate\Support\Facades\Request::input())->links() }}</div>
 <div id="courseList" style="display:none;"></div>
 <style>
     #open-course{width: 300px; height: 100px; padding-top: 30px;display: none;padding-left: 10px;}
