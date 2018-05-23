@@ -1,6 +1,6 @@
 @if($paginator->count() > 0)
     <ul class="pagination">
-        <li><span>共 {{ $paginator->count() }} 条记录</span></li>
+        <li><span>共 {{ $paginator->total() }} 条记录</span></li>
         @if ($paginator->hasPages())
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
