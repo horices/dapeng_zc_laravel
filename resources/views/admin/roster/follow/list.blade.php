@@ -1,42 +1,43 @@
 @extends("admin.public.layout")
 @section("right_content")
 <div class="row search-row" style="padding:9px 0 15px 15px;">
-    <form class="form-inline" style=" height:auto;" method="get" id="searchForm">
-        <input type="hidden" name="user_id" value="{{ Request::get("user_id") }}" />
-        <div class="form-tm" style="float:left; margin-left:10px;">
-            <input type="text" name="roster_no" class="form-control" style="height:30px;width:120px;" placeholder="搜索量号码"
-                   value="{{ Request::get("roster_no") }}">
-            <label>
-                <select name="deep_level" style="padding:3px;">
-                    <option value="">私聊深度</option>
-                    @foreach($rosterDeepLevel as $key =>$level)
-                        <option value="{{ $key }}" class="option_group" @if(Request::input('deep_level') == $key) selected @endif>{{ $level }}</option>
-                    @endforeach
-                </select>&nbsp;
-            </label>
-            <label>
-                <select name="intention" style="padding:3px;">
-                    <option value="">报名意向</option>
-                    @foreach($rosterIntention as $key => $intention)
-                        <option value="{{ $key }}" class="option_group" @if(Request::input('intention') == $key) selected @endif>{{ $intention }}</option>
-                    @endforeach
-                </select>&nbsp;
-            </label>
 
-            <label>私聊时间：</label>
-            <input type="text" name="startdate" class="form-control select_date" id="startdate" style="height:30px;"
-                   placeholder="开始时间" value="{{ Request::get("startdate") }}">
-            <label>&nbsp;至&nbsp;</label>
-            <input type="text" name="enddate" class="form-control select_date" id="enddate" style="height:30px;"
-                   placeholder="结束时间" value="{{ Request::get("enddate") }}">
+    <form class="form-inline" role="form">
+        <input type="hidden" name="user_id" value="{{ Request::get("user_id") }}" />
+        <div class="form-group">
+            <input type="text" name="roster_no" class="form-control" style="width: 120px;" placeholder="搜索量号码" value="{{ Request::input("roster_no") }}">
         </div>
-        <div class="form-but" style="float:left;  color:#fff;  width:122px; margin-top:3px;  ">
-<span class="but-ss" style=" height:auto;text-align:center; line-height:25px; ">
-<a class="common-button combg1 linkSubmit" data="{page:1}"
-   data="" style="height:30px;line-height:20px;">搜索</a></span></div>
-        <div class="form-but" style=" color:#fff;  width:122px; margin-top:3px;  ">
-<span class="but-ss fleft" style=" height:auto;text-align:center; line-height:25px; ">
-<!-- <a class="common-button combg4 linkSubmit" href="{:U('exportAdviserStatistics')}" style="height:30px;line-height:20px;">导出</a> --></span>
+        <div class="form-group">
+            <label class="control-label">私聊深度</label>
+            <select name="deep_level" style="padding:3px;" class="form-control">
+                <option value="">私聊深度</option>
+                @foreach($rosterDeepLevel as $key =>$level)
+                    <option value="{{ $key }}" class="option_group" @if(Request::input('deep_level') == $key) selected @endif>{{ $level }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>报名意向</label>
+            <select name="intention" style="padding:3px;" class="form-control">
+                <option value="">报名意向</option>
+                @foreach($rosterIntention as $key => $intention)
+                    <option value="{{ $key }}" class="option_group" @if(Request::input('intention') == $key) selected @endif>{{ $intention }}</option>
+                @endforeach
+            </select>&nbsp;
+        </div>
+        <div class="form-group">
+            <label>私聊时间：</label>
+            <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" callback="selectDateCallback" /> 至
+            <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" callback="selectDateCallback" />
+        </div>
+
+        {{--            <div class="form-group">
+                        <input type="text" name="seoer_name" class="form-control" style="width:140px;" value="{{ Request::input("seoer_name") }}" placeholder="推广专员名称" />
+                        <input type="text"  name="adviser_name" class="form-control" style="width:140px;" value="{{ Request::input("adviser_name") }}" placeholder="课程顾问名称" />
+                    </div>--}}
+        <div class="form-group">
+            <a href="" class="common-button combg2 linkSubmit" data="{page:1}">搜索</a>
         </div>
     </form>
 </div>
