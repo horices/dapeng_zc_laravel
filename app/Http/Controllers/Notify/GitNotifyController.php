@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Notify;
 
 use App\Http\Controllers\Controller;
 use App\Utils\Util;
+use Faker\Provider\bn_BD\Utils;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
@@ -26,12 +27,10 @@ class GitNotifyController extends BaseController
         Util::DEV => 'zhang',
     ];
     function getRemoteUser(){
-        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::DEV);
-        return $this->user[$host];
+        return $this->user[Util::getCurrentBranch()];
     }
     function getBranchName(){
-        $host = collect(Util::getWebSiteConfig('HOST_ALL',false))->get(Request::header('host'),Util::DEV);
-        return $this->branch[$host];
+        return $this->branch[Util::getCurrentBranch()];
     }
     /**
      * coding webHook
