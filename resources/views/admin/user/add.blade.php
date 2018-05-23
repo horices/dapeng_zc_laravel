@@ -33,6 +33,17 @@
                 </div>
             </div>
             @endif
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="input01">在职状态</label>
+                <div class="col-md-8 ">
+                    <label class="btn btn-primary">
+                        <input type="radio" name="is_incumbency"  value="0" @if($user->is_incumbency == 0) checked @endif > 离职
+                    </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="is_incumbency" value="1" @if($user->is_incumbency == 1) checked @endif @if(!$user->uid) checked @endif> 在职
+                    </label>
+                </div>
+            </div>
 			<div class="form-group">
                 <label class="col-md-2 control-label" for="input01">权限</label>
                 <div class="col-md-8 controls">
@@ -56,17 +67,6 @@
                 <div class="col-md-8 controls">
                     <input type="text" name="staff_no"  class="form-control" style="width:200px" placeholder="" value="{{$user->staff_no}}">
                     <p class="help-block"></p>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label" for="input01">在职状态</label>
-                <div class="col-md-8 ">
-                    <label class="btn btn-primary">
-                        <input type="radio" name="is_incumbency"  value="0" @if($user->is_incumbency == 0) checked @endif > 离职
-                    </label>
-                    <label class="btn btn-primary">
-                        <input type="radio" name="is_incumbency" value="1" @if($user->is_incumbency == 1) checked @endif > 在职
-                    </label>
                 </div>
             </div>
             <div class="form-group">
