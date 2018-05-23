@@ -71,8 +71,9 @@ class UserController extends BaseController
             if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
                 $returnData['msg'] = "修改成功";
-                $routeUrl = $request->get('ROUTE_URL') ? route($request->get('route_url')) : route("admin.user.list");
-                $returnData['url'] = $routeUrl;
+                $routeUrl = $request->get('back_url');
+                if($routeUrl)
+                    $returnData['url'] = $routeUrl;
             }else{
                 $returnData['code'] = Util::FAIL ;
                 $returnData['msg'] = "修改失败".$user->errors;

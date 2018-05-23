@@ -20,6 +20,7 @@
 <div class="row dp-member-body-2">
     <form role="form" id="regForm" class="form-horizontal" action="{{ route('admin.user.save')}}" method="post">
     <input type="hidden" name="_token" value="{{csrf_token()}}"/>
+    <input type="hidden" name="back_url" value="{{ \Illuminate\Support\Facades\URL::previous() }}" />
     @if($user->uid)
     <input type="hidden" name="uid" value="{{$user->uid}}" />
     @endif

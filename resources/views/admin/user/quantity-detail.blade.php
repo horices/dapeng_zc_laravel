@@ -10,6 +10,7 @@
     <div class="row dp-member-body-2">
 
         <form role="form" id="regForm" class="form-horizontal" method="post">
+            <input type="hidden" name="back_url" value="{{ \Illuminate\Support\Facades\URL::previous() }}" />
             <fieldset>
                 <div class="form-group">
                     <label class="col-md-2 control-label" for="input01">ID</label>
