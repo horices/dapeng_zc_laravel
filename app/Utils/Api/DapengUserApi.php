@@ -33,6 +33,8 @@ class DapengUserApi extends DapengApiBase {
         'updateStudyTime'           =>  "/api/extension/updateStudyTtime",   //接口编号：42-1 更新用户的最后学习时间
         'revisingAdvisor'           =>  "/api/displaywindow/revisingAdvisor",   //接口编号 62 ,修改学员主站的课程顾问
         'openCourse'                =>  "/api/extension/opencourse",    //接口59 开通课程
+        //课程顾问开通课程
+        'openCourseHead'            =>  '/api/extension/advisorOpenCourse'
     ];
     /**
      * 获取用户信息
@@ -97,5 +99,15 @@ class DapengUserApi extends DapengApiBase {
         Log::info("开通课程");
         Log::info($data);
         return self::api(self::$url['openCourse'],$data,"post");
+    }
+
+    /**
+     * 课程顾问开通课程
+     * @param $data
+     * @return mixed
+     */
+    static function openCourseHead($data){
+        $res = parent::api(self::$url['openCourseHead'],$data,"post");
+        return $res;
     }
 }

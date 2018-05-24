@@ -178,14 +178,9 @@ class UserController extends BaseController
             throw new UserValidateException("请先去主站补全QQ号！");
         }
         $data = [
-            'wingsId'           =>  $userData->uid,
-            'advisorMobile'     =>  $userData->dapeng_user_mobile,
-            'studentMobile'     =>  $userData->dapeng_user_mobile,
-            'schoolId'          =>  Util::getSchoolName(),
-            'qq'                =>  $dapengUserInfo['data']['user']['qqAccount'],
-            'wx'                =>  ''
+            'advisorid'                =>  $dapengUserInfo['data']['user']['userId'],
         ];
-        $openCourseInfo = DapengUserApi::openCourse($data);
+        $openCourseInfo = DapengUserApi::openCourseHead($data);
         if($openCourseInfo['code'] == Util::FAIL){
             throw new DapengApiException($openCourseInfo['msg']);
         }
