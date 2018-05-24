@@ -27,7 +27,7 @@ class UserRegistrationModel extends BaseModel{
         //'last_pay_time'
     ];
     protected $appends = [
-        "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text","is_bright"
+        "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text","is_bright,account,school_text,attach_data"
     ];
     //报名分期付款方式
     public $fqType = [
@@ -76,6 +76,34 @@ class UserRegistrationModel extends BaseModel{
     public function getLastPayTimeTextAttribute(){
         //$pay_time = UserPayLogModel::where("registration_id",$this->id)->orderBy("id","desc")->value("pay_time");
         return date("Y-m-d H:i:s",$this->last_pay_time);
+    }
+
+    /**
+     * 获取用户的qq或者wx 做为账号
+     * @return mixed
+     */
+    public function getAccountAttribute(){
+        return $this->qq ? $this->qq : $this->wx;
+    }
+
+    /**
+     * 获取所属学院名称
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    public function getSchoolTextAttribute(){
+        $this->school_id = $this->school_id ? $this->school_id : 'SJ';
+        return Util::getSchoolNameText($this->school_id);
+    }
+
+    /**
+     * 获取附加的套餐信息
+     * @return mixed
+     */
+    public function getAttachDataAttribute(){
+        if($this->package_attach_content){
+            return json_decode($this->package_attach_content,1);
+        }
+        return [];
     }
 
     /**

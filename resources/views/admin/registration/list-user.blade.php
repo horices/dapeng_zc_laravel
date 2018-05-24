@@ -102,8 +102,10 @@
                 <th>顾问</th>
                 <th>学员</th>
                 <th>开课手机</th>
-                <th>QQ号</th>
-                <th width="130">课程套餐</th>
+                <th>QQ/微信</th>
+                <th>学院</th>
+                <th width="130">套餐</th>
+                <th width="130">附加</th>
                 <th>分期</th>
                 <th>开课</th>
                 <th>总金额</th>
@@ -124,9 +126,17 @@
                         <td>{{$v->adviser_name}}</td>
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
-                        <td>{{$v->qq}}</td>
+                        <td>{{$v->account}}</td>
+                        <td>{{$v->school_text}}</td>
                         <td>
                             {{$v->package_all_title}}
+                        </td>
+                        <td>
+                            @if(isset($v->attach_data['package_course']))
+                                @foreach($v->attach_data['package_course'] as $i=>$l)
+                                    {{$l['title']}}<br/>
+                                @endforeach
+                            @endif
                         </td>
                         <td>{{$v->fq_type_text}}</td>
                         <td>

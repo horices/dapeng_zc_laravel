@@ -6,7 +6,7 @@
             <a class="common-button combg4" href="{{route('admin.pay.package.add')}}">新增套餐</a>
         </div>
         <div class="form-group">
-            <select name="type" class="form-control">
+            <select name="school_id" class="form-control">
                 <option value="">学院名称</option>
                 <option value="SJ" @if(Request::input('school_id') == 'SJ') selected @endif>设计学院</option>
                 <option value="MS" @if(Request::input('school_id') == 'MS') selected @endif>美术学院</option>
