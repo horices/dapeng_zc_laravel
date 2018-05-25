@@ -110,6 +110,8 @@ $(function(){
 });
 
 </script>
+@section("script")
+@show
 </head>
 
 <body class="" id="bodyColor" style="background-color:#f0f0f0;">

@@ -26,7 +26,8 @@ use Illuminate\Validation\Rule;
 
 
 class RegistrationController extends BaseController{
-    function getAdd(){
+
+    /*function getAdd(){
         //获取附加课程套餐列表
         $CoursePackage = new CoursePackageModel();
         //$packageAttachList = $CoursePackage->where(['type'=>1,'status'=>'USE'])->select();
@@ -46,6 +47,16 @@ class RegistrationController extends BaseController{
             'fqTypeList'    =>  json_encode($fqTypeList,JSON_UNESCAPED_UNICODE),
             'rebateList'    =>  json_encode($rebateList,JSON_UNESCAPED_UNICODE),
             'leftNav'           => "admin.registration.add"
+        ]);
+    }*/
+
+
+    function getAdd(){
+        //查询所有的套餐列表
+        $packageList = CoursePackageModel::where("course_attach","!=",'')->get()->groupBy("school_id");
+
+        return view("admin.registration.add",[
+            'packageList'   =>   $packageList
         ]);
     }
     /**

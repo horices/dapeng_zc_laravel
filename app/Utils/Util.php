@@ -259,6 +259,15 @@ class Util{
         return $regUrlArr[0]['url_short'];
     }
 
+
+    static function jsonEncode($data){
+        return json_encode($data);
+    }
+
+    static function jsonDecode($str){
+        return json_decode($str,true);
+    }
+
 }
 
 ?>

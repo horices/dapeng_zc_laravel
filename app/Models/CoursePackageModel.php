@@ -40,10 +40,16 @@ class CoursePackageModel extends BaseModel {
      * @return mixed
      */
     public function getCourseAttachDataAttribute(){
+        $return = [];
         if($this->course_attach){
-            return json_decode($this->course_attach,1);
+            $return = json_decode($this->course_attach,1);
+            if($return['rebate']){
+                $temp = $return['rebate'];
+                $return['rebate'] = [];
+                $return['rebate'][] = $temp;
+            }
         }
-        return [];
+        return $return;
     }
 
     /**

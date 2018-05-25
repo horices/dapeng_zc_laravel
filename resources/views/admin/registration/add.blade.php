@@ -1,561 +1,839 @@
 @extends("admin.public.layout")
-@section("right_content")
-    <link rel="stylesheet" href="/js/datetimepicker/jquery.datetimepicker.css">
+@section("script")
+    <style>
+        [v-cloak] { display: none }
+    </style>
     <script>
-        var isAjax = 0;
-        function loadInit() {
-            vm = new Vue({
-                el: '#container',
-                data: {
-                    payData : {
-                        type:'',
-                        txt:'',
-                        amount:'',
-                        time:'',
-                        packageTitle:'', //套餐标题
-                        packageTotalPrice:'', //套餐总金额
-                        packageId:'', //套餐ID
-                    },
-                    //课程套餐列表
-                    packageList:[],
-                    //优惠活动列表
-                    rebateList:{!! $rebateList !!},
-                    //附加套餐列表
-                    packageAttachList:{!!$packageAttachList!!},
-                    giveList:{!!$giveList!!},   //赠送课程
-                    //分期方式列表
-                    fqTypeList:{!!$fqTypeList!!},
-                    //支付方式列表
-                    payDataList: [],
-                    //用户支付的相关信息
-                    userPayInfo:{
-                        package_id:'', //套餐ID
-                        package_title:'', //主套餐标题
-                        package_tmp_title:'',
-                        package_price:0, //主套餐价格
-                        package_attach_select:'',//附加套餐对象
-                        package_attach_id:0, //附加套餐ID
-                        package_attach_title:'', //附加套餐
-                        package_attach_price:0,//附加套餐价格
-                        give_title:'',    //赠送课程标题
-                        give_id:'',   //赠送课程主键
-                        package_total_price:0, //套餐总金额
-                        amount_submitted:0,
-                        rebate_title:'',  //活动标题
-                        rebate_tmp_title:'',//临时活动标题
-                        rebate_price:'',  //活动优惠价格,
-                        rebate_id:0,      //优惠活动ID
-                        fq_type:'',       //分期方式
-                        server_date:0,  //赠送服务期
-                        is_open:0,      //是否已经开课导学
-                    },
-                    //学员开课手机号
-                    mobile:'',
-                    //是否显示第二个form
-                    hasForm:0,
-                    //用户是否已经存在
-                    hasUser:false
-                },
-                ready:function () {
-                    var _this = this;
-                    _this.$nextTick(function () {
-
-                    })
-                },
-                methods: {
-                    checkCourseIdInStr:function() {
-                        return false;
-                    },
-                    setPackAttach:function () {
-                        var attachId;
-                        var _this = this;
-                        //用each获取每个元素
-                        $.each(this.packageAttachList, function(i, val){
-                            if(_this.userPayInfo.package_attach_id == val.id){
-                                _this.userPayInfo.package_attach_title = val.title;
-                                _this.userPayInfo.package_attach_price = val.price;
-                            }
-                        });
-                        if(_this.userPayInfo.package_attach_id == 0){
-                            _this.userPayInfo.package_total_price = _this.userPayInfo.package_price;
-                        }else{
-                            _this.userPayInfo.package_total_price = parseFloat(_this.userPayInfo.package_price)+parseFloat(_this.userPayInfo.package_attach_price);
-                        }
-
-                        //setPackageTotal(); //计算最终套餐价格
-                    },
-                    setRebate:function () {
-                        var _this = this;
-                        if(_this.userPayInfo.rebate_id == 0){
-                            _this.userPayInfo.rebate_title = '';
-                            _this.userPayInfo.rebate_price = 0;
-                        }else{
-                            //用each获取每个元素
-                            $.each(this.rebateList, function(i, val){
-                                if(_this.userPayInfo.rebate_id == val.id){
-                                    _this.userPayInfo.rebate_title = val.title;
-                                    _this.userPayInfo.rebate_price = val.price;
-                                }
-                            });
-                        }
-
-                    },
-                    addPayType:function(){
-                        this.payData.txt = $("#pay-type").find("option:selected").text();
-                        if(!this.payData.type){
-                            layer.msg("请先选择支付方式！",{icon:2,time:2000});
-                            return false;
-                        }
-                        if(!this.payData.amount){
-                            layer.msg("请填写支付金额！",{icon:2,time:2000});
-                            return false;
-                        }
-
-                        if(isNaN(this.payData.amount) || parseFloat(this.payData.amount)>9999){
-                            layer.msg("请填写正确的支付金额！",{icon:2,time:2000});
-                            return false;
-                        }
-                        if(!this.payData.time){
-                            layer.msg("支付日期不能为空！",{icon:2,time:2000});
-                            return false;
-                        }
-                        var dom = {type:this.payData.type,txt:this.payData.txt,amount:this.payData.amount,time:this.payData.time};
-                        this.payDataList = this.payDataList.concat(dom);
-                        this.userPayInfo.amount_submitted = parseFloat(this.userPayInfo.amount_submitted)+parseFloat(this.payData.amount);
-                        //初始化 支付方式选择
-                        this.payData.type = '';
-                        this.payData.txt = '';
-                        this.payData.amount = '';
-                        this.payData.time = '';
-
-                    },
-                    minusPayType:function (index) {
-                        this.userPayInfo.amount_submitted = Utils.subtraction(parseFloat(this.userPayInfo.amount_submitted),parseFloat(this.payDataList[index].amount));
-                        //this.userPayInfo.amount_submitted = parseFloat(this.userPayInfo.amount_submitted)-parseFloat(this.payDataList[index].amount);
-                        this.payDataList.splice(index, 1);
-
-                    },
-                    //获取当前附加套餐
-                    getAttach:function (id) {
-                        var val = this.packageAttachList.indexOf(id);
-                        console.log(val);
-                    },
-                    //控制赠送课程 只要选择了否，则前面的
-                    giveSelect:function () {
-                        var _this = this;
-                        var glen = $(".give_select_id").length-1;
-                        if($($(".give_select_id")[glen]).prop('checked')){
-                            $(".give_select_id").each(function (e) {
-                                if(e == glen){
-                                    return ;
-                                }
-                                _this.giveList[e].checked = false;
-                                //$(this).attr("checked",false);
-                                $(this).attr("disabled",'true');
-                            })
-                        }else{
-                            $(".give_select_id").attr("disabled",false);
-                        }
-                        var k = 0;
-                        var giveArr = [];
-                        $("input[name='give_id[]']:checked").each(function (i,el) {
-                            giveArr[k] = $(el).val();
-                            k++;
-                        });
-                        _this.userPayInfo.give_id = giveArr.toString();
-                    },
-                    searchPackage:function () { //搜索相关套餐
-                        var _this = this;
-//                        if(isAjax == 1){
-//                            return ;
-//                        }
-//                        isAjax = 1;
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            url         :   "{{url('admin/registration/post-package-list')}}",
-                            dataType    :   'json',
-                            method      :   'post',
-                            data        :   {'title':_this.userPayInfo.package_tmp_title},
-                            success     :   function (data) {
-                                if(data.code && data.data.length > 0){
-                                    $(".course-package").show();
-                                }else{
-                                    $(".course-package").hide();
-                                }
-                                //vm.userPayInfo.package_total_price = "";
-                                _this.packageList = data.data;
-                                isAjax = 0;
-                            }
-                        })
-                    },
-                    searchRebate:function () {
-                        var _this = this;
-                        if(isAjax == 1){
-                            return ;
-                        }
-                        isAjax = 1;
-                        $.ajax({
-                            url         :   "{:U('getRebateList')}",
-                            dataType    :   'json',
-                            method      :   'post',
-                            data        :   {'title':_this.userPayInfo.rebate_tmp_title},
-                            success     :   function (data) {
-                                //$(".rebate-activity").show();
-                                if(data.data.length > 0){
-                                    $(".rebate-activity").show();
-                                }else{
-                                    $(".rebate-activity").hide();
-                                }
-                                //vm.userPayInfo.package_total_price = "";
-                                _this.rebateList = data.data;
-                                isAjax = 0;
-                            }
-                        })
-                    },
-                    removeRebate:function () {
-                        vm.userPayInfo.rebate_id = 0;
-                        vm.userPayInfo.rebate_price = 0;
-                        vm.userPayInfo.rebate_title = '';
-                        $(".rebate-activity").hide();
-                    }
-                }
-            });
-        }
-        //判断用户是否已经报名
-        function hasRegistration(jsonData,obj) {
-            if(jsonData.code == 0){
-                layer.msg(jsonData.msg,{icon:0,time:2000});
-                return ;
+        //选择主套餐课程
+        function selectPackage(index){
+            vm.currentPos = index;
+            if(vm[vm.currentPos].data.readonly == true){
+                return false;
             }
-            if(jsonData.code == 1 && jsonData.data){
-                //获取用户支付的相关信息
-                vm.userPayInfo = jsonData.data;
-                vm.userPayInfo.package_title = vm.userPayInfo.package_tmp_title = jsonData.data.course_package.title;
-                vm.userPayInfo.rebate_tmp_title = jsonData.data.rebate_activity.title;
-                if(jsonData.data.course_package_attach){
-                    vm.packageAttachList.push(jsonData.data.course_package_attach);
-                }
-                vm.hasUser = 1;
-                //修改异步提交地址
-                //$(".ajaxSubmit").attr("href","{:U('updateRegistration')}");
-                $(".ajaxSubmit").attr("url","{{route('admin.registration.update-registration')}}");
-                //判断是否属于当前课程顾问，非当前课程顾问的学员不能提交支付信息
-                if(jsonData.data.isBelong == 0){
-                    $(".ajaxSubmit").attr("disabled",true);
-                    $(".ajaxSubmit").text("只有该学员的课程顾问才能提交");
-                }
-                layer.msg(jsonData.msg,{icon:1,time:2000});
-            }else{
-                layer.msg(jsonData.msg,{icon:0,time:2000});
-            }
-            //设置已选赠送课程
-            $.each(vm.giveList,function (index,el) {
-                if(checkCourseIdInStr(vm.userPayInfo.give_id,$(el)[0].id)){
-                    vm.giveList[index].checked = true;
-                    $(el)[0].checked = true;
-                }
+            vm.list = vm[vm.currentPos].data.packageList;
+            vm.$nextTick(function(){
+                layer.open({
+                    type:1,
+                    title:"请选择主套餐课程",
+                    area:['700px','550px'],
+                    content:$(".tc_dialog").find(".package").prop("outerHTML")
+                });
+                vm.list='';
+                //默认选中
+                $("input[default]").prop("checked","checked");
             });
-            $(".main_left").css({'border-right':'1px solid #666'});
-            vm.hasForm = 1;
-            $("#mobile").attr("readonly",true);
-            //初始化日期选择器
-            $('.datetime').datetimepicker({
-                format:'Y-m-d H:i:s',
-            });
-            return ;
         }
 
         /**
-         *  选择课程套餐
+         * 选择主套餐后回调
          * @param obj
          */
-        function setPackName(obj) {
-//            $("#package-title").val($(obj).text());
-            vm.userPayInfo.package_title = $(obj).find('a').text();
-            vm.userPayInfo.package_tmp_title = vm.userPayInfo.package_title;
-            $(".course-package").hide();
-            console.log($(obj).attr("price"));
-            if($(obj).attr("price"))
-                vm.userPayInfo.package_price = $(obj).attr("price");
-            //套餐ID
-            console.log($(obj).attr("package-id"));
-            if($(obj).attr("package-id"))
-                vm.userPayInfo.package_id = $(obj).attr("package-id");
-            vm.userPayInfo.package_total_price = parseFloat(vm.userPayInfo.package_price)+parseFloat(vm.userPayInfo.package_attach_price);
-            //setPackageTotal(); //计算最终套餐价格
+        function selectPackageCallback(obj){
+            if(vm[vm.currentPos].data.readonly == true){
+                return false;
+            }
+            vm[vm.currentPos].data.selectedPackage = [];
+            $(obj).parent().find("input[type='radio']:checked").each(function () {
+                vm[vm.currentPos].data.selectedPackage.push($(this).val());
+            });
+            layer.closeAll();
+        }
+        //选择附加课程
+        function selectPackageAttach(index){
+            vm.currentPos = index;
+            if(vm[vm.currentPos].data.readonly == true){
+                return false;
+            }
+            vm.list = vm[vm.currentPos].data.packageAttach;
+            vm.$nextTick(function(){
+                layer.open({
+                    type:1,
+                    title:"请选择附加课程",
+                    area:['700px','550px'],
+                    content:$(".tc_dialog").find(".packageAttach").prop("outerHTML")
+                })
+                vm.list = '';
+                //默认选中
+                $("input[default]").prop("checked","checked");
+            })
+        }
+        /**
+         * 选择附加套餐后回调
+         * @param obj
+         */
+        function selectPackageAttachCallback(obj){
+            if(vm[vm.currentPos].data.readonly == true){
+                return false;
+            }
+            vm[vm.currentPos].data.selectedPackageAttach = [];
+            $(obj).parent().find("input[type='checkbox']:checked").each(function () {
+                vm[vm.currentPos].data.selectedPackageAttach.push($(this).val());
+            });
+            layer.closeAll();
+        }
+        //选择赠送课程
+        function selectPackageCourse(index){
+            vm.currentPos = index;
+            if(vm[vm.currentPos].data.readonly == true){
+                return false;
+            }
+            vm.list = vm[vm.currentPos].data.packageCourse;
+            vm.$nextTick(function () {
+                layer.open({
+                    type:1,
+                    title:"请选择赠送课程",
+                    area:['700px','550px'],
+                    content:$(".tc_dialog").find(".packageCourse").prop("outerHTML")
+                })
+                vm.list = '';
+                //默认选中
+                $("input[default]").prop("checked","checked");
+            })
+
+        }
+        /**
+         * 选择赠送课程后回调
+         * @param obj
+         */
+        function selectPackageCourseCallback(obj){
+            if(vm[vm.currentPos].data.readonly == true){
+                return false;
+            }
+            vm[vm.currentPos].data.selectedPackageCourse = [];
+            $(obj).parent().find("input[type='checkbox']:checked").each(function () {
+                vm[vm.currentPos].data.selectedPackageCourse.push($(this).val());
+            });
+            layer.closeAll();
+        }
+        //添加支付信息
+        function addPayInfo(index){
+            vm.currentPos = index;
+            vm.$nextTick(function(){
+                layer.open({
+                    type:1,
+                    title:"添加支付信息",
+                    shadeClose:true,
+                    area:['500px','300px'],
+                    content:$(".tc_dialog").find(".tc_pay").prop("outerHTML")
+                })
+                vm.list = '';
+                $(".layui-layer .datetime").each(function(){
+                    var _this = $(this);
+                    laydate.render({
+                        elem: _this[0], //指定元素
+                        type:'datetime'
+                    });
+                });
+
+            })
+
         }
 
         /**
-         *  判断赠送课程是否包含
-         * @param str
-         * @param id
-         * @returns {boolean}
+         * 添加支付记录后回调
          */
-        function checkCourseIdInStr(str,id) {
-            id = parseInt(id);
-            var arr = str.split(",");
-            $.each(arr,function (index) {
-                arr[index] = parseInt(arr[index]);
-            });
-            if($.inArray(id, arr) > -1){
-                return true;
-            }else{
+        function addPayInfoCallback(obj){
+            var form = $(obj).parents("form");
+            var json = {};
+            json.pay_type = form.find("select[name='pay_type']").val();
+            json.amount = form.find("input[name='amount']").val();
+            json.pay_time = form.find("input[name='pay_time']").val();
+            json.readonly = false;
+            if(!json.pay_type){
+                layer.msg("请选择支付类型",{icon:2});
+                return ;
+            }
+            if(!json.amount || parseFloat(json.amount) <= 0){
+                layer.msg("请输入合法的支付金额",{icon:2});
+                return ;
+            }
+            if(!json.pay_time){
+                layer.msg("请选择支付时间",{icon:2});
+                return ;
+            }
+            vm[vm.currentPos].data.payList.push(json);
+            layer.closeAll();
+        }
+
+
+        /**
+         * 至少提交一笔支付记录
+         */
+        function checkPayList(){
+            if(vm.first.data.payList.length +vm.second.data.payList.length == 0){
+                layer.msg("至少提交一笔支付记录",{icon:2});
                 return false;
             }
         }
-        /**
-         * 日期选择回调
-         * @param obj
-         * @param date
-         */
-        function selectDateCallback(obj,date) {
-            vm.payData.time = date;
-        }
+        var vm;
+        $(function(){
+            vm = new Vue({
+                el:".sub_main",
+                data:{
+                    packageList:{!! $packageList !!},//所有的套餐列表
+                    userRole:"adviser",  //用户身份
+                    payType:{!! collect($payTypeList)->toJson() !!},
+                    enroll:{},
+                    first:{
+                        'name': '',
+                        'data':{
+                            readonly:false,
+                            registration_id:'',  //报名ID
+                            packageList:[], //主套餐列表
+                            packageAttach:[], //附加课程
+                            packageCourse:[], //赠送课程
+                            packageRebate:[], //所有的优惠活动
+                            selectedPackage:[], //已选中主套餐索引
+                            selectedPackageAttach:[],//已选中附加套餐索引
+                            selectedPackageCourse:[], //已选中赠送课程索引
+                            selectedPackageRebate:'', //选中的优惠活动
+                            rebatePrice:0, //填写的优惠金额
+                            payList:[], //支付列表
+                        }
+                    },//第一份报名,默认为美术学院
+                    second:{
+                        'name': '',
+                        'data':{
+                            readonly:false,
+                            registration_id:'',  //报名ID
+                            packageList:[], //主套餐列表
+                            packageAttach:[], //附加课程
+                            packageCourse:[], //赠送课程
+                            packageRebate:[], //所有的优惠活动
+                            selectedPackage:[], //已选中主套餐索引
+                            selectedPackageAttach:[],//已选中附加套餐索引
+                            selectedPackageCourse:[], //已选中赠送课程索引
+                            selectedPackageRebate:'', //选中的优惠活动
+                            rebatePrice:0, //填写的优惠金额
+                            payList:[], //支付列表
+                        },
+                    },
+                    list:[],//弹窗列表
+                    currentPos:'first'
+                    //第二份报名默认为设计
+                },
+                computed:{
+                    //总金额
+                    firstTotalPrice:function(){
+                        var total = 0;
+                        if(this.first.data.selectedPackage){
+                            for(var i=0;i<this.first.data.selectedPackage.length;i++){
+                                total += parseFloat(this.first.data.packageList[this.first.data.selectedPackage[i]].price);
+                            }
+                        }
+                        if(this.first.data.selectedPackageAttach){
+                            for(var i=0;i<this.first.data.selectedPackageAttach.length;i++){
+                                total += parseFloat(this.first.data.packageAttach[this.first.data.selectedPackageAttach[i]].price);
+                            }
+                        }
+                        if(this.first.data.rebatePrice){
+                            total -= this.first.data.rebatePrice;
+                        }
+                        return total;
+                    },
+                    //附加套餐总金额
+                    firstPackageAttachPrice:function(){
+                        var total = 0;
+                        if(this.first.data.selectedPackageAttach){
+                            for(var i=0;i<this.first.data.selectedPackageAttach.length;i++){
+                                total += parseFloat(this.first.data.packageAttach[this.first.data.selectedPackageAttach[i]].price);
+                            }
+                        }
+                        return total;
+                    },
+                    secondTotalPrice:function(){
+                        var total = 0;
+                        if(this.second.data.selectedPackage){
+                            for(var i=0;i<this.second.data.selectedPackage.length;i++){
+                                total += parseFloat(this.second.data.packageList[this.second.data.selectedPackage[i]].price);
+                            }
+                        }
+                        if(this.second.data.selectedPackageAttach){
+                            for(var i=0;i<this.second.data.selectedPackageAttach.length;i++){
+                                total += parseFloat(this.second.data.packageAttach[this.second.data.selectedPackageAttach[i]].price);
+                            }
+                        }
+                        if(this.second.data.rebatePrice){
+                            total -= this.second.data.rebatePrice;
+                        }
+                        return total;
+                    },
+                    //附加套餐总金额
+                    secondPackageAttachPrice:function(){
+                        var total = 0;
+                        if(this.second.data.selectedPackageAttach){
+                            for(var i=0;i<this.second.data.selectedPackageAttach.length;i++){
+                                total += parseFloat(this.second.data.packageAttach[this.second.data.selectedPackageAttach[i]].price);
+                            }
+                        }
+                        return total;
+                    },
+                },
+                methods:{
+                    //默认选中
+                    defaultChecked:function(value,key){
+                        var flag = false;
+                        for(var i=0;i<vm[vm.currentPos].data[key].length;i++){
+                            if(value == vm[vm.currentPos].data[key][i]){
+                                flag = true;
+                            }
+                        }
+                        return flag?true:false;
+                    },
+                    //删除支付记录
+                    removePayList:function(key,index){
+                        console.log(this[key].data.payList[index]);
+                        this[key].data.payList.splice(index,1);
+                    },
+                    addSecond:function(){
+                        if(this.first.name="SJ"){
+                            this.second.name="MS";
+                        }else {
+                            this.second.name="SJ";
+                        }
+
+                    },
+                    removeSecond:function(){
+                        this.second.name="";
+                    },
+                    objtostr:function(obj){
+                        return JSON.stringify(obj);
+                    },
+                    searchList:function(){
+
+                    }
+                },
+                watch:{
+                    //变更学院后，变更套餐信息
+                    "first.name":function(newName,oldName){
+                        if(newName == this.second.name){
+                            this.first.name = oldName;
+                            return ;
+                        }
+                        if(newName)
+                            this.first.data.packageList = this.packageList[newName];
+                    },
+                    "second.name":function(newName,oldName){
+                        if(newName == this.first.name){
+                            this.second.name = oldName;
+                            return ;
+                        }
+                        if(newName)
+                            this.second.data.packageList = this.packageList[newName];
+                    },
+                    //选择主套餐后，变更主套餐信息
+                    "first.data.selectedPackage":function(newVal,oldVal){
+                        for(var i=0;i<newVal.length;i++){
+                            var packageInfo = this.first.data.packageList[newVal[i]];
+                            this.first.data.packageAttach = packageInfo.course_attach_data.attach;
+                            this.first.data.packageCourse = packageInfo.course_attach_data.give;
+                            this.first.data.packageRebate = packageInfo.course_attach_data.rebate;
+                        }
+                    },
+                    "first.data.rebatePrice":function(newVal,oldVal){
+                        if(this.first.data.selectedPackageRebate === ''){
+                            //没有选中优惠活动则跳过
+                            return ;
+                        }
+                        //获取当前优惠最大数字
+                        newVal = parseFloat(newVal);
+                        if(newVal < 1 || newVal > parseFloat(this.first.data.packageRebate[0].price)){
+                            layer.msg("数字不合法,只能在1-"+this.first.data.packageRebate[0].price+'之间');
+                            this.first.data.rebatePrice = oldVal;
+                        }
+                    },
+                    "first.data.selectedPackageRebate":function(newVal,oldVal){
+                        if(newVal === ''){
+                            //没有选中优惠
+                            this.first.data.rebatePrice = 0;
+                        }else{
+                            this.first.data.rebatePrice = this.first.data.packageRebate[newVal].price;
+                        }
+                    },
+
+
+                    //选择主套餐后，变更主套餐信息
+                    "second.data.selectedPackage":function(newVal,oldVal){
+                        for(var i=0;i<newVal.length;i++){
+                            var packageInfo = this.second.data.packageList[newVal[i]];
+                            this.second.data.packageAttach = packageInfo.course_attach_data.attach;
+                            this.second.data.packageCourse = packageInfo.course_attach_data.give;
+                            this.second.data.packageRebate = packageInfo.course_attach_data.rebate;
+                        }
+                    },
+                    "second.data.rebatePrice":function(newVal,oldVal){
+                        if(this.second.data.selectedPackageRebate === ''){
+                            //没有选中优惠活动则跳过
+                            return ;
+                        }
+                        //获取当前优惠最大数字
+                        newVal = parseFloat(newVal);
+                        if(newVal < 1 || newVal > parseFloat(this.second.data.packageRebate[0].price)){
+                            layer.msg("数字不合法,只能在1-"+this.second.data.packageRebate[0].price+'之间');
+                            this.second.data.rebatePrice = oldVal;
+                        }
+                    },
+                    "second.data.selectedPackageRebate":function(newVal,oldVal){
+                        if(newVal === ''){
+                            //没有选中优惠
+                            this.second.data.rebatePrice = 0;
+                        }else{
+                            this.second.data.rebatePrice = this.second.data.packageRebate[newVal].price;
+                        }
+                    },
+
+
+                },
+                mounted:function () {
+                    if(JSON.stringify(this.enroll) == '{}'){
+                        this.first.name="SJ";
+                    }else{
+                        var t = 0;
+                        for(var schoolName in this.enroll.registrations){
+                            var package_attach_content =  this.enroll.registrations[schoolName].package_attach_content;
+                            var packageInfo = package_attach_content.package_info;
+                            t++;
+                            if(t == 1){
+                                this.first.name = schoolName;
+                                //课程顾问只有查看权限
+                                if(this.userRole == "adviser"){
+                                    this.first.data.readonly = true;
+                                }
+                                this.first.data.registration_id = this.enroll.registrations[this.first.name].id;
+                                //this.first.data.packageList[packageInfo.id] = packageInfo;
+                                this.first.data.selectedPackage.push(packageInfo.id);
+                                package_attach_content.package_attach_id && (this.first.data.selectedPackageAttach = package_attach_content.package_attach_id.split(','));
+                                package_attach_content.package_course_id && (this.first.data.selectedPackageCourse = package_attach_content.package_course_id.split(','));
+                                this.first.data.selectedPackageRebate = package_attach_content.package_rebate_id;
+                                this.first.data.payList = this.enroll.registrations[this.first.name].payList;
+                                this.$nextTick(function(){
+                                    this.first.data.rebatePrice = parseFloat(this.enroll.registrations[this.first.name].rebate);
+                                })
+                                //添加附加套餐
+                            }else if (t == 2){
+                                this.second.name = schoolName;
+                                //课程顾问只有查看权限
+                                if(this.userRole == "adviser"){
+                                    this.second.data.readonly = true;
+                                }
+                                this.second.data.registration_id = this.enroll.registrations[this.second.name].id;
+                                //this.second.data.packageList[packageInfo.id] = packageInfo;
+                                this.second.data.selectedPackage.push(packageInfo.id);
+                                package_attach_content.package_attach_id && (this.second.data.selectedPackageAttach = package_attach_content.package_attach_id.split(','));
+                                package_attach_content.package_course_id && (this.second.data.selectedPackageCourse = package_attach_content.package_course_id.split(','));
+                                this.second.data.selectedPackageRebate = package_attach_content.package_rebate_id;
+                                this.second.data.payList = this.enroll.registrations[this.second.name].payList;
+                                this.$nextTick(function(){
+                                    this.second.data.rebatePrice = parseFloat(this.enroll.registrations[this.second.name].rebate);
+                                })
+                            }
+                        }
+                        //即没有添加美术学院，也没有添加设计学院
+                        if(t == 0){
+                            this.first.name = 'SJ';
+                        }
+                    }
+                    AjaxAction.bindAjax();
+                    //重新绑定
+                    /*$(".ajaxSubmit, .submit:not('.notajax')").each(function(){
+                        bindAjaxSubmitAction($(this));
+                    });*/
+                },
+            });
+        });
     </script>
-    <style>
-        .container{width: 1270px;}
-        .form-control{width: 200px;}
-        .course-package,.rebate-activity{width: 370px;border: 1px solid #ccc;margin-left: 120px;display: none;max-height: 100px;overflow-y:scroll;}
-        .course-package span,.rebate-activity span{width: 370px;height:28px; display: inline-block; line-height: 28px;cursor: pointer; padding-left: 4px;}
-        .course-package span:hover,.rebate-activity span:hover{background-color: #ccc}
-        /*添加支付按钮*/
-        .add-pay-type{width: 40px; line-height: 30px;font-size: 20px; cursor: pointer;}
-        .help-block{color: red; float: left;width:50px;}
-        [v-cloak] {
-            display: none;
-        }
-        /*新结构*/
-        .sub_main{width: 100%; min-height:960px;}
-        .sub_main .main_left{width: 47%; height: 100%; float: left}
-        .sub_main .main_right{width: 53%; height: 100%; float: left;padding-left: 25px;}
-        .control-label{width: 120px;float: left;text-align: center;line-height: 34px;}
-        .div_input_one{height: 40px;width: 100%;margin-top: 10px; line-height: 34px;}
-        .sub_main_one{min-height: 670px;}
-        .sub_main_two{height: 100px;border-top: 1px solid #ccc;height: 30%;}
-        .pay_input{width: 100px; float: left; margin-left: 4px;}
-    </style>
-    <!--<div class="row dp-member-title-2">-->
-    <!--<h4 class="col-md-4" style="padding-left:0">学员支付/开课录入</h4>-->
-    <!--</div>-->
-        <div id="container" class="sub_main">
+@endsection
+@section("right_content")
 
-            <div class="row dp-member-title-2" style="margin-left: -3px;">
-                <h4 class="col-md-4" style="padding-left:0;font-weight:700;">
-                    报名信息：
-                </h4>
+        <!--<div class="main_left pull-left">
+            <div class="row dp-member-title-2 " style="margin-left: -3px; ">
+                <h4 class="col-md-4 " style="padding-left: 0px; font-weight: 700; "> 报名信息： </h4>
             </div>
-            <div class="div_input_one">
-                <label class="col-md-2 control-label" for="input01">
-                    学员手机：
-                </label>
-                <form>
-                <input type="text" name="mobile" v-model="mobile" class="form-control fleft" maxlength="11" :readonly="hasUser"/>
-                    <input type="hidden" name="client_submit" value="PC" />
-                    <input type="text" style="display: none;">
-                <a class="common-button dblock fleft combg2 ml5 ajaxSubmit" url="{{route('admin.registration.has-registration')}}" callback="hasRegistration">下一步</a>
-                </form>
+            <div class="div_input_one ">
+                <label for="input01 " class="col-md-2 control-label "> 学员手机： </label>
+                <input type="text " id="mobile " name="enroll[mobile]" value=" " maxlength="11 " class="form-control pull-left " />
+                <a data="{mobile:$( '#mobile').val(),client_submit: 'PC'} " href="javascript:; " callback="hasRegistration " class="common-button dblock fleft combg2 ml5 ajaxLink " linkurl="/Member/Adviser/hasRegistration.html " processing="false " isclicked="0 ">下一步</a>
             </div>
-
-            <form v-show="hasForm" style="display: none">
-            <input type="hidden" name="mobile" v-model="mobile" />
-            <div class="sub_main_one">
-                <div class="main_left">
-                    <div id="show-input">
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                学员QQ：
-                            </label>
-                            <input type="text" name="qq" class="form-control" v-model="userPayInfo.qq" :readonly="hasUser" />
-                        </div>
-
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                学员姓名：
-                            </label>
-                            <input type="text" name="name" class="form-control" v-model="userPayInfo.name" :readonly="hasUser"/>
-                        </div>
-
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                开课套餐：
-                            </label>
-                            <input id="package-title" type="text" name="package_title" class="form-control fleft" style="width: 300px;" v-model="userPayInfo.package_tmp_title" :readonly="hasUser" @keyup="searchPackage" />
-                            <!--<a class="common-button dblock fleft combg2 ml5 ajaxLink" data="{title:$('#package-title').val(),total_price:$('#package-price').val()}" href="{:U('addPackage')}" callback="addPackage" v-show="!packageList.length && payData.packageTitle">新加</a>-->
-                        </div>
-                        <div class="course-package" style="display: none;">
-                            <span onclick="setPackName(this)" v-for="(l,index) in packageList" :price="l.price" :package-id="l.id"><a>@{{l.title}}</a> - (金额@{{l.price}}元)</span>
-                            <input type="hidden" name="package_id" v-model="userPayInfo.package_id"/>
-                        </div>
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                已选主套餐：
-                            </label>
-                            @{{userPayInfo.package_title || '未选'}}
-                        </div>
-
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                附加套餐：
-                            </label>
-                            <select class="form-control fleft" v-model="userPayInfo.package_attach_id" name="package_attach_id" :disabled="hasUser" @change="setPackAttach">
-                            <option value="0">选择附加套餐</option>
-                            <option v-for="(l,index) in packageAttachList" :value="l.id" :selected="(l.id == userPayInfo.package_attach_id)"><a>@{{l.title}}<template v-if="l.status == 'DEL'">(已删)</template></a></option>
-                            </select>
-                            <input type="hidden" name="package_attach_title" v-model="userPayInfo.package_attach_title" />
-                            <!--<input type="hidden" name="package_attach_id" v-model="userPayInfo.package_attach_id" />-->
-                            <input type="hidden" name="package_attach_price" v-model="userPayInfo.package_attach_price" />
-                        </div>
-
-
-                        <div class="div_input_one" style="height: 55px;">
-                            <label class="col-md-2 control-label" for="input01">
-                                赠送：
-                            </label>
-                            <template v-for="(l,index) in giveList">
-                                <input type="checkbox" class="give_select_id" name="give_id[]" :value="l.id" :disabled="hasUser" :checked="l.checked" v-model="l.checked"  @click="giveSelect(index)"/>@{{l.text}}
-                            </template>
-                            <input id="give_id" name="give_id" type="hidden" v-model="userPayInfo.give_id"/>
-                        </div>
-
-
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                套餐总金额：
-                            </label>
-                            <input id="package-price" type="text" name="package_total_price" class="form-control" v-model="userPayInfo.package_total_price" readonly/>
-                        </div>
-
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                优惠活动：
-                            </label>
-                            <select class="form-control fleft" v-model="userPayInfo.rebate_id" name="rebate_id" :disabled="hasUser" @change="setRebate">
-                            <option value="0">选择优惠活动</option>
-                            <option v-for="(l,index) in rebateList" :value="l.id" :selected="(l.id == userPayInfo.rebate_id)">@{{l.title}}</option>
-                            </select>
-                            <input type="hidden" name="rebate_title" v-model="userPayInfo.rebate_title" />
-                            <input type="hidden" name="rebate_price" v-model="userPayInfo.rebate_price" />
-                        </div>
-
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                优惠金额：
-                            </label>
-                            <input type="text" name="rebate" class="form-control" v-model="userPayInfo.rebate_price" readonly />
-                        </div>
-
-
-                        <div class="div_input_one">
-                            <label class="col-md-2 control-label" for="input01">
-                                服务期：
-                            </label>
-                            <input type="radio" name="server_date" :checked="userPayInfo.server_date == 0" value="0" v-model="userPayInfo.server_date" :disabled="hasUser" checked />无
-                            <input type="radio" name="server_date" :checked="userPayInfo.server_date == 1" value="1" v-model="userPayInfo.server_date" :disabled="hasUser" /> 1个月
-                            <input type="radio" name="server_date" :checked="userPayInfo.server_date == 2" value="2" :disabled="hasUser" v-model="userPayInfo.server_date" />2个月
-                        </div>
-
-                        <div class="div_input_one" v-show="hasUser">
-                            <label class="col-md-2 control-label" for="input01">
-                                是否开课：
-                            </label>
-                            <input type="radio" name="is_open" :checked="userPayInfo.is_open == 0" value="0" v-model="userPayInfo.is_open" :disabled="hasUser" checked />未开课
-                            <input type="radio" name="is_open" :checked="userPayInfo.is_open == 1" value="1" v-model="userPayInfo.is_open" :disabled="hasUser" /> 部分开课
-                            <input type="radio" name="is_open" :checked="userPayInfo.is_open == 2" value="2" v-model="userPayInfo.is_open" :disabled="hasUser" /> 全部开课
-                        </div>
-
-
-                    </div>
-                </div>
-                <!--右侧容器-->
-                <div class="main_right">
-                    <div class="row dp-member-title-2">
-                        <h4 class="col-md-4" style="padding-left:0;margin-left: -38px;font-weight:700;">
-                            支付信息：
-                        </h4>
-                    </div>
-                    <div class="div_input_one">
-                        <label class="col-md-2 control-label" for="input01" style="width: 100px;padding-left: 0px;">
-                            是否分期：
-                        </label>
-                        <input type="radio" name="fq_type" value="" :disabled="hasUser" v-model="userPayInfo.fq_type" />无分期
-                        <template v-for="(l,index) in fqTypeList">
-                            <input type="radio" name="fq_type" :value="index" :disabled="hasUser" v-model="userPayInfo.fq_type"  />@{{l}}&nbsp;
-                        </template>
-
-                    </div>
-                    <div class="div_input_one" style="height: 400px;">
-                        <div class="pay_input" style="width:75px;font-weight:700;">
-                            支付方式：
-                        </div>
-                        <div class="pay_input" style="width: 110px;">
-
-                            <select id="pay-type" class="form-control user-pay-input" v-model="payData.type" style="width: 110px;">
-                                <option value="" selected>方式</option>
-                                <option value="ALIPAY">支付宝</option>
-                                <option value="WEIXIN">微信</option>
-                                <option value="HUABEI">花呗</option>
-                                <option value="HUABEIFQ">花呗分期</option>
-                                <option value="MAYIFQ">蚂蚁分期</option>
-                                <option value="BANKZZ">银行转账</option>
-                            </select>
-                        </div>
-
-                        <!--支付金额-->
-                        <div class="pay_input" style="width:82px;">
-                            <input type="text" id="pay-amount" class="form-control" value="" placeholder="金额" style="width: 80px;" v-model="payData.amount" maxlength="8" onkeyup="this.value=this.value.replace(/[^0-9|\.]/,'')"/>
-                        </div>
-                        <div class="pay_input" style="width:165px;margin-right: 10px;">
-                            <input type="text" class="form-control select_date" value="" placeholder="日期" v-model="payData.time" callback="selectDateCallback" style="width: 165px;">
-                        </div>
-                        <div class="fa fa-plus add-pay-type" @click="addPayType" title="添加该支付方式"></div>
-                    <!--<span class="help-block">*必填项</span>-->
-                    <div class="form-group"  style="height: 30px;color: red; padding-left: 85px;">
-                        注意:请在填写完支付信息后点击‘+’生成有效信息
-                    </div>
-                    <!--开始循环支付方式列表-->
-                    <div class="form-group" v-for="(item,index) in payDataList" style="height: 30px;">
-                        <label class="col-md-2 control-label" for="input01"></label>
-                        <div class="col-md-8 controls" style="width:440px;margin-right:2px; padding-left: 6px;">
-                            <div class="form-control user-pay-input" style="width:440px; background-color: #CCCCCC;font-weight: bold;" v-cloak>
-                                方式:@{{item.txt}}&nbsp;&nbsp;|&nbsp;&nbsp;金额:@{{item.amount}}元&nbsp;&nbsp;|&nbsp;&nbsp;时间:@{{item.time}}
-                            </div>
-
-                            <input type="hidden" name="pay_type_list[]" :value="item.type" />
-                            <input type="hidden" name="amount_list[]" :value="item.amount" />
-                            <input type="hidden" name="pay_time_list[]" :value="item.time" />
-                        </div>
-                        <div class="col-md-8 controls fa fa-minus add-pay-type" @click="minusPayType(index)" title="删除该支付方式"></div>
-                    </div>
-                <div class="div_input_one" style="margin-top: 10px;">
-                    <label class="col-md-2 control-label" for="input01" style="text-align:left;padding-left:7px;">
-                        已交总金额：
-                    </label>
-                    <input type="text" name="amount_submitted" class="form-control" v-model="userPayInfo.amount_submitted" readonly />
-                </div>
-            </div>
-            </div>
-            </div>
-
-            <div class="sub_main_two">
-
-                <div class="div_input_one" style="height: 150px;">
-                    <label class="col-md-2 control-label" for="input01" style="width: 130px;">
-                        开课交接备注：
-                    </label>
-                    <textarea name="remark" class="form-control" style="width:500px; height:120px;" v-model="userPayInfo.remark"></textarea>
-                </div>
-                <div class="div_input_one" style="margin: 0 auto; text-align: center;">
-                    <input type="hidden" name="package_id" v-model="userPayInfo.package_id" :disabled="!hasUser" />
-                    <input type="hidden" name="rebate_id" v-model="userPayInfo.rebate_id" :disabled="!hasUser" />
-                    <input type="hidden" name="registration_id" v-model="userPayInfo.id" :disabled="!hasUser" />
-                    <input type="hidden" name="client_submit" value="PC" />
-                    <button class="btn btn-primary ajaxSubmit" type="button" url="{{url('admin/registration/add-registration')}}">确认提交</button>
-                </div>
-            </div>
-            </form>
+        </div>-->
+     <div class="sub_main">
+     <form class="col-md-10 dp-member-content " style="padding: 30px; ">
+      <div class="sub_main_one ">
+       <div class="main_left pull-left">
+        <div class="row dp-member-title-2 " style="margin-left: -3px; ">
+         <h4 class="col-md-4 " style="padding-left: 0px; font-weight: 700; "> 报名信息： </h4>
         </div>
+        <div class="div_input_one ">
+         <label for="input01 " class="col-md-3 control-label "> 学员手机： </label>
+         <input type="text " id="mobile " name="enroll[mobile]" maxlength="11" class="form-control pull-left " v-model="enroll.mobile" readonly/>
+         <!--<a data="{mobile:$( '#mobile').val(),client_submit: 'PC'} " href="javascript:; " callback="hasRegistration " class="common-button dblock fleft combg2 ml5 ajaxLink " linkurl="/Member/Adviser/hasRegistration.html " processing="false " isclicked="0 ">下一步</a>-->
+        </div>
+        <div id="show-input " style="display: block; ">
+         <div class="div_input_one ">
+          <label for="input01 " class="col-md-3 control-label "> 学员QQ： </label>
+          <input type="text " name="enroll[qq]" class="form-control" v-model="enroll.qq" :readonly="first.data.readonly == true"/>
+         </div>
+         <div class="div_input_one ">
+          <label for="input01 " class="col-md-3 control-label "> 学员微信： </label>
+          <input type="text " name="enroll[wx]" class="form-control" v-model="enroll.wx" :readonly="first.data.readonly == true"/>
+         </div>
+         <div class="div_input_one ">
+          <label for="input01 " class="col-md-3 control-label "> 学员姓名： </label>
+          <input type="text " name="enroll[name]" class="form-control" v-model="enroll.name" :readonly="first.data.readonly == true"/>
+         </div>
+        <div class="div_input_one " v-if="enroll.pay_adviser_name">
+            <label for="input01 " class="col-md-3 control-label ">支付课程顾问： </label>
+            <input type="text " class="form-control" v-model="enroll.pay_adviser_name" :readonly="true"/>
+        </div>
+        <div class="div_input_one " v-if="enroll.adviser_name">
+            <label for="input01 " class="col-md-3 control-label ">报名课程顾问： </label>
+            <input type="text " class="form-control" v-model="enroll.adviser_name" :readonly="true"/>
+        </div>
+        <div id="show-input " style="display: block; ">
+         <div class="div_input_one ">
+          <label for="input01 " class="col-md-3 control-label "> 学院名称： </label>
+          <select class="form-control" v-model="first.name" :disabled="first.data.readonly == true">
+           <option value="MS">美术学院</option>
+           <option value="SJ">设计学院</option>
+          </select>
+         </div>
+         <div class="div_input_one fj_tc">
+          <label for="input01 " class="col-md-3 control-label "> 报名套餐： </label>
+          <p class="tc_list pull-left" onclick="selectPackage('first');" v-cloak>选择主套餐课程</p>
+         <div class="fj_list" v-show="first.data.selectedPackage.length >0 " v-cloak>
+             <h3>已选主套餐：</h3>
+             <p class="tc_list" v-for="item in first.data.selectedPackage">@{{ first.data.packageList[item].title }}</p>
+         </div>
+         </div>
+         <div class="div_input_one fj_tc">
+          <label for="input01 " class="col-md-3 control-label " > 附加课程： </label>
+          <p class="tc_list pull-left" onclick="selectPackageAttach('first');" v-cloak>选择附加课程</p>
+          <div class="fj_list" v-show="first.data.selectedPackageAttach.length >0 " v-cloak>
+          	<h3>已选附加课程：</h3>
+          	<p v-for="item in first.data.selectedPackageAttach">@{{ first.data.packageAttach[item].title }}（@{{ first.data.packageAttach[item].price }}元）</p>
+          </div>
+         </div>
+         <div class="div_input_one fj_tc">
+          <label for="input01" class="col-md-3 control-label "> 赠送课程： </label>
+         <p class="tc_list pull-left" onclick="selectPackageCourse('first');" v-cloak>选择赠送课程</p>
+         <div class="fj_list" v-show="first.data.selectedPackageCourse.length >0 " v-cloak>
+         	<h3 class="pull-left">已选赠送课程：</h3>
+             <span v-for="(item,index) in first.data.selectedPackageCourse">@{{ first.data.packageCourse[item].title }}<a v-if="(index+1) < first.data.selectedPackageCourse.length">、</a></span>
+         </div>
+         </div>
+         <div class="div_input_one">
+          <label for="input01" class="col-md-3 control-label "> 优惠活动： </label>
+          <select class="form-control fleft pull-left" v-model="first.data.selectedPackageRebate" :disabled="first.data.readonly == true">
+           <option value="" selected>无优惠</option>
+           <option v-for="(item,index) in first.data.packageRebate" :value="index">@{{ item.title }}</option>
+          </select>
+          <input type="text" v-model="first.data.rebatePrice" class="form-control rebate_price  pull-left " :readonly="first.data.selectedPackageRebate === '' || first.data.readonly == true " max="500" min="1" value="0" />
+         </div>
+         <div class="div_input_one ">
+          <label for="input01" class="col-md-4 control-label "> 套餐总金额： </label>
+          <p class="pull-left num_price" v-cloak>@{{firstTotalPrice}}</p>
 
-    <script src="/js/datetimepicker/build/jquery.datetimepicker.full.js"></script>
+         </div>
+         <div class="pay_mess">
+          <div class="pay_mess_main fj_tc">
+           <label for="input01 " class="col-md-3 control-label "> 添加支付： </label>
+           <p class="tc_list pull-left" onclick="addPayInfo('first');">添加支付记录</p>
+          </div>
+          <div class="pay_input " v-show="first.data.payList.length > 0" v-cloak>
+           <div class="pay_input zf_title col-md-4">
+             支付记录：
+           </div>
+           <div class="jl_list pull-left">
+            <div class="jl_list_sun" v-for="(item,index) in first.data.payList">
+             <p class="pull-left">方式:@{{ payType[item.pay_type]}} | 金额:@{{ item.amount }}元 | 时间:@{{ item.pay_time }}</p>
+             <span class="glyphicon glyphicon-minus" @click="removePayList('first',index)" v-if="item.readonly != true"></span>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        </div>
+       </div>
+
+       <div class="main_right pull-left">
+           <div id="show-input " class="add_menu" style="display: block; " v-show="second.name  != ''">
+               <div class="div_input_one ">
+                   <label for="input01 " class="col-md-3 control-label "> 学院名称： </label>
+                   <select class="form-control" v-model="second.name" :disabled="second.data.readonly == true">
+                       <option value="MS">美术学院</option>
+                       <option value="SJ">设计学院</option>
+                   </select>
+               </div>
+               <div class="div_input_one fj_tc">
+                   <label for="input01 " class="col-md-3 control-label "> 报名套餐： </label>
+                   <p class="tc_list pull-left" onclick="selectPackage('second');" v-cloak>选择主套餐课程</p>
+                   <div class="fj_list" v-show="second.data.selectedPackage.length >0 " v-cloak>
+                       <h3>已选主套餐：</h3>
+                       <p class="tc_list" v-for="item in second.data.selectedPackage">@{{ second.data.packageList[item].title }}</p>
+                   </div>
+               </div>
+               <div class="div_input_one fj_tc">
+                   <label for="input01 " class="col-md-3 control-label " > 附加套餐： </label>
+                   <p class="tc_list pull-left" onclick="selectPackageAttach('second');" v-cloak>选择附加套餐课程</p>
+                   <div class="fj_list" v-show="second.data.selectedPackageAttach.length >0 " v-cloak>
+                       <h3>已选附加课程：</h3>
+                       <p v-for="item in second.data.selectedPackageAttach">@{{ second.data.packageAttach[item].title }}（@{{ second.data.packageAttach[item].price }}元）</p>
+                   </div>
+               </div>
+               <div class="div_input_one fj_tc">
+                   <label for="input01" class="col-md-3 control-label "> 赠送课程： </label>
+                   <p class="tc_list pull-left" onclick="selectPackageCourse('second');" v-cloak>选择赠送课程</p>
+                   <div class="fj_list" v-show="second.data.selectedPackageCourse.length >0 " v-cloak>
+                       <h3 class="pull-left">已选赠送课程：</h3>
+                       <span v-for="(item,index) in second.data.selectedPackageCourse">@{{ second.data.packageCourse[item].title }}<a v-if="((index+1) < second.data.selectedPackageCourse.length)">、</a></span>
+                   </div>
+               </div>
+               <div class="div_input_one">
+                   <label for="input01" class="col-md-3 control-label "> 优惠活动： </label>
+                   <select class="form-control fleft pull-left" v-model="second.data.selectedPackageRebate" :disabled="second.data.readonly == true">
+                       <option value="" selected>无优惠</option>
+                       <option v-for="(item,index) in second.data.packageRebate" :value="index">@{{ item.title }}</option>
+                   </select>
+                   <input type="text" v-model="second.data.rebatePrice" class="form-control rebate_price  pull-left " :readonly="second.data.selectedPackageRebate === '' || second.data.readonly == true" max="500" min="1" value="0" />
+               </div>
+               <div class="div_input_one ">
+                   <label for="input01" class="col-md-4 control-label "> 套餐总金额： </label>
+                   <p class="pull-left num_price" v-cloak>@{{secondTotalPrice}}</p>
+
+               </div>
+               <div class="pay_mess">
+                   <div class="pay_mess_main fj_tc">
+                       <label for="input01 " class="col-md-3 control-label "> 添加支付： </label>
+                       <p class="tc_list pull-left" onclick="addPayInfo('second');">添加支付记录</p>
+                   </div>
+                   <div class="pay_input " v-show="second.data.payList.length > 0" v-cloak>
+                       <div class="pay_input zf_title col-md-3">
+                           支付记录：
+                       </div>
+                       <div class="jl_list pull-left">
+                           <div class="jl_list_sun" v-for="(item,index) in second.data.payList">
+                               <p class="pull-left">方式:@{{ payType[item.pay_type]}} | 金额:@{{ item.amount }}元 | 时间:@{{ item.pay_time }}</p>
+                               <span class="glyphicon glyphicon-minus" @click="removePayList('second',index)" v-if="item.readonly != true"></span>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+        <div class="add_tc" v-show="second.name == ''" @click="addSecond">
+         <span>+</span>
+         <p>继续添加报名套餐信息</p>
+        </div>
+        <div class="add_tc" v-show="second.name != '' && second.data.readonly == false" @click="removeSecond">
+         <span>-</span>
+         <p>继续删除报名套餐信息</p>
+        </div>
+        <div class="div_input_one ">
+         <label for="input01 " class="col-md-3 control-label "> 是否导学： </label>
+         <div class="in_radio pull-left">
+          <input type="radio" value="1" v-model="enroll.is_guide" :disabled="first.data.readonly == true" />是
+          <input type="radio" value="0" v-model="enroll.is_guide" :disabled="first.data.readonly == true" /> 否
+         </div>
+        </div>
+        <div class="sub_main_two ">
+         <div class="div_input_one text-left">
+         <input type="hidden" name="enroll[client_submit]" value="PC" />
+         <input type="hidden" name="enroll[id]" :value="enroll.id" />
+         <input type="hidden" name="enroll[is_guide]" :value="enroll.is_guide" />
+
+         <input type="hidden" :name="'registration['+first.name+'][id]'" v-if="first.data.registration_id" :value="first.data.registration_id" />
+         <input type="hidden" :name="'registration['+first.name+'][package_id]'" v-model="first.data.selectedPackage" />
+         <input type="hidden" :name="'registration['+first.name+'][package_all_title]'" v-for="index in first.data.selectedPackage" :value="first.data.packageList[index].title" />
+         <input type="hidden" :name="'registration['+first.name+'][rebate]'" v-model="first.data.rebatePrice" />
+         <input type="hidden" :name="'registration['+first.name+'][package_total_price]'" v-model="firstTotalPrice" />
+         <input type="hidden" :name="'registration['+first.name+'][course_attach_all_price]'" v-model="firstPackageAttachPrice" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_attach_id]'" v-model="first.data.selectedPackageAttach" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_course_id]'" v-model="first.data.selectedPackageCourse" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_rebate_id]'" v-model="first.data.selectedPackageRebate" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_info]'" v-if="first.data.selectedPackage" :value="objtostr(first.data.packageList[first.data.selectedPackage])" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_attach][]'" v-for="attach in first.data.selectedPackageAttach" :value="objtostr(first.data.packageAttach[attach])" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_course][]'" v-for="course in first.data.selectedPackageCourse" :value="objtostr(first.data.packageCourse[course])" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_rebate]'" v-if="first.data.selectedPackageRebate !== '' " :value="objtostr(first.data.packageRebate[first.data.selectedPackageRebate])" />
+         <input type="hidden" :name="'registration['+first.name+'][pay_list][]'" v-for="pay in first.data.payList" :value="objtostr(pay)" />
+
+
+         <input type="hidden" :name="'registration['+second.name+'][id]'" v-if="second.data.registration_id" :value="second.data.registration_id"  />
+         <input type="hidden" :name="'registration['+second.name+'][package_id]'" v-model="second.data.selectedPackage" />
+         <input type="hidden" :name="'registration['+second.name+'][package_all_title]'" v-for="index in second.data.selectedPackage" :value="second.data.packageList[index].title" />
+         <input type="hidden" :name="'registration['+second.name+'][rebate]'" v-model="second.data.rebatePrice" />
+         <input type="hidden" :name="'registration['+second.name+'][package_total_price]'" v-model="secondTotalPrice" />
+         <input type="hidden" :name="'registration['+second.name+'][course_attach_all_price]'" v-model="secondPackageAttachPrice" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_attach_id]'" v-model="second.data.selectedPackageAttach" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_course_id]'" v-model="second.data.selectedPackageCourse" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_rebate_id]'" v-model="second.data.selectedPackageRebate" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_info]'" v-if="second.data.selectedPackage" :value="objtostr(second.data.packageList[second.data.selectedPackage])" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_attach][]'" v-for="attach in second.data.selectedPackageAttach" :value="objtostr(second.data.packageAttach[attach])" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_course][]'" v-for="course in second.data.selectedPackageCourse" :value="objtostr(second.data.packageCourse[course])" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_rebate]'" v-if="second.data.selectedPackageRebate !== '' " :value="objtostr(second.data.packageRebate[second.data.selectedPackageRebate])" />
+         <input type="hidden" :name="'registration['+second.name+'][pay_list][]'" v-for="pay in second.data.payList" :value="objtostr(pay)" />
+      <button type="button" class="btn btn-primary ajaxSubmit" href="{:U('addRegisteration')}" beforeAction="checkPayList">确认提交</button>
+         </div>
+        </div>
+       </div>
+      </div>
+     </form>
+     {{-- 弹窗开始 --}}
+     <div class="body_zz"></div>
+     <!--支付信息弹窗-->
+     <div class="tc_dialog" style="display:none;">
+         <div class="tc_pay">
+             <form>
+                 <div class="tc_pay_l pull-left">
+                     <!--         <div class="row dp-member-title-2 ">
+                               <h4 class="col-md-4 "> 支付信息： </h4>
+                              </div> -->
+                     <div class="div_input_one ">
+                         <div class="pay_input pull-left zf_title col-md-2">
+                             支付方式：
+                         </div>
+                         <div class="pay_input">
+                             <select id="pay-type " name="pay_type" class="form-control user-pay-input">
+                                 <option :value="index" v-for="(item,index) in payType">@{{ item }}</option>
+                             </select>
+                         </div>
+                         <div class="pay_input">
+                             <div class="pay_input pull-left zf_title col-md-2">
+                                 支付金额：
+                             </div>
+                             <input type="text" id="pay-amount" name="amount" placeholder="金额" value="" maxlength="8" class="form-control" />
+                         </div>
+                         <div class="pay_input ">
+                             <div class="pay_input pull-left zf_title col-md-2">
+                                 支付日期：
+                             </div>
+                             <div class="input-group form_datetime " >
+                                 <input class="form-control form_width_3 datetime" name="pay_time" size="16" type="text" value="" />
+                                 <!--<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>-->
+                                 <!--<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>-->
+                             </div>
+                             <input type="hidden" id="dtp_input1" value="" />
+                             <br />
+                         </div>
+                         <!--<div class="pay_input">
+                          <div class="pay_input zf_title col-md-2">
+                            支付记录：
+                          </div>
+                          <p class="pull-left">方式:花呗 | 金额:100元 | 时间:2018-05-15 00:00:43</p>
+                         </div> -->
+                     </div>
+                 </div>
+                 <div class="pay_add pull-right" onclick="addPayInfoCallback(this)">
+                     <div title="添加该支付方式 " class="add-pay-type text-center">
+                         <span>+</span>
+                         <p>点击添加</p>
+                     </div>
+                 </div>
+             </form>
+         </div>
+
+
+         <!--选择主套餐弹窗-->
+         <div class="select_tc package show">
+             <!--   <div class="se_top">
+                 <h3 class="pull-left">选择附加套餐</h3>
+                 <span class="glyphicon glyphicon-remove-circle pull-right"></span>
+                </div> -->
+             <form class="se_form">
+                 <input type="hidden" name="schoolName" value="" />
+                 <!--<input type="search" placeholder="课程名称" class=" form-control pull-left" @change="" />
+                 <button type="button" class="btn btn-primary">搜索</button>-->
+                 <div class="se_table">
+                     <table>
+                         <tbody>
+                         <tr>
+                             <td>勾选</td>
+                             <td>课程名称</td>
+                             <td>课程价格</td>
+                         </tr>
+                         <tr v-for="(item,index) in list">
+                             <td>
+                                 <div class="check_box">
+                                     <input type="radio" :value="index" name="course" :id="'check'+index" :default="defaultChecked(index,'selectedPackage')" />
+                                     <label :for="'check'+index"></label>
+                                 </div>
+                             </td>
+                             <td>@{{ item.title }}</td>
+                             <td>@{{ item.price }}</td>
+                         </tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <button type="button" class="btn btn-success pull-right btn-qz" onclick="selectPackageCallback(this)">确认</button>
+             </form>
+         </div>
+
+         <!--选择附加套餐弹窗-->
+         <div class="select_tc packageAttach show">
+             <!--   <div class="se_top">
+                 <h3 class="pull-left">选择附加套餐</h3>
+                 <span class="glyphicon glyphicon-remove-circle pull-right"></span>
+                </div> -->
+             <form class="se_form">
+                 <input type="hidden" name="schoolName" value="" />
+                 <!--<input type="search" placeholder="课程名称" class=" form-control pull-left" />
+                 <button type="button" class="btn btn-primary">搜索</button>-->
+                 <div class="se_table">
+                     <table>
+                         <tbody>
+                         <tr>
+                             <td>勾选</td>
+                             <td>课程名称</td>
+                             <td>课程价格</td>
+                         </tr>
+                         <tr v-for="(item,index) in list">
+                             <td>
+                                 <div class="check_box">
+                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :default="defaultChecked(index,'selectedPackageAttach')" />
+                                     <label :for="'check'+index"></label>
+                                 </div>
+                             </td>
+                             <td>@{{ item.title }}</td>
+                             <td>@{{ item.price }}</td>
+                         </tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <button type="button" class="btn btn-success pull-right btn-qz" onclick="selectPackageAttachCallback(this)">确认</button>
+             </form>
+         </div>
+         <!--选择赠送课程弹窗-->
+         <div class="select_tc packageCourse show">
+             <!--   <div class="se_top">
+                 <h3 class="pull-left">选择附加套餐</h3>
+                 <span class="glyphicon glyphicon-remove-circle pull-right"></span>
+                </div> -->
+             <form class="se_form">
+                 <input type="hidden" name="schoolName" value="" />
+                 <!--<input type="search" placeholder="课程名称" class=" form-control pull-left" />
+                 <button type="button" class="btn btn-primary">搜索</button>-->
+                 <div class="se_table">
+                     <table>
+                         <tbody>
+                         <tr>
+                             <td>勾选</td>
+                             <td>课程名称</td>
+                             <!--<td>课程价格</td>-->
+                         </tr>
+                         <tr v-for="(item,index) in list">
+                             <td>
+                                 <div class="check_box">
+                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :default="defaultChecked(index,'selectedPackageCourse')" />
+                                     <label :for="'check'+index"></label>
+                                 </div>
+                             </td>
+                             <td>@{{ item.title }}</td>
+                             <!--<td>@{{ item.price }}</td>-->
+                         </tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <button type="button" class="btn btn-success pull-right btn-qz" onclick="selectPackageCourseCallback(this)">确认</button>
+             </form>
+         </div>
+     </div>
+     {{-- 弹窗结束 --}}
+     </div>
 @endsection
