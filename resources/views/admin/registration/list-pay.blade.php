@@ -44,6 +44,9 @@
 
 
     <div class="row search-row" style="padding:9px 0 0px 15px;">
+        <div class="row dp-member-title-2">
+            <h4 class="col-md-4">支付记录：</h4>
+        </div>
         <form class="form-inline" role="form">
             <div class="form-group">
                 <a class="common-button combg4" href="{{route('admin.registration.list.user')}}">切换到用户统计</a>
@@ -83,7 +86,7 @@
             <thead>
             <tr>
                 <th width="50">序号</th>
-                <th width="80">顾问</th>
+                @if($adminInfo['grade'] <= 5)<th width="80">顾问</th>@endif
                 <th width="80">学员</th>
                 <th>开课手机</th>
                 <th>QQ/微信</th>
@@ -102,7 +105,7 @@
                 @foreach ($list as $k=>$v)
                     <tr class="listCurrent">
                         <td>{{ $loop->index + 1 }}</td>
-                        <td>{{$v->adviser_name}}</td>
+                        @if($adminInfo['grade'] <= 5)<td>{{$v->adviser_name}}</td>@endif
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
                         <td>{{$v->userRegistration->account}}</td>
