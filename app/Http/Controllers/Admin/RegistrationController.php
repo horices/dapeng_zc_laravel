@@ -9,6 +9,8 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Exceptions\UserException;
+use App\Models\UserEnrollModel;
 use App\Utils\Api\DapengUserApi;
 use App\Exceptions\UserValidateException;
 use App\Http\Requests\RegistrationForm;
@@ -51,13 +53,85 @@ class RegistrationController extends BaseController{
     }*/
 
 
-    function getAdd(){
+    function getAdd(UserEnrollModel $enroll,Request $request){
+        $mobile = $request->get("mobile");
+        //不存在模型则创建一个，保证前端VUE不会出现问题
+        $enroll = UserEnrollModel::firstOrNew(['mobile'=>$mobile],['is_guide'=>1]);
         //查询所有的套餐列表
         $packageList = CoursePackageModel::where("course_attach","!=",'')->get()->groupBy("school_id");
-
         return view("admin.registration.add",[
+            'enroll'    =>  $enroll,
             'packageList'   =>   $packageList
         ]);
+    }
+
+    /**
+     * 添加或修改报名信息
+     */
+    function postSaveRegistration(Request $request){
+        DB::transaction(function () use($request){
+            $enrollId = $request->get("enroll.id");
+            //添加新的主报名信息
+            if(!$enrollId){
+                $enroll = UserEnrollModel::create($request->get("enroll"));
+            }else{
+                $enroll = UserEnrollModel::find($enrollId);
+                $enroll->fill($request->get("enroll"));
+                if($enroll->save() === false){
+                    throw new UserException("更新主站失败");
+                }
+            }
+            //查询该主报名信息的所有学院报名信息
+            $registrationIds = UserRegistrationModel::where("enroll_id","=",$enroll->id)->pluck("id");
+            //添加副报名信息
+            foreach ($request->get("registration") as $k=>$registrationData) {
+                if(!is_string($k)){
+                    continue;
+                }
+                if(isset($registrationData['pay_list'])){
+                    $payList = $registrationData['pay_list'];
+                    unset($registrationData['pay_list']);
+                }
+                //添加报名信息
+                $registrationData['school_id'] = $k;
+                $registrationData['enroll_id'] = $enroll->id;
+                if(!isset($registrationData['id'])){
+                    $registration = UserRegistrationModel::create($registrationData);
+                }else{
+                    //如果存在该ID，则该ID不需要被移除
+                    $registrationIds = $registrationIds->diff($registrationData['id']);
+                    $registration = UserRegistrationModel::find($registrationData['id']);
+                    $registration->fill($registrationData);
+                    if($registration->save() === false){
+                        throw new UserException("更新副报名信息失败");
+                    }
+                }
+
+                //查询该学院报名下的所有支付信息
+                $payIds = UserPayLogModel::where("registration_id",$registration->id)->pluck("id");
+                //开始更新支付信息
+                foreach ($payList as $v){
+                    $v = Util::jsonDecode($v);
+                    if(!isset($v['id'])){
+                        $pay = UserPayLogModel::create($v);
+                    }else{
+                        $payIds = collect($payIds)->diff([$v['id']]);
+                        $payLog = UserPayLogModel::find($v['id']);
+                        $payLog->fill($v);
+                        if( $payList->save() === false ){
+                            throw new UserException("更新支付记录失败");
+                        }
+                    }
+
+                }
+            }
+        });
+        return [
+            'code'  =>  Util::SUCCESS,
+            'msg'   =>  "添加成功",
+            "data"  =>  ""
+        ];
+
     }
     /**
      * @note 检查学员是否已经报名

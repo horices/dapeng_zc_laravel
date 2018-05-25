@@ -38,11 +38,13 @@ input[type="hidden" i] {
 .div_input_one .zc_check>p{ margin: 0 5px; line-height: 34px;}
 .div_input_one .zc_check input[type=checkbox]{ margin: 11px 0;}
 .div_input_one .tc_list{ line-height:32px; text-align:left}
-.div_input_one .fj_list{ clear:both; margin-left:120px; overflow:hidden}
-.div_input_one .fj_list h3{ font-size:14px; font-weight:600; margin:0}
+.div_input_one .fj_list{ clear:both; overflow:hidden}
+.div_input_one .fj_list h3{ font-size:14px; font-weight:600; margin:0; float:left}
 .div_input_one .fj_list p,.div_input_one .fj_list span{ color:#3fb13f}
+.div_input_one .fj_list p{ margin-left:130px}
 .div_input_one .fj_list h3,.div_input_one .fj_list p,.div_input_one .fj_list span{ line-height:25px;}
 .div_input_one .fj_list span{ float:left;}
+.div_input_one .fj_list h3+span{ margin-left:35px}
 .div_input_one .in_radio,.div_input_one .num_price{ line-height: 34px;}
 .div_input_one .in_radio input[type=radio]{ margin: 5px 5px;}
 .pay_input,.sub_main_two,.pay_mess_main{ overflow: hidden;}
@@ -68,9 +70,11 @@ input[type="hidden" i] {
 .rebate_price{ width: 80px; margin-left:10px;}
 .pay_mess .zf_title{ font-weight: 600; text-align: center;}
 .wz_ts{height: 30px; color: red;}
-.tc_pay .pay_input input[type=text],.pay_input select,.pay_mess #pay-amount { width: 110px; margin-right: 5px;}
+.pay_input select,.pay_mess #pay-amount { width: 110px; margin-right: 5px;}
 .input-group,.pay_mess select,.pay_mess #pay-amount,.tc_pay select,.tc_pay #pay-amount{ width: 190px;}
-.pay_mess .pay_input,.tc_pay .pay_input{ margin-bottom:15px;}
+.div_input_one .pay_input,.tc_pay .pay_input{ margin-bottom:15px;}
+.jl_list .zf_title+.jl_list_sun{ margin-left:0px;}
+.jl_list_sun{ margin-left:120px;}
 .pay_mess .pay_add{ margin: 80px 100px 0 0;overflow: hidden;}
 .add-pay-type span,.add_tc span,.tc_fj .btn_add{ display:inline-block;width: 30px;height: 30px; border: 1px solid #777;color: #777; border-radius: 50%;margin-bottom: 10px; line-height: 30px; text-align: center; font-size: 25px;}
 .sub_main_two button{margin-left: 25px;}

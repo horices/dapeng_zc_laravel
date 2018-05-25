@@ -24,12 +24,12 @@ class UserRegistrationObservers{
     }
 
     function created(UserRegistrationModel $registrationModel){
-        $userPayArr = $registrationModel->toArray();
+        /*$userPayArr = $registrationModel->toArray();
         $registrationArr['registration_id'] = $userPayArr['id'];
         $registrationArr['amount'] = $userPayArr['amount_submitted'];
         unset($userPayArr['id']);
         $userPayModel = UserPayModel::query();
-        $userPayModel->create($userPayArr);
+        $userPayModel->create($userPayArr);*/
     }
 
     function updating(UserRegistrationModel $registrationModel){
