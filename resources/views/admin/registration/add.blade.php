@@ -457,7 +457,7 @@
             </div>
         </div>-->
      <div class="sub_main">
-     <form class="col-md-10 dp-member-content " style="padding: 30px; ">
+     <form class="dp-member-content ">
       <div class="sub_main_one ">
        <div class="main_left pull-left">
         <div class="row dp-member-title-2 " style="margin-left: -3px; ">
