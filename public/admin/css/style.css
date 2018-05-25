@@ -68,7 +68,7 @@ input[type="hidden" i] {
 .rebate_price{ width: 80px; margin-left:10px;}
 .pay_mess .zf_title{ font-weight: 600; text-align: center;}
 .wz_ts{height: 30px; color: red;}
-.tc_pay .pay_input input[type=text],.pay_input select,.pay_mess #pay-amount { width: 110px; margin-right: 5px;}
+.tc_pay .pay_input input[type=text],.pay_input select,.pay_mess #pay-amount { margin-right: 5px;}
 .input-group,.pay_mess select,.pay_mess #pay-amount,.tc_pay select,.tc_pay #pay-amount{ width: 190px;}
 .pay_mess .pay_input,.tc_pay .pay_input{ margin-bottom:15px;}
 .pay_mess .pay_add{ margin: 80px 100px 0 0;overflow: hidden;}
