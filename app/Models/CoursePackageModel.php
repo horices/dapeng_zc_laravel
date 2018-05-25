@@ -26,6 +26,18 @@ class CoursePackageModel extends BaseModel {
         'course_attach_data'
     ];
 
+    public function getCourseAttachAttribute($value){
+        if(!$value){
+            $data = [
+                'attach'    =>  [],
+                'give'      =>  [],
+                'rebate'    =>  []
+            ];
+            $value = collect($data)->toJson();
+        }
+        return $value;
+    }
+
     /**
      * 获取学院标题
      * @return \Illuminate\Config\Repository|mixed
@@ -43,7 +55,7 @@ class CoursePackageModel extends BaseModel {
         $return = [];
         if($this->course_attach){
             $return = json_decode($this->course_attach,1);
-            if($return['rebate']){
+            if(isset($return['rebate']) && $return['rebate']){
                 $temp = $return['rebate'];
                 $return['rebate'] = [];
                 $return['rebate'][] = $temp;

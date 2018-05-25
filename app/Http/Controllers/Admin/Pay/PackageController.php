@@ -43,7 +43,7 @@ class PackageController extends BaseController {
         $package->school_id = 'SJ';
         return view("admin.pay.package.detail",[
             'r'              =>  $package,
-            'course_attach'  =>  '',
+            'course_attach'  =>  $package->course_attach,
             'leftNav'        => "admin.pay.package"
         ]);
     }
