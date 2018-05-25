@@ -2,7 +2,6 @@
 @section("right_content")
 
 <style>
-    .container{width: 1240px}
     .act_list{ position:relative; background:#f00; zoom:1;}
     .act_list .sel{ margin:0; padding:0; width:80px; height:22px; line-height:22px; overflow:hidden; position:absolute; border:1px transparent solid; left:0; top:0;}
     .act_list .sel li a{ display:block; width:100%; height:22px; line-height:22px; margin:0; padding:0 0 0 10px; outline:0; text-decoration:none;}
@@ -106,14 +105,14 @@
                 <th>学院</th>
                 <th width="130">套餐</th>
                 <th width="130">附加</th>
-                <th>分期</th>
                 <th>开课</th>
-                <th>总金额</th>
+                <th>套餐+附加</th>
                 <th>优惠</th>
                 <th>应交</th>
                 <th>已交</th>
                 <th width="100">提交时间</th>
                 @if($adminInfo['grade'] <= 5)
+                    <th>导学</th>
                     <th width="60">操作</th>
                 @endif
             </tr>
@@ -138,15 +137,15 @@
                                 @endforeach
                             @endif
                         </td>
-                        <td>{{$v->fq_type_text}}</td>
                         <td>
                             {{$v->is_open_text}}
                         </td>
-                        <td>{{$v->package_total_price}}</td>
+                        <td>{{$v->package_all_price}}</td>
                         <td>{{floatval($v->rebate)}}</td>
-                        <td>{{$v->sub_price}}</td>
+                        <td>{{$v->package_total_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
                         <td>{{$v->last_pay_time_text}}</td>
+                        <td>{{$v->guide_text}}</td>
                             @if($adminInfo['grade'] <= 5)
                             <td>
                                 <a class="set-is-open-a" onclick="setIsOpen(this)">开课</a>
