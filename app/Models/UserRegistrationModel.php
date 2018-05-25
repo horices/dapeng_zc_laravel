@@ -27,13 +27,7 @@ class UserRegistrationModel extends BaseModel{
         //'last_pay_time'
     ];
     protected $appends = [
-        "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text","is_bright,account,school_text,attach_data"
-    ];
-    //报名分期付款方式
-    public $fqType = [
-        'CASH'      =>  '现金分期',
-        'HUABEI'    =>  '花呗分期',
-        'MYFQ'      =>  '蚂蚁分期',
+        "is_belong","is_open_text","sub_price","last_pay_time_text","is_bright,account,school_text,attach_data,guide_text"
     ];
 
     //开课状态数组
@@ -107,6 +101,14 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
+     * 获取导学状态
+     * @return string
+     */
+    public function getGuideTextAttribute(){
+        return $this->userEnroll->is_guide ? '是' : '否';
+    }
+
+    /**
      * 是否记录高亮显示
      * @return int
      */
@@ -151,6 +153,14 @@ class UserRegistrationModel extends BaseModel{
      */
     public function userHeadmaster(){
         return $this->belongsTo(UserModel::class,'adviser_id','uid')->withDefault();
+    }
+
+    /**
+     * 关联用户登记表
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function userEnroll(){
+        return $this->belongsTo(UserEnrollModel::class,'enroll_id','id')->withDefault();
     }
 
     /**

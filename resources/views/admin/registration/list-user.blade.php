@@ -106,14 +106,14 @@
                 <th>学院</th>
                 <th width="130">套餐</th>
                 <th width="130">附加</th>
-                <th>分期</th>
                 <th>开课</th>
-                <th>总金额</th>
+                <th>套餐+附加</th>
                 <th>优惠</th>
                 <th>应交</th>
                 <th>已交</th>
                 <th width="100">提交时间</th>
                 @if($adminInfo['grade'] <= 5)
+                    <th>导学</th>
                     <th width="60">操作</th>
                 @endif
             </tr>
@@ -129,7 +129,7 @@
                         <td>{{$v->account}}</td>
                         <td>{{$v->school_text}}</td>
                         <td>
-                            {{$v->package_all_title}}
+                            {{$v->course_attach_all_price+$v->package_price}}
                         </td>
                         <td>
                             @if(isset($v->attach_data['package_course']))
@@ -138,7 +138,6 @@
                                 @endforeach
                             @endif
                         </td>
-                        <td>{{$v->fq_type_text}}</td>
                         <td>
                             {{$v->is_open_text}}
                         </td>
@@ -147,6 +146,7 @@
                         <td>{{$v->sub_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
                         <td>{{$v->last_pay_time_text}}</td>
+                        <td>{{$v->guide_text}}</td>
                             @if($adminInfo['grade'] <= 5)
                             <td>
                                 <a class="set-is-open-a" onclick="setIsOpen(this)">开课</a>
