@@ -104,7 +104,6 @@ input[type="hidden" i] {
 	}
 .se_form .btn-qz{ padding:6px 35px; margin:30px 0}
 
-/*
 .form-horizontal .div_input_one{margin:0 -15px 25px -15px; }
 .form-horizontal .div_input_one label{ margin-right:15px}
 .form-horizontal .control-label{ padding-top:0}
@@ -113,6 +112,6 @@ input[type="hidden" i] {
 .form-horizontal .form_datetime{ margin: 0 15px;}
 .form-horizontal .btn-primary{ margin:50px 0 0 20px; padding: 6px 35px;}
 .form-horizontal .controls p{ line-height: 36px; margin: 0 10px;}
-.form-horizontal .controls .btn_add{ margin-top: 2px;}*/
+.form-horizontal .controls .btn_add{ margin-top: 2px;}
 .container .dp-side-menu-2 li a{ text-align:right}
 
