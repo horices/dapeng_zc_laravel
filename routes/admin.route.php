@@ -83,7 +83,7 @@ Route::get("registration/add","RegistrationController@getAdd")->name("admin.regi
 //验证 支付 是否已存在 并且获取信息
 Route::post("registration/has-registration","RegistrationController@postHasRegistration")->name("admin.registration.has-registration");
 //写入支付记录
-Route::post("registration/add-registration","RegistrationController@postAddRegistration")->name("admin.registration.add-registration");
+Route::post("registration/save","RegistrationController@postSaveRegistration")->name("admin.registration.add-registration");
 //更新 报名
 Route::post("registration/update-registration","RegistrationController@postUpdateRegistration")->name("admin.registration.update-registration");
 //异步获课程取套餐列表

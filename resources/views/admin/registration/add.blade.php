@@ -173,7 +173,7 @@
                     packageList:{!! $packageList !!},//所有的套餐列表
                     userRole:"adviser",  //用户身份
                     payType:{!! collect($payTypeList)->toJson() !!},
-                    enroll:{},
+                    enroll:{!! collect($enroll)->toJson() !!},
                     first:{
                         'name': '',
                         'data':{
@@ -314,6 +314,7 @@
                             this.first.data.packageList = this.packageList[newName];
                     },
                     "second.name":function(newName,oldName){
+                        console.log(1);
                         if(newName == this.first.name){
                             this.second.name = oldName;
                             return ;
@@ -555,7 +556,7 @@
        </div>
 
        <div class="main_right pull-left">
-           <div id="show-input " class="add_menu" style="display: block; " v-show="second.name  != ''">
+           <div id="show-input " class="add_menu" style="display: block; " v-if="second.name  != ''">
                <div class="div_input_one ">
                    <label for="input01 " class="col-md-3 control-label "> 学院名称： </label>
                    <select class="form-control" v-model="second.name" :disabled="second.data.readonly == true">
@@ -629,14 +630,14 @@
         <div class="div_input_one ">
          <label for="input01 " class="col-md-3 control-label "> 是否导学： </label>
          <div class="in_radio pull-left">
-          <input type="radio" value="1" v-model="enroll.is_guide" :disabled="first.data.readonly == true" />是
-          <input type="radio" value="0" v-model="enroll.is_guide" :disabled="first.data.readonly == true" /> 否
+          <input type="radio" name="is_guide" value="1" v-model="enroll.is_guide" :disabled="first.data.readonly == true" />是
+          <input type="radio" name="is_guide" value="0" v-model="enroll.is_guide" :disabled="first.data.readonly == true" /> 否
          </div>
         </div>
         <div class="sub_main_two ">
          <div class="div_input_one text-left">
          <input type="hidden" name="enroll[client_submit]" value="PC" />
-         <input type="hidden" name="enroll[id]" :value="enroll.id" />
+         <input type="hidden" name="enroll[id]" :value="enroll.id" v-if="enroll.id" />
          <input type="hidden" name="enroll[is_guide]" :value="enroll.is_guide" />
 
          <input type="hidden" :name="'registration['+first.name+'][id]'" v-if="first.data.registration_id" :value="first.data.registration_id" />
@@ -669,7 +670,7 @@
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_course][]'" v-for="course in second.data.selectedPackageCourse" :value="objtostr(second.data.packageCourse[course])" />
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_rebate]'" v-if="second.data.selectedPackageRebate !== '' " :value="objtostr(second.data.packageRebate[second.data.selectedPackageRebate])" />
          <input type="hidden" :name="'registration['+second.name+'][pay_list][]'" v-for="pay in second.data.payList" :value="objtostr(pay)" />
-      <button type="button" class="btn btn-primary ajaxSubmit" href="{:U('addRegisteration')}" beforeAction="checkPayList">确认提交</button>
+      <button type="button" class="btn btn-primary ajaxSubmit" url="{{ route("admin.registration.add-registration") }}" beforeAction="checkPayList">确认提交</button>
          </div>
         </div>
        </div>

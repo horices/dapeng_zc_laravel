@@ -82,6 +82,9 @@ class UserRegistrationModel extends BaseModel{
         return Util::getSchoolNameText($this->school_id);
     }
 
+    public function setPackageAttachContentAttribute($v){
+        $this->attributes['package_attach_content'] = collect($v)->toJson();
+    }
     /**
      * 获取附加的套餐信息
      * @return mixed

@@ -16,6 +16,7 @@ use App\Utils\Util;
 
 class UserPayLogObservers {
     function creating(UserPayLogModel $userPayLog){
+        //添加时，自动补全课程顾问信息
         $userInfo = Util::getUserInfo();
         $userPayLog->uid = $userInfo['uid'];
         $userPayLog->adviser_id = $userInfo['uid'];
@@ -24,21 +25,13 @@ class UserPayLogObservers {
     }
 
     function created(UserPayLogModel $userPayLog){
-        $query = UserRegistrationModel::find($userPayLog->registration_id);
-        //dd($userPayLog->create_time);
-        $query->last_pay_time = strtotime($userPayLog->create_time);
-        $query->save();
+        //添加完成后，更新最后支付时间
+        //$query = UserRegistrationModel::find($userPayLog->registration_id);
+        //$query->last_pay_time = $userPayLog->create_time->timestamp;
+        //$query->save();
     }
 
     function deleted(UserPayLogModel $userPayLog){
-        $logPayCount = UserPayLogModel::where("pay_id",$userPayLog->pay_id)->count();
-        //如果二级支付记录为空，则删除一级支付记录
-        if($logPayCount == 0){
-            UserPayModel::where("id",$userPayLog->pay_id)->delete();
-            UserRegistrationModel::where("id",$userPayLog->registration_id)->delete();
-        }else{
-            UserPayModel::where("id",$userPayLog->pay_id)->decrement("amount",$userPayLog->amount);
-            UserRegistrationModel::where("id",$userPayLog->registration_id)->decrement("amount_submitted",$userPayLog->amount);
-        }
+
     }
 }
