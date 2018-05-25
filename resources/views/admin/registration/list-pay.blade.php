@@ -86,16 +86,14 @@
                 <th width="80">顾问</th>
                 <th width="80">学员</th>
                 <th>开课手机</th>
-                <th>QQ号</th>
+                <th>QQ/微信</th>
+                <th>学院</th>
+                <th width="120">套餐名称</th>
+                <th>应交</th>
                 <th>收款</th>
                 <th width="80">方式</th>
-                <th width="120">课程套餐</th>
-                <th width="60">总金额</th>
                 <th>支付时间</th>
-                <!--<th>应交</th>
-                <th>已交</th>-->
                 <th>提交时间</th>
-                <th width="80">开课状态</th>
                 <th style="padding-left:19px" width="80">操作</th>
             </tr>
             </thead>
@@ -107,22 +105,19 @@
                         <td>{{$v->adviser_name}}</td>
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
-                        <td>{{$v->qq}}</td>
-                        <td>{{floatval($v->amount)}}</td>
-                        <td>{{$v->pay_type_text}}</td>
+                        <td>{{$v->userRegistration->account}}</td>
+                        <td>{{$v->userRegistration->school_text}}</td>
                         <td>
                             {{$v->userRegistration->package_all_title}}
                         </td>
-                        <!--<td>{$v.title}</td>-->
-                        <td>{{floatval($v->userRegistration->package_total_price)}}</td>
+                        <td>{{$v->userRegistration->package_total_price}}</td>
+                        <td>{{floatval($v->amount)}}</td>
+                        <td>{{$v->pay_type_text}}</td>
                         <td>{{$v->pay_time_text}}</td>
                         <!--<td>{$v[package_total_price] - $v[rebate]}</td>
                         <td>{$v.amount_submitted}</td>-->
                         <td>{{$v->create_time}}</td>
-                        <td>{{$v->userRegistration->is_open_text}}</td>
                         <td style="text-align: center">
-                            <!--<a onclick="showDetail(this)" pay-log-id="{$v.id}">
-                                查看</a>-->
 <a href="{{route('admin.registration.list.detail',['payLogId'=>$v->id])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
                                     |<a url="{{route('admin.registration.delete')}}" data="{id:'{{$v->id}}'}" class="ajaxLink" warning="确认删除？">删除</a>
