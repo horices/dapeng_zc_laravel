@@ -10,5 +10,5 @@ namespace App\Models;
 
 
 class UserEnrollModel extends BaseModel {
-    protected $table = "user_registration";
+    protected $table = "user_enroll";
 }
