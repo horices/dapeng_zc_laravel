@@ -7,6 +7,7 @@ use App\Models\GroupModel;
 use App\Models\RebateActivityModel;
 use App\Models\RosterCourseLogModel;
 use App\Models\RosterModel;
+use App\Models\UserEnrollModel;
 use App\Models\UserPayLogModel;
 use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
@@ -15,6 +16,7 @@ use App\Observers\GroupObserver;
 use App\Observers\RebateObserver;
 use App\Observers\RosterCourseLogObserver;
 use App\Observers\RosterObserver;
+use App\Observers\UserEnrollObserver;
 use App\Observers\UserPayLogObservers;
 use App\Observers\UserPayObservers;
 use App\Observers\UserRegistrationObservers;
@@ -74,7 +76,8 @@ class AppServiceProvider extends ServiceProvider
         UserPayModel::observe(UserPayObservers::class);
         //二级支付记录
         UserPayLogModel::observe(UserPayLogObservers::class);
-
+        //主报名支付
+        UserEnrollModel::observe(UserEnrollObserver::class);
         //记录SQL日志
         DB::listen(function($query){
             $sql = $query->sql;
