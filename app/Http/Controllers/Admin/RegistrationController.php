@@ -58,6 +58,11 @@ class RegistrationController extends BaseController{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getAdd(UserEnrollModel $enroll,Request $request){
+        if(!$request->get("mobile")){
+            return view("admin.registration.add-first",[
+                $request->get("leftNav","admin.registration.add"),
+            ]);
+        }
         $mobile = $request->get("mobile");
         //不存在模型则创建一个，保证前端VUE不会出现问题
         $enroll = UserEnrollModel::firstOrNew(['mobile'=>$mobile],['is_guide'=>1]);
@@ -83,6 +88,7 @@ class RegistrationController extends BaseController{
         });
         return view("admin.registration.add",[
             'enroll'    =>  $enroll,
+            "leftNav"   =>  $request->get("leftNav","admin.registration.add"),
             "userRole"  =>  $request->get("userRole",""),
             'packageList'   =>   $packageList
         ]);
@@ -93,7 +99,7 @@ class RegistrationController extends BaseController{
      * @return mixed
      */
     function getUserAdd(Request $request){
-        $request->merge(['userRole' =>  'adviser']);
+        $request->merge(['userRole' =>  'adviser','leftNav'=>"admin.registration.add.user"]);
         return Route::respondWithRoute("admin.registration.add");
     }
     /**
@@ -211,7 +217,8 @@ class RegistrationController extends BaseController{
         if($hasDapengUser['code'] == Util::FAIL){
             return response()->json(['code'=>Util::FAIL,"msg"=>"该开课手机号未注册!"]);
         }
-        $hasReg = UserRegistrationModel::with(["rebateActivity"])->where("mobile",$post['mobile'])->orderBy("id","desc")->first();
+        //$hasReg = UserRegistrationModel::with(["rebateActivity"])->where("mobile",$post['mobile'])->orderBy("id","desc")->first();
+        $hasReg = UserEnrollModel::where("mobile",$post['mobile'])->count();
         if($hasReg){
             return response()->json(['code'=>Util::SUCCESS,"msg"=>"学员已报名!",'data'=>$hasReg]);
         }else{

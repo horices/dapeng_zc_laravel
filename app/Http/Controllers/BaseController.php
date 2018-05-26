@@ -178,8 +178,8 @@ class BaseController extends Controller
         ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
-            'route'=> "admin.registration.add",    //链接地址
-            'flag'=> 'admin.registration.add',  //默认选中标识
+            'route'=> "admin.registration.add.user",    //链接地址
+            'flag'=> 'admin.registration.add.user',  //默认选中标识
             'grade' =>  [9,10],          //需要展示的权限等级
         ],
         'pay_list' =>   [
