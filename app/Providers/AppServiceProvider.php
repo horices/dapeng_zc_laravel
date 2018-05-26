@@ -17,9 +17,9 @@ use App\Observers\RebateObserver;
 use App\Observers\RosterCourseLogObserver;
 use App\Observers\RosterObserver;
 use App\Observers\UserEnrollObserver;
-use App\Observers\UserPayLogObservers;
-use App\Observers\UserPayObservers;
-use App\Observers\UserRegistrationObservers;
+use App\Observers\UserPayLogObserver;
+use App\Observers\UserPayObserver;
+use App\Observers\UserRegistrationObserver;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -71,11 +71,11 @@ class AppServiceProvider extends ServiceProvider
         //观察器 优惠活动表
         RebateActivityModel::observe(RebateObserver::class);
         //观察器 支付报名
-        UserRegistrationModel::observe(UserRegistrationObservers::class);
+        UserRegistrationModel::observe(UserRegistrationObserver::class);
         //一级支付记录
-        UserPayModel::observe(UserPayObservers::class);
+        UserPayModel::observe(UserPayObserver::class);
         //二级支付记录
-        UserPayLogModel::observe(UserPayLogObservers::class);
+        UserPayLogModel::observe(UserPayLogObserver::class);
         //主报名支付
         UserEnrollModel::observe(UserEnrollObserver::class);
         //记录SQL日志

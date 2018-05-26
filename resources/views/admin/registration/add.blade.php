@@ -170,8 +170,8 @@
             vm = new Vue({
                 el:".sub_main",
                 data:{
-                    packageList:{!! $packageList !!},//所有的套餐列表
-                    userRole:"adviser",  //用户身份
+                    packageList:{!! collect($packageList)->toJson() !!},//所有的套餐列表
+                    userRole:"{{ $userRole }}",  //用户身份
                     payType:{!! collect($payTypeList)->toJson() !!},
                     enroll:{!! collect($enroll)->toJson() !!},
                     first:{
@@ -314,7 +314,6 @@
                             this.first.data.packageList = this.packageList[newName];
                     },
                     "second.name":function(newName,oldName){
-                        console.log(1);
                         if(newName == this.first.name){
                             this.second.name = oldName;
                             return ;
@@ -406,7 +405,7 @@
                                 package_attach_content.package_attach_id && (this.first.data.selectedPackageAttach = package_attach_content.package_attach_id.split(','));
                                 package_attach_content.package_course_id && (this.first.data.selectedPackageCourse = package_attach_content.package_course_id.split(','));
                                 this.first.data.selectedPackageRebate = package_attach_content.package_rebate_id;
-                                this.first.data.payList = this.enroll.registrations[this.first.name].payList;
+                                this.first.data.payList = this.enroll.registrations[this.first.name].payList || [];
                                 this.$nextTick(function(){
                                     this.first.data.rebatePrice = parseFloat(this.enroll.registrations[this.first.name].rebate);
                                 })
@@ -555,7 +554,7 @@
         </div>
        </div>
 
-       <div class="main_right pull-left">
+       <div class="main_right pull-left" v-cloak>
            <div id="show-input " class="add_menu" style="display: block; " v-if="second.name  != ''">
                <div class="div_input_one ">
                    <label for="input01 " class="col-md-3 control-label "> 学院名称： </label>
@@ -636,11 +635,12 @@
         </div>
         <div class="sub_main_two ">
          <div class="div_input_one text-left">
-         <input type="hidden" name="enroll[client_submit]" value="PC" />
          <input type="hidden" name="enroll[id]" :value="enroll.id" v-if="enroll.id" />
          <input type="hidden" name="enroll[is_guide]" :value="enroll.is_guide" />
 
          <input type="hidden" :name="'registration['+first.name+'][id]'" v-if="first.data.registration_id" :value="first.data.registration_id" />
+         <input type="hidden" :name="'registration['+first.name+'][client_submit]'" value="PC" />
+         <input type="hidden" :name="'registration['+first.name+'][school_id]'" v-model="first.name" />
          <input type="hidden" :name="'registration['+first.name+'][package_id]'" v-model="first.data.selectedPackage" />
          <input type="hidden" :name="'registration['+first.name+'][package_all_title]'" v-for="index in first.data.selectedPackage" :value="first.data.packageList[index].title" />
          <input type="hidden" :name="'registration['+first.name+'][rebate]'" v-model="first.data.rebatePrice" />
@@ -655,8 +655,10 @@
          <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_rebate]'" v-if="first.data.selectedPackageRebate !== '' " :value="objtostr(first.data.packageRebate[first.data.selectedPackageRebate])" />
          <input type="hidden" :name="'registration['+first.name+'][pay_list][]'" v-for="pay in first.data.payList" :value="objtostr(pay)" />
 
-
+         <div v-if="second.name != ''">
          <input type="hidden" :name="'registration['+second.name+'][id]'" v-if="second.data.registration_id" :value="second.data.registration_id"  />
+         <input type="hidden" :name="'registration['+second.name+'][client_submit]'" value="PC" />
+         <input type="hidden" :name="'registration['+second.name+'][school_id]'" v-model="second.name" />
          <input type="hidden" :name="'registration['+second.name+'][package_id]'" v-model="second.data.selectedPackage" />
          <input type="hidden" :name="'registration['+second.name+'][package_all_title]'" v-for="index in second.data.selectedPackage" :value="second.data.packageList[index].title" />
          <input type="hidden" :name="'registration['+second.name+'][rebate]'" v-model="second.data.rebatePrice" />
@@ -670,7 +672,8 @@
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_course][]'" v-for="course in second.data.selectedPackageCourse" :value="objtostr(second.data.packageCourse[course])" />
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_rebate]'" v-if="second.data.selectedPackageRebate !== '' " :value="objtostr(second.data.packageRebate[second.data.selectedPackageRebate])" />
          <input type="hidden" :name="'registration['+second.name+'][pay_list][]'" v-for="pay in second.data.payList" :value="objtostr(pay)" />
-      <button type="button" class="btn btn-primary ajaxSubmit" url="{{ route("admin.registration.add-registration") }}" beforeAction="checkPayList">确认提交</button>
+         </div>
+      <button type="button" class="btn btn-primary ajaxSubmit" url="{{ route("admin.registration.add-registration") }}" beforeAction="checkPayList" showloading="true">确认提交</button>
          </div>
         </div>
        </div>

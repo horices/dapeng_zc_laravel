@@ -80,6 +80,7 @@ Route::post("index/account","IndexController@postAccount");
 /*支付系统*/
 //支付统计
 Route::get("registration/add","RegistrationController@getAdd")->name("admin.registration.add");
+Route::get("registration/user/add","RegistrationController@getUserAdd")->name("admin.registration.add.user");
 //验证 支付 是否已存在 并且获取信息
 Route::post("registration/has-registration","RegistrationController@postHasRegistration")->name("admin.registration.has-registration");
 //写入支付记录

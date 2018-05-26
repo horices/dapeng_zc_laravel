@@ -74,6 +74,7 @@ class BaseModel extends Model
      */
     function fill(array $attributes)
     {
+        return parent::fill($attributes);
         if($this->default){
             $attributes = collect($attributes)->merge(collect($this->default)->flip()->map(function ($item){
                 return null;

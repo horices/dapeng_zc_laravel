@@ -10,21 +10,20 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Exceptions\UserException;
-use App\Models\UserEnrollModel;
-use App\Utils\Api\DapengUserApi;
 use App\Exceptions\UserValidateException;
 use App\Http\Requests\RegistrationForm;
 use App\Models\CoursePackageModel;
 use App\Models\RebateActivityModel;
+use App\Models\UserEnrollModel;
 use App\Models\UserPayLogModel;
 use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
+use App\Utils\Api\DapengUserApi;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Route;
 
 
 class RegistrationController extends BaseController{
@@ -52,25 +51,64 @@ class RegistrationController extends BaseController{
         ]);
     }*/
 
-
+    /**
+     * 可修改权限
+     * @param UserEnrollModel $enroll
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     function getAdd(UserEnrollModel $enroll,Request $request){
         $mobile = $request->get("mobile");
         //不存在模型则创建一个，保证前端VUE不会出现问题
         $enroll = UserEnrollModel::firstOrNew(['mobile'=>$mobile],['is_guide'=>1]);
+        if($enroll->id){
+            $enroll = $enroll->toArray();
+            UserRegistrationModel::where("enroll_id",$enroll['id'])->get()->each(function($registration) use (&$enroll){
+                //查询当前报名下的支付信息
+                $payList = UserPayLogModel::where("registration_id",$registration->id)->select("id","pay_type","amount","pay_time")->get()->toArray();
+                $payList = collect($payList)->transform(function($v){
+                    $v['pay_time'] = $v['pay_time_text'];
+                    return $v;
+                });
+                $registration['payList'] = $payList;
+                $enroll['registrations'][$registration->school_id] = $registration;
+            });
+        }
+        $packageList = [];
         //查询所有的套餐列表
-        $packageList = CoursePackageModel::where("course_attach","!=",'')->get()->groupBy("school_id");
+        CoursePackageModel::where("course_attach","!=",'')->get()->mapWithKeys(function($v){
+            return [$v['id']=>$v];
+        })->each(function($v) use (&$packageList){
+            $packageList[$v['school_id']][$v['id']] = $v;
+        });
         return view("admin.registration.add",[
             'enroll'    =>  $enroll,
+            "userRole"  =>  $request->get("userRole",""),
             'packageList'   =>   $packageList
         ]);
     }
 
     /**
+     * 用户添加或修改
+     * @return mixed
+     */
+    function getUserAdd(Request $request){
+        $request->merge(['userRole' =>  'adviser']);
+        return Route::respondWithRoute("admin.registration.add");
+    }
+    /**
      * 添加或修改报名信息
      */
     function postSaveRegistration(Request $request){
+
         DB::transaction(function () use($request){
-            $enrollId = $request->get("enroll.id");
+            $jsonDecode = function (&$v){
+                $t = Util::jsonDecode($v);
+                if($t !== null){
+                    $v = $t;
+                }
+            };
+            $enrollId = $request->input("enroll.id");
             //添加新的主报名信息
             if(!$enrollId){
                 $enroll = UserEnrollModel::create($request->get("enroll"));
@@ -81,6 +119,7 @@ class RegistrationController extends BaseController{
                     throw new UserException("更新主站失败");
                 }
             }
+
             //查询该主报名信息的所有学院报名信息
             $registrationIds = UserRegistrationModel::where("enroll_id","=",$enroll->id)->pluck("id");
             //添加副报名信息
@@ -88,13 +127,21 @@ class RegistrationController extends BaseController{
                 if(!is_string($k)){
                     continue;
                 }
+                $payList = [];
                 if(isset($registrationData['pay_list'])){
                     $payList = $registrationData['pay_list'];
                     unset($registrationData['pay_list']);
                 }
                 //添加报名信息
-                $registrationData['school_id'] = $k;
                 $registrationData['enroll_id'] = $enroll->id;
+                $registrationData['name'] = $enroll->name;
+                $registrationData['adviser_id'] = $enroll->adviser_id;
+                $registrationData['adviser_name'] = $enroll->adviser_name;
+                $registrationData['mobile'] = $enroll->mobile;
+                $registrationData['qq'] = $enroll->qq;
+                $registrationData['wx'] = $enroll->wx;
+                array_walk_recursive($registrationData,$jsonDecode);
+                array_walk_recursive($registrationData,$jsonDecode);
                 if(!isset($registrationData['id'])){
                     $registration = UserRegistrationModel::create($registrationData);
                 }else{
@@ -106,29 +153,45 @@ class RegistrationController extends BaseController{
                         throw new UserException("更新副报名信息失败");
                     }
                 }
-
                 //查询该学院报名下的所有支付信息
                 $payIds = UserPayLogModel::where("registration_id",$registration->id)->pluck("id");
                 //开始更新支付信息
                 foreach ($payList as $v){
                     $v = Util::jsonDecode($v);
+                    $tempdata['registration_id'] = $registration->id;
+                    $tempdata['qq'] = $enroll->qq;
+                    $tempdata['wx'] = $enroll->wx;
+                    //支付记录暂时不允许修改，
+                    $tempdata['amount'] = $v['amount'];
+                    $tempdata['pay_type'] = $v['pay_type'];
+                    $tempdata['pay_time'] = strtotime($v['pay_time']);
                     if(!isset($v['id'])){
-                        $pay = UserPayLogModel::create($v);
+                        UserPayLogModel::create($tempdata);
                     }else{
                         $payIds = collect($payIds)->diff([$v['id']]);
+
                         $payLog = UserPayLogModel::find($v['id']);
-                        $payLog->fill($v);
-                        if( $payList->save() === false ){
+                        $payLog->fill($tempdata);
+                        if( $payLog->save() === false ){
                             throw new UserException("更新支付记录失败");
                         }
                     }
-
+                }
+                //删除已经删除的支付记录
+                $payIds = $payIds->toArray();
+                if($payIds && UserPayLogModel::destroy($payIds) === false){
+                    throw new UserException("删除支付记录失败");
+                }
+                //删除已经删除的报名支付
+                $registrationIds = collect($registrationIds)->toArray();
+                if($registrationIds && UserRegistrationModel::destroy($registrationIds) === false){
+                    throw new UserException("删除报名记录失败");
                 }
             }
         });
         return [
             'code'  =>  Util::SUCCESS,
-            'msg'   =>  "添加成功",
+            'msg'   =>  "保存成功",
             "data"  =>  ""
         ];
 

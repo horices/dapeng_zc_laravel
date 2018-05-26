@@ -9,6 +9,8 @@
 namespace App\Models;
 
 
+use Illuminate\Support\Facades\Validator;
+
 class UserEnrollModel extends BaseModel {
     protected $table = "user_enroll";
 }

@@ -14,7 +14,7 @@ use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
 use App\Utils\Util;
 
-class UserPayLogObservers {
+class UserPayLogObserver {
     function creating(UserPayLogModel $userPayLog){
         //添加时，自动补全课程顾问信息
         $userInfo = Util::getUserInfo();

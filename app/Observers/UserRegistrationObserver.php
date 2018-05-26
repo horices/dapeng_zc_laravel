@@ -9,11 +9,11 @@
 namespace App\Observers;
 
 
-use App\Models\UserPayModel;
 use App\Models\UserRegistrationModel;
 use App\Utils\Util;
+use Illuminate\Support\Facades\Validator;
 
-class UserRegistrationObservers{
+class UserRegistrationObserver extends BaseObserver {
 
     function creating(UserRegistrationModel $registrationModel){
         $userInfo = Util::getUserInfo();
@@ -21,24 +21,20 @@ class UserRegistrationObservers{
         $registrationModel->adviser_id = $userInfo['uid'];
         $registrationModel->adviser_name = $userInfo['name'];
         $registrationModel->adviser_qq = $userInfo['qq'];
-    }
 
-    function created(UserRegistrationModel $registrationModel){
-        /*$userPayArr = $registrationModel->toArray();
-        $registrationArr['registration_id'] = $userPayArr['id'];
-        $registrationArr['amount'] = $userPayArr['amount_submitted'];
-        unset($userPayArr['id']);
-        $userPayModel = UserPayModel::query();
-        $userPayModel->create($userPayArr);*/
     }
-
     function updating(UserRegistrationModel $registrationModel){
         //重新设置套餐总价格
-        $registrationModel->setPackageAll($registrationModel);
+        //$registrationModel->setPackageAll($registrationModel);
     }
 
-//    function updated(UserRegistrationModel $registrationModel){
-//
-//    }
-
+    function saving(UserRegistrationModel $registration){
+        Validator::make($registration->toArray(),[
+            'school_id'  =>  "required",
+            "enroll_id"    =>  "required",
+        ],[
+            "school_id.required" =>  "未找到学院",
+            "enroll_id.required"    =>  "主报名信息错误",
+        ])->validate();
+    }
 }

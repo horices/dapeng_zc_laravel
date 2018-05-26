@@ -1,6 +1,7 @@
 <?php 
 namespace App\Utils;
 use App\Exceptions\UserValidateException;
+use App\Models\UserModel;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -140,7 +141,7 @@ class Util{
 
     /**
      * 获取当前登录用户的信息
-     * @return mixed
+     * @return UserModel
      */
     static function getUserInfo(){
         return session()->get("userInfo");

@@ -12,7 +12,7 @@ namespace App\Observers;
 use App\Models\UserPayModel;
 use App\Utils\Util;
 
-class UserPayObservers{
+class UserPayObserver{
     function creating(UserPayModel $userPayModel){
         $userInfo = Util::getUserInfo();
         $userPayModel->uid = $userInfo['uid'];

@@ -42,6 +42,7 @@ class UserRegistrationModel extends BaseModel{
     }
     //获取开课状态
     public function getIsOpenTextAttribute(){
+        if($this->is_open)
         return $this->isOpenArr[$this->is_open];
     }
     //获取套餐总价格
@@ -83,17 +84,21 @@ class UserRegistrationModel extends BaseModel{
     }
 
     public function setPackageAttachContentAttribute($v){
+        //防止为0时，JS 判断失败
+        $v['package_attach_id'] = strval($v['package_attach_id']);
+        $v['package_course_id'] = strval($v['package_course_id']);
+        $v['package_rebate_id'] = strval($v['package_rebate_id']);
         $this->attributes['package_attach_content'] = collect($v)->toJson();
+    }
+    public function getPackageAttachContentAttribute($v){
+        return Util::jsonDecode($v);
     }
     /**
      * 获取附加的套餐信息
      * @return mixed
      */
     public function getAttachDataAttribute(){
-        if($this->package_attach_content){
-            return json_decode($this->package_attach_content,1);
-        }
-        return [];
+        return $this->package_attach_content;
     }
 
     /**
