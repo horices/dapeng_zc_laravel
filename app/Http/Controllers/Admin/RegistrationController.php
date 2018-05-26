@@ -70,9 +70,10 @@ class RegistrationController extends BaseController{
             $enroll = $enroll->toArray();
             UserRegistrationModel::where("enroll_id",$enroll['id'])->get()->each(function($registration) use (&$enroll){
                 //查询当前报名下的支付信息
-                $payList = UserPayLogModel::where("registration_id",$registration->id)->select("id","pay_type","amount","pay_time")->get()->toArray();
-                $payList = collect($payList)->transform(function($v){
+                $payList = UserPayLogModel::where("registration_id",$registration->id)->select("id","pay_type","amount","pay_time","adviser_name")->orderBy("id","asc")->get()->toArray();
+                $payList = collect($payList)->transform(function($v) use (&$enroll){
                     $v['pay_time'] = $v['pay_time_text'];
+                    $enroll['pay_adviser_name'] = $v['adviser_name'];
                     return $v;
                 });
                 $registration['payList'] = $payList;
@@ -86,6 +87,10 @@ class RegistrationController extends BaseController{
         })->each(function($v) use (&$packageList){
             $packageList[$v['school_id']][$v['id']] = $v;
         });
+        $userInfo = $this->getUserInfo();
+        if($userInfo->grade == 9 || $userInfo->grade == 10){
+            $request->merge(['userRole' =>  'adviser','leftNav'=>"admin.registration.add.user"]);
+        }
         return view("admin.registration.add",[
             'enroll'    =>  $enroll,
             "leftNav"   =>  $request->get("leftNav","admin.registration.add"),
@@ -99,7 +104,7 @@ class RegistrationController extends BaseController{
      * @return mixed
      */
     function getUserAdd(Request $request){
-        $request->merge(['userRole' =>  'adviser','leftNav'=>"admin.registration.add.user"]);
+        $request->merge(['userRole' =>  'adviser','leftNav'=>"admin.registration.add.user","editRoute"=>"admin.registration.add.user"]);
         return Route::respondWithRoute("admin.registration.add");
     }
     /**
@@ -171,16 +176,18 @@ class RegistrationController extends BaseController{
                     $tempdata['amount'] = $v['amount'];
                     $tempdata['pay_type'] = $v['pay_type'];
                     $tempdata['pay_time'] = strtotime($v['pay_time']);
+                    $tempdata['mobile'] = $enroll->mobile;
+                    $tempdata['name'] = $enroll->name;
                     if(!isset($v['id'])){
                         UserPayLogModel::create($tempdata);
                     }else{
                         $payIds = collect($payIds)->diff([$v['id']]);
-
-                        $payLog = UserPayLogModel::find($v['id']);
+                        //支付记录不允许修改
+                        /*$payLog = UserPayLogModel::find($v['id']);
                         $payLog->fill($tempdata);
                         if( $payLog->save() === false ){
                             throw new UserException("更新支付记录失败");
-                        }
+                        }*/
                     }
                 }
                 //删除已经删除的支付记录
