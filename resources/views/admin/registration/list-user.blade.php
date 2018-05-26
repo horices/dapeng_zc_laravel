@@ -63,6 +63,9 @@
 
 
     <div class="row search-row" style="padding:9px 0 15px 15px;">
+        <div class="row dp-member-title-2">
+            <h4 class="col-md-4">用户统计：</h4>
+        </div>
         <form class="form-inline" role="form">
             <div class="form-group" style="margin-right:0px ">
                 <a class="common-button combg4" href="{{route('admin.registration.list.pay')}}">切换到支付记录</a>
@@ -98,14 +101,14 @@
             <thead>
             <tr>
                 <th>序号</th>
-                <th>顾问</th>
+                @if($adminInfo['grade']<=5)<th>顾问</th>@endif
                 <th>学员</th>
                 <th>开课手机</th>
                 <th>QQ/微信</th>
                 <th>学院</th>
                 <th width="130">套餐</th>
                 <th width="130">附加</th>
-                <th>开课</th>
+                @if($adminInfo['grade']<=5)<th>开课</th>@endif
                 <th>套餐+附加</th>
                 <th>优惠</th>
                 <th>应交</th>
@@ -122,7 +125,7 @@
                 @foreach ($list as $v)
                     <tr class="listCurrent @if($v->is_bright == 1) bg_color @endif">
                         <td>{{ $loop->index + 1 }}</td>
-                        <td>{{$v->adviser_name}}</td>
+                        @if($adminInfo['grade']<=5)<td>{{$v->adviser_name}}</td>@endif
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
                         <td>{{$v->account}}</td>
@@ -137,9 +140,11 @@
                                 @endforeach
                             @endif
                         </td>
+                        @if($adminInfo['grade']<=5)
                         <td>
                             {{$v->is_open_text}}
                         </td>
+                        @endif
                         <td>{{$v->package_all_price}}</td>
                         <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>

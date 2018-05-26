@@ -262,23 +262,29 @@ class RegistrationController extends BaseController{
      * @param $query
      */
     function exportListUser($query){
-        $data['filename'] = "用户统计".date("Y-m-d_H:i:s");
-        $data['title'] = [
-            'idk'               =>  '序号',
-            'name'              =>  '学员姓名',
-            'adviser_name'      =>  '课程顾问',
-            'mobile'            =>  '开课手机',
-            'qq'                =>  '学员QQ',
-            'package_all_title' =>  '报名套餐',
-            'amount_submitted'  =>  '已收金额',
-            'package_total_price'=> '套餐总金额',
-            'fq_type_text'       =>  '分期方式',
-            'is_open_text'       =>  '开课状态',
-            'last_pay_time_text' =>  '提交时间',
-            'remark'            =>  '课程交接备注',
+        $exportData['filename'] = "用户统计".date("Y-m-d_H:i:s");
+        $exportData['title'] = [
+            'idk'                       =>  '序号',
+            'ue_adviser_name'           =>  '课程顾问',
+            'name'                      =>  '学员姓名',
+            'mobile'                    =>  '开课手机',
+            'qq'                        =>  'QQ号',
+            'wx'                        =>  '微信',
+            'school_text'               =>  '学院名称',
+            'package_all_title'         =>  '报名套餐',
+            'attach_course_text'        =>  '附加课程',
+            'package_price'             =>  '套餐金额',
+            'course_attach_all_price'   =>  '附加课程金额',
+            'rebate'                    =>  '优惠金额',
+            'package_total_price'       =>  '应交总金额',
+            'amount_submitted'          =>  '已收金额',
+            'is_open_text'              =>  '开课状态',
+            'last_pay_time_text'        =>  '提交时间',
+            'guide_text'                =>  '是否导学',
         ];
-        $data['data'] = $query->take(100000)->get();
-        return $this->export($data);
+        $exportData['data'] = $query->take(100)->first();
+//        dd($exportData['data']->toArray());
+        return $this->export($exportData);
     }
 
     /**

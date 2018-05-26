@@ -27,7 +27,7 @@ class UserRegistrationModel extends BaseModel{
         //'last_pay_time'
     ];
     protected $appends = [
-        "is_belong","is_open_text","last_pay_time_text","is_bright,account,school_text,attach_data,guide_text,package_all_price"
+        "is_belong","is_open_text","last_pay_time_text","is_bright","account","school_text","attach_data","guide_text","package_all_price","attach_course_text"
     ];
 
     //开课状态数组
@@ -94,6 +94,21 @@ class UserRegistrationModel extends BaseModel{
             return json_decode($this->package_attach_content,1);
         }
         return [];
+    }
+
+    /**
+     * 获取附加课程 换行的字符串
+     * @return string
+     */
+    public function getAttachCourseTextAttribute(){
+        $test = "";
+        if(isset($this->attach_data['package_attach']) && $this->attach_data['package_attach']){
+            foreach ($this->attach_data['package_attach'] as $key=>$val){
+                $test .= $val['title']."\n";
+            }
+        }
+        return $test;
+
     }
 
     /**
