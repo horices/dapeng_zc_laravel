@@ -637,9 +637,9 @@
          <div class="div_input_one text-left">
          <input type="hidden" name="enroll[id]" :value="enroll.id" v-if="enroll.id" />
          <input type="hidden" name="enroll[is_guide]" :value="enroll.is_guide" />
+         <input type="hidden" :name="'registration['+first.name+'][client_submit]'" value="PC" />
 
          <input type="hidden" :name="'registration['+first.name+'][id]'" v-if="first.data.registration_id" :value="first.data.registration_id" />
-         <input type="hidden" :name="'registration['+first.name+'][client_submit]'" value="PC" />
          <input type="hidden" :name="'registration['+first.name+'][school_id]'" v-model="first.name" />
          <input type="hidden" :name="'registration['+first.name+'][package_id]'" v-model="first.data.selectedPackage" />
          <input type="hidden" :name="'registration['+first.name+'][package_all_title]'" v-for="index in first.data.selectedPackage" :value="first.data.packageList[index].title" />
@@ -656,8 +656,8 @@
          <input type="hidden" :name="'registration['+first.name+'][pay_list][]'" v-for="pay in first.data.payList" :value="objtostr(pay)" />
 
          <div v-if="second.name != ''">
-         <input type="hidden" :name="'registration['+second.name+'][id]'" v-if="second.data.registration_id" :value="second.data.registration_id"  />
          <input type="hidden" :name="'registration['+second.name+'][client_submit]'" value="PC" />
+         <input type="hidden" :name="'registration['+second.name+'][id]'" v-if="second.data.registration_id" :value="second.data.registration_id"  />
          <input type="hidden" :name="'registration['+second.name+'][school_id]'" v-model="second.name" />
          <input type="hidden" :name="'registration['+second.name+'][package_id]'" v-model="second.data.selectedPackage" />
          <input type="hidden" :name="'registration['+second.name+'][package_all_title]'" v-for="index in second.data.selectedPackage" :value="second.data.packageList[index].title" />
