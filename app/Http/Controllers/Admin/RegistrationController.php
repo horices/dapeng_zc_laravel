@@ -286,7 +286,7 @@ class RegistrationController extends BaseController{
      * 获取用户统计列表
      */
     function getUserList(Request $request){
-        $query = UserRegistrationModel::with(["userHeadmaster"])->where('is_active',1);
+        $query = UserRegistrationModel::with(["userHeadmaster","userEnroll"])->where('is_active',1);
         //根据学员姓名检索
         $name = $request->get("name");
         if(!empty($name)){
