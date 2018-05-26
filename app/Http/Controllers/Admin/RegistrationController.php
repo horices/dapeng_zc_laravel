@@ -196,8 +196,10 @@ class RegistrationController extends BaseController{
                 //更新最后支付时间
                 $lastPay = UserPayLogModel::where("registration_id",$registration->id)->orderBy("create_time","desc")->first();
                 $registration->last_pay_time = $lastPay->create_time->timestamp;
+                //用户已经提交的所有金额
+                $registration->amount_submitted = UserPayLogModel::where("registration_id",$registration->id)->sum("amount");
                 if($registration->save() === false){
-                    throw new UserValidateException("更新最后支付时间失败");
+                    throw new UserValidateException("更新最后支付时间及支付金额失败");
                 }
             }
         });
