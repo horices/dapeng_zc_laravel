@@ -101,15 +101,15 @@
             <thead>
             <tr>
                 <th>序号</th>
-                @if($adminInfo['grade']<=5)<th>顾问</th>@endif
+                @if($adminInfo['grade']<=5)<th width="70">顾问</th>@endif
                 <th>学员</th>
                 <th>开课手机</th>
                 <th>QQ/微信</th>
                 <th>学院名称</th>
                 <th width="130">套餐名称</th>
                 <th>套餐金额</th>
-                <th width="130">附加课程</th>
-                <th width="130">附加金额</th>
+                <th width="70">附加课程</th>
+                <th width="70">附加金额</th>
                 @if($adminInfo['grade']<=5)<th>是否开课</th>@endif
                 <th>赠送</th>
                 <th>优惠</th>

@@ -57,7 +57,7 @@
     <h4 class="col-md-4" style="padding-left:0"> 新增课程套餐</h4>
 </div>
 <div id="content-vue" class="row dp-member-body-2">
-    <form class="form-horizontal" onsubmit="return beforeOnSubmitAction(this);">
+    <form class="form-horizontal main_container" onsubmit="return beforeOnSubmitAction(this);">
         <fieldset>
             <div class="div_input_one">
                 <label for="input01 " class="col-md-2 control-label "> 学员名称： </label>
