@@ -157,17 +157,17 @@ class UserController extends BaseController
      */
     function postOpenCourseHead(Request $request){
         $uid = $request->get("uid");
-        $userData = UserModel::find($uid);
-        if($userData->status == 0){
+        $user = UserModel::find($uid);
+        if($user->status == 0){
             throw new UserValidateException("该账号已暂停！");
         }
-        if(!$userData->dapeng_user_mobile){
+        if(!$user->dapeng_user_mobile){
             throw new UserValidateException("请先绑定主站账号！");
         }
         //查询主站的用户信息
         $dapengMap = [
             'type'      =>  'MOBILE',
-            'keyword'   =>  $userData->dapeng_user_mobile
+            'keyword'   =>  $user->dapeng_user_mobile
         ];
         $dapengUserInfo = DapengUserApi::getInfo($dapengMap);
         if($dapengUserInfo['code'] == Util::FAIL){
@@ -184,6 +184,9 @@ class UserController extends BaseController
         if($openCourseInfo['code'] == Util::FAIL){
             throw new DapengApiException($openCourseInfo['msg']);
         }
+        //更新课程顾问开课状态
+        $user->is_open_course = 1;
+        $user->save();
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
 }
