@@ -21,7 +21,7 @@ function hasRegistration(data){
 @section("right_content")
   <div id="content-container" class="container ">
    <div class="row row-2-10 ">
-    <form class="col-md-10" style="padding: 30px; ">
+    <form class="col-md-10 main_container" style="padding: 30px; ">
         <div class="main_left pull-left" style="border:none;">
             <div class="row dp-member-title-2 " style="margin-left: -3px; ">
                 <h4 class="col-md-4 " style="padding-left: 0px; font-weight: 700; "> 报名信息： </h4>

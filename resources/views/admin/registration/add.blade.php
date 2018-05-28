@@ -456,7 +456,7 @@
             </div>
         </div>-->
      <div class="sub_main">
-     <form class="dp-member-content ">
+     <form class="dp-member-content main_container">
       <div class="sub_main_one ">
        <div class="main_left pull-left">
         <div class="row dp-member-title-2 " style="margin-left: -3px; ">
@@ -529,7 +529,7 @@
           <input type="text" v-model="first.data.rebatePrice" class="form-control rebate_price  pull-left " :readonly="first.data.selectedPackageRebate === '' || first.data.readonly == true " max="500" min="1" value="0" />
          </div>
          <div class="div_input_one ">
-          <label for="input01" class="col-md-4 control-label "> 套餐总金额： </label>
+          <label for="input01" class="col-md-4 control-label text-left"> 套餐总金额： </label>
           <p class="pull-left num_price" v-cloak>@{{firstTotalPrice}}</p>
 
          </div>
