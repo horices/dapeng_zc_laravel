@@ -105,11 +105,13 @@
                 <th>学员</th>
                 <th>开课手机</th>
                 <th>QQ/微信</th>
-                <th>学院</th>
-                <th width="130">套餐</th>
-                <th width="130">附加</th>
-                @if($adminInfo['grade']<=5)<th>开课</th>@endif
-                <th>套餐+附加</th>
+                <th>学院名称</th>
+                <th width="130">套餐名称</th>
+                <th>套餐金额</th>
+                <th width="130">附加课程</th>
+                <th width="130">附加金额</th>
+                @if($adminInfo['grade']<=5)<th>是否开课</th>@endif
+                <th>赠送</th>
                 <th>优惠</th>
                 <th>应交</th>
                 <th>已交</th>
@@ -133,25 +135,31 @@
                         <td>
                             {{$v->package_all_title}}
                         </td>
+                        <th>{{ $v->package_price }}</th>
                         <td>
-                            @if(isset($v->attach_data['package_course']))
-                                @foreach($v->attach_data['package_course'] as $i=>$l)
+                            @if(isset($v->attach_data['package_attach']))
+                                @foreach($v->attach_data['package_attach'] as $i=>$l)
                                     {{$l['title']}}<br/>
                                 @endforeach
                             @endif
                         </td>
+                        <td>{{ $v->course_attach_all_price }}</td>
                         @if($adminInfo['grade']<=5)
                         <td>
                             {{$v->is_open_text}}
                         </td>
                         @endif
-                        <td>{{$v->package_all_price}}</td>
+                        <td>@if(isset($v->attach_data['package_course']))
+                                @foreach($v->attach_data['package_course'] as $l)
+                                    {{$l['title']}}<br/>
+                                @endforeach
+                            @endif</td>
                         <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
                         {{--<td>{{$v->last_pay_time_text}}</td>--}}
-                        <td>{{$v->guide_text}}</td>
-                            @if($adminInfo['grade'] <= 5)
+                        @if($adminInfo['grade'] <= 5)
+                            <td>{{$v->guide_text}}</td>
                             <td>
                                 <a class="set-is-open-a" onclick="setIsOpen(this)">开课</a>
                                 <div class="set-open">
