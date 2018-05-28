@@ -174,9 +174,9 @@ class UserController extends BaseController
             throw new UserValidateException("主站找不到该课程顾问！");
         }
 
-        if(!$dapengUserInfo['data']['user']['qqAccount']){
-            throw new UserValidateException("请先去主站补全QQ号！");
-        }
+//        if(!$dapengUserInfo['data']['user']['qqAccount']){
+//            throw new UserValidateException("请先去主站补全QQ号！");
+//        }
         $data = [
             'advisorid'                =>  $dapengUserInfo['data']['user']['userId'],
         ];
