@@ -55,7 +55,9 @@
                     </td>
                     <td>
                         @if(isset($v->course_attach_data['rebate']))
-                            {{$v->course_attach_data['rebate']['title']}}
+                            @foreach($v->course_attach_data['rebate'] as $i=>$l)
+                                {{$l['title']}}<br/>
+                            @endforeach
                         @endif
                     </td>
                     <td>
