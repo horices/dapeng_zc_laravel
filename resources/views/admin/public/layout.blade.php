@@ -141,7 +141,7 @@ $(function(){
         </div>
     </div>
 </div>
-<div id="content-container" class="container">
+<div id="content-container" class="container main_container">
     <div class="row row-2-10">
         <div class="col-md-2 nav-left">
         @include("admin.public.nav")
