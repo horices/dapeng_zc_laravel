@@ -97,7 +97,7 @@
                 <th width="80">方式</th>
                 <th>支付时间</th>
                 <th>提交时间</th>
-                <th style="padding-left:19px" width="80">操作</th>
+                <th width="80">操作</th>
             </tr>
             </thead>
             <tbody>

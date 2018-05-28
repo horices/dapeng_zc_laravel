@@ -58,6 +58,8 @@ class RegistrationController extends BaseController{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getAdd(UserEnrollModel $enroll,Request $request){
+        $userInfo = $this->getUserInfo();
+        $userRole = $userInfo->grade <=5 ? "":"adviser";
         if(!$request->get("mobile")){
             return view("admin.registration.add-first",[
                 $request->get("leftNav","admin.registration.add"),
@@ -68,11 +70,15 @@ class RegistrationController extends BaseController{
         $enroll = UserEnrollModel::firstOrNew(['mobile'=>$mobile],['is_guide'=>1]);
         if($enroll->id){
             $enroll = $enroll->toArray();
-            UserRegistrationModel::where("enroll_id",$enroll['id'])->get()->each(function($registration) use (&$enroll){
+            UserRegistrationModel::where("enroll_id",$enroll['id'])->get()->each(function($registration) use (&$enroll,$userRole){
                 //查询当前报名下的支付信息
                 $payList = UserPayLogModel::where("registration_id",$registration->id)->select("id","pay_type","amount","pay_time","adviser_name")->orderBy("id","asc")->get()->toArray();
-                $payList = collect($payList)->transform(function($v) use (&$enroll){
+                $payList = collect($payList)->transform(function($v) use (&$enroll,$userRole){
                     $v['pay_time'] = $v['pay_time_text'];
+                    $v['readonly'] = false;
+                    if($userRole == "adviser"){
+                        $v['readonly'] = true;
+                    }
                     $enroll['pay_adviser_name'] = $v['adviser_name'];
                     return $v;
                 });
@@ -80,6 +86,7 @@ class RegistrationController extends BaseController{
                 $enroll['registrations'][$registration->school_id] = $registration;
             });
         }
+
         $packageList = [];
         //查询所有的套餐列表
         CoursePackageModel::where("course_attach","!=",'')->get()->mapWithKeys(function($v){
@@ -94,7 +101,7 @@ class RegistrationController extends BaseController{
         return view("admin.registration.add",[
             'enroll'    =>  $enroll,
             "leftNav"   =>  $request->get("leftNav","admin.registration.add"),
-            "userRole"  =>  $request->get("userRole",""),
+            "userRole"  =>  $userRole,
             'packageList'   =>   $packageList
         ]);
     }
