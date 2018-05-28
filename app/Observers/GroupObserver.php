@@ -28,8 +28,14 @@ class GroupObserver{
             if($groupModel->is_open == 1){
                 $query = GroupModel::query();
                 $query->where([
-                    'leader_id' => $groupModel->leader_id
-                ])->update(['is_open'=>0]);
+                    'leader_id' => $groupModel->leader_id,
+                ]);
+                //修改时，忽略当前群
+                if($groupModel->id){
+                    $query->where("id","<>",$groupModel->id);
+                }
+
+                $query->update(['is_open'=>0]);
             }
         }
     }
