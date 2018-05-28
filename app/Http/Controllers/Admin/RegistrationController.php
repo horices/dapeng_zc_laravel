@@ -153,6 +153,7 @@ class RegistrationController extends BaseController{
                 $registrationData['wx'] = $enroll->wx;
                 array_walk_recursive($registrationData,$jsonDecode);
                 array_walk_recursive($registrationData,$jsonDecode);
+                $registrationData['package_price'] = $registrationData['package_attach_content']['package_info']["price"];
                 if(!isset($registrationData['id'])){
                     $registration = UserRegistrationModel::create($registrationData);
                 }else{
