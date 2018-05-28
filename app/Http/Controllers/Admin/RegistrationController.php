@@ -327,12 +327,11 @@ class RegistrationController extends BaseController{
             $query->where("create_time","<=",strtotime($endDate));
         }
 
+        $query->orderBy("last_pay_time","desc");
         if($request->get('export') == 1){
-            $query->orderBy("last_pay_time","desc");
             return $this->exportListUser($query);
         }
-
-        $list = $query->orderBy("last_pay_time","desc")->paginate(15);
+        $list = $query->paginate(15);
         foreach ($list as $key=>$val){
             $list[$key]['idk'] = $key+1;
         }
@@ -350,8 +349,8 @@ class RegistrationController extends BaseController{
     function exportListUser($query){
         $exportData['filename'] = "用户统计".date("Y-m-d_H:i:s");
         $exportData['title'] = [
-            'idk'                       =>  '序号',
-            'ue_adviser_name'           =>  '课程顾问',
+            'id'                       =>  '序号',
+            'adviser_name'           =>  '课程顾问',
             'name'                      =>  '学员姓名',
             'mobile'                    =>  '开课手机',
             'qq'                        =>  'QQ号',
@@ -368,7 +367,7 @@ class RegistrationController extends BaseController{
             'last_pay_time_text'        =>  '提交时间',
             'guide_text'                =>  '是否导学',
         ];
-        $exportData['data'] = $query->take(100)->first();
+        $exportData['data'] = $query->take(3000)->get();
 //        dd($exportData['data']->toArray());
         return $this->export($exportData);
     }

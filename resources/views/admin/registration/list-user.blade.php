@@ -90,7 +90,7 @@
             <div class="form-group">
                 <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
                 @if($adminInfo['grade'] <= 5)
-                    <a class="common-button combg2 linkSubmit" data="{'export':'1'}" href="{{route('admin.registration.list.user')}}">导出</a>
+                    <a class="common-button combg2 linkSubmit" data="{'export':'1'}" href="{{route('admin.registration.list.user')}}" showloading="true">导出</a>
                 @endif
             </div>
         </form>
