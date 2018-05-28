@@ -366,7 +366,7 @@ class IndexController extends BaseController
             throw new DapengApiException($res['msg']);
         }
         $rosterData->dapeng_user_mobile = $studentMobile;
-        $rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
+        //$rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
         $rosterData->save();
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
