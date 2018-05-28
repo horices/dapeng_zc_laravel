@@ -194,12 +194,12 @@ class BaseController extends Controller
             'flag'=> 'admin.pay.package',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
-        'pay_rebate' =>   [
+        /*'pay_rebate' =>   [
             'text'=> '优惠活动',   //文字描述
             'route'=> "admin.pay.rebate.list",    //链接地址
             'flag'=> 'admin.pay.rebate',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
-        ],
+        ],*/
         'intelligent_roster' =>   [
             'text'=> '智推数据',   //文字描述
             'route'=> "admin.roster.list.intelligent",    //链接地址
