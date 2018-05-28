@@ -344,6 +344,8 @@ class IndexController extends BaseController
             }
             $studentMobile = $request->phone;
         }
+        //所属群
+        $groupData = GroupModel::find($rosterData->qq_group_id);
         //所属课程顾问信息
         $userData = UserModel::find($rosterData->adviser->uid);
         //获取主站信息
@@ -352,19 +354,19 @@ class IndexController extends BaseController
             throw new DapengApiException("主站未找到该用户！");
         }
         $data = [
-            'wingsId'           =>  $userData->uid,
-            'advisorMobile'     =>  $userData->dapeng_user_mobile,
-            'studentMobile'     =>  $studentMobile,
-            'qq'                =>  $rosterData->qq,
-            'wx'                =>  $rosterData->wx,
-            'schoolId'          =>  Util::getSchoolName()
+            'advisorMobile'             =>  $userData->dapeng_user_mobile,
+            'studentMobile'             =>  $studentMobile,
+            'classCode'                 =>  $groupData->group_name,
+            'qq'                        =>  $rosterData->qq,
+            'wx'                        =>  $rosterData->wx,
+            'affiliatedCollege'         =>  Util::getSchoolName()
         ];
         $res = DapengUserApi::openCourse($data); //接口59
         if($res['code'] == Util::FAIL){
             throw new DapengApiException($res['msg']);
         }
         $rosterData->dapeng_user_mobile = $studentMobile;
-        $rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
+        //$rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
         $rosterData->save();
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
