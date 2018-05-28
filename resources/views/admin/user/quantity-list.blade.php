@@ -40,7 +40,7 @@
             <th>负责的微信号（个）</th>
             <th>微信每轮分配数量</th>
             <th>状态</th>
-            <th style="padding-left:19px" width="80">操作</th>
+            <th width="80">操作</th>
         </tr>
         </thead>
 
