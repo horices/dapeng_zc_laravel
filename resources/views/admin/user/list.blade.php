@@ -55,7 +55,7 @@
                 <th>姓名</th>
                 <th>展翅系统账号</th>
                 <th>主站手机号</th>
-                <th>状态</th>
+                <th>账号状态</th>
                 <th>在职状态</th>
                 <th>用户身份</th>
                 <th style="padding-left:19px" width="80">操作</th>

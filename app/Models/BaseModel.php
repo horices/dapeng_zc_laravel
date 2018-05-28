@@ -74,7 +74,7 @@ class BaseModel extends Model
      */
     function fill(array $attributes)
     {
-        return parent::fill($attributes);
+        //return parent::fill($attributes);
         if($this->default){
             $attributes = collect($attributes)->merge(collect($this->default)->flip()->map(function ($item){
                 return null;
@@ -85,6 +85,5 @@ class BaseModel extends Model
         });
         return parent::fill(collect($attributes)->intersectByKeys(collect($columns)->flip())->toArray());
     }
-
 
 }
