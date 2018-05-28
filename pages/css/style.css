@@ -113,8 +113,9 @@ input[type="hidden" i] {
 .tc_fj input{ width:150px; margin-right:10px}
 .sent_course input{ width:310px}
 .form-horizontal .form_datetime{ margin: 0 15px;}
-.form-horizontal .btn-primary{ margin:50px 0 0 20px; padding: 6px 35px;}
+.form-horizontal .btn-primary{ padding: 6px 35px;}
 .form-horizontal .controls p{ line-height: 36px; margin: 0 10px;}
 .form-horizontal .controls .btn_add{ margin-top: 2px;}
 .container .dp-side-menu-2 li a{ text-align:right}
-
+.table>tbody>tr>td{ padding:5px 0}
+.table>thead>tr>th,.table>tbody>tr>td{ text-align:center;    padding: 5px 0px;}
