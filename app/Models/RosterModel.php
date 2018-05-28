@@ -19,7 +19,8 @@ class RosterModel extends BaseModel
         'roster_type_text',
         'course_type_text',
         'group_status_text',
-        'addtime_export_text'
+        'addtime_export_text',
+        'reg_url_prama'
     ];
 
     function getRosterNoAttribute(){
@@ -76,7 +77,7 @@ class RosterModel extends BaseModel
         $data = [$qqCrypt,$this->group->group_name,time()];
         $str = http_build_query($data);
         $signData = md5('8934031001776A04444F72154425DDBC'.$str.'8934031001776A04444F72154425DDBC');
-        return Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName());
+        return Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName())."&rosterId=".$this->id;
         //return Util::getShorturl(Util::getWapHost()."/login/register-zc?qqCrypt=".$qqCrypt."&className=".$this->group->group_name."&rosterId=".$this->id."&stamp=".$stamp."&sign=".$signData."&schoolId=".strtolower(Util::getSchoolName()));
     }
 
