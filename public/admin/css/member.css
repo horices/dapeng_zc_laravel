@@ -138,6 +138,460 @@ padding-left: 25px; padding-right: 25px; }
 .dp-fpw form button:hover { color: #fff; background: #00D853; }
 /** } 密码忘记  **/
 
+/** 未购买课程页 { **/
+.dp-guest { background: #F2F2F2; margin-top: -20px; }
+.dp-guest .container { border-bottom: 1px solid #EBEBEB; padding-left: 0px; }
+.dp-guest .main .container { border-bottom: 0px; }
+.dp-guest >div { margin-bottom: 0; padding-right: 0px; }
+.dp-guest div .btns { margin-top: 50px; margin-bottom: 26px; position: absolute; bottom: 0px; }
+.dp-guest ul { list-style: none outside none; }
+.dp-guest .breadcrumb { color: #9E9E9E; padding-left: 0; margin-bottom: 0; padding-right: 0; }
+.dp-guest .breadcrumb a { color: #9E9E9E; text-decoration: none; line-height: 30px; }
+.dp-guest .breadcrumb a:hover { color: #42E282 !important; }
+.dp-guest .breadcrumb .btn-group a { color: #fff; text-decoration: none; line-height: 15px; }
+.dp-guest .banner-wrap { background: #fff; margin-left: 0px; margin-right: 0px; }
+.dp-guest .banner-wrap>div { height: 434px; }
+.dp-guest .l-wrap { height: 100%; padding-left: 0px; padding-right: 0px; }
+.dp-guest .l-wrap >img { width: 100%; height: 100%; }
+.dp-guest .r-wrap { height: 100%; background: #fff; padding-left: 0px; padding-right: 0px; color: #909090; padding: 0 40px; position: relative; min-height: 350px; }
+.dp-guest .glyphicon-g { border-bottom: 1px solid #e5e5e5; padding-bottom: 17px; }
+.dp-guest .member-num { color: #00D752; }
+.dp-guest .r-wrap h1 { /* border-bottom: 1px solid #e5e5e5; */
+font-size: 18px; margin-top: 17px; margin-bottom: 11px; }
+.dp-guest .r-wrap .info { border-bottom: 1px solid #e5e5e5; color: #888; font-size: 11px; padding: 15px 0; margin-bottom: 30px; overflow: hidden; height: 59px; }
+.dp-guest .r-wrap .info span { color: #00D853; font-size: 19px; }
+.dp-guest .r-wrap .info li { float: left; /* width: 33.33333%; */
+text-align: center; width: 45%; cursor: default; }
+.dp-guest .r-wrap .info li:first-child { margin-left: -15px; }
+.dp-guest .r-wrap .intro { font-size: 13px; line-height: 24px; text-indent: 2em; max-height: 40%; overflow: hidden; text-overflow: ellipsis; }
+.dp-guest .r-wrap .purchase { background: #00E155; color: #fff; font-size: 18px; padding-top: 1px; padding-bottom: 1px; width: 180px; height: 40px; line-height: 40px; }
+.dp-guest .r-wrap .purchase:hover { background: #00D853; }
+.dp-guest .main { background: #fff; }
+.dp-guest .main .container { margin: auto; }
+.dp-guest .main-inner { padding-left: 0; padding-right: 0; }
+.dp-guest .main-inner .introduction img { width: 100%; }
+.dp-guest .container { padding: 0px; }
+.dp-guest .main-inner .hd ul { margin-top: 50px; margin-bottom: 30px; height: 20px; line-height: 17px; }
+.dp-guest .main-inner .hd ul { padding-left: 0; }
+.dp-guest .main-inner .hd .active { color: #42E282; ; }
+.dp-guest .main-inner .hd a { color: #717171; text-decoration: none; padding-right: 30px; padding-left: 30px; font-size: 18px; }
+.dp-guest .main-inner .hd a:hover, .dp-guest .main-inner .hd a:active { color: #42E282; }
+.dp-guest .main-inner .hd a .live { color: #fff; background: #42E282; height: 20px; margin-left: 10px; padding: 3px 10px; top: -3px; position: relative; border-radius: 10px; font-size: 12px; }
+.dp-guest .main-inner .hd li:last-child { border-right: 0px; }
+.dp-guest .main-inner .hd li:first-child { border-left: 4px solid #03D653; }
+.dp-guest .main-inner .hd li { float: left; text-align: center; border-right: 1px solid #717171; height: 19px; line-height: 15px; }
+.dp-guest .aside { padding-right: 0px; }
+.dp-guest .aside .head { padding: 0 10px 0px; margin-bottom: 0px; position: relative; }
+.dp-guest .aside .teacher h3:first-child { margin-top: 50px; margin-bottom: 30px; }
+.dp-guest .aside h3 { display: inline-block; font-size: 18px; border-left: 4px solid #01D952; margin-left: 10px; padding-left: 10px; color: #686868; line-height: normal; height: 20px; line-height: 17px; margin-top: 0px; margin-bottom: 30px; }
+.dp-guest .teacher-info ul { padding-left: 10px; }
+.dp-guest .teacher-info ul li { margin-bottom: 30px; }
+.dp-guest .teacher-info ul li:nth-last-child(1) { margin-bottom: 50px !important; }
+.dp-guest .teacher-info .l-cont, .dp-guest .teacher-info .r-cont { display: inline-block; height: 100%; float: left; }
+.dp-guest .teacher-info .l-cont { padding-left: 10px; width: 30%; }
+.dp-guest .teacher-info .r-cont { padding-left: 10px; width: 70%; min-width: 100px; height: 138px; }
+.dp-guest .teacher-info .l-cont img { width: 80px; height: 80px; float: left; border-radius: 50%; }
+.dp-guest .teacher-info .r-cont a { font-size: 15px; color: #686868; text-decoration: none; }
+.dp-guest .teacher-info .r-cont p { line-height: 13px; margin: 10px 0 0; font-size: 13px; color: #989898; }
+.dp-guest .teacher-info .r-cont .intro { line-height: 1.42857; }
+.dp-guest .teacher-info .r-cont p:first-child { font-size: 15px; color: #686868; }
+.dp-guest .recommand-info ul { padding-left: 10px; margin-bottom: 0px; }
+.dp-guest .recommand-info ul li { margin-bottom: 20px; }
+.dp-guest .recommand-info ul li:nth-last-child(1) { margin-bottom: 0px; }
+.dp-guest .recommand-info .l-cont, .dp-guest .recommand-info .r-cont { display: inline-block; height: 100%; float: left; }
+.dp-guest .recommand-info .l-cont { padding-left: 10px; width: 130px; }
+.dp-guest .recommand-info .r-cont { padding-left: 10px; min-width: 100px; max-width: 220px; }
+.dp-guest .recommand-info .l-cont img { float: left; }
+.dp-guest .recommand-info .r-cont a { font-size: 14px; color: #686868; text-decoration: none; height: 14px; display: inline-block; }
+.dp-guest .recommand-info .r-cont p { line-height: 16px; font-size: 13px; color: #B1B1B1; }
+.dp-guest .recommand-info .r-cont label { line-height: 13px; font-size: 12px; margin-right: 10px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; display: block; margin-bottom: 10px; }
+.dp-guest .recommand-info .r-cont i { margin-right: 5px; color: #B1B1B1; }
+.dp-guest .recommand-info .r-cont span { line-height: 13px; font-size: 12px; color: #42E282; }
+.dp-guest .live { background: #F7F7F7; }
+.dp-guest .live ul { padding: 10px 30px 30px; }
+.dp-guest .live .pagination { padding: 0px; }
+.dp-guest .live label { color: #BCBCBC; }
+.dp-guest .live span { color: #707070; }
+.dp-guest .live li { margin-top: 10px; }
+.dp-guest .live a:hover { text-decoration: none; }
+.dp-guest .live .title { margin-left: 10px; }
+.dp-guest .live .status { margin-right: 30px; color: #fff; padding: 10px 7px; font-size: 10px; height: 12px; line-height: 1px; border-radius: 5px; }
+.dp-guest .live .living { background: #00D853; }
+.dp-guest .live .end { background: #CCCCCC; }
+.dp-guest .live .unstart { background: #676767; }
+.dp-guest .live .audition { background: #00D853; margin-left: -10px; }
+.dp-guest .live .time { margin-right: 20px; }
+.dp-guest .catolog { overflow: auto; }
+.dp-guest .catolog .section { background: #F3F3F3; margin-top: 0px; }
+.dp-guest .catolog .section .l-cont { padding-right: 0; }
+.dp-guest .catolog .section h3 { font-size: 16px; color: #7A7A7A; word-break: break-all; }
+.dp-guest .catolog .section label { color: #BCBCBC; }
+.dp-guest .catolog .section ul { padding-left: 0; }
+.dp-guest .catolog .section li { margin-bottom: 3px; }
+.dp-guest .catolog .section li:first-child { margin-top: 17px; }
+.dp-guest .catolog .section a { color: #707070; text-decoration: none; }
+.dp-guest .catolog .section .hover { color: #42E282 !important; text-decoration: underline !important; }
+.dp-guest .live .hover:nth-child(-n+2) { color: #42E282 !important; text-decoration: underline !important; }
+.dp-guest .catolog .section .preview { color: #fff; background: #00D853; text-decoration: none; height: 23px; padding-top: 1px; padding-bottom: 1px; }
+/** } 未购买课程页 **/
+
+/** 异步登陆 { **/
+.dp-alg { }
+.dp-alg .modal-header { border: 0px; padding-bottom: 0px; }
+.dp-alg .modal-body { margin-top: -15px; padding: 0 40px 20px; }
+.dp-alg a { color: #00D853; text-decoration: none; }
+.dp-alg h2, .dp-alg h3, .dp-alg h4 { color: #7A7B90; }
+.dp-alg form input { background: #F7F7F7; height: 50px; font-size: 16px; }
+.dp-alg form .pd { padding-left: 45px; }
+.dp-alg form .form-group.i { margin-top: -24px; }
+.dp-alg form .mobile, .dp-alg form .password { padding-left: 45px; position: relative; top: 38px; font-size: 20px; }
+.dp-alg form .mobile { background: url("../img/user.png") no-repeat scroll left center transparent; }
+.dp-alg form .password { background: url("../img/lock.png") no-repeat scroll left center transparent; }
+.dp-alg form button { margin-top: 30px; color: #fff; height: 50px; font-size: 18px; background: #00E155; border: none; }
+.dp-alg form button:hover { color: #fff; background: #00D853; }
+.dp-alg .auto-lg label { color: #A1A1A1; }
+.dp-alg .auto-lg input { height: 13px; }
+.dp-alg .alert-danger { margin-top: 30px; margin-bottom: -10px; }
+/** } 异步登陆 **/
+
+/** 点播页面 { **/
+.dp-vodCourse { background: #000; margin-top: -20px; padding-top: 10px; }
+.dp-vodCourse .breadcrumb { margin-bottom: 10px; }
+.dp-vodCourse .breadcrumb { background: #000; padding-left: 0px; color: #8D8D8D; }
+.dp-vodCourse .breadcrumb .btn-success { color: #fff; }
+.dp-vodCourse a { color: #8D8D8D; }
+.dp-vodCourse .breadcrumb a:hover { color: #42E282; }
+.dp-vodCourse .banner-wrap { margin-right: 17px; margin-bottom: 70px; margin-left: 0px; }
+.dp-vodCourse .l-wrap, .dp-vodCourse .r-wrap { height: 500px; padding-left: 0px; padding-right: 0px; }
+.dp-vodCourse .zoom-rbtn { background: url("../img/zoom-rbtn.png"); height: 37px; width: 17px; display: inline-block; float: left; margin-top : 50px; cursor: pointer; }
+.dp-vodCourse .zoom-lbtn { background: url("../img/zoom-lbtn.png"); height: 37px; width: 17px; display: inline-block; float: right; margin-top : 232px; cursor: pointer; }
+.dp-vodCourse .rotate { -webkit-transform: rotate(90deg); -o-transform: rotate(90deg); -moz-transfomr: rotate(90deg); }
+.dp-vodCourse .l-wrap { background: #1F1F1F; }
+.dp-vodCourse .r-wrap { background: #333333; overflow: hidden; }
+.dp-vodCourse .zoom-btns { height: 500px; float: right; background: #282828; }
+.dp-vodCourse .zoom-btns .fill { margin-top: 440px; background: #1F1F1F; none repeat scroll 0% 0%;
+height: 60px; }
+.dp-vodCourse .main { background: #FFF none repeat scroll 0% 0%; min-height: 50px; }
+.dp-vodCourse .main .container { margin: auto; padding-left: 0px; padding-right: 0px; }
+.dp-vodCourse .main .container .aside { padding-right: 0px; }
+.dp-vodCourse .discuss .head { padding: 0px 0px 8px; margin-bottom: 20px; position: relative; }
+.dp-vodCourse .discuss .main img { width: 100% !important; }
+.dp-vodCourse .discuss h3 { display: inline-block; font-size: 18px; border-left: 4px solid #01D952; padding-left: 10px; color: #686868; line-height: normal; margin-top: 40px; }
+.dp-vodCourse .discuss .head span { font-size: 18px; padding-left: 10px; margin-top: -5px; color: #B3B3B3; }
+.dp-vodCourse .discuss #discuss-btn, .dp-vodCourse .discuss .discuss-btn { background: #00D753; width: 90px; }
+.dp-vodCourse .aside .head { padding: 0px 10px 8px; margin-bottom: 20px; position: relative; }
+.dp-vodCourse .aside h3 { display: inline-block; font-size: 18px; border-left: 4px solid #01D952; margin-left: 10px; padding-left: 10px; color: #686868; line-height: normal; margin-top: 40px; }
+.dp-vodCourse .teacher-info ul { padding-left: 10px; }
+.dp-vodCourse .teacher-info ul li { margin-bottom: 20px; }
+.dp-vodCourse .teacher-info .l-cont, .dp-vodCourse .teacher-info .r-cont { display: inline-block; height: 100%; float: left; }
+.dp-vodCourse .teacher-info .l-cont { padding-left: 10px; width: 30%; }
+.dp-vodCourse .teacher-info .r-cont { padding-left: 10px; width: 60%; min-width: 100px; }
+.dp-vodCourse .teacher-info .l-cont img { width: 82px; height: 82px; float: left; border-radius: 50%; }
+.dp-vodCourse .aside .course-info { margin-left: 20px; }
+.dp-vodCourse .aside .introduction .head { margin-bottom: 0px }
+.dp-vodCourse .aside .introduction span { color: #8D8D8D; }
+.dp-vodCourse .discuss-group ul { margin-top: 90px; }
+.dp-vodCourse .discuss-group li { border-top: 1px solid #DCDCDC; }
+.dp-vodCourse .discuss-group .thread-header, .thread-body { margin: 0px; }
+.dp-vodCourse .discuss-group .thread { margin-top: 22px; margin-bottom: 0; }
+.dp-vodCourse .discuss-group .media-list .media { border-bottom: 0px; padding-bottom: 0px; }
+.dp-vodCourse .discuss-group .user-link { float: left; margin-right: 25px; }
+.dp-vodCourse .discuss-group .link-muted { color: #00D753; }
+.dp-vodCourse .discuss-group .publish-date { margin-left: 10px; }
+.dp-vodCourse .discuss-group .user-link img { border-radius: 50%; width: 60px; height: 60px; }
+.dp-vodCourse .discuss-group .thread-body { float: left; }
+.dp-vodCourse .discuss-group li:nth-last-child(1) { border-bottom: 1px solid #DCDCDC !important; padding-bottom: 20px !important; }
+.dp-vodCourse .comm-reply { margin-top: 10px !important; }
+.dp-vodCourse .comm-reply li { border: 0px !important; }
+.dp-vodCourse .comm-reply .green { color: #FFF; background: #00D753; }
+.dp-vodCourse .comm-reply li:nth-last-child(1) { border: 0px !important; }
+.dp-vodCourse .player-aside { height: 100%; margin-top: -20px; background-color: #333333; }
+.dp-vodCourse .player-aside > div { border-bottom: 1px solid #000; }
+.dp-vodCourse .player-aside .course-name { padding-bottom: 17px; }
+.dp-vodCourse .player-aside > div:nth-last-child(1) { border-bottom: 0px; padding-bottom: 0px; }
+.dp-vodCourse .player-aside span, .dp-vodCourse .player-aside i { color: #989898; }
+.dp-vodCourse .player-aside i { margin-left: 35px; }
+.dp-vodCourse .player-aside .member-num { color: #00D752; margin-left: 5px; }
+.dp-vodCourse label { color: #808080; }
+.dp-vodCourse .player-aside h2 { padding: 20px 35px 0px; color: #fff; font-size: 23px; }
+.dp-vodCourse .player-aside .course-btn { height: 38px; }
+.dp-vodCourse .player-aside .course-btn li, .dp-vodCourse .player-aside .course-btn ul { float: left; margin-bottom: 0px; }
+.dp-vodCourse .player-aside .course-btn li { padding-right: 10px; }
+.dp-vodCourse .player-aside .course-btn ul { padding-left: 35px; }
+.dp-vodCourse .player-aside .course-btn .active { border-bottom: 3px solid #00D753; }
+.dp-vodCourse .player-aside .course-btn a { color: #fff; font-size: 18px; line-height: 30px; text-decoration: none; height: 38px; display: inline-block; padding-top: 5px; }
+.dp-vodCourse .player-aside .course-btn a:hover { border-bottom: 3px solid #00D753; }
+.dp-vodCourse .player-aside .catolog { width: 94%; overflow: hidden; }
+.dp-vodCourse .player-aside .catolog ul { padding-left: 19px; }
+.dp-vodCourse .player-aside .catolog li:first-child { margin-top: 20px; }
+.dp-vodCourse .player-aside .catolog li a:hover { text-decoration: none; }
+.dp-vodCourse .player-aside .catolog span { width: 70%; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: -5px; }
+.dp-vodCourse .player-aside .catolog li { margin-top: 5px; font-size: 15px; }
+.dp-vodCourse .player-aside .catolog label { width: 60px; }
+.dp-vodCourse .player-aside .catolog .active label, .dp-vodCourse .player-aside .catolog .active span { color: #00D753; }
+.dp-vodCourse .player-aside .live .active label, .dp-vodCourse .player-aside .live .active span { color: #00D753; }
+.dp-vodCourse .player-aside .live ul { padding-left: 36px; }
+.dp-vodCourse .player-aside .live li:first-child { margin-top: 20px; }
+.dp-vodCourse .player-aside .live li { margin-top: 5px; font-size: 15px; }
+.dp-vodCourse .player-aside .live span { width: 70%; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: -5px; }
+.dp-vodCourse .player { height: 440px; background-color: #282828; }
+.dp-vodCourse .player-bottom { height: 60px; background-color: #1F1F1F; padding-top: 20px; padding-bottom: 20px; overflow: hidden; }
+.dp-vodCourse .player-bottom .player-dm { margin-top: -3px; width: 85%; min-width: 280px; }
+.dp-vodCourse .player-bottom .dm-btn { border-radius: 0px 5px 5px 0px; height: 26px; margin-top: -3px; margin-left: -4px; line-height: 12px; }
+.dp-vodCourse .dm-face { margin-top: -3px; display: inline-block; height: 26px; width: 30px; margin-left: -4px; vertical-align: middle; background-color: #434343; cursor: pointer; }
+.dp-vodCourse .praise { margin-left: 15px; }
+.dp-vodCourse .like-count { color: #919191; }
+.dp-vodCourse .dm-content { border-radius: 5px 0px 0px 5px; /* width: 430px; */
+width: 80%; background-color: #434343; border: 0px; color: #919191; font-weight: bold; padding-left: 30px; height: 26px; }
+.dp-vodCourse .expression-frame { background: #333333; z-index: 999; color: #fff; height: 101px; width: 140px; position: absolute; }
+.dp-vodCourse .expression-frame .ps-scrollbar-y-rail { margin-top: 0px !important; }
+.dp-vodCourse .expression-frame ul { height: 101px; padding-left: 0px; text-align: center; padding-top: 10px; padding-bottom: 10px; overflow: hidden; }
+.dp-vodCourse .expression-frame ul li { padding-bottom: 5px; }
+.dp-vodCourse .expression-frame ul span { width: 100%; display: block; color: #fff; cursor: pointer; }
+.dp-vodCourse .expression-frame .border-bottom:before { content: '\20'; display: block; width: 0; height: 0; top: -10px; position: relative; float: right; margin-right: 46%; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #333333; }
+.dp-vodCourse .pagination { }
+.dp-vodCourse .pagination > li:first-child > a, .dp-vodCourse .pagination > li:first-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
+.dp-vodCourse .pagination > .active > a, .dp-vodCourse .pagination > .active > span { background: #00D753 none repeat scroll 0% 0%; }
+.dp-vodCourse .pagination > .active > a:hover, .dp-vodCourse .pagination > .active > span:hover { color: #686880; }
+.dp-vodCourse .pagination > li > a, .pagination > li > span { font-size: 18px; line-height: 18px; padding: 2px 6px; border-radius: 13px; color: #686880; border: medium none; margin-left: 6px; }
+.dp-vodCourse .pagination .pageNext > a, .dp-vodCourse .pagination .pageNext > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
+.dp-vodCourse .pagination > li:last-child > a, .pagination > li:last-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; margin-left: 10px; }
+.dp-vodCourse .pagination li:nth-last-child(2) > a, .pagination li:nth-last-child(2) > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
+.dp-vodCourse .pagination li:nth-last-child(1) > a { height: 28px !important; top: -3px; }
+/** } 点播页面 **/
+
+
+/** 直播页面 { **/
+.dp-liveCourse { background: #000; margin-top: -20px; padding-top: 10px; }
+.dp-liveCourse .breadcrumb { margin-bottom: 10px; }
+.dp-liveCourse .breadcrumb { background: #000; padding-left: 0px; color: #8D8D8D; }
+.dp-liveCourse a { color: #8D8D8D; }
+.dp-liveCourse .breadcrumb a:hover { color: #42E282; }
+.dp-liveCourse .banner-wrap { margin-right: 17px; margin-bottom: 70px; margin-left: 0px; }
+.dp-liveCourse .l-wrap, .dp-liveCourse .r-wrap { height: 500px; padding-left: 0px; padding-right: 0px; }
+.dp-liveCourse .zoom-rbtn { background: url("../img/zoom-rbtn.png"); height: 37px; width: 17px; display: inline-block; float: left; margin-top : 50px; cursor: pointer; }
+.dp-liveCourse .zoom-lbtn { background: url("../img/zoom-lbtn.png"); height: 37px; width: 17px; display: inline-block; float: right; margin-top : 232px; cursor: pointer; }
+.dp-liveCourse .rotate { -webkit-transform: rotate(90deg); -o-transform: rotate(90deg); -moz-transfomr: rotate(90deg); }
+.dp-liveCourse .l-wrap { background: #1F1F1F; }
+.dp-liveCourse .r-wrap { background: #333333; }
+.dp-liveCourse .zoom-btns { height: 500px; float: right; background: #282828; }
+.dp-liveCourse .zoom-btns .fill { margin-top: 440px; background: #1F1F1F; none repeat scroll 0% 0%;
+height: 60px; }
+.dp-liveCourse .main { background: #FFF none repeat scroll 0% 0%; min-height: 50px; }
+.dp-liveCourse .main .container { margin: auto; padding-left: 0px; padding-right: 0px; margin-bottom: 150px; }
+.dp-liveCourse .aside .head { padding: 0px 10px 8px; margin-bottom: 20px; position: relative; }
+.dp-liveCourse .aside h3 { display: inline-block; font-size: 18px; border-left: 4px solid #01D952; margin-left: 10px; padding-left: 10px; color: #686868; line-height: normal; margin-top: 40px; }
+.dp-liveCourse .player-aside { margin-top: -10px; background-color: #333333; }
+.dp-liveCourse .player-aside > div { border-bottom: 1px solid #000; }
+.dp-liveCourse .player-aside .course-name { padding-bottom: 10px; }
+.dp-liveCourse .player-aside > div:nth-last-child(1) { border-bottom: 0px; padding-bottom: 0px; }
+.dp-liveCourse .player-aside span, .dp-liveCourse .player-aside i { color: #989898; }
+.dp-liveCourse .player-aside i { margin-left: 35px; }
+.dp-liveCourse .player-aside .member-num { color: #00D752; margin-left: 5px; }
+.dp-liveCourse label { color: #808080; }
+.dp-liveCourse .player-aside h2 { color: #fff; font-size: 22px; margin-top: 30px; }
+.dp-liveCourse .course-name ul { padding-left: 5px; margin-top: 10px; }
+.dp-liveCourse .course-name li:first-child { margin-top: 0px; float: left; }
+.dp-liveCourse .course-name li { margin-top: 10px; }
+.dp-liveCourse .player-aside .teacher-avatar { margin-top: 0px; margin-left: 30px; margin-right: 20px; }
+.dp-liveCourse .player-aside .teacher-avatar img { width: 52px; height: 52px; border-radius: 50%; }
+.dp-liveCourse .player-aside .course-btn { height: 38px; }
+.dp-liveCourse .player-aside .course-btn .student-count { color: #00D753; }
+.dp-liveCourse .player-aside .course-btn .new-msg { position: relative; font-size: 12px; top: -10px; color: #00D753; display: none; }
+.dp-liveCourse .player-aside .course-btn li, .dp-liveCourse .player-aside .course-btn ul { float: left; margin-bottom: 0px; }
+.dp-liveCourse .player-aside .course-btn li { /* padding-right: 15px; */
+width: 33%; text-align: center; }
+.dp-liveCourse .player-aside .course-btn ul { padding-left: 35px; padding-right: 35px; width: 100%; }
+.dp-liveCourse .player-aside .course-btn .active { border-bottom: 3px solid #00D753; }
+.dp-liveCourse .player-aside .course-btn a { color: #fff; font-size: 18px; line-height: 30px; text-decoration: none; height: 38px; display: inline-block; padding-top: 5px; }
+.dp-liveCourse .course-list { border-bottom: 0px !important; }
+.dp-liveCourse .course-list .introduction { width: 90%; padding-left: 15px; padding-right: 0px; padding-top: 15px; }
+.dp-liveCourse .player-aside .course-btn a:hover { border-bottom: 3px solid #00D753; }
+.dp-liveCourse .player-aside .catolog { width: 95%; overflow: hidden; }
+.dp-liveCourse .player-aside .catolog ul { padding-left: 19px; }
+.dp-liveCourse .player-aside .catolog li:first-child { margin-top: 20px; }
+.dp-liveCourse .player-aside .catolog span { width: 70%; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: -5px; }
+.dp-liveCourse .player { height: 500px; background-color: #282828; }
+.dp-liveCourse .dm-content { border-radius: 5px 0px 0px 5px; /* width: 430px; */
+width: 70%; background-color: #434343; border: 0px; color: #919191; font-weight: bold; padding-left: 30px; height: 26px; }
+.dp-liveCourse .teacher { color: #fff !important; }
+.dp-liveCourse .communicate .content { color: #fff; }
+.dp-liveCourse .communicate .content .chat { padding-left: 15px; margin-bottom: 0px; height: 100%; }
+.dp-liveCourse .communicate .content ul.chat li { list-style: outside none none; padding: 5px 0px; margin: 10px auto; font-size: 12px; }
+.emotionimg.new { width: 25px !important; height: 25px !important; }
+.dp-liveCourse .communicate ul.chat li.right .message { text-align: left; margin-right: 20px; background: #F6F6F6; }
+.dp-liveCourse .communicate ul.chat li.right img.avatar { float: right; margin-left: -10px; margin-right: 20px; }
+.dp-liveCourse .communicate ul.chat li.left img.avatar { float: left; margin-right: 10px; }
+.dp-liveCourse .communicate ul.chat li.right { text-align: right; }
+.dp-liveCourse .communicate .content .chat img { width: 50px; height: 50px; }
+.dp-liveCourse .communicate .content ul.chat li.left .message { text-align: left; margin-left: 0px; }
+.dp-liveCourse .communicate .content ul.chat li.left .message { text-align: left; margin-left: 0px; background: #FFF none repeat scroll 0% 0%; }
+.dp-liveCourse .communicate .content ul.chat li .message { display: inline-block; border: 1px solid #DDD; padding: 5px; position: relative; border-radius: 10px; }
+ul.chat li.left .message .arrow { height: 10px; width: 10px; display: block; position: absolute; top: 5px; left: -10px; background: transparent url("../img/chat-left.png") no-repeat scroll 0px 0px; }
+ul.chat li.right .message .arrow { height: 10px; width: 10px; display: block; position: absolute; top: 5px; right: -10px; background: transparent url("../img/chat-right.png") no-repeat scroll 0px 0px; }
+ul.chat li.left .message { text-align: left; }
+ul.chat li .time { padding-left: 5px; color: #B6B6B6; }
+ul.chat li.left .message .text { max-width: 220px; table-layout: fixed; word-wrap: break-word; word-break: break-all; }
+ul.chat li.right .message .text { max-width: 220px; table-layout: fixed; word-wrap: break-word; word-break: break-all; }
+.swiper-container { margin: 0px auto; position: relative; width: 100%; height: 100%; overflow: hidden; backface-visibility: hidden; z-index: 1; text-align: center; }
+.emotion_wrp { display: block; width: 100%; height: 140px; }
+.emotion_wrp .emotions { -moz-user-select: none; overflow: hidden; }
+#emotionsmaindiv { border: 0px; }
+.emotion_wrp ul, .emotion_wrp ol { padding-left: 0px; list-style-type: none; display: inline-block; }
+.emotion_wrp .emotions_item { float: left; line-height: 40px; height: 40px; font-size: 0px; text-align: center; width: 14.2857%; }
+.emotion_wrp .emotions_item i { display: inline-block; cursor: pointer; width: 48px; height: 48px; margin: -5px 0px 0px -5px; transform: scale(0.64); vertical-align: middle; background: transparent url("../img/default.png") no-repeat scroll 0px 0px; }
+.dp-liveCourse .studentCount { color: #fff; }
+.dp-liveCourse .studentCount ul { padding-left: 35px; margin-bottom: 0px; height: 100%; }
+.dp-liveCourse .studentCount li { margin-top: 15px; }
+.dp-liveCourse .communicate .bottom { height: 120px; }
+.dp-liveCourse .tip { position: relative; top: -3px; display: none; }
+.dp-liveCourse .communicate .cont { height: 85px; width: 100%; color: #888; border: 0px; padding: 10px; background: #3B3B3B; }
+.dp-liveCourse .communicate .g-btn { height: 35px; padding-top: 6px; background: #333333; }
+.dp-liveCourse .communicate .g-btn input { margin-right: 10px !important; }
+.dp-liveCourse .communicate .g-btn input:first-child { margin-left: 20px !important; }
+.dp-liveCourse .communicate .g-btn .green { margin-bottom: 3px; line-height: 10px; background: #00D753; margin-right: 20px; width: 85px; height: 25px; color: #fff; }
+/** } 直播页面 **/
+
+/**  我的学习 { **/
+.dp-learning { color: #999999; }
+.dp-learning .panel-body { padding-top: 25px; padding-left: 0px; padding-right: 0px; }
+.dp-learning .up { margin-left: 0px !important; margin-right: 0px !important; height: 195px; }
+.dp-learning .up .col-md-6 { padding-left: 26px; padding-right: 26px; }
+.dp-learning .up .welcome { font-size: 20px; margin-top: 3px; }
+.dp-learning .up a { color: #00D853; text-decoration: underline !important; }
+.dp-learning .up a:hover { color: #16BF4C; text-decoration: underline !important; }
+.dp-learning .up .lsr { margin-bottom: 3px; }
+.dp-learning .up .user-group { text-align: right; }
+.dp-learning .up .user-group p { margin-bottom: 0px; line-height: 17px; }
+.dp-learning .up .user-group .name { color: #000; font-size: 20px; margin-bottom: 10px; line-height: 1.42857; top: 2px; position: relative; }
+.dp-learning .up img { float: right; width: 83px; height: 83px; border-radius: 50%; margin-left: 25px; }
+.dp-learning .up .courses { margin-top: 15px; float: right; }
+.dp-learning .up .courses label { display: inline-block; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border: 1px solid #999; background: #F2F2F2; height: 35px; margin-bottom: 0px; padding-left: 10px; padding-right: 10px; padding-top: 7px; padding-bottom: 5px; position: relative; right: -5px; }
+.dp-learning .up .courses select option { padding-left: 10px; padding-right: 10px }
+.dp-learning .up .courses select { border: 1px solid #999; border-left: 0px solid #999; border-top-right-radius: 8px; border-bottom-right-radius: 8px; width: 150px; height: 35px; padding-left: 5px; color: #00D853; ; }
+.dp-learning .center .live h3, .dp-learning .center .basic h3 { font-size: 20px; }
+.dp-learning .center .live { padding-top: 15px; padding-left: 10px; padding-bottom: 15px; color: #fff; width: 50%; float: left; background: #F8931F; border-top-left-radius: 10px; border-top-right-radius: 10px; cursor: pointer; }
+.dp-learning .center .live:hover { background: #F58912; }
+.dp-learning .center .live .m-b { margin-bottom: 10px; }
+.dp-learning .center .clean.bottom.m-b { margin-bottom: 0px; }
+.dp-learning .center .live > div:first-child, .dp-learning .center .basic > div:first-child { height: 110px; }
+.dp-learning .center .live .play, .dp-learning .center .basic .bas { top: 6px; position: relative; }
+.dp-learning .center .live .horn, .dp-learning .center .basic .clock { position: relative; top: 7px; }
+.dp-learning .center .basic { cursor: pointer; padding-top: 15px; padding-left: 10px; color: #fff; width: 49%; float: right; background: #37C3FF; padding-bottom: 15px; border-top-left-radius: 10px; border-top-right-radius: 10px; }
+.dp-learning .center .basic:hover { background: #34B9F2; }
+.dp-learning .center .bar-g { margin-top: 10px; margin-left: 30px; }
+.dp-learning .center .live .bar-g { color: #FCD4A3; }
+.dp-learning .center .live .bar-g .progress { float: left; margin-left: 10px; height: 10px; border: 1px solid #FCD4A3; width: 60%; background: #F8931F; margin-bottom: 0px; margin-top: 5px; margin-right: 5px; }
+.dp-learning .center .basic .bar-g .progress { float: left; margin-left: 10px; height: 10px; border: 1px solid #B0E6FF; width: 60%; background: #37C3FF; margin-bottom: 0px; margin-top: 5px; margin-right: 5px; }
+.dp-learning .center .live .bar-g .progress .progress-bar-success { background: #FCD4A3; box-shadow: 0px 0px 0px; }
+.dp-learning .center .basic .bar-g .progress .progress-bar-success { background: #B0E6FF; box-shadow: 0px 0px 0px; }
+.dp-learning .center .basic .bar-g { color: #B0E6FF; }
+.dp-learning .center .bottom { margin-left: 30px; margin-bottom: 10px; width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dp-learning .center .live .bottom a { margin-left: 10px; color: #9A7352; text-decoration: underline !important; }
+.dp-learning .center .live .bottom a:hover { color: #fff; }
+.dp-learning .center .basic .bottom a { margin-left: 10px; color: #578499; text-decoration: underline !important; }
+.dp-learning .center .basic .bottom a:hover { color: #fff; }
+.dp-learning .down .table { border: 1px solid #37C3FF; }
+.dp-learning .down .table.live { border: 1px solid #F58912; }
+.dp-learning .down .table td { border: 0px; }
+.dp-learning .down .table thead { background: #E6F7FF; }
+.dp-learning .down .table.live thead { background: #FFF1E0; }
+.dp-learning .down .table th:first-child { border-right: 1px solid #E6E6E6; }
+.dp-learning .down .table th { color: #9A9A9A; border-bottom: 0px; }
+.dp-learning .down .table tr td { padding-top: 15px; padding-left: 10px; font-size: 15px; }
+.dp-learning .down .table tr:first-child td.w { border-top: 0px; }
+.dp-learning .down .table tr:first-child td.w span { word-break: break-all; width: 100%; display: inline-block; }
+.dp-learning .down .table tr td.w { background: #fff; border-right: 1px solid #E6E6E6; padding-top: 15px; padding-left: 25px; padding-right: 25px; color: #666666; border-top: 1px solid #ddd; }
+.dp-learning .down .table tr td.w label { margin-right: 10px; }
+.dp-learning .down .table.live tr td.title { color: #666666; word-break: break-all; width: 40%; }
+.dp-learning .down .table tr td.title a { color: #666666; }
+.dp-learning .down .table tr td.title a:hover { color: #35C4FF; }
+.dp-learning .down .live.table tr td.title a:hover { color: #F7AD56; }
+.dp-learning .down .live.table tr .pb a, .dp-learning .down .live.table tr .pb a:hover { color: #F7931E !important; }
+.dp-learning .down .table .glyphicon { margin-right: 23px; margin-left: 17px; width: 15px; }
+.dp-learning .down .table .glyphicon-ok { color: #35C4FF; }
+.dp-learning .down .table .live.glyphicon-ok { color: #F7AD56; }
+.dp-learning .down .table .glyphicon-save { color: #CDCDCD; margin-left: 22px; }
+.dp-learning .down .table .live.glyphicon-save:hover { color: #F7AD56; }
+.dp-learning .down .table .vod.glyphicon-save:hover { color: #37C3FF; }
+.dp-learning .down .table .status { color: #FFF; padding: 5px 10px; font-size: 10px; height: 15px; border-radius: 5px; }
+.dp-learning .down .table .status.end { background: #CCC; }
+.dp-learning .down .table .status.living { background: #F7931E; }
+.dp-learning .down .table .status.living:hover { background: #ED8D1D; }
+.dp-learning .down .table .status.unstart { background: #808080; }
+.dp-learning .down .table .status.audition { background: #808080; }
+/** } 我的学习 **/
+
+/** 支付页弹窗 {**/
+.dp-purchase-modal { width: 650px; padding-left: 0px; padding-right: 0px; }
+.dp-purchase-modal .modal-header { height: 50px; background: #F6F6F6; padding-left: 45px; padding-top: 0px; padding-bottom: 0px; }
+.dp-purchase-modal .center { margin-left: 20px; }
+.dp-purchase-modal .purchase { background: #00D753; color: #FFF; font-size: 18px; width: 150px; height: 40px; position: absolute; bottom: 20px; right: 46px; }
+.dp-purchase-modal .tip { color: #00D753; position: absolute; bottom: 25px; left: 46px; }
+.dp-purchase-modal .t-name { font-size: 14px; color: #a1a1b3; margin-top: 16px; }
+.dp-purchase-modal .s-count { font-size: 14px; color: #00D753; margin-top: 12px; }
+.dp-purchase-modal .s-count span { color: #a1a1b3; }
+.dp-purchase-modal .c-intro { color: #a1a1b3; width: 300px; overflow: hidden; height: 80px; }
+.dp-purchase-modal .c-title { font-size: 18px; color: #666680; line-height: 18px; max-width: 190px; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dp-purchase-modal .price { color: #00D753; margin-left: 38px; font-size: 18px; }
+.dp-purchase-modal .modal-body { padding: 35px 45px 20px 45px; min-height: 280px; }
+.dp-purchase-modal .modal-body img { width: 240px; height: 142px; }
+.dp-purchase-modal .modal-header button { font-size: 35px; line-height: 50px; }
+.dp-purchase-modal .modal-header h4 { font-size: 21px; color: #666680; line-height: 50px; }
+.dp-purchase-modal .modal-content { box-shadow: 0px 0px 0px; border-radius: 0px; border: 0px; }
+/** } 支付页弹窗 **/
+
+/** 支付页 {**/
+.dp-purchase { margin-top: 56px; }
+.dp-purchase .p-suc { background: url("../img/purchase/success.png"); width: 80px; height: 80px; margin-right: 25px; }
+.dp-purchase .banner-wrap { background: #fff; min-height: 172px; border-bottom: 1px solid #E6E6E6; }
+.dp-purchase .banner-wrap>div { width: 440px; margin: auto; margin-top: 48px; }
+.dp-purchase .panel-heading { background: #F9F9F9; padding: 0px 46px 0px; height: 50px; }
+.dp-purchase .panel-heading span { line-height: 50px; color: #666680; }
+.dp-purchase .panel-heading .date { margin-left: 17px; }
+.dp-purchase .panel-heading .payType { margin-left: 17px; }
+.dp-purchase .banner-wrap span { color: #666680; }
+.dp-purchase .banner-wrap h2 { font-size: 30px; color: #00d753; }
+.dp-purchase .panel-body { padding-top: 35px; padding-left: 46px; padding-right: 46px; }
+.dp-purchase .panel-body .center { margin-left: 20px; }
+.dp-purchase .c-title { font-size: 18px; color: #666680; }
+.dp-purchase .price { margin-left: 38px; font-size: 18px; color: #A1A1B3; }
+.dp-purchase .t-name { font-size: 14px; color: #A1A1B3; margin-top: 16px; }
+.dp-purchase .panel-body .courseImage { width: 150px; height: 86px; }
+.dp-purchase .banner-wrap .l-wrap span { margin-left: 40px; }
+.dp-purchase .control-label { width: 80px; float: left; color: #A1A1B3; text-align: left; margin-left: 80px; }
+.dp-purchase .form-control { background: #F7F7F7; }
+.dp-purchase .banner-center { background: #fff; min-height: 232px; border-bottom: 1px solid #E6E6E6; }
+.dp-purchase.quickPayment .banner-center { min-height: 315px; }
+.dp-purchase .banner-bottom span { font-size: 21px; }
+.dp-purchase.quickPayment .panel-heading span { font-size: 21px; }
+.dp-purchase .banner-center .panel-body { min-height: 182px; }
+.dp-purchase.finish { margin-bottom: 130px; }
+.dp-purchase.finish .panel-heading span { border-right: 1px solid #666680; padding-right: 17px; }
+.dp-purchase.finish .order-detail { width: 110px; height: 42px; color: #666680; background: #FFF; border: 1px solid #666680; line-height: 28px; }
+.dp-purchase.finish .order-detail:hover { background-color: #EBEBEB; border-color: #ADADAD; }
+.dp-purchase.finish .panel-heading span:nth-last-child(1), .dp-purchase.finish .panel-heading span:nth-last-child(2) { border-right: 0px; }
+.dp-purchase .banner-bottom .panel-body { min-height: 220px; background: #fff; margin-bottom: 130px; padding-top: 54px; }
+.dp-purchase .banner-bottom .total { padding: 10px 30px 0px 0px; }
+.dp-purchase .banner-bottom .contact { padding-top: 17px; font-size: 16px; color: #00D753; }
+.dp-purchase .banner-bottom .payType { margin-bottom: 56px; }
+.dp-purchase .banner-bottom .payType label { cursor: pointer; margin-right: 10px; }
+.dp-purchase .banner-bottom .payType img { cursor: pointer; border-radius: 5px; border: 1px solid rgb(229, 229, 229); }
+.dp-purchase .banner-bottom .payType img.active { border: 2px solid #00D753; }
+.dp-purchase .banner-bottom .total label { color: #A1A1B3; }
+.dp-purchase .banner-bottom .price { margin-left: 0px; color: #00d753; }
+.dp-purchase .purchase { background: #00D753 none repeat scroll 0% 0%; color: #FFF; font-size: 18px; width: 150px; height: 40px; float: right; }
+.dp-waitPaid .modal-header { padding-left: 50px; }
+.dp-waitPaid .modal-body { padding-left: 50px; padding-top: 50px; padding-right: 0px; }
+.dp-waitPaid .modal-header { padding-left: 50px; }
+.dp-waitPaid span { color: #666680; font-size: 18px; }
+.dp-waitPaid .finish { background: #00D753; color: #FFF; font-size: 18px; width: 150px; height: 40px; position: absolute; bottom: 58px; right: 340px; }
+.dp-waitPaid .reset { color: #00D753; background: #FFF; border: 1px solid #00D753; font-size: 18px; width: 150px; height: 40px; position: absolute; bottom: 58px; right: 166px; }
+.dp-purchase.callback .center { margin-left: 0px; }
+.dp-purchase.callback span { color: #666680; }
+.dp-purchase.callback label { color: #A1A1B3; margin-right: 10px; }
+.dp-purchase.callback .price { color: #00D753; margin-left: 0px; }
+.dp-purchase.quickPayment form .form-control { width: 220px; }
 /** } 支付页 **/
 
 /** footer页脚 {**/
@@ -257,16 +711,27 @@ padding-left: 25px; padding-right: 25px; }
 .dp-zhanghao a { color: #999; font-size: 16px; }
 .dp-zhanghao .active { font-weight: bold; color: #00D853; }
 .dp-cxx-menu { padding-left: 0px; border: 0px; box-shadow: 0px 0px rgba(0, 0, 0, 0); }
-
+/*****我的订单******/
+.dp-allOrder { padding-left: 30px; padding-right: 30px; border-right: 0px solid #000; }
+.dp-allOrder a { color: #999; font-size: 16px; }
+.dp-allOrder .active { font-weight: bold; color: #00D853; }
+.dp-yesPay { padding-left: 30px; padding-right: 30px; border-right: 0px solid #000; }
+.dp-yesPay a { color: #999; font-size: 16px; }
+.dp-yesPay .active { font-weight: bold; color: #00D853; }
+.dp-noPay { padding-left: 30px; }
+.dp-noPay a { color: #999; font-size: 16px; }
+.dp-noPay .active { font-weight: bold; color: #00D853; }
+/****我的课程*****/
+.dp-wdkc-menu li { width: 48%; min-height: 200px; border: 1px solid #ccc; border-bottom: 0px; margin-right: 10px; }
+.dp-wdkc-menu .live-tab { background-color: #f7931e; }
+.dp-wdkc-menu .course-tab { background-color: #36c3ff; }
 /***分页样式****/
-/*
 .pagination>li>a, .pagination>li>span { font-size: 18px; line-height: 18px; padding: 2px 6px; border-radius: 13px; color: #686880; border: none; margin-left: 6px; }
 .pagination>li:first-child>a, .pagination>li:first-child>span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .pagination>li:last-child>a, .pagination>li:last-child>span { display: none !important; border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; margin-left: 10px; }
 .pagination .pageNext>a, .pagination .pageNext>span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .pagination>.active>a, .pagination>.active>span { background: #00d753; }
 .pagination a:hover { color: #FFF; background: #00D753 !important; }
-*/
 
 .list-group-panel { }
 .list-group-panel .list-group-heading { color: #999; padding: 5px 0;/*margin-bottom: 5px;*/}
@@ -277,7 +742,7 @@ padding-left: 25px; padding-right: 25px; }
 /***********************/
 
 
-.dp-member-content{ background:#fff; min-height:600px; margin:25px 0 30px; padding:0 30px;}
+.dp-member-content{ background:#fff; min-height:600px; margin:25px 0 30px; width:90%; padding:0 20px}
 .dp-member-title { margin:6px 0 30px; border-bottom:1px #ccc solid; padding:6px 0 0;}
 
 .navbar a{ outline:0;}
@@ -296,7 +761,7 @@ em.error{ color:#f00; font-style:normal;}
 .container .dp-side-menu-2 li a{ background:none; border:none; font-size:16px;}
 .container .dp-side-menu-2 li a.cur{ color:#0c3;}
 
-/*.dp-member-content{ box-shadow:0px 0px 6px #ddd;}*/
+.dp-member-content{ box-shadow:0px 0px 6px #ddd;}
 
 .dp-member-title-2{ background:url(/Public/img/ico-1.gif) no-repeat 0 8px; padding-left:26px; line-height:30px; font-size:16px; margin-left:15px;}
 .dp-member-body-2{ padding-top:30px;}

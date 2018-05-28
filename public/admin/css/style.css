@@ -32,16 +32,16 @@ input[type="hidden" i] {
     margin: 10px 0;
 	overflow:hidden
 }
-.fj_tc>p{ color: #ff8226; cursor: pointer;}
+.fj_tc>p{ color: #ff8226; cursor: pointer; line-height:34px}
 .main_left { width:50%; border-right: 1px solid #ccc;}
-.main_right {width:50%; text-align: center;}
+.main_right {width:50%; text-align: center; padding-left:30px}
 .div_input_one .zc_check>p{ margin: 0 5px; line-height: 34px;}
 .div_input_one .zc_check input[type=checkbox]{ margin: 11px 0;}
 .div_input_one .tc_list{ line-height:32px; text-align:left}
 .div_input_one .fj_list{ clear:both; overflow:hidden}
 .div_input_one .fj_list h3{ font-size:14px; font-weight:600; margin:0; float:left}
 .div_input_one .fj_list p,.div_input_one .fj_list span{ color:#3fb13f}
-.div_input_one .fj_list p{ margin-left:130px}
+.div_input_one .fj_list p{ margin-left:125px; text-align:left}
 .div_input_one .fj_list h3,.div_input_one .fj_list p,.div_input_one .fj_list span{ line-height:25px;}
 .div_input_one .fj_list span{ float:left;}
 .div_input_one .fj_list h3+span{ margin-left:35px}
@@ -68,13 +68,12 @@ input[type="hidden" i] {
 }
 .pay_mess .zf_title ,.tc_pay .zf_title{width: 120px;}
 .rebate_price{ width: 80px; margin-left:10px;}
-.pay_mess .zf_title{ font-weight: 600; text-align: center;}
+.pay_mess .zf_title{ font-weight: 600; text-align: center; line-height:34px}
 .wz_ts{height: 30px; color: red;}
 .pay_input select,.pay_mess #pay-amount { width: 110px; margin-right: 5px;}
 .input-group,.pay_mess select,.pay_mess #pay-amount,.tc_pay select,.tc_pay #pay-amount{ width: 190px;}
 .div_input_one .pay_input,.tc_pay .pay_input{ margin-bottom:15px;}
-.jl_list .zf_title+.jl_list_sun{ margin-left:0px;}
-.jl_list_sun{ margin-left:120px;}
+
 .pay_mess .pay_add{ margin: 80px 100px 0 0;overflow: hidden;}
 .add-pay-type span,.add_tc span,.tc_fj .btn_add{ display:inline-block;width: 30px;height: 30px; border: 1px solid #777;color: #777; border-radius: 50%;margin-bottom: 10px; line-height: 30px; text-align: center; font-size: 25px;}
 .sub_main_two button{margin-left: 25px;}
@@ -114,8 +113,9 @@ input[type="hidden" i] {
 .tc_fj input{ width:150px; margin-right:10px}
 .sent_course input{ width:310px}
 .form-horizontal .form_datetime{ margin: 0 15px;}
-.form-horizontal .btn-primary{ margin:50px 0 0 20px; padding: 6px 35px;}
+.form-horizontal .btn-primary{ padding: 6px 35px;}
 .form-horizontal .controls p{ line-height: 36px; margin: 0 10px;}
 .form-horizontal .controls .btn_add{ margin-top: 2px;}
 .container .dp-side-menu-2 li a{ text-align:right}
-
+.table>tbody>tr>td{ padding:5px 0}
+.table>thead>tr>th,.table>tbody>tr>td{ text-align:center;    padding: 5px 0px;}
