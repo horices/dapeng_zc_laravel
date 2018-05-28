@@ -83,9 +83,9 @@ class BaseController extends Controller
     //支付方式列表
     private static $_PAY_TYPE_LIST = [
         'ALIPAY'=>'支付宝',
+        'WEIXIN'=>'微信支付',
         'HUABEI'=>'花呗',
         'HUABEIFQ'=>'花呗分期',
-        'WEIXIN'=>'微信支付',
         'MAYIFQ'=>'蚂蚁分期',
         'BANKZZ'=>'银行转账'
     ];

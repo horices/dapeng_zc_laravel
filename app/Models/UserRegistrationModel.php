@@ -42,7 +42,9 @@ class UserRegistrationModel extends BaseModel{
     }
     //获取开课状态
     public function getIsOpenTextAttribute(){
-        return $this->isOpenArr[$this->is_open];
+        if($this->is_open !== null){
+            return $this->isOpenArr[$this->is_open];
+        }
     }
     //获取套餐总价格
     public function getPackageAllPriceAttribute(){

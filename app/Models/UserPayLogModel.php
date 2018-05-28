@@ -65,7 +65,9 @@ class UserPayLogModel extends BaseModel {
     }
 
     public function getCreateTimeTextAttribute(){
-        return date('Y-m-d H:i:s',$this->create_time->timestamp);
+        if($this->create_time){
+            return date('Y-m-d H:i:s',$this->create_time->timestamp);
+        }
     }
     /**
      * 获取报名记录模型
