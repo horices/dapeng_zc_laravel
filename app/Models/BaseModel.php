@@ -86,5 +86,4 @@ class BaseModel extends Model
         return parent::fill(collect($attributes)->intersectByKeys(collect($columns)->flip())->toArray());
     }
 
-
 }
