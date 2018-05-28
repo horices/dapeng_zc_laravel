@@ -27,7 +27,7 @@ return [
     //大鹏主站URL
     'PC_URL'   =>  [
         \App\Utils\Util::MASTER    =>  'http://www.dapengjiaoyu.com',
-        \App\Utils\Util::DEV      =>  'http://123.56.200.151',
+        \App\Utils\Util::DEV      =>  'http://123.56.200.151:9090',
     ],
     //展翅系统URL
     'ZC_URL'   =>  [

@@ -47,6 +47,7 @@ class DapengUserApi extends DapengApiBase {
         if($data['code'] == Util::FAIL){
             return $data;
         }
+        $data['data'] = $data['data'][0];
         if($data['data']){
             Util::getImgUrl($data['data']['user']['avatar']);
             if($data['data']['user']['gender'] == 'S'){
