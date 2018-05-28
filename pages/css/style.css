@@ -36,12 +36,11 @@ input[type="hidden" i] {
 .div_input_one .zc_check input[type=checkbox]{ margin: 11px 0;}
 .div_input_one .tc_list{ line-height:32px; text-align:left}
 .div_input_one .fj_list{ clear:both; overflow:hidden}
-.div_input_one .fj_list h3{ font-size:14px; font-weight:600; margin:0; float:left}
+.div_input_one .fj_list h3{ font-size:14px; font-weight:600; margin:0; float:left; width:25%; text-align:center}
 .div_input_one .fj_list p,.div_input_one .fj_list span{ color:#3fb13f}
-.div_input_one .fj_list p{ margin-left:125px; text-align:left}
+.div_input_one .fj_list p{ margin-left:140px; text-align:left}
 .div_input_one .fj_list h3,.div_input_one .fj_list p,.div_input_one .fj_list span{ line-height:25px;}
 .div_input_one .fj_list span{ float:left;}
-.div_input_one .fj_list h3+span{ margin-left:35px}
 .div_input_one .in_radio,.div_input_one .num_price{ line-height: 34px;}
 .div_input_one .in_radio input[type=radio]{ margin: 5px 5px;}
 .pay_input,.sub_main_two,.pay_mess_main{ overflow: hidden;}
@@ -64,7 +63,6 @@ input[type="hidden" i] {
     display: block;
 }
 .pay_mess .zf_title ,.tc_pay .zf_title{width: 120px;}
-.rebate_price{ width: 80px; margin-left:10px;}
 .pay_mess .zf_title{ font-weight: 600; text-align: center; line-height:34px}
 .wz_ts{height: 30px; color: red;}
 .pay_input select,.pay_mess #pay-amount { width: 110px; margin-right: 5px;}
@@ -117,4 +115,5 @@ input[type="hidden" i] {
 .table>thead>tr>th,.table>tbody>tr>td{ text-align:center;    padding: 5px 0px;}
 .main_container .form-control{ width:200px}
 .main_container{ width:100%}
+.rebate_price{ width: 80px; margin-left:10px;}
 
