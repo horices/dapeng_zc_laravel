@@ -7,6 +7,8 @@ use App\Models\RosterModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 
 class QQGroupEventNotifyController extends BaseController
@@ -25,6 +27,33 @@ class QQGroupEventNotifyController extends BaseController
         "ClusterMemberExit"     =>  "已退群",
         "ClusterMemberKick"     =>  "已被踢"
     ];
+
+    /**
+     * 初始化实例对象,转发请求,因为每个通知的签名验证方式不统一，所以需要单独进行转发
+     * DapengNotifyController constructor.
+     * @param Curl $curl
+     */
+    function __construct(Curl $curl,Request $request)
+    {
+        parent::__construct($curl);
+        $baseUrl = URL::route(Route::currentRouteName(),[],false);
+        //设计学院正式站
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){
+            //通知设计学院测试站
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_SJ.".".Util::DEV,false);
+            $curl->post($host.$baseUrl,$request->all())->response;
+            //通知美术学院正式站
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::MASTER,false);
+            $curl->post($host.$baseUrl,$request->all())->response;
+        }
+        //美术学院正式站
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_MS && Util::getCurrentBranch() == Util::MASTER){
+            //通知美术学院测试站
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::DEV,false);
+            $curl->post($host.$baseUrl,$request->all())->response;
+        }
+    }
+
     /**
      *
      */
