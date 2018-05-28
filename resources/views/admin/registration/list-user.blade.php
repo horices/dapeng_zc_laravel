@@ -113,7 +113,7 @@
                 <th>优惠</th>
                 <th>应交</th>
                 <th>已交</th>
-                <th width="100">提交时间</th>
+                {{--<th width="100">提交时间</th>--}}
                 @if($adminInfo['grade'] <= 5)
                     <th>导学</th>
                     <th width="60">操作</th>
@@ -149,7 +149,7 @@
                         <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
-                        <td>{{$v->last_pay_time_text}}</td>
+                        {{--<td>{{$v->last_pay_time_text}}</td>--}}
                         <td>{{$v->guide_text}}</td>
                             @if($adminInfo['grade'] <= 5)
                             <td>
