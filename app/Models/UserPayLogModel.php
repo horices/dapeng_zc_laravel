@@ -28,7 +28,7 @@ class UserPayLogModel extends BaseModel {
         'create_time'
     ];
     protected $appends = [
-        'pay_type_text','adviser_name_reg','pay_time_text'
+        'pay_type_text','adviser_name_reg','pay_time_text','create_time_text'
     ];
     //支付方式
     public $payType = [
@@ -64,6 +64,9 @@ class UserPayLogModel extends BaseModel {
         return date("Y-m-d H:i:s",$this->pay_time);
     }
 
+    public function getCreateTimeTextAttribute(){
+        return date('Y-m-d H:i:s',$this->create_time->timestamp);
+    }
     /**
      * 获取报名记录模型
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

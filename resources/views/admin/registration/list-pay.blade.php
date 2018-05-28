@@ -71,9 +71,9 @@
             </div>
             <div class="form-group">
                 <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
-                <elt name="_SESSION['dapeng']['member_auth']['grade']" value="5">
-                    <a class="common-button combg2 linkSubmit" href="{:U('exportPayList')}">导出</a>
-                </elt>
+                @if($adminInfo->grade <= 5)
+                    <a class="common-button combg2 linkSubmit" data="{'export':'1'}" showloading="true">导出</a>
+                @endif
             </div>
         </form>
     </div>

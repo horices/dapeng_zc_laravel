@@ -27,7 +27,7 @@ class UserRegistrationModel extends BaseModel{
         //'last_pay_time'
     ];
     protected $appends = [
-        "is_belong","is_open_text","last_pay_time_text","is_bright","account","school_text","attach_data","guide_text","package_all_price","attach_course_text"
+        "is_belong","is_open_text","last_pay_time_text","is_bright","account","school_text","attach_data","guide_text","package_all_price","attach_course_text","amount_bill"
     ];
 
     //开课状态数组
@@ -65,6 +65,12 @@ class UserRegistrationModel extends BaseModel{
         return date("Y-m-d H:i:s",$this->last_pay_time);
     }
 
+    /**
+     * 获取应交总金额 = 套餐总金额 - 优惠金额
+     */
+    public function getAmountBillAttribute(){
+        return $this->package_total_price - $this->rebate;
+    }
     /**
      * 获取用户的qq或者wx 做为账号
      * @return mixed

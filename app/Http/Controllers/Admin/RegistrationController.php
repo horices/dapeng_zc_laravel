@@ -343,7 +343,7 @@ class RegistrationController extends BaseController{
     }
 
     /**
-     * 导出用户支付列表
+     * 导出用户统计列表
      * @param $query
      */
     function exportListUser($query){
@@ -368,7 +368,6 @@ class RegistrationController extends BaseController{
             'guide_text'                =>  '是否导学',
         ];
         $exportData['data'] = $query->take(3000)->get();
-//        dd($exportData['data']->toArray());
         return $this->export($exportData);
     }
 
@@ -422,9 +421,12 @@ class RegistrationController extends BaseController{
             $userPayLogModel->where("create_time","<=",strtotime($endDate)+1);
         }
         //月统计条总金额
+        $userPayLogModel->orderBy("id","desc");
+        if($request->input("export") == 1){
+            return $this->exportPayList($userPayLogModel);
+        }
+        $list = $userPayLogModel->paginate(15);
         $allSubmitAmount = $userPayLogModel->whereBetween('create_time',[strtotime(date('Y-m-1 00:00:00')),time()])->sum("amount");
-
-        $list = $userPayLogModel->orderBy("id","desc")->paginate(15);
         //总记录条数
         return view("admin.registration.list-pay",[
             'allSubmitAmount'   =>  $allSubmitAmount,
@@ -434,6 +436,32 @@ class RegistrationController extends BaseController{
         ]);
     }
 
+    /**
+     * 导出支付列表
+     * @param $model
+     */
+    function exportPayList($model){
+        $exportData['filename'] = "用户支付记录导出".date("Y-m-d_H:i:s");
+        $exportData['title'] = [
+            'id'                       =>  '序号',
+            'pay_time_text'            =>   '收款日期',
+            'adviser_name'           =>  '课程顾问',
+            'name'                      =>  '学员姓名',
+            'mobile'                    =>  '开课手机',
+            'amount'                    =>  '支付总金额',
+            'pay_type_text'             =>  '付款方式',
+            'userRegistration.package_total_price'       =>  "套餐总金额",    //主套餐+附加课程
+            'userRegistration.amount_bill'       =>  '应交总金额',    //套餐总金额-优惠
+            'userRegistration.rebate'                    =>  '优惠金额',
+            'qq'                        =>  'QQ号',
+            'wx'                        =>  "微信号",
+            'userRegistration.school_text'               =>  '学院名称',
+            'userRegistration.package_all_title'         =>  '报名套餐',
+            'create_time_text'          =>  "提交时间",
+        ];
+        $exportData['data'] = $model->take(3000)->get();
+        return $this->export($exportData);
+    }
     /**
      * 获取支付记录的详情信息
      * @param Request $request
