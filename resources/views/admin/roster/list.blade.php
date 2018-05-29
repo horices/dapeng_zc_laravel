@@ -11,6 +11,23 @@
 }
 .webuploader-pick{padding: 5px 15px !important;margin-top: 10px !important;display: inline !important;}
 .form-group{margin-right: 0px !important;}
+
+.flag_icon::before{
+    position:relative;
+    display:block;
+    position:absolute;
+    left:10px;
+}
+.flag_icon_1::before{
+    content:url(/admin/images/flag_icon_new.gif);
+
+}
+.flag_icon_2::before{
+    content:url(/admin/images/flag_icon_active.gif);
+}
+.flag_icon_both::before{
+    content:url(/admin/images/flag_icon_both.gif);
+}
 </style>
 
 <script>
