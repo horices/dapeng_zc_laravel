@@ -284,12 +284,11 @@
                 </tr>
                 @endforeach
                 <tr>
-                    <th colspan="14"><div class="pagenav"> {{ $list->appends(Request::all())->links() }}</div></th>
+                    <td colspan="14"><div class="pagenav"> {{ $list->appends(Request::all())->links() }}</div></td>
                 </tr>
             </tbody>
         </table>
 </div>
-<div class="pagenav">{{ $list->appends(\Illuminate\Support\Facades\Request::input())->links() }}</div>
 <div id="courseList" style="display:none;"></div>
 <style>
     #open-course{width: 300px; height: 100px; padding-top: 30px;display: none;padding-left: 10px;}
