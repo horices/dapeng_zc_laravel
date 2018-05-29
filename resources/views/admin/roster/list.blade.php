@@ -275,14 +275,14 @@
                     </td>
                     <td class="grade grade4 grade5 grade9 grade10">
                         @if($roster->dapeng_user_mobile)
-                        <a class="ajaxLink" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}">开通</a>
+                        <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}">开通</a>
                             @if($userInfo->grade <= 5 )
-                            <a class="ajaxLink" method="post" showLoading="1" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}">解绑</a>
+                            <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}">解绑</a>
                             @endif
                         @else
-                        <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
+                        <a href="javascript:;" @if($roster->is_old != 1) onclick="alertOpenCourse('{{ $roster->id }}')" @endif >开通</a>
                         @endif
-                        <a class="ajaxLink" data="{url:'{{$roster->reg_url_prama}}'}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" url="{{route('admin.roster.index.set-reg-url')}}" callback="registerUrl" >链接</a>
+                        <a class="@if($roster->is_old != 1) ajaxLink @endif" data="{url:'{{$roster->reg_url_prama}}'}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" url="{{route('admin.roster.index.set-reg-url')}}" callback="registerUrl" >链接</a>
                     </td>
                 </tr>
                 @endforeach
