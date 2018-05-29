@@ -6,10 +6,16 @@ use App\Exceptions\UserValidateException;
 use App\Models\GroupModel;
 use App\Models\UserModel;
 
-class GroupObserver{
+class GroupObserver extends  BaseObserver {
     function saved(GroupModel $groupModel){
     }
 
+    function creating(GroupModel $groupModel){
+        $groupModel->add_time = $groupModel->update_time = time();
+    }
+    function updating(GroupModel $groupModel){
+        $groupModel->update_time = time();
+    }
     /**
      * @param GroupModel $groupModel
      */

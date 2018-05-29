@@ -283,11 +283,9 @@
                     </td>
                 </tr>
                 @endforeach
-                @if(!$list->count())
-                    <tr>
-                        <th colspan="14">暂无信息</th>
-                    </tr>
-                @endif
+                <tr>
+                    <th colspan="14"><div class="pagenav"> {{ $list->appends(Request::all())->links() }}</div></th>
+                </tr>
             </tbody>
         </table>
 </div>

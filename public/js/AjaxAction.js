@@ -295,11 +295,13 @@
                         	node.push(input);
                         	form.prepend(input);
 						}
+						var target = form[0].target;
                         if(obj.attr("showloading")){
                             form[0].target = "_blank";
                             //CustomDialog.loadingDialog();
                         }
                         form[0].submit();
+                        form[0].target = target;
                         for(var i = 0 ;i<node.length;i++){
                             node[i].remove();
 						}
