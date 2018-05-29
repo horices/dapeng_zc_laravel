@@ -116,4 +116,5 @@ input[type="hidden" i] {
 .main_container .form-control,.se_form input[type=search]{ width:200px}
 .main_container{ width:100%}
 .rebate_price{ width: 80px; margin-left:10px;}
-
+.tc_pay{ width:500px; height:240px;position:fixed; top:50%; left:50%; margin-top:-120px; margin-left:-250px; display:none}
+.tc_pay.show{ display:block}
