@@ -28,6 +28,8 @@
                         return ;
                     }
                     this.course_attach.attach.push({'title':attachTitle,'price':attachPrice});
+                    $(".course_attach_title").val("");
+                    $(".course_attach_price").val("");
                 },
                 //删除附加课程
                 minus_course_attach:function (index) {
@@ -37,10 +39,11 @@
                 add_course_give:function () {
                     var giveTitle = $(".course_give_title").val();
                     if(!giveTitle){
-                        layer.msg('请填写赠送课程价格！',{icon:0,time:2000});
+                        layer.msg('请填写赠送课程标题！',{icon:0,time:2000});
                         return ;
                     }
                     this.course_attach.give.push({'title':giveTitle});
+                    $(".course_give_title").val("");
                 },
                 //删除赠送课程
                 minus_course_give:function (index) {
@@ -57,7 +60,7 @@
     <h4 class="col-md-4" style="padding-left:0"> 新增课程套餐</h4>
 </div>
 <div id="content-vue" class="row dp-member-body-2">
-    <form class="form-horizontal main_container" onsubmit="return beforeOnSubmitAction(this);">
+    <form class="form-horizontal main_container add_tc_form" onsubmit="return beforeOnSubmitAction(this);">
         <fieldset>
             <div class="div_input_one">
                 <label for="input01 " class="col-md-2 control-label "> 学员名称： </label>
