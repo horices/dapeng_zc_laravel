@@ -98,6 +98,7 @@ class RegistrationController extends BaseController{
         if($userInfo->grade == 9 || $userInfo->grade == 10){
             $request->merge(['userRole' =>  'adviser','leftNav'=>"admin.registration.add.user"]);
         }
+        $request->merge(['back_url'=>$request->get("back_url",route("admin.registration.list.pay"))]);
         return view("admin.registration.add",[
             'enroll'    =>  $enroll,
             "leftNav"   =>  $request->get("leftNav","admin.registration.add"),
@@ -118,7 +119,6 @@ class RegistrationController extends BaseController{
      * 添加或修改报名信息
      */
     function postSaveRegistration(Request $request){
-
         DB::transaction(function () use($request){
             $jsonDecode = function (&$v){
                 $t = Util::jsonDecode($v);
@@ -165,7 +165,7 @@ class RegistrationController extends BaseController{
                     $registration = UserRegistrationModel::create($registrationData);
                 }else{
                     //如果存在该ID，则该ID不需要被移除
-                    $registrationIds = $registrationIds->diff($registrationData['id']);
+                    $registrationIds = collect($registrationIds)->diff($registrationData['id']);
                     $registration = UserRegistrationModel::find($registrationData['id']);
                     $registration->fill($registrationData);
                     if($registration->save() === false){
@@ -203,24 +203,24 @@ class RegistrationController extends BaseController{
                 if($payIds && UserPayLogModel::destroy($payIds) === false){
                     throw new UserException("删除支付记录失败");
                 }
-                //删除已经删除的报名支付
-                $registrationIds = collect($registrationIds)->toArray();
-                if($registrationIds && UserRegistrationModel::destroy($registrationIds) === false){
-                    throw new UserException("删除报名记录失败");
-                }
-                //更新最后支付时间
-                $lastPay = UserPayLogModel::where("registration_id",$registration->id)->orderBy("create_time","desc")->first();
-                $registration->last_pay_time = $lastPay->create_time->timestamp;
-                //用户已经提交的所有金额
-                $registration->amount_submitted = UserPayLogModel::where("registration_id",$registration->id)->sum("amount");
-                if($registration->save() === false){
-                    throw new UserValidateException("更新最后支付时间及支付金额失败");
-                }
+            }
+            //删除已经删除的报名支付
+            if($registrationIds && UserRegistrationModel::destroy($registrationIds->toArray()) === false){
+                throw new UserException("删除报名记录失败");
+            }
+            //更新最后支付时间
+            $lastPay = UserPayLogModel::where("registration_id",$registration->id)->orderBy("create_time","desc")->first();
+            $registration->last_pay_time = $lastPay->create_time->timestamp;
+            //用户已经提交的所有金额
+            $registration->amount_submitted = UserPayLogModel::where("registration_id",$registration->id)->sum("amount");
+            if($registration->save() === false){
+                throw new UserValidateException("更新最后支付时间及支付金额失败");
             }
         });
         return [
             'code'  =>  Util::SUCCESS,
             'msg'   =>  "保存成功",
+            "url"   =>  $request->get("back_url"),
             "data"  =>  ""
         ];
 
