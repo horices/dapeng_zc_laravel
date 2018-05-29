@@ -197,7 +197,7 @@ class BaseController extends Controller{
             $query->where($rosterWhere);
         }
         $result = $query->get();
-        $statistics = $user_statistics = [];
+        $statistics = [];
         $statistics['user_total'] = 0; //所有数据总量
         $statistics['user_total_reg_num_0'] = 0;   //未注册总人数
         $statistics['user_total_reg_num_1'] = 0;   //已注册总人数
