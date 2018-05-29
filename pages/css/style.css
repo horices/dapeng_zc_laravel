@@ -122,3 +122,6 @@ input[type="hidden" i] {
 .show{ display:block}
 .body_zz{ width:100%; height:100%; top:0; left:0; background:rgba(0,0,0,0.3); z-index:1000}
 .select_tc,.body_zz{display:none;position:fixed;}
+.add_tc_form .course_attach_price{ width:130px}
+.add_tc_form .div_input_one label,.add_tc_form .control-label{ width:140px}
+.add_tc { clear:both}
