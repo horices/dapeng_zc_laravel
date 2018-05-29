@@ -121,7 +121,7 @@
                         <td>{$v.amount_submitted}</td>-->
                         <td>{{$v->create_time}}</td>
                         <td style="text-align: center">
-<a href="{{route("admin.registration.add",['mobile'=>$v->mobile])}}">查看</a>
+<a href="{{route("admin.registration.add",['mobile'=>$v->mobile,'back_url'=>\Illuminate\Support\Facades\URL::full()])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
                                     |<a url="{{route('admin.registration.delete')}}" data="{id:'{{$v->id}}'}" class="ajaxLink" warning="确认删除？">删除</a>
                                 @endif

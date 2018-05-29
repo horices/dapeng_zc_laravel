@@ -98,6 +98,7 @@ class RegistrationController extends BaseController{
         if($userInfo->grade == 9 || $userInfo->grade == 10){
             $request->merge(['userRole' =>  'adviser','leftNav'=>"admin.registration.add.user"]);
         }
+        $request->merge(['back_url'=>$request->get("back_url",route("admin.registration.list.pay"))]);
         return view("admin.registration.add",[
             'enroll'    =>  $enroll,
             "leftNav"   =>  $request->get("leftNav","admin.registration.add"),
@@ -118,7 +119,6 @@ class RegistrationController extends BaseController{
      * 添加或修改报名信息
      */
     function postSaveRegistration(Request $request){
-
         DB::transaction(function () use($request){
             $jsonDecode = function (&$v){
                 $t = Util::jsonDecode($v);
@@ -220,6 +220,7 @@ class RegistrationController extends BaseController{
         return [
             'code'  =>  Util::SUCCESS,
             'msg'   =>  "保存成功",
+            "url"   =>  $request->get("back_url"),
             "data"  =>  ""
         ];
 

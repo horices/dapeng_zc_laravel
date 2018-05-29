@@ -635,6 +635,7 @@
         </div>
         <div class="sub_main_two ">
          <div class="div_input_one text-left">
+         <input type="hidden" name="back_url" value="{{ Request::get('back_url') }}" />
          <input type="hidden" name="enroll[id]" :value="enroll.id" v-if="enroll.id" />
          <input type="hidden" name="enroll[is_guide]" :value="enroll.is_guide" />
          <input type="hidden" :name="'registration['+first.name+'][client_submit]'" value="PC" />
