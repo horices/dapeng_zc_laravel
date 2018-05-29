@@ -18,7 +18,7 @@
         $(".grade{{$userInfo->grade}}").show();
     });
     function openCourseLog(roster){
-        AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+"}'></a>",function(data){
+        AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.course.list") }}' method='get' showloading='true' data='{roster_id:"+roster.id+",qq:"+roster.qq+"}'></a>",function(data){
             $("#courseList").empty().html(data);
             console.log($(data).find("li").size());
             if($(data).find("li").size()){
