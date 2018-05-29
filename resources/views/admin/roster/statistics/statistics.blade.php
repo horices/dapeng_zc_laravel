@@ -168,7 +168,7 @@
             <tbody class="tbody" style="color:#333;">
             @foreach($list as $user)
                 <tr class="">
-                    <td>{{ $user->uid }}</td>
+                    <td>{{ $loop->index+1 }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user_statistics[$user->uid]['user_total'] ?? 0 }}</td>
                     <td>

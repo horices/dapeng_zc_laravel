@@ -10,14 +10,19 @@ return [
     'HOST_ALL'  =>  [
         'bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::MASTER,
         'zc.dapengjiaoyu.com'  =>  \App\Utils\Util::MASTER,
+        'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::MASTER,
         'test.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
         'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
+        'test.ms.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
     ],
     //学院名字
     'SCHOOL_NAME'   =>  [
         'bzr.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'zc.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
-        'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
+        'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_MS,
+        'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_SJ,
+        'test.ms.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_MS,
+        //'laravel.local.zc.com'      =>  \App\Utils\Util::SCHOOL_NAME_MS
     ],
     //学院标题
     'SCHOOL_NAME_TEXT'  =>  [
