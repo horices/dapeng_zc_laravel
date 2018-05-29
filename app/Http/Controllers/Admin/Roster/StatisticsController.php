@@ -35,7 +35,7 @@ class StatisticsController extends BaseController
             });
             //查询所有的推广专员,并补全每个专员的统计信息
             $users = $user->select("uid","name")->get()->keyBy('uid')->transform(function($v,$k) use($temp){
-                return collect($v)->merge($temp['user_statistics'][$k] ?? []);
+                return collect($v)->merge($temp[$v['uid']] ?? []);
             });
             return $this->exportStatisticsList($users);
         }
@@ -53,8 +53,11 @@ class StatisticsController extends BaseController
             'leftNav'   => $leftNav,
             'list'  => $list,
             'user_id_str'  =>  'seoer_id',
-            'statistics'    => $statistics['statistics'],
-            'user_statistics'    => $statistics['user_statistics'],
+            'statistics'    => $this->getStatistics(null,function($roster) use($seoerGrade){
+                //不包括智能推广的数据
+                $roster->whereIn("inviter_id",UserModel::where("grade",$seoerGrade)->pluck("uid"));
+            }),
+            'user_statistics'    => $statistics,
             'url_data'  =>  ['leftNav'=>$leftNav]
         ]);
     }
@@ -77,7 +80,7 @@ class StatisticsController extends BaseController
             });
             //查询所有的推广专员,并补全每个专员的统计信息
             $users = $user->select("uid","name")->get()->keyBy('uid')->transform(function($v,$k) use($temp){
-                return collect($v)->merge($temp['user_statistics'][$k] ?? []);
+                return collect($v)->merge($temp[$v['uid']] ?? []);
             });
             return $this->exportStatisticsList($users);
         }
@@ -90,8 +93,8 @@ class StatisticsController extends BaseController
             'leftNav'   => "admin.roster.statistics.adviser",
             'list'  => $list,
             'user_id_str'   => "adviser_id",
-            'statistics'    => $statistics['statistics'],
-            'user_statistics'    => $statistics['user_statistics'],
+            'statistics'    => $this->getStatistics(),
+            'user_statistics'    => $statistics,
             'url_data'  =>  ['leftNav'=>"admin.roster.statistics.adviser"]
         ]);
     }

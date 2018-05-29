@@ -142,7 +142,7 @@ class BaseController extends Controller{
      * @param \Closure|null $rosterWhere
      * @return mixed
      */
-    protected function getStatistics(array $column,\Closure $rosterWhere = null){
+    protected function getStatistics(array $column = null,\Closure $rosterWhere = null){
         //若没有选择时间，则默认选择当天时间
         $request = app("request");
         if(!$request->has("startdate")){
@@ -210,7 +210,9 @@ class BaseController extends Controller{
         $statistics['user_total_course_num_0'] = 0;    //未开通课程总人数
         $statistics['user_total_course_num_1'] = 0;    //开通试学课总人数
         $statistics['user_total_course_num_2'] = 0;    //开通正式课总人数
-        $result->groupBy($column)->each(function($collect,$user_id) use (&$statistics,&$user_statistics){
+
+        //计算统计通用式，返回统计数组
+        $caculate = function($data){
             $temp['user_total'] = 0; //所有数据总量
             $temp['user_total_reg_num_0'] = 0;   //未注册总人数
             $temp['user_total_reg_num_1'] = 0;   //已注册总人数
@@ -223,19 +225,14 @@ class BaseController extends Controller{
             $temp['user_total_course_num_0'] = 0;    //未开通课程总人数
             $temp['user_total_course_num_1'] = 0;    //开通试学课总人数
             $temp['user_total_course_num_2'] = 0;    //开通正式课总人数
-            //提交总人数
-            $collect->each(function ($user) use (&$statistics,&$temp){
-                $temp['user_total'] += $user->num ;
-                $statistics['user_total'] += $user->num;
+            $data->each(function ($roster) use (&$temp){
+                $temp['user_total'] += $roster->num ;
                 //注册量
-                $temp['user_total_reg_num_'.$user->is_reg]+=$user->num;
-                $statistics['user_total_reg_num_'.$user->is_reg] += $user->num;
+                $temp['user_total_reg_num_'.$roster->is_reg]+=$roster->num;
                 //进群量
-                $temp['user_total_group_num_'.$user->group_status] += $user->num;
-                $statistics['user_total_group_num_'.$user->group_status] += $user->num;
+                $temp['user_total_group_num_'.$roster->group_status] += $roster->num;
                 //开课量
-                $temp['user_total_course_num_'.$user->course_type] += $user->num;
-                $statistics['user_total_course_num_'.$user->course_type] += $user->num;
+                $temp['user_total_course_num_'.$roster->course_type] += $roster->num;
             });
             //进群量的在群量+退群量+被踢量
             $temp['user_total_join_group'] = $temp['user_total_group_num_2'] + $temp['user_total_group_num_3'] +$temp['user_total_group_num_5'];
@@ -254,28 +251,18 @@ class BaseController extends Controller{
                 //正课比例
                 $temp['user_total_formal_course_percent'] = (round($temp['user_total_course_num_2']/$temp['user_total_join_group'],4)*100)."%";
             }
-            $user_statistics[$user_id] = $temp;
-        });
-        //进群量的在群量+退群量+被踢量
-        $statistics['user_total_join_group'] = $statistics['user_total_group_num_2'] + $statistics['user_total_group_num_3'] +$statistics['user_total_group_num_5'];
-        //进群比例
-        if($statistics['user_total'])
-            $statistics['user_total_join_group_percent'] = (round($statistics['user_total_join_group']/$statistics['user_total'],4)*100)."%";
-        if($statistics['user_total_join_group']){
-            //退群比例
-            $statistics['user_total_quit_group_percent'] = (round($statistics['user_total_group_num_3']/$statistics['user_total_join_group'],4)*100)."%";
-            //被踢比例
-            $statistics['user_total_kick_group_percent'] = (round($statistics['user_total_group_num_5']/$statistics['user_total_join_group'],4)*100)."%";
-            //注册比例
-            $statistics['user_total_reg_percent'] = (round($statistics['user_total_reg_num_1']/$statistics['user_total_join_group'],4)*100)."%";
-            //试学比例
-            $statistics['user_total_trial_course_percent'] = (round($statistics['user_total_course_num_1']/$statistics['user_total_join_group'],4)*100)."%";
-            //正课比例
-            $statistics['user_total_formal_course_percent'] = (round($statistics['user_total_course_num_2']/$statistics['user_total_join_group'],4)*100)."%";
+            return $temp;
+        };
+        //如果没有传入字段，则表示计算所有的数据，直接计算，返回一个数组
+        if(!$column){
+            $statistics = $caculate($result);
+        }else{
+            //如果有传入字段，则表示需要单独计算推广专员或课程顾问,返回一个二维数组，键名为用户id;
+            $result->groupBy($column)->each(function($collect,$user_id) use (&$statistics,$caculate){
+                $statistics[$user_id] = $caculate($collect);
+            });
         }
-        $data['user_statistics'] = $user_statistics;
-        $data['statistics'] = $statistics;
-        return $data;
+        return $statistics;
     }
 
     function exportStatisticsList(&$list){
