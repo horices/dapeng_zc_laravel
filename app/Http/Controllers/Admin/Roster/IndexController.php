@@ -90,7 +90,6 @@ class IndexController extends BaseController
 //            $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
 //        }
         $where = [];
-        $statistics = [];   //统计列表默认为空
         if(!$request->has("startdate")){
             $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
         }
@@ -167,14 +166,14 @@ class IndexController extends BaseController
             $statistics = $this->getStatistics(['inviter_id'],function($query) use($seoerId) {
                 $query->where("inviter_id", $seoerId);
             });
-            $statistics = $statistics[$seoerId];
+
         }
         if($adviserId !== null){
             $query->where('last_adviser_id',$adviserId);
             $statistics = $this->getStatistics(['last_adviser_id'],function($query) use($adviserId) {
                 $query->where("last_adviser_id", $adviserId);
             });
-            $statistics = $statistics[$adviserId];
+            $statistics = $statistics['adviserId'];
         }
         //课程顾问姓名搜索
         if($adviserName){
@@ -205,9 +204,7 @@ class IndexController extends BaseController
         if(Input::get('export') == 1){
             return $this->exportRosterList($query);
         }
-        if(!$statistics){
-            $statistics = $this->getStatistics();
-        }
+        $statistics = $this->getStatistics();
         $query->orderBy("id","desc");
         $list = $query->paginate();
         return view("admin.roster.list",[
