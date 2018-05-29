@@ -11,7 +11,6 @@
 <link href="/admin/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 <link href="/admin/css/animate.css" rel="stylesheet">
 <link href="/admin/css/member.css" rel="stylesheet">
-<link href="/admin/css/page.css" rel="stylesheet">
 <link href="/admin/css/btn.css" rel="stylesheet">
 <link href="/admin/css/status.css" rel="stylesheet">
 <link href="/admin/css/style.css" rel="stylesheet">
