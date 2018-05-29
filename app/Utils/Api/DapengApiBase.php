@@ -3,6 +3,7 @@ namespace App\Utils\Api;
 
 use App\Utils\Util;
 use Curl\Curl;
+use Illuminate\Support\Facades\Log;
 
 class DapengApiBase {
     private static $apiKey = '8934031001776A04444F72154425DDBC';
@@ -47,7 +48,12 @@ class DapengApiBase {
         $Curl = new Curl();
         //设置连接超时为两秒
         $Curl->setOpt(CURLOPT_CONNECTTIMEOUT_MS, 2000);
+        Log::info("请求接口");
+        Log::info("提交地址：".$url);
+        Log::info("提交数据:");
+        Log::info(self::getPostData($data));
         $returnData = $Curl->$method($url,self::getPostData($data))->response;
+        Log::info("返回数据:".$returnData);
         $result = json_decode($returnData,true);
         if($result['status'] == "success"){
             $result['code'] = Util::SUCCESS;
