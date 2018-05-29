@@ -209,7 +209,8 @@
                         },
                     },
                     list:[],//弹窗列表
-                    currentPos:'first'
+                    currentPos:'first',
+                    searchKey:'', //搜索关键字
                     //第二份报名默认为设计
                 },
                 computed:{
@@ -300,7 +301,17 @@
                         return JSON.stringify(obj);
                     },
                     searchList:function(){
-
+                        var filterKey = this.searchKey && this.searchKey.toLowerCase();
+                        var data = this.list;
+                        if (filterKey) {
+                            data = data.filter(function (row) {
+                                return Object.keys(row).some(function (key) {
+                                    return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                                })
+                            })
+                        }
+                        this.list = data;
+                        //return data
                     }
                 },
                 watch:{
@@ -743,8 +754,8 @@
                 </div> -->
              <form class="se_form">
                  <input type="hidden" name="schoolName" value="" />
-                 <!--<input type="search" placeholder="课程名称" class=" form-control pull-left" @change="" />
-                 <button type="button" class="btn btn-primary">搜索</button>-->
+                 <input type="search" placeholder="课程名称" class="form-control pull-left" v-model='searchKey' @change="searchList" />
+                 <button type="button" class="btn btn-primary">搜索</button>
                  <div class="se_table">
                      <table>
                          <tbody>

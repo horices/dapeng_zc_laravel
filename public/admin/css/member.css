@@ -742,7 +742,7 @@ ul.chat li.right .message .text { max-width: 220px; table-layout: fixed; word-wr
 /***********************/
 
 
-.dp-member-content{ background:#fff; min-height:600px; margin:25px 0 30px; width:90%; padding:30px 20px}
+.dp-member-content{ background:#fff; min-height:600px; margin:25px 0 30px; width:90%; padding:0px 20px}
 .dp-member-title { margin:6px 0 30px; border-bottom:1px #ccc solid; padding:6px 0 0;}
 
 .navbar a{ outline:0;}
