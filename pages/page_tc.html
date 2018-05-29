@@ -74,7 +74,7 @@ $(function(){
 </script>
 <style>
 	@media (min-width: 992px){
-		.nav-left{padding-left: 0px; width: 15%}
+		.nav-left{padding-left: 0px; width: 10%}
 		.nav-left a{padding-left: 8px;}
 	}
 </style>
@@ -87,7 +87,7 @@ $(function(){
         <h4 class="col-md-4" style="padding-left:0"> 新增课程套餐</h4>
     </div>
     <div class="row dp-member-body-2"> 
-      <form class="form-horizontal" onsubmit="return beforeOnSubmitAction(this);"> 
+      <form class="form-horizontal main_container add_tc_form" onsubmit="return beforeOnSubmitAction(this);"> 
        <fieldset> 
        <div class="div_input_one"> 
           <label for="input01 " class="col-md-2 control-label "> 学员名称： </label> 
@@ -112,13 +112,13 @@ $(function(){
          <!-- Text input--> 
          <label class="col-md-2 control-label" for="input01">附加课程：</label> 
          <div class="col-md-8 controls"> 
-          <input type="text" name="course" value="" class="form-control pull-left">
-          <input type="number" name="price" value="" class="form-control pull-left">  
+          <input type="text" name="course"  placeholder="请输入附加课程名称" value="" class="form-control pull-left">
+          <input type="number" name="price" value=""  placeholder="请输入金额" class="form-control pull-left course_attach_price">  
           <span class="pull-left btn_add">+</span>
           <p class="pull-left">点击添加附加课程</p>
           <div class="add_tc pull-left">
           <input type="text" name="course" value="" placeholder="请输入附加课程名称" class="form-control pull-left">
-          <input type="number" name="price" value="" placeholder="请输入金额" class="form-control  pull-left">  
+          <input type="number" name="price" value="" placeholder="请输入金额" class="form-control  pull-left course_attach_price">  
           <span class="pull-left btn_add">-</span>
           <p class="pull-left">点击删除附加课程</p>
           </div> 
@@ -145,7 +145,7 @@ $(function(){
          <label class="col-md-2 control-label" for="input01">优惠活动：</label> 
          <div class="col-md-8 controls"> 
           <input type="text" name="course" value="" placeholder="请输入活动名称" class="form-control pull-left">
-          <input type="number" name="course" value="" placeholder="金额" class="form-control pull-left">
+          <input type="number" name="course" value="" placeholder="金额" class="form-control pull-left course_attach_price">
          </div> 
         </div>
         
