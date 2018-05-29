@@ -30,6 +30,7 @@ Route::post("user/open-course-head","UserController@postOpenCourseHead")->name("
 
 //学员量管理
 Route::get("roster/list","Roster\IndexController@getList")->name("admin.roster.list");
+Route::post("roster/unbind","Roster\IndexController@postUnbind")->name("admin.roster.unbind");
 //开课记录
 Route::get("roster/course/list","Roster\IndexController@getCourseList")->name("admin.roster.course.list");
 //进群记录

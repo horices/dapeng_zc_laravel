@@ -276,6 +276,9 @@
                     <td class="grade grade4 grade5 grade9 grade10">
                         @if($roster->dapeng_user_mobile)
                         <a class="ajaxLink" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}">开通</a>
+                            @if($userInfo->grade <= 5 )
+                            <a class="ajaxLink" method="post" showLoading="1" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}">解绑</a>
+                            @endif
                         @else
                         <a href="javascript:;" onclick="alertOpenCourse('{{ $roster->id }}')">开通</a>
                         @endif

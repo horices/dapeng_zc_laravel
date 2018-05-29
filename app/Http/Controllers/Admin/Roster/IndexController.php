@@ -81,6 +81,18 @@ class IndexController extends BaseController
     }
 
     /**
+     * 解除绑定，可以重新输入手机号
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function postUnbind(Request $request){
+        $roster = RosterModel::find($request->get("roster_id"));
+        $roster->dapeng_user_mobile = '';
+        $roster->dapeng_user_id = '';
+        $roster->save();
+        return Util::ajaxReturn(Util::SUCCESS,"解绑成功");
+    }
+    /**
      * 获取全部列表
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
