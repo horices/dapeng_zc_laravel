@@ -189,6 +189,9 @@ class IndexController extends BaseController
             });
             $statistics = collect($statistics)->get($adviserId);
             $isLoadStatistics = true;
+            //查看指定的课程时，三天内的活量优先显示
+            //三天前的时间节点
+            $query->orderBy(DB::raw("concat(flag,addtime) > 2".strtotime("-3 days")),"desc");
         }
         //课程顾问姓名搜索
         if($adviserName){
