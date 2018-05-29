@@ -11,7 +11,14 @@
   <script src="js/bootstrap.min.js"></script> 
   <script src="js/jquery-1.8.3.min.js"></script> 
   <script src="js/bootstrap-datetimepicker.min.js"></script> 
-  <script src="js/bootstrap-datetimepicker.zh-CN.js"></script> 
+  <script src="js/bootstrap-datetimepicker.zh-CN.js"></script>
+  <style>
+	@media (min-width: 992px){
+		.nav-left{padding-left: 0px; width: 10%}
+		.nav-left a{padding-left: 8px;}
+	}
+</style>  
+ 
  </head>
 	<body class="" id="bodyColor" style="background-color:#f0f0f0;">
 <div class="navbar dp-nav">
@@ -60,7 +67,7 @@
 	</div>
 </div>
         </div>
-      <form class="col-md-10 dp-member-content " style="padding: 30px; "> 
+      <form class="col-md-10 dp-member-content main_container " style="padding: 30px; "> 
      <div class="sub_main "> 
       <div class="sub_main_one "> 
        <div class="main_left pull-left"> 
@@ -423,7 +430,6 @@
 </div>
 
 
-
 <div class="layui-layer-move"></div>
 
  <!--支付信息弹窗-->
@@ -601,6 +607,7 @@
 		forceParse: 0,
         showMeridian: 1
     });
-    </script>  
+    </script> 
+   
 	</body>
 </html>
