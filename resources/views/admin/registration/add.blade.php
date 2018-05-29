@@ -19,9 +19,10 @@
                     content:$(".tc_dialog").find(".package").prop("outerHTML")
                 });
                 vm.list='';
-                //默认选中
-                $("input[default]").prop("checked","checked");
             });
+            //默认选中
+            $("input[default]").prop("checked","checked");
+            //$(".select_package").show();
         }
 
         /**
@@ -851,5 +852,37 @@
          </div>
      </div>
      {{-- 弹窗结束 --}}
+        <div class="select_tc select_package">
+            <div class="se_top">
+                <h3 class="pull-left">选择附加套餐</h3>
+                <span class="glyphicon glyphicon-remove-circle pull-right"></span>
+            </div>
+            <form class="se_form">
+                <input type="search" placeholder="课程名称" class=" form-control pull-left" />
+                <button type="button" class="btn btn-primary">搜索</button>
+                <div class="se_table">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>勾选</td>
+                            <td>课程名称</td>
+                            <td>课程价格</td>
+                        </tr>
+                        <tr v-for="(item,index) in list">
+                            <td>
+                                <div class="check_box">
+                                    <input type="radio" :value="index" name="course" :id="'check'+index" :default="defaultChecked(index,'selectedPackage')" />
+                                    <label :for="'check'+index"></label>
+                                </div>
+                            </td>
+                            <td>@{{ item.title }}</td>
+                            <td>@{{ item.price }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-success pull-right btn-qz" onclick="selectPackageCallback(this)">确认</button>
+            </form>
+        </div>
      </div>
 @endsection
