@@ -182,7 +182,7 @@ class UserRegistrationModel extends BaseModel{
                 'sometimes',
                 'required',
                 'regex:/\d{5,11}/',
-                Rule::unique('user_registration')->ignore($data['registration_id']),
+                //Rule::unique('user_registration')->ignore($data['registration_id']),
             ],
             'package_id'        => 'sometimes|exists:course_package,id',
             'amount_submitted'  =>  'sometimes|required|numeric'
@@ -196,7 +196,7 @@ class UserRegistrationModel extends BaseModel{
             'name.max'          =>  '学员姓名格式错误！',
             'qq.required'       =>  '请输入学员QQ号！',
             'qq.regex'          =>  '学员QQ号格式错误！',
-            'qq.unique'         =>  '学员QQ号已存在！',
+            //'qq.unique'         =>  '学员QQ号已存在！',
             'package_id.exists' =>  '请选择正确的课程主套餐！',
             'rebate_id.exists'  =>  '请选择正确的优惠活动！',
             'amount_submitted,required'=>   '已提交金额有误！',
