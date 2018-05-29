@@ -76,7 +76,7 @@
                </tr>
                @endforeach
                <tr>
-                   <td colspan="8">{{ $list->appends(Request::input())->links() }}</td>
+                   <td colspan="8"><div class="pagenav">{{ $list->appends(Request::input())->links() }}</div></td>
                </tr>
        </tbody>
    </table>
