@@ -86,6 +86,7 @@ input[type="hidden" i] {
 .select_tc span{ line-height:50px}
 .select_tc .se_top{ background:#eee; height:50px;}
 .se_form{ padding:15px 30px }
+
 .se_form button{ margin:0 10px}
 .se_form table{ width:100%; margin: 20px 0;  }
 .se_form .se_table{height:300px;overflow-y:scroll; overflow-x:hidden; width:100%; margin-top:20px;}
@@ -111,9 +112,8 @@ input[type="hidden" i] {
 .form-horizontal .controls p{ line-height: 36px; margin: 0 10px;}
 .form-horizontal .controls .btn_add{ margin-top: 2px;}
 .container .dp-side-menu-2 li a{ text-align:right}
-.table>tbody>tr>td{ padding:5px 0}
-.table>thead>tr>th,.table>tbody>tr>td{ text-align:center;    padding: 5px 0px;}
-.main_container .form-control{ width:200px}
+.table>thead>tr>th,.table>tbody>tr>td{ text-align:center;padding: 5px 0px;}
+.main_container .form-control,.se_form input[type=search]{ width:200px}
 .main_container{ width:100%}
 .rebate_price{ width: 80px; margin-left:10px;}
 
