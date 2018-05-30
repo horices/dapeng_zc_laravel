@@ -466,7 +466,7 @@ class RegistrationController extends BaseController{
             'userRegistration.package_all_title'         =>  '报名套餐',
             'create_time_text'          =>  "提交时间",
         ];
-        $exportData['data'] = $model->take(10)->get();
+        $exportData['data'] = $model->take(3000)->get();
         return $this->export($exportData);
     }
     /**
