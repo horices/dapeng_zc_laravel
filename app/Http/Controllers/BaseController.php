@@ -105,13 +105,13 @@ class BaseController extends Controller
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
         'roster_user_add' =>   [
-            'text'=> '添加QQ',   //文字描述
+            'text'=> 'QQ号提交',   //文字描述
             'route'=> "admin.roster.user.add",    //链接地址
             'flag'=> 'admin.roster.user.add',  //默认选中标识
             'grade' =>  [11,12],          //需要展示的权限等级
         ],
         'roster_user_add_wx' =>   [
-            'text'=> '添加微信',   //文字描述
+            'text'=> '微信提交',   //文字描述
             'route'=> "admin.roster.user.addwx",    //链接地址
             'flag'=> 'admin.roster.user.addwx',  //默认选中标识
             'grade' =>  [11,12],          //需要展示的权限等级
