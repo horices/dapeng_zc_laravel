@@ -11,14 +11,11 @@
                 return false;
             }
             vm.list = vm[vm.currentPos].data.packageList;
-            vm.$nextTick(function(){
-                layer.open({
-                    type:1,
-                    title:"请选择主套餐课程",
-                    area:['700px','550px'],
-                    content:$(".tc_dialog").find(".package").prop("outerHTML")
-                });
-                vm.list='';
+            layer.open({
+                type:1,
+                title:"请选择主套餐课程",
+                area:['700px','550px'],
+                content:$(".package")
             });
             //默认选中
             $("input[default]").prop("checked","checked");
@@ -695,8 +692,7 @@
      {{-- 弹窗开始 --}}
      <div class="body_zz"></div>
      <!--支付信息弹窗-->
-     <div class="tc_dialog" style="display:none;">
-         <div class="tc_pay">
+         <div class="tc_pay" style="display: none;">
              <form>
                  <div class="tc_pay_l pull-left">
                      <!--         <div class="row dp-member-title-2 ">
@@ -748,7 +744,7 @@
 
 
          <!--选择主套餐弹窗-->
-         <div class="select_tc package show">
+         <div class="select_tc package">
              <!--   <div class="se_top">
                  <h3 class="pull-left">选择附加套餐</h3>
                  <span class="glyphicon glyphicon-remove-circle pull-right"></span>
@@ -768,7 +764,7 @@
                          <tr v-for="(item,index) in list">
                              <td>
                                  <div class="check_box">
-                                     <input type="radio" :value="index" name="course" :id="'check'+index" :default="defaultChecked(index,'selectedPackage')" />
+                                     <input type="radio" :value="index" name="course" :id="'check'+index" :checked="defaultChecked(index,'selectedPackage')" />
                                      <label :for="'check'+index"></label>
                                  </div>
                              </td>
@@ -783,7 +779,7 @@
          </div>
 
          <!--选择附加套餐弹窗-->
-         <div class="select_tc packageAttach show">
+         <div class="select_tc packageAttach">
              <!--   <div class="se_top">
                  <h3 class="pull-left">选择附加套餐</h3>
                  <span class="glyphicon glyphicon-remove-circle pull-right"></span>
@@ -803,7 +799,7 @@
                          <tr v-for="(item,index) in list">
                              <td>
                                  <div class="check_box">
-                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :default="defaultChecked(index,'selectedPackageAttach')" />
+                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :checked="defaultChecked(index,'selectedPackageAttach')" />
                                      <label :for="'check'+index"></label>
                                  </div>
                              </td>
@@ -817,7 +813,7 @@
              </form>
          </div>
          <!--选择赠送课程弹窗-->
-         <div class="select_tc packageCourse show">
+         <div class="select_tc packageCourse">
              <!--   <div class="se_top">
                  <h3 class="pull-left">选择附加套餐</h3>
                  <span class="glyphicon glyphicon-remove-circle pull-right"></span>
@@ -837,7 +833,7 @@
                          <tr v-for="(item,index) in list">
                              <td>
                                  <div class="check_box">
-                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :default="defaultChecked(index,'selectedPackageCourse')" />
+                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :checked="defaultChecked(index,'selectedPackageCourse')" />
                                      <label :for="'check'+index"></label>
                                  </div>
                              </td>
@@ -852,37 +848,4 @@
          </div>
      </div>
      {{-- 弹窗结束 --}}
-        <div class="select_tc select_package">
-            <div class="se_top">
-                <h3 class="pull-left">选择附加套餐</h3>
-                <span class="glyphicon glyphicon-remove-circle pull-right"></span>
-            </div>
-            <form class="se_form">
-                <input type="search" placeholder="课程名称" class=" form-control pull-left" />
-                <button type="button" class="btn btn-primary">搜索</button>
-                <div class="se_table">
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td>勾选</td>
-                            <td>课程名称</td>
-                            <td>课程价格</td>
-                        </tr>
-                        <tr v-for="(item,index) in list">
-                            <td>
-                                <div class="check_box">
-                                    <input type="radio" :value="index" name="course" :id="'check'+index" :default="defaultChecked(index,'selectedPackage')" />
-                                    <label :for="'check'+index"></label>
-                                </div>
-                            </td>
-                            <td>@{{ item.title }}</td>
-                            <td>@{{ item.price }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button type="button" class="btn btn-success pull-right btn-qz" onclick="selectPackageCallback(this)">确认</button>
-            </form>
-        </div>
-     </div>
 @endsection
