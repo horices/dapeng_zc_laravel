@@ -414,7 +414,7 @@ class BaseController extends Controller
      * 获取当前登陆的用户信息
      */
     public function getUserInfo(){
-        return Session::get("userInfo");
+        return Util::getUserInfo();
     }
 
     /**
