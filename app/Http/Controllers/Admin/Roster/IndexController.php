@@ -383,6 +383,9 @@ class IndexController extends BaseController
             'wx'                        =>  $rosterData->wx,
             'affiliatedCollege'         =>  Util::getSchoolName()
         ];
+        if(!$userData->dapeng_user_mobile){
+            throw new UserValidateException("该课程顾问还未绑定主站账号,不能进行该操作");
+        }
         $res = DapengUserApi::openCourse($data); //接口59
         if($res['code'] == Util::FAIL){
             throw new DapengApiException($res['msg']);
