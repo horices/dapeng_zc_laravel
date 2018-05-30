@@ -351,7 +351,7 @@ class IndexController extends BaseController
 
         //用户开课的主站手机号
         //$studentMobile = "";
-        if($rosterData->dapeng_user_id && $rosterData->dapeng_user_mobile) {
+        if($rosterData->dapeng_user_mobile) {
             $studentMobile = $rosterData->dapeng_user_mobile;
         }else {
             if(!$request->phone){
