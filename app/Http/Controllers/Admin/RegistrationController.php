@@ -356,7 +356,7 @@ class RegistrationController extends BaseController{
     function exportListUser($query){
         $exportData['filename'] = "用户统计".date("Y-m-d_H:i:s");
         $exportData['title'] = [
-            'id'                       =>  '序号',
+            //'id'                       =>  '序号',
             'adviser_name'           =>  '课程顾问',
             'name'                      =>  '学员姓名',
             'mobile'                    =>  '开课手机',
@@ -450,7 +450,7 @@ class RegistrationController extends BaseController{
     function exportPayList($model){
         $exportData['filename'] = "用户支付记录导出".date("Y-m-d_H:i:s");
         $exportData['title'] = [
-            'id'                       =>  '序号',
+            //'id'                       =>  '序号',
             'pay_time_text'            =>   '收款日期',
             'adviser_name'           =>  '课程顾问',
             'name'                      =>  '学员姓名',
@@ -466,7 +466,7 @@ class RegistrationController extends BaseController{
             'userRegistration.package_all_title'         =>  '报名套餐',
             'create_time_text'          =>  "提交时间",
         ];
-        $exportData['data'] = $model->take(3000)->get();
+        $exportData['data'] = $model->take(10)->get();
         return $this->export($exportData);
     }
     /**
