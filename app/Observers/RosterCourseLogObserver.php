@@ -14,9 +14,16 @@ class RosterCourseLogObserver{
             //开通课程
             $data = $rosterCourseLog->toArray();
             unset($data['id']);
-            if(!RosterCourseModel::create($data)){
-                Log::error("更新用户课程失败",['roster_course_log'=>$rosterCourseLog]);
+            //判断当前课程该用户没有开通，则开通该课程
+            if(!RosterCourseModel::where([
+                'roster_id' =>  $rosterCourseLog->roster_id,
+                'course_id' =>  $rosterCourseLog->course_id
+            ])->count()){
+                if(!RosterCourseModel::create($data)){
+                    Log::error("更新用户课程失败",['roster_course_log'=>$rosterCourseLog]);
+                }
             }
+
         }else{
             //关闭课程
             if(RosterCourseModel::where('qq',$rosterCourseLog->qq)->where("course_id",$rosterCourseLog->course_id)->delete() === false){
