@@ -63,7 +63,7 @@
     <form class="form-horizontal main_container add_tc_form" onsubmit="return beforeOnSubmitAction(this);">
         <fieldset>
             <div class="div_input_one">
-                <label for="input01 " class="col-md-2 control-label "> 学员名称： </label>
+                <label for="input01 " class="col-md-2 control-label "> 学院名称： </label>
                 <select class="form-control" name="school_id" v-model="r.school_id">
                     <option value="SJ">设计学院</option>
                     <option value="MS">美术学院</option>
