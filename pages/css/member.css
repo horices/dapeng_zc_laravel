@@ -353,7 +353,7 @@ width: 80%; background-color: #434343; border: 0px; color: #919191; font-weight:
 .dp-vodCourse .pagination > li:first-child > a, .dp-vodCourse .pagination > li:first-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .dp-vodCourse .pagination > .active > a, .dp-vodCourse .pagination > .active > span { background: #00D753 none repeat scroll 0% 0%; }
 .dp-vodCourse .pagination > .active > a:hover, .dp-vodCourse .pagination > .active > span:hover { color: #686880; }
-.dp-vodCourse .pagination > li > a, .pagination > li > span { font-size: 18px; line-height: 18px; padding: 2px 6px; border-radius: 13px; color: #686880; border: medium none; margin-left: 6px; }
+/*.dp-vodCourse .pagination > li > a, .pagination > li > span { font-size: 18px; line-height: 18px; padding: 2px 6px; border-radius: 13px; color: #686880; border: medium none; margin-left: 6px; }*/
 .dp-vodCourse .pagination .pageNext > a, .dp-vodCourse .pagination .pageNext > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }
 .dp-vodCourse .pagination > li:last-child > a, .pagination > li:last-child > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; margin-left: 10px; }
 .dp-vodCourse .pagination li:nth-last-child(2) > a, .pagination li:nth-last-child(2) > span { border-radius: 13px; border: 1px solid #686880; padding: 2px 8px; }

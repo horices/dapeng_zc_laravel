@@ -113,6 +113,7 @@ input[type="hidden" i] {
 .form-horizontal .controls .btn_add{ margin-top: 2px;}
 .container .dp-side-menu-2 li a{ text-align:right}
 .table>thead>tr>th,.table>tbody>tr>td{ text-align:center;padding: 5px 0px;}
+.table>tbody>tr:last-child>td{ text-align:left}
 .main_container .form-control,.se_form input[type=search]{ width:200px}
 .main_container{ width:100%}
 .rebate_price{ width: 80px; margin-left:10px;}
