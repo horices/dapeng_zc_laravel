@@ -18,6 +18,7 @@ class BaseController extends Controller
         //记录通知
         //记录请求的所有数据
         Log::info("\n\n=============================================================");
+        Log::info("通知来源:".url()->previous());
         Log::info("通知地址:".url()->full());
         Log::info("通知参数:");
         Log::info(Request::all());
