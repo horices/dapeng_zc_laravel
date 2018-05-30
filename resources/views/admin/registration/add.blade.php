@@ -200,6 +200,7 @@
                     list:[],//弹窗列表
                     currentPos:'first',
                     searchKey:'', //搜索关键字
+                    searchResult:[], //搜索结果列表
                     //第二份报名默认为设计
                 },
                 computed:{
@@ -288,19 +289,6 @@
                     },
                     objtostr:function(obj){
                         return JSON.stringify(obj);
-                    },
-                    searchList:function(){
-                        var filterKey = this.searchKey && this.searchKey.toLowerCase();
-                        var data = this.list;
-                        if (filterKey) {
-                            data = data.filter(function (row) {
-                                return Object.keys(row).some(function (key) {
-                                    return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-                                })
-                            })
-                        }
-                        this.list = data;
-                        //return data
                     }
                 },
                 watch:{
@@ -381,7 +369,23 @@
                             this.second.data.rebatePrice = this.second.data.packageRebate[newVal].price;
                         }
                     },
-
+                    list:function (newVal,oldVal) {
+                        this.searchResult = newVal;
+                    },
+                    searchKey:function(){
+                        var filterKey = this.searchKey && this.searchKey.toLowerCase();
+                        var temp = {};
+                        if (filterKey) {
+                            for(key in this.list){
+                                if(this.list[key].title.toLowerCase().indexOf(filterKey) > -1){
+                                    temp[key] = this.list[key];
+                                }
+                            }
+                            this.searchResult = temp;
+                        }else{
+                            this.searchResult = this.list;
+                        }
+                    }
 
                 },
                 mounted:function () {
@@ -742,7 +746,7 @@
                 </div> -->
              <form class="se_form">
                  <input type="hidden" name="schoolName" value="" />
-                 <input type="search" placeholder="课程名称" class="form-control pull-left" v-model='searchKey' @change="searchList" />
+                 <input type="search" placeholder="课程名称" class="form-control pull-left" v-model='searchKey' />
                  <button type="button" class="btn btn-primary">搜索</button>
                  <div class="se_table">
                      <table>
@@ -752,7 +756,7 @@
                              <td>课程名称</td>
                              <td>课程价格</td>
                          </tr>
-                         <tr v-for="(item,index) in list">
+                         <tr v-for="(item,index) in searchResult">
                              <td>
                                  <div class="check_box">
                                      <input type="radio" :value="index" name="course" :id="'package_check'+index" :checked="defaultChecked(index,'selectedPackage')" />
