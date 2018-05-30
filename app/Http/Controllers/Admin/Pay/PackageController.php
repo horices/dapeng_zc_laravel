@@ -40,7 +40,8 @@ class PackageController extends BaseController {
     }
 
     function getAdd(CoursePackageModel $package){
-        $package->school_id = 'SJ';
+        session(["backUrl"=>route("admin.pay.package.list")]);
+        $package->school_id = Util::getSchoolName();
         return view("admin.pay.package.detail",[
             'r'              =>  $package,
             'course_attach'  =>  $package->course_attach,
@@ -54,6 +55,7 @@ class PackageController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getEdit(Request $request){
+        session(["backUrl"=>url()->previous()]);
         $packageId = $request->get("id");
         $detail = CoursePackageModel::where("id",$packageId)->orderBy("id","desc")->first();
         //dd(collect($detail->course_attach)->toArray());
@@ -85,7 +87,7 @@ class PackageController extends BaseController {
         }
         if($eff){
             $msg = isset($post['id']) && $post['id'] ? '修改成功！' : '新增成功！';
-            return response()->json(['code'=>Util::SUCCESS,'msg'=>$msg]);
+            return response()->json(['code'=>Util::SUCCESS,'msg'=>$msg,'url'=>session()->get("backUrl")]);
         }else{
             $msg = isset($post['id']) && $post['id'] ? '修改失败！' : '新增失败！';
             throw new UserValidateException($msg);
