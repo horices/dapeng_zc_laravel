@@ -28,7 +28,7 @@ class DapengApiBase {
      * @param string $data
      */
     public static function getPostData(array $data = null){
-        Util::setDefault($data['timestamp'], intval(ceil(microtime(true)*1000)));
+        Util::setDefault($data['timestamp'], ceil(microtime(true)*1000));
         $data['sign'] = strtoupper(self::makeSign($data));
         return $data;
     }

@@ -334,6 +334,13 @@ class IndexController extends BaseController
         return $this->export($data);
     }
 
+    /**
+     * 学员开课
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws DapengApiException
+     * @throws UserValidateException
+     */
     function postOpenCourse(Request $request){
         $data = collect($request)->toArray();
         $validator = Validator::make($data,[
@@ -351,7 +358,7 @@ class IndexController extends BaseController
 
         //用户开课的主站手机号
         //$studentMobile = "";
-        if($rosterData->dapeng_user_id && $rosterData->dapeng_user_mobile) {
+        if($rosterData->dapeng_user_mobile) {
             $studentMobile = $rosterData->dapeng_user_mobile;
         }else {
             if(!$request->phone){
