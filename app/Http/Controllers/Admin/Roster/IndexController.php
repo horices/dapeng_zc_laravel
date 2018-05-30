@@ -334,6 +334,13 @@ class IndexController extends BaseController
         return $this->export($data);
     }
 
+    /**
+     * 学员开课
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws DapengApiException
+     * @throws UserValidateException
+     */
     function postOpenCourse(Request $request){
         $data = collect($request)->toArray();
         $validator = Validator::make($data,[
