@@ -18,8 +18,6 @@
                 content:$(".package")
             });
             //默认选中
-            $("input[default]").prop("checked","checked");
-            //$(".select_package").show();
         }
 
         /**
@@ -30,10 +28,17 @@
             if(vm[vm.currentPos].data.readonly == true){
                 return false;
             }
-            vm[vm.currentPos].data.selectedPackage = [];
-            $(obj).parent().find("input[type='radio']:checked").each(function () {
-                vm[vm.currentPos].data.selectedPackage.push($(this).val());
-            });
+            if($(obj).parent().find("input[type='radio']:checked").val() != vm[vm.currentPos].data.selectedPackage){
+                //更换主套餐，需要清空其它信息
+                vm[vm.currentPos].data.selectedPackageAttach = [];
+                vm[vm.currentPos].data.selectedPackageCourse = [];
+                vm[vm.currentPos].data.selectedPackageRebate = '';
+                vm[vm.currentPos].data.selectedPackage = [];
+                $(obj).parent().find("input[type='radio']:checked").each(function () {
+                    vm[vm.currentPos].data.selectedPackage.push($(this).val());
+                });
+            }
+
             layer.closeAll();
         }
         //选择附加课程
@@ -43,16 +48,11 @@
                 return false;
             }
             vm.list = vm[vm.currentPos].data.packageAttach;
-            vm.$nextTick(function(){
-                layer.open({
-                    type:1,
-                    title:"请选择附加课程",
-                    area:['700px','550px'],
-                    content:$(".tc_dialog").find(".packageAttach").prop("outerHTML")
-                })
-                vm.list = '';
-                //默认选中
-                $("input[default]").prop("checked","checked");
+            layer.open({
+                type:1,
+                title:"请选择附加课程",
+                area:['700px','550px'],
+                content:$(".packageAttach")
             })
         }
         /**
@@ -76,18 +76,12 @@
                 return false;
             }
             vm.list = vm[vm.currentPos].data.packageCourse;
-            vm.$nextTick(function () {
-                layer.open({
-                    type:1,
-                    title:"请选择赠送课程",
-                    area:['700px','550px'],
-                    content:$(".tc_dialog").find(".packageCourse").prop("outerHTML")
-                })
-                vm.list = '';
-                //默认选中
-                $("input[default]").prop("checked","checked");
+            layer.open({
+                type:1,
+                title:"请选择赠送课程",
+                area:['700px','550px'],
+                content:$(".packageCourse")
             })
-
         }
         /**
          * 选择赠送课程后回调
@@ -106,24 +100,21 @@
         //添加支付信息
         function addPayInfo(index){
             vm.currentPos = index;
-            vm.$nextTick(function(){
-                layer.open({
-                    type:1,
-                    title:"添加支付信息",
-                    shadeClose:true,
-                    area:['500px','300px'],
-                    content:$(".tc_dialog").find(".tc_pay").prop("outerHTML")
-                })
-                vm.list = '';
-                $(".layui-layer .datetime").each(function(){
-                    var _this = $(this);
-                    laydate.render({
-                        elem: _this[0], //指定元素
-                        type:'datetime'
-                    });
-                });
-
+            layer.open({
+                type:1,
+                title:"添加支付信息",
+                shadeClose:true,
+                area:['500px','300px'],
+                content:$(".tc_dialog").find(".tc_pay").prop("outerHTML")
             })
+            $(".layui-layer .datetime").each(function(){
+                var _this = $(this);
+                laydate.render({
+                    elem: _this[0], //指定元素
+                    type:'datetime'
+                });
+            });
+
 
         }
 
@@ -764,8 +755,8 @@
                          <tr v-for="(item,index) in list">
                              <td>
                                  <div class="check_box">
-                                     <input type="radio" :value="index" name="course" :id="'check'+index" :checked="defaultChecked(index,'selectedPackage')" />
-                                     <label :for="'check'+index"></label>
+                                     <input type="radio" :value="index" name="course" :id="'package_check'+index" :checked="defaultChecked(index,'selectedPackage')" />
+                                     <label :for="'package_check'+index"></label>
                                  </div>
                              </td>
                              <td>@{{ item.title }}</td>
@@ -799,8 +790,8 @@
                          <tr v-for="(item,index) in list">
                              <td>
                                  <div class="check_box">
-                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :checked="defaultChecked(index,'selectedPackageAttach')" />
-                                     <label :for="'check'+index"></label>
+                                     <input type="checkbox" :value="index" name="course[]" :id="'package_attach_check'+index" :checked="defaultChecked(index,'selectedPackageAttach')" />
+                                     <label :for="'package_attach_check'+index"></label>
                                  </div>
                              </td>
                              <td>@{{ item.title }}</td>
@@ -833,8 +824,8 @@
                          <tr v-for="(item,index) in list">
                              <td>
                                  <div class="check_box">
-                                     <input type="checkbox" :value="index" name="course[]" :id="'check'+index" :checked="defaultChecked(index,'selectedPackageCourse')" />
-                                     <label :for="'check'+index"></label>
+                                     <input type="checkbox" :value="index" name="course[]" :id="'package_course_check'+index" :checked="defaultChecked(index,'selectedPackageCourse')" />
+                                     <label :for="'package_course_check'+index"></label>
                                  </div>
                              </td>
                              <td>@{{ item.title }}</td>
