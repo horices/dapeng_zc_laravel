@@ -67,7 +67,7 @@
         <tbody class="tbody" style="color:#333;">
         @foreach($list as $followInfo)
             <tr class="">
-                <td>{{ $followInfo->id }}</td>
+                <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $followInfo->roster->roster_type_text }}</td>
                 <td>{{ $followInfo->roster->roster_no }}</td>
                 <td>{{ $followInfo->roster->group->group_name}}</td>

@@ -48,7 +48,7 @@
         @if(count($list)>0)
             @foreach($list as $v)
                 <tr>
-                    <td>{{$v->code}}</td>
+                    <td>{{ $loop->index + 1 }}</td>
                     <td>{{$v->name}}</td>
                     <!--<td>{$l['qq'] ?: '--'}</td>  -->
                     <td>{{$v->mobile}}</td>

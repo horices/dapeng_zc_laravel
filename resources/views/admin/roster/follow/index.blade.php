@@ -46,7 +46,7 @@
             <tbody class="tbody" style="color:#333;">
             @foreach($list as $user)
                 <tr class="">
-                    <td>{{ $user->uid }}</td>
+                    <td>{{ $loop->index + 1 }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->roster_follow_count }}</td>
                     <td>
@@ -60,7 +60,7 @@
             <tr>
                 <td colspan="10">
                     <div class="pagenav">
-                        <ul>{{ $list->appends(Request::input())->links() }}</ul>
+                        {{ $list->appends(Request::input())->links() }}
                     </div>
                 </td>
             </tr>
