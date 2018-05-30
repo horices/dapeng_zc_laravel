@@ -28,7 +28,7 @@ class DapengApiBase {
      * @param string $data
      */
     public static function getPostData(array $data = null){
-        Util::setDefault($data['timestamp'], ceil(microtime(true)*1000));
+        Util::setDefault($data['timestamp'], intval(ceil(microtime(true)*1000)));
         $data['sign'] = strtoupper(self::makeSign($data));
         return $data;
     }
@@ -48,12 +48,14 @@ class DapengApiBase {
         $Curl = new Curl();
         //设置连接超时为两秒
         $Curl->setOpt(CURLOPT_CONNECTTIMEOUT_MS, 2000);
+        Log::info("\n\n==============================================================");
         Log::info("请求接口");
         Log::info("提交地址：".$url);
         Log::info("提交数据:");
         Log::info(self::getPostData($data));
         $returnData = $Curl->$method($url,self::getPostData($data))->response;
         Log::info("返回数据:".$returnData);
+        Log::info("==============================================================\n\n");
         $result = json_decode($returnData,true);
         if($result['status'] == "success"){
             $result['code'] = Util::SUCCESS;
