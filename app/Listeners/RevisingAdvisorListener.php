@@ -43,12 +43,14 @@ class RevisingAdvisorListener
             throw new UserValidateException($data['msg']);
         }
         //更换 last_adviser_id
-        RosterModel::where([
+        if(RosterModel::where([
             "adviser_id"=>$event->oldAdviserId,
             "qq_group_id"   => $event->groupId
         ])->update([
             'last_adviser_id'   =>  $event->newAdviser->uid,
             'last_adviser_name'   =>  $event->newAdviser->name,
-        ]);
+        ]) === false){
+            throw new UserValidateException("更新用户 last_adviser_id失败");
+        }
     }
 }
