@@ -2,13 +2,6 @@
 @section("right_content")
     <script type="text/javascript">
         $(function(){
-            var currentGroupStatus = "{$Think.get.group_status|default=''}";
-            var courseType = "{$Think.get.course_type}";
-            var isReg = "{$Think.get.is_reg}";
-            $("select[name='group_status'] option[value='"+currentGroupStatus+"']").prop("selected","selected");
-            $("select[name='course_type'] option[value='"+courseType+"']").prop("selected","selected");
-            $("select[name='is_reg'] option[value='"+isReg+"']").prop("selected","selected");
-            $("select[name='dateType'] option[value='{$Think.get.dateType}']").prop("selected",true);
             //列表点击变色
             $(".listCurrent").click(function () {
                 $(this).css('background-color','darkgrey').siblings().css('background-color','')
