@@ -8,7 +8,11 @@ use App\Utils\Util;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class RosterObserver{
+class RosterObserver extends  BaseObserver {
+    function creating(RosterModel $roster){
+        $roster->last_adviser_id = $roster->adviser_id;
+        $roster->last_adviser_name = $roster->adviser_name;
+    }
     function saving(RosterModel $rosterModel){
     }
     function saved(RosterModel $rosterModel){

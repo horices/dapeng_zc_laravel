@@ -109,7 +109,7 @@ class RosterModel extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     function adviser(){
-        return $this->belongsTo(UserModel::class,'adviser_id','uid')->withDefault();
+        return $this->belongsTo(UserModel::class,'last_adviser_id','uid')->withDefault();
     }
     /**
      * 群日志
@@ -262,8 +262,8 @@ class RosterModel extends BaseModel
         $createData['qq_group'] = $group->qq_group;
         $createData['inviter_id'] = $data['seoer_id'];
         $createData['inviter_name'] = $data['seoer_name'];
-        $createData['adviser_id'] = $createData['last_adviser_id'] = $group->leader_id;
-        $createData['adviser_name'] = $createData['last_adviser_name'] = $group->user->name;
+        $createData['adviser_id'] =  $group->leader_id;
+        $createData['adviser_name'] = $group->user->name;
         $createData['flag'] = $data['flag'] ?? 0;
         $createData['addtimes'] = $data['addtimes'] ?? 1;
         $createData['addtime'] = time();

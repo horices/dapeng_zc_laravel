@@ -44,7 +44,7 @@ class GroupModel extends BaseModel
     function setLeaderIdAttribute($v){
         if(isset($this->attributes['leader_id']) && $this->attributes['leader_id'] != $v){
             //触发更换课程顾问事件
-            event(new RevisingAdvisor(['groupId'=>$this->attributes['id'],'newAdviserId'=>$v]));
+            event(new RevisingAdvisor(['groupId'=>$this->attributes['id'],'newAdviserId'=>$v,'oldAdviserId'=>$this->attributes['leader_id']]));
         }
         $this->attributes['leader_id'] = $v;
     }
