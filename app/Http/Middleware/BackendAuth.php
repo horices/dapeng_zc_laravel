@@ -20,15 +20,9 @@ class BackendAuth
     public function handle($request, Closure $next)
     {
         if(!$request->session()->get("userToken")){
-            if($request->cookies->get("userInfo")){
-                //自动登陆
-                $user = new UserModel();
-                $user->fill($request->cookies->get("userInfo"));
-                app(AuthController::class)->login($user);
-            }else{
+            if(!app(AuthController::class)->autoLogin()){
                 return redirect(route("admin.auth.login"));
             }
-
         }
         $userInfo = app('status')->getUserInfo();
         if(app('status')->checkUserPermission(collect($request->route()->getAction())->get('as',''),$userInfo->grade) === false){

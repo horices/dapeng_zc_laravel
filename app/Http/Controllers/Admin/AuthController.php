@@ -18,7 +18,6 @@ class AuthController extends  BaseController{
      */
     function getLogin(){
         if($userInfo = Cookie::get("userInfo")){
-            $this->login($userInfo);
             return redirect()->route("admin.index.index");
         }
         return view("admin.auth.login");
@@ -66,6 +65,21 @@ class AuthController extends  BaseController{
         session(['userInfo'=>$userInfo]);
     }
 
+    /**
+     * 如果可以的话，进行自动登陆
+     * @return bool|string
+     */
+    function autoLogin(){
+        //检查COOKIE是否有值，有值则自动登陆
+        $userInfo  = Cookie::get("userInfo");
+        if($userInfo){
+            //自动登陆
+            $userInfo = app(UserModel::class)->fill($userInfo);
+            app(AuthController::class)->login($userInfo);
+            return $userInfo;
+        }
+        return false;
+    }
     function getLogout(Request $request){
         if($request->session()->has("userInfo")){
             $request->session()->flush();
