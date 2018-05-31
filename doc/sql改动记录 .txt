@@ -1,0 +1,204 @@
+CREATE TABLE `dp_reg_url` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `url_option` varchar(255) NOT NULL DEFAULT '' COMMENT '链接跳转地址',
+  `create_time` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `user_roster`
+ADD COLUMN `wx`  varchar(80) NOT NULL DEFAULT '' COMMENT '提交的微信号量' AFTER `qq`;
+
+ALTER TABLE `user_roster`
+ADD COLUMN `type`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '1qq号  2微信号' AFTER `flag`;
+
+
+
+ALTER TABLE `user_headmaster`
+ADD COLUMN `per_max_num_wx`  int NOT NULL DEFAULT 1 COMMENT '分配微信数量' AFTER `mobile`,
+ADD COLUMN `per_max_num_qq`  int NOT NULL DEFAULT 1 COMMENT '分配qq数量' AFTER `per_max_num_wx`;
+
+
+
+
+ALTER TABLE `roster_course`
+ADD COLUMN `user_type`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '1qq号  2微信号' AFTER `addtime`;
+
+
+ALTER TABLE `roster_course_log`
+ADD COLUMN `user_type`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '1qq号  2微信号' AFTER `addtime`;
+
+
+
+ALTER TABLE `qq_blacklist`
+ADD COLUMN `type`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '1QQ号量  2微信号量' AFTER `qq`;
+
+
+ALTER TABLE user_qqgroup
+ADD COLUMN `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1QQ号量  2微信号量';
+
+#########�޸Ŀ�ͨ�γ̼�¼��qq�ֶ�����###########
+ALTER TABLE `roster_course`
+MODIFY COLUMN `qq`  varchar(15) NOT NULL DEFAULT '' COMMENT '用户qq' AFTER `roster_id`;
+
+ALTER TABLE `roster_course_log`
+MODIFY COLUMN `qq`  varchar(15) NOT NULL DEFAULT '' COMMENT '用户qq' AFTER `roster_id`;
+
+
+
+#############################################################
+#														   	#
+#             展翅系统 2017-11-06 添加统计群状态所有时间					#	
+#														   	#
+#############################################################
+
+
+ALTER TABLE `roster_course_log`
+ADD INDEX `roster_id` (`roster_id`) USING BTREE ,
+ADD INDEX `qq` (`qq`) USING BTREE ;
+ALTER TABLE `user_roster`
+DROP INDEX `qq` ,
+ADD INDEX `qq` (`qq`, `addtime`) USING BTREE ;
+
+CREATE TABLE `event_group_log` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `roster_id` int(10) NOT NULL,
+  `qq` varchar(15) NOT NULL,
+  `addtime` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `roster_id` (`roster_id`) USING BTREE,
+  KEY `qq` (`qq`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='QQ群记录';
+
+
+
+ALTER TABLE `event_group_log`
+MODIFY COLUMN `roster_id`  int(10) NOT NULL DEFAULT 0 AFTER `id`,
+MODIFY COLUMN `qq`  varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'QQ 号' AFTER `roster_id`,
+MODIFY COLUMN `addtime`  int(10) NOT NULL DEFAULT 0 AFTER `qq`,
+ADD COLUMN `qq_nickname`  varchar(100) NOT NULL DEFAULT '' AFTER `qq`,
+ADD COLUMN `group`  int(10) NOT NULL DEFAULT 0 COMMENT '群号' AFTER `qq_nickname`,
+ADD COLUMN `group_name`  varchar(200) NOT NULL DEFAULT '' COMMENT '群昵称' AFTER `group`,
+ADD COLUMN `operator_name`  varchar(100) NOT NULL DEFAULT '' COMMENT '操作人' AFTER `group_name`;
+
+ALTER TABLE `event_group_log`
+ADD COLUMN `operator`  varchar(15) NOT NULL AFTER `group_name`;
+
+ALTER TABLE `event_group_log`
+ADD COLUMN `rebot_qq`  varchar(15) NOT NULL DEFAULT '' COMMENT '机器人QQ号' AFTER `operator_name`;
+
+ALTER TABLE `event_group_log`
+ADD COLUMN `group_status`  tinyint(1) NOT NULL DEFAULT 0 COMMENT 'QQ群状态' AFTER `group_name`;
+
+ALTER TABLE `event_group_log`
+CHANGE COLUMN `rebot_qq` `robot_qq`  varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '机器人QQ号' AFTER `operator_name`;
+
+############################ 添加统计群状态所有时间结束###############################
+
+
+
+#############################################################################
+#																			#
+#				2017-11-09 	删除课程后，即时变动展翅系统中的开课							#
+#																			#
+#############################################################################
+//开通课程保存大鹏主站的用户ID号
+ALTER TABLE `roster_course_log`
+ADD COLUMN `dapeng_user_id`  varchar(50) NOT NULL DEFAULT '' AFTER `id`;
+
+ALTER TABLE `roster_course_log`
+ADD COLUMN `operator_id`  varchar(50) NOT NULL DEFAULT '' AFTER `user_type`,
+ADD COLUMN `operator_name`  varchar(100) NOT NULL DEFAULT '' AFTER `operator_id`,
+ADD COLUMN `operator_ip`  varchar(15) NOT NULL DEFAULT '' AFTER `operator_name`;
+
+ALTER TABLE `roster_course_log`
+MODIFY COLUMN `qq`  varchar(15) NOT NULL AFTER `roster_id`,
+ADD INDEX `dapeng_user_id` (`dapeng_user_id`) USING HASH ;
+
+ALTER TABLE `roster_course_log`
+MODIFY COLUMN `course_type`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '课程类型' AFTER `action`;
+ALTER TABLE `user_roster`
+ADD COLUMN `last_open_course_time`  int(10) DEFAULT 0 NOT NULL AFTER `course_name`;
+
+ALTER TABLE `roster_course_log`
+DROP INDEX `qq` ,
+ADD INDEX `qq` (`qq`) USING HASH ;
+
+ALTER TABLE `roster_course`
+ADD INDEX `qq` (`qq`, `addtime`) ;
+
+#############################2017-11-09 结束####################################
+
+
+ALTER TABLE `roster_course`
+MODIFY COLUMN `qq`  varchar(15) NOT NULL AFTER `roster_id`;
+
+
+
+#############################################################################
+#																			#
+#				2017-12-15 	课程顾问允许绑定主站帐号									#
+#																			#
+#############################################################################
+
+
+ALTER TABLE `user_headmaster`
+ADD COLUMN `dapeng_user_id`  varchar(20) NOT NULL DEFAULT '' AFTER `code`,
+ADD COLUMN `dapeng_user_mobile`  varchar(20) NOT NULL DEFAULT '' AFTER `dapeng_user_id`;
+
+
+#############################################################################
+#																			#
+#				2017-12-25 微信查询过慢，添加微信索引，									#
+#																			#
+#############################################################################
+ALTER TABLE `user_roster`
+ADD INDEX `wx` (`wx`, `addtime`,`id`) ;
+
+
+
+#############################################################################
+#																			#
+#				2018-1-9 修改展翅系统使用的开课接口，保存用户开课的手机号，									#
+#																			#
+#############################################################################
+ALTER TABLE `user_roster`
+ADD COLUMN `dapeng_user_mobile`  varchar(15) NOT NULL DEFAULT '' COMMENT '大鹏主站用户的开课手机号' AFTER `dapeng_user_id`;
+
+
+#############################################################################
+#																			#
+#				2018-01-11 user_roster保存QQ号的最新课程顾问						#
+#																			#
+#############################################################################
+ALTER TABLE `user_roster`
+ADD COLUMN `last_adviser_id`  int(10) NOT NULL DEFAULT 0 AFTER `adviser_name`,
+ADD COLUMN `last_adviser_name`  varchar(32) NOT NULL DEFAULT '' AFTER `last_adviser_id`;
+ALTER TABLE `user_roster`
+MODIFY COLUMN `last_adviser_id`  int(10) NOT NULL DEFAULT 0 COMMENT '最新的课程顾问ID' AFTER `adviser_name`,
+MODIFY COLUMN `last_adviser_name`  varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '最新的课程顾问姓名' AFTER `last_adviser_id`;
+
+#############################################################################
+#																			#
+#				2018-01-22 保存QQ群二维码识别后的链接地址								#
+#																			#
+#############################################################################
+ALTER TABLE `user_qqgroup`
+ADD COLUMN `qrc_link`  varchar(200) NOT NULL DEFAULT '' COMMENT 'QQ群二维码链接地址' AFTER `qrc_url`;
+
+#############################################################################
+#																			#
+#				2018-02-07 保存员工的在职状态和员工编号							#
+#																			#
+#############################################################################
+ALTER TABLE `user_headmaster`
+ADD COLUMN `is_incumbency`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '在职状态[1:在职，0:离职]' AFTER `status`;
+ALTER TABLE `user_headmaster`
+ADD COLUMN `staff_no`  varchar(50) NOT NULL DEFAULT '' COMMENT '员工编号' AFTER `is_incumbency`;
+
+#####添加6批量导入的来源类型#####
+ALTER TABLE `user_roster`
+MODIFY COLUMN `from_type`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '量的来源类型 ，1:正常提交 2:大鹏PC站 3:大鹏WAP站 4:Android 5:IOS 6.批量导入' AFTER `type`;
+
+################### 添加大鹏主站注册时间
+ALTER TABLE `user_roster`
+ADD COLUMN `dapeng_reg_time`  int(10) NOT NULL DEFAULT 0 AFTER `reg_time`;
