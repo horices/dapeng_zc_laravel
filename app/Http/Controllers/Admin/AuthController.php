@@ -58,8 +58,10 @@ class AuthController extends  BaseController{
             throw new AuthenticationException("您还不入登入系统中");
         }
         //记住用户名,30天
-        if($rememberMe)
-            Cookie::queue("userInfo",$userInfo,60*24*30);
+        if($rememberMe){
+            //保存存用户对象时，会不能正常保存，所以需要转成数组，登陆时，fill 到对象中
+            Cookie::queue("userInfo",$userInfo->toArray(),60*24*30);
+        }
         session(['userToken'=>$userInfo->uid]);
         session(['userInfo'=>$userInfo]);
     }

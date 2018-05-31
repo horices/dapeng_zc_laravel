@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Admin\AuthController;
+use App\Models\UserModel;
 use Closure;
 use Illuminate\Support\Facades\View;
 
@@ -21,7 +22,9 @@ class BackendAuth
         if(!$request->session()->get("userToken")){
             if($request->cookies->get("userInfo")){
                 //自动登陆
-                app(AuthController::class)->login($request->cookies->get("userInfo"));
+                $user = new UserModel();
+                $user->fill($request->cookies->get("userInfo"));
+                app(AuthController::class)->login($user);
             }else{
                 return redirect(route("admin.auth.login"));
             }
