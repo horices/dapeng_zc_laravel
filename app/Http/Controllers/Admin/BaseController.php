@@ -165,6 +165,10 @@ class BaseController extends Controller{
         if($searchType && $keywords !== null){
             if($searchType == "roster_no"){
                 $roster->where("qq",$keywords)->orWhere('wx',$keywords);
+            }elseif($searchType == "group_name") {
+                $roster->whereHas("group",function($group) use ($keywords){
+                    $group->where("group_name",$keywords);
+                });
             }else{
                 $where[$searchType] = $keywords;
             }

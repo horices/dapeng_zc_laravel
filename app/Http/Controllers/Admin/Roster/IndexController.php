@@ -102,6 +102,7 @@ class IndexController extends BaseController
 //            $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
 //        }
         $where = [];
+        $statistics = [];
         $isLoadStatistics = false;  //是否已经加载统计，没有加载的话，加载全部统计
         if(!$request->has("startdate")){
             $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
@@ -222,7 +223,7 @@ class IndexController extends BaseController
         if(Input::get('export') == 1){
             return $this->exportRosterList($query);
         }
-        if(!$isLoadStatistics)
+        if(!$isLoadStatistics && $showStatistics)
             $statistics = $this->getStatistics();
         $query->orderBy("id","desc");
         $list = $query->paginate();
