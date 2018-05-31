@@ -61,11 +61,12 @@ class BaseModel extends Model
         }
         return $fields;
     }
-
+/*
     public function getConnectionName()
     {
-        return Util::getSchoolName();
-    }
+        //以配置文件中的数据库连接为准
+        return env("DB_CONNECTION");//Util::getSchoolName();
+    }*/
 
     /**
      * 重写父级自动填充，自动过滤非本表自段
