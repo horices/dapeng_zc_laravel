@@ -31,7 +31,7 @@ class RevisingAdvisorListener
     public function handle(RevisingAdvisor $event)
     {
         //如果没有QQ号需要转移，则跳过
-        if(!$event->qqList){
+        if(!$event->qqList->count()){
             return ;
         }
         $data = DapengUserApi::revisingAdvisor([
