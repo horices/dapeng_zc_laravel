@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\UserException;
+use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Controller;
 use App\Models\RosterModel;
 use App\Models\UserModel;
 use App\Utils\Util;
-use Faker\Provider\bn_BD\Utils;
+use Curl\Curl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -22,7 +24,7 @@ class RosterController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    function getInfo(Request $request){
+    function getInfo(Request $request,Curl $curl){
         Validator::make($request->all(),[
             'schoolId'  =>  "nullable|in:SJ,MS",
             'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",
@@ -33,15 +35,37 @@ class RosterController extends BaseController
             'schoolId.in' =>  "请选择正确的学院",
             'keyword.required'   =>  "请输入查询的关键字"
         ])->validate();
-        $roster = RosterModel::with('group','adviser')->where(Input::get("type"),Input::get("keyword"))->orderBy("id","desc")->first();
-        $roster = $roster->toArray();
-        $roster['origin'] = Str::lower(Util::getSchoolName());
-        $roster['adviser_qq'] = $roster['adviser']['qq'];
-        $roster['adviser_name'] = $roster['adviser']['name'];
-        $roster['adviser_mobile'] = $roster['adviser']['mobile'];
-        $roster['qq_group_url'] = $roster['group']['qrc_link'];
-        $roster['qq_group_qrc'] = $roster['group']['qrc_url'];
-        return Util::ajaxReturn(Util::SUCCESS,"",$roster);
+        $result = [];
+        //没有传入学院ID，或传入当前学院，表示需要查询当前学院的信息
+        if(!$request->get("schoolId") || Util::getSchoolName() == $request->get("schoolId")){
+            $roster = RosterModel::with('group','adviser')->where(Input::get("type"),Input::get("keyword"))->orderBy("id","desc")->first();
+            $roster = $roster->toArray();
+            $roster['origin'] = Str::lower(Util::getSchoolName());
+            $roster['adviser_qq'] = $roster['adviser']['qq'];
+            $roster['adviser_name'] = $roster['adviser']['name'];
+            $roster['adviser_mobile'] = $roster['adviser']['mobile'];
+            $roster['qq_group_url'] = $roster['group']['qrc_link'];
+            $roster['qq_group_qrc'] = $roster['group']['qrc_url'];
+            $result[Str::lower(Util::getSchoolName())] = $roster;
+        }
+        //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && $request->get("schoolId") != 'SJ'){
+            //获取美术学院数据
+            $baseUrl = URL::route(Route::currentRouteName(),[],false);
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
+            $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
+            $response = $curl->post($host.$baseUrl,$request->all())->response;
+            $curlData = Util::jsonDecode($response);
+            if(!$curlData){
+                throw new UserValidateException("获取美术学院信息返回失败".$response);
+            }
+            //美术学院获取失败时，直接返回
+            if($curlData['code'] == Util::FAIL){
+                return Util::ajaxReturn(Util::FAIL,$curlData['msg'],$curlData['data']);
+            }
+            $result = collect($result)->merge($curlData);
+        }
+        return Util::ajaxReturn(Util::SUCCESS,"",$result);
     }
 
 
