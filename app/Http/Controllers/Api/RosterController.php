@@ -79,10 +79,38 @@ class RosterController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    function setInfo(Request $request){
-        $rosterId = $request->get("roster_id");
-        $roster = RosterModel::find($rosterId);
-        $roster->fild($request->all());
+    function setInfo(Request $request,Curl $curl){
+        Validator::make($request->all(),[
+            'schoolId'  =>  "required|in:SJ,MS",
+            'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",
+            'keyword'   =>  'required'
+        ],[
+            'type.required' =>  "请输入要查询的类型",
+            'type.in'   =>  "请选择正确的查询类型",
+            'schoolId.in' =>  "请选择正确的学院",
+            'keyword.required'   =>  "请输入查询的关键字"
+        ])->validate();
+        //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
+        //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && $request->get("schoolId") != 'SJ'){
+            //获取美术学院数据
+            $baseUrl = URL::route(Route::currentRouteName(),[],false);
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
+            $request->merge($this->getPostData($request->except('sign')));
+            Log::error("转发地址：".$host.$baseUrl);
+            $response = $curl->get($host.$baseUrl,$request->all())->response;
+            $curlData = Util::jsonDecode($response);
+            if(!$curlData){
+                throw new UserValidateException("获取美术学院信息返回失败".$response);
+            }
+            //美术学院获取失败时，直接返回
+            if($curlData['code'] == Util::FAIL){
+                return Util::ajaxReturn(Util::FAIL,$curlData['msg']);
+            }
+        }
+        //$rosterId = $request->get("roster_id");
+        $roster = RosterModel::where(Input::get("type"),Input::get("keyword"))->first();
+        $roster->fill($request->all());
         if($roster->save() === false){
             Log::error("保存roster信息失败");
         }
