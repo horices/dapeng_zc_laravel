@@ -66,7 +66,7 @@ class RosterController extends BaseController
             }
             //美术学院获取失败时，直接返回
             if($curlData['code'] == Util::FAIL){
-                return Util::ajaxReturn(Util::FAIL,$curlData['msg'],$curlData['data']);
+                return Util::ajaxReturn(Util::FAIL,$curlData['msg'],$curlData);
             }
             $result = collect($result)->merge($curlData);
         }
