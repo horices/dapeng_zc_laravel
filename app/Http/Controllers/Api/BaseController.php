@@ -12,13 +12,14 @@ class BaseController extends Controller
 {
     protected static $apiKey = "8934031001776A04444F72154425DDBC";
     /*protected static $url;*/
-    function __construct(){
-        Log::info(Request()->input());
+    function __construct(Request $request){
+        Log::info("请求接口:".url()->full());
+        Log::info("请求数据:");
+        Log::info($request->input());
         $validate = $this->validateApi();
         if($validate === false){
             throw new DapengApiException("接口验证错误！");
         }
-        Log::info("调用通知接口:".url()->full());
     }
 
 
