@@ -113,6 +113,7 @@ class RosterController extends BaseController
         $roster->fill($request->all());
         if($roster->save() === false){
             Log::error("保存roster信息失败");
+            throw new UserValidateException("修改信息失败！");
         }
         return Util::ajaxReturn(Util::SUCCESS,"success","修改成功");
     }
