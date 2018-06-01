@@ -5,7 +5,7 @@ use App\Utils\Util;
 use Curl\Curl;
 use Illuminate\Support\Facades\Log;
 
-class DapengApiBase {
+class DapengApiBase extends BaseApi {
     private static $apiKey = '8934031001776A04444F72154425DDBC';
     protected static $page = 1;
     protected static $pagesize = 10;

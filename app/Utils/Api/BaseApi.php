@@ -10,6 +10,6 @@ namespace App\Utils\Api;
 
 
 
-class BaseApi extends DapengApiBase{
+class BaseApi {
 
 }

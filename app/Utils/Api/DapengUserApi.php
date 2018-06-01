@@ -34,7 +34,12 @@ class DapengUserApi extends DapengApiBase {
         'revisingAdvisor'           =>  "/api/displaywindow/revisingAdvisor",   //接口编号 62 ,修改学员主站的课程顾问
         'openCourse'                =>  "/api/extension/opencourse",    //接口59 开通课程
         //课程顾问开通课程
-        'openCourseHead'            =>  '/api/extension/advisorOpenCourse'
+        'openCourseHead'            =>  '/api/extension/advisorOpenCourse',
+        'integralRecordDetails'       =>  '/api/extension/integralAccess', //2.获取用户积分记录列表
+        'getTotalScore'               =>  '/api/extension/getTotalScore',   //1.获得用户总积分
+        'operatingUserPoints'         =>  '/api/extension/operatingUserPoints',   //操作用户积分
+        'getWay'                      =>    '/api/extension/integralAccess', //38.获取用户积分获得方式列表
+        'getIntergalTask'             =>    '/api/extension/getIntegralTask', //44 获取用户积分获得任务列表
     ];
     /**
      * 获取用户信息
@@ -60,7 +65,7 @@ class DapengUserApi extends DapengApiBase {
             //$data['data']['user']['gender'] = "保密";
         }
         //获取用户身份 接口1
-        $info = UserIntegralApi::getTotalScoreByUserId($data['data']['user']['userId']);
+        $info = DapengUserApi::getTotalScoreByUserId($data['data']['user']['userId']);
         $data['data']['user'] = collect([$data['data']['user'],$info['data']])->collapse();
         //$data= ArrayHelper::merge($data,$info);
         $typeArr = [
@@ -108,5 +113,14 @@ class DapengUserApi extends DapengApiBase {
     static function openCourseHead($data){
         $res = parent::api(self::$url['openCourseHead'],$data,"post");
         return $res;
+    }
+
+    /**
+     * 1.获得用户总积分
+     */
+    public static function getTotalScoreByUserId($userId){
+        $data['userId'] = $userId;
+        $data = self::api(self::$url['getTotalScore'],$data);
+        return $data;
     }
 }
