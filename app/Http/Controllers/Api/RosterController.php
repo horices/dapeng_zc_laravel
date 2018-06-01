@@ -97,8 +97,7 @@ class RosterController extends BaseController
             $baseUrl = URL::route(Route::currentRouteName(),[],false);
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
             $request->merge($this->getPostData($request->except('sign')));
-            Log::error("转发地址：".$host.$baseUrl);
-            $response = $curl->get($host.$baseUrl,$request->all())->response;
+            $response = $curl->post($host.$baseUrl,$request->all())->response;
             $curlData = Util::jsonDecode($response);
             if(!$curlData){
                 throw new UserValidateException("获取美术学院信息返回失败".$response);
@@ -110,6 +109,10 @@ class RosterController extends BaseController
         }
         //$rosterId = $request->get("roster_id");
         $roster = RosterModel::where(Input::get("type"),Input::get("keyword"))->first();
+        if(!$roster){
+            Log::error("主站已经注册成功，但展翅未改dapeng_user_mobile：".Input::get("keyword"));
+            throw new UserValidateException("未找到专属链接的用户！");
+        }
         $roster->fill($request->all());
         if($roster->save() === false){
             Log::error("保存roster信息失败");
