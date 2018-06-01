@@ -40,7 +40,7 @@ class BaseController extends Controller
         $sign       = isset($data['sign']) ? $data['sign'] : "";
         $timestamp       = isset($data['timestamp']) ? $data['timestamp'] : "";
         unset($data['sign']);
-        $validateData = self::getPostData($data);
+        $validateData = $this->getPostData($data);
         if(empty($sign) || empty($timestamp)){
             return false;
         }
@@ -57,7 +57,7 @@ class BaseController extends Controller
      * 生成签名
      * @param string $data
      */
-    private static function makeSign($data = null){
+    protected function makeSign($data = null){
         ksort($data);
         $str = '';
         foreach($data as $k=>$v){
@@ -72,9 +72,9 @@ class BaseController extends Controller
      * 生成 POST数据
      * @param string $data
      */
-    private static function getPostData($data = null){
+    protected function getPostData($data = null){
         //$data['timestamp'] = ceil(microtime(true)*1000);
-        $data['sign'] = strtoupper(self::makeSign($data));
+        $data['sign'] = strtoupper($this->makeSign($data));
         return $data;
     }
 }
