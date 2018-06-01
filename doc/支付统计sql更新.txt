@@ -1,0 +1,131 @@
+################2017.9.1######添加新字段，标识信息来源客户端#########
+ALTER TABLE `user_registration`
+ADD COLUMN `client_submit`  varchar(10) NOT NULL DEFAULT '' COMMENT '提交过来的客户端 PC WAP' AFTER `is_active`;
+
+ALTER TABLE `user_registration`
+MODIFY COLUMN `is_open`  tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否时最新开通' AFTER `qq`;
+
+################2017.9.2######添加新字段，标识报名付款的分期方式#########
+ALTER TABLE `user_registration`
+ADD COLUMN `fq_type`  varchar(10) NOT NULL DEFAULT '' COMMENT '默认无,CASH:现金,HUABEI:花呗分期,MYFQ:蚂蚁分期' AFTER `is_active`;
+
+###################以上已更新到正式和测试#####################
+
+#2017.9.14#
+ALTER TABLE `user_registration`
+ADD COLUMN `server_date`  tinyint NOT NULL DEFAULT 0 COMMENT '赠送服务期 0.无 1.一个月 2.两个月' AFTER `reg_time`;
+
+
+#2017.9.14#
+ALTER TABLE `user_registration`
+MODIFY COLUMN `is_open`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '0.未开课 1.部分开课 2.全部开课  ' AFTER `qq`;
+
+###################以上已更新到正式和测试#####################
+
+#优惠活动表#
+ALTER TABLE `rebate_activity`
+ADD COLUMN `rebate_id`  int NOT NULL DEFAULT 0 COMMENT '优惠活动的id,一个优惠活动拥有唯一一个course_id,可能会在多条记录（同一优惠不同版本）中出现' AFTER `id`,
+ADD COLUMN `status`  varchar(10) NOT NULL DEFAULT 'USE' COMMENT '当前优惠活动的状态,USE:正在使用。DEL:已经删除。MOD:已经修改。' AFTER `rebate_id`;
+#优惠活动表#
+ALTER TABLE `rebate_activity`
+ADD INDEX `rebate_id` (`rebate_id`) USING BTREE ;
+#课程套餐表#
+ALTER TABLE `course_package`
+ADD COLUMN `package_id`  int NOT NULL DEFAULT 0 COMMENT '课程套餐的id,一套课程拥有唯一一个package_id,可能会在多条记录（同一套餐不同版本）中出现' AFTER `id`,
+ADD COLUMN `status`  varchar(10) NOT NULL DEFAULT 'USE' COMMENT '当前课程套餐的状态,USE:正在使用。DEL:已经删除。MOD:已经修改' AFTER `package_id`,
+ADD INDEX `package_id` (`package_id`) USING BTREE ;
+#支付记录字段修改#
+ALTER TABLE `user_pay_log`
+ADD COLUMN `status`  varchar(10) NOT NULL DEFAULT 'USE' COMMENT '当前支付记录状态,USE:正常,DEL:已删除,暂时用不到' AFTER `id`;
+
+
+
+
+#开始#2018.5.3# 修改支付统计系统#
+
+#创建user_enroll 用户登记表#
+CREATE TABLE `user_enroll` (
+`id`  int NOT NULL AUTO_INCREMENT COMMENT '主键' ,
+`uid`  int NOT NULL DEFAULT 0 COMMENT '外键user_roster的ID' ,
+`name`  varchar(30) NOT NULL DEFAULT '' COMMENT '学员姓名' ,
+`adviser_id`  int NOT NULL DEFAULT 0 COMMENT '课程顾问ID user_headmaster' ,
+`mobile`  varchar(15) NOT NULL DEFAULT '' COMMENT '学员手机号' ,
+`qq`  varchar(15) NOT NULL DEFAULT '' COMMENT '学员QQ' ,
+`wx`  varchar(20) NOT NULL DEFAULT '' COMMENT '学员微信' ,
+`is_guide`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否导学 0未导学，1导学' ,
+PRIMARY KEY (`id`));
+
+#支付报名表，添加wx字段#
+ALTER TABLE `user_registration`
+ADD COLUMN `wx`  varchar(30) NOT NULL AFTER `qq`;
+ALTER TABLE `user_registration`
+MODIFY COLUMN `wx`  varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '学院微信号' AFTER `qq`;
+
+#支付报名表，添加wx字段#
+ALTER TABLE `rebate_activity`
+ADD COLUMN `package_id`  int(11) NOT NULL DEFAULT 0 COMMENT '所属套餐ID' AFTER `rebate_id`;
+
+#支付报名表，添加school_id字段#
+ALTER TABLE `user_registration`
+ADD COLUMN `school_id`  varchar(10) NOT NULL DEFAULT '' COMMENT '学院标识SJ:设计学院MS:美术学院' AFTER `id`;
+
+#支付报名表，附加课程总金额#
+ALTER TABLE `user_registration`
+ADD COLUMN `course_attach_all_price`  decimal(10,2) NOT NULL DEFAULT 0 COMMENT '附加课程总金额' AFTER `package_total_price`;
+
+#支付报名表，添加是否导学字段#
+ALTER TABLE `user_registration`
+ADD COLUMN `is_guide`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否导学 0否 1是' AFTER `is_open`;
+
+#套餐表，添加学院标识#
+ALTER TABLE `course_package`
+ADD COLUMN `school_id`  varchar(10) NOT NULL DEFAULT '' COMMENT '所属学院标识 SJ设计 MS美术' AFTER `package_id`;
+
+#套餐表，外键enroll_id#
+ALTER TABLE `user_registration`
+ADD COLUMN `enroll_id`  int NOT NULL DEFAULT 0 COMMENT '用户登记表ID' AFTER `school_id`;
+
+#支付记录表添加wx字段#
+ALTER TABLE `user_pay_log`
+ADD COLUMN `wx`  varchar(20) NOT NULL DEFAULT '' COMMENT '开课学员的微信' AFTER `qq`;
+
+#报名表 添加package_price#
+ALTER TABLE `user_registration`
+ADD COLUMN `package_price`  decimal(10,2) NOT NULL DEFAULT 0 COMMENT '主套餐金额' AFTER `amount_submitted`;
+
+#登记表 添加adviser_name#
+ALTER TABLE `user_enroll`
+ADD COLUMN `adviser_name`  varchar(30) NOT NULL DEFAULT '' COMMENT '课程顾问姓名' AFTER `adviser_id`;
+
+
+#结束#2018.5.3# 
+
+
+#用户报名表添加 外键enroll_id#
+ALTER TABLE `user_registration`
+ADD COLUMN `enroll_id`  int NOT NULL DEFAULT 0 COMMENT '学员登记(user_enroll)外键ID' AFTER `uid`;
+
+#结束 2018.5.4#
+
+
+#开始 2018.5.8#
+#套餐表，新增course_package字段#
+ALTER TABLE `course_package`
+ADD COLUMN `course_attach`  text NOT NULL COMMENT '附加课程和赠送课程json包' AFTER `course_id`;
+#结束 2018.5.8#
+
+#开始 2018.5.9#
+ALTER TABLE `user_registration`
+ADD COLUMN `package_attach_content`  text NOT NULL COMMENT '附加套餐的信息json格式' AFTER `course_attach_all_price`;
+#结束 2018.5.9#
+
+ALTER TABLE `user_registration`
+MODIFY COLUMN `package_total_price`  decimal(10,2) NOT NULL DEFAULT 0.00 COMMENT '应交总金额' AFTER `package_price`;
+
+ALTER TABLE `user_registration`
+MODIFY COLUMN `package_all_title`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '套餐名称' AFTER `rebate_id`;
+
+
+#结束 修改支付统计系统#
+
+
