@@ -26,8 +26,19 @@ class BaseController extends Controller
         if($validate === false){
             throw new DapengApiException("接口验证错误！");
         }
+        //当前学院为设计学院，且要查询的学院不仅有设计学院
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && $request->get("schoolId") != Util::SCHOOL_NAME_SJ){
+            //$this->forward();
+        }
     }
 
+    /**
+     * 对请求数据进行转发
+     * @param string $url
+     * @param array $data
+     * @param string $method
+     * @throws UserValidateException
+     */
     function forward($url='',$data=[],$method=''){
         if(!$url){
             //获取美术学院数据
@@ -49,6 +60,10 @@ class BaseController extends Controller
         $this->forwardData = $curlData['data'];
     }
 
+    /**
+     * 获得转发的结果
+     * @return array
+     */
     function getForwardData(){
         return $this->forwardData;
     }
