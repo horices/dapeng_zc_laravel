@@ -113,7 +113,7 @@ class RosterController extends BaseController
             Log::error("主站已经注册成功，但展翅未改dapeng_user_mobile：".Input::get("keyword"));
             throw new UserValidateException("未找到专属链接的用户！");
         }
-        $roster->fill($request->all());
+        $roster->fill($request->only(['dapeng_user_mobile','is_reg','dapeng_user_id','schoolId']));
         if($roster->save() === false){
             Log::error("保存roster信息失败");
             throw new UserValidateException("修改信息失败！");
