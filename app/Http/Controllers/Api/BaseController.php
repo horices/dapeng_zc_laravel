@@ -3,14 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\DapengApiException;
+use App\Exceptions\UserValidateException;
 use App\Utils\Util;
+use Curl\Curl;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController as Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class BaseController extends Controller
 {
-    protected static $apiKey = "8934031001776A04444F72154425DDBC";
+    protected $apiKey = "8934031001776A04444F72154425DDBC";
+    protected $forwardData = [];
     /*protected static $url;*/
     function __construct(Request $request){
         Log::info("请求接口:".url()->full());
@@ -22,13 +28,38 @@ class BaseController extends Controller
         }
     }
 
+    function forward($url='',$data=[],$method=''){
+        if(!$url){
+            //获取美术学院数据
+            $baseUrl = URL::route(Route::currentRouteName(),[],false);
+            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
+            $url = $host.$baseUrl;
+        }
+        if(!$data){
+            request()->merge($this->getPostData(request()->except('sign')));
+            $data = request()->all();
+        }
+        $method = $method ? $method : Str::lower(request()->getMethod());
+        $curl = app(Curl::class);
+        $response = $curl->$method($url,$data)->response;
+        $curlData = Util::jsonDecode($response);
+        if(!$curlData || $curlData['code'] == Util::FAIL){
+            throw new UserValidateException("接口转发返回失败".$response);
+        }
+        $this->forwardData = $curlData['data'];
+    }
+
+    function getForwardData(){
+        return $this->forwardData;
+    }
+
 
     /**
      * 接口签名验证
      * @return bool
      */
     function validateApi(){
-        $data = Request()->input();
+        $data = request()->input();
         //return Util::ajaxReturn(1,$data);
 //        $data = [
 //            'type'      =>  'id',
@@ -65,7 +96,7 @@ class BaseController extends Controller
                 $str .= $k.$v;
             }
         }
-        return md5(self::$apiKey.$str.self::$apiKey);
+        return md5($this->apiKey.$str.$this->apiKey);
     }
 
     /**
