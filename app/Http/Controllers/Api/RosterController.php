@@ -58,7 +58,7 @@ class RosterController extends BaseController
             //获取美术学院数据
             $baseUrl = URL::route(Route::currentRouteName(),[],false);
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
-            $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
+            $request->merge(['sign'=>$this->makeSign($request->except('sign'))]);
             $response = $curl->get($host.$baseUrl,$request->all())->response;
             $curlData = Util::jsonDecode($response);
             if(!$curlData){
@@ -66,7 +66,7 @@ class RosterController extends BaseController
             }
             //美术学院获取失败时，直接返回
             if($curlData['code'] == Util::FAIL){
-                return Util::ajaxReturn(Util::FAIL,$curlData['msg'],$curlData);
+                return Util::ajaxReturn(Util::FAIL,$curlData['msg']);
             }
             $result = collect($result)->merge($curlData);
         }
