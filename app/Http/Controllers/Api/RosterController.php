@@ -39,13 +39,15 @@ class RosterController extends BaseController
         //没有传入学院ID，或传入当前学院，表示需要查询当前学院的信息
         if(!$request->get("schoolId") || Util::getSchoolName() == $request->get("schoolId")){
             $roster = RosterModel::with('group','adviser')->where(Input::get("type"),Input::get("keyword"))->orderBy("id","desc")->first();
-            $roster = $roster->toArray();
-            $roster['origin'] = Str::lower(Util::getSchoolName());
-            $roster['adviser_qq'] = $roster['adviser']['qq'];
-            $roster['adviser_name'] = $roster['adviser']['name'];
-            $roster['adviser_mobile'] = $roster['adviser']['mobile'];
-            $roster['qq_group_url'] = $roster['group']['qrc_link'];
-            $roster['qq_group_qrc'] = $roster['group']['qrc_url'];
+            if($roster){
+                $roster = $roster->toArray();
+                $roster['origin'] = Str::lower(Util::getSchoolName());
+                $roster['adviser_qq'] = $roster['adviser']['qq'];
+                $roster['adviser_name'] = $roster['adviser']['name'];
+                $roster['adviser_mobile'] = $roster['adviser']['mobile'];
+                $roster['qq_group_url'] = $roster['group']['qrc_link'];
+                $roster['qq_group_qrc'] = $roster['group']['qrc_url'];
+            }
             $result[Str::lower(Util::getSchoolName())] = $roster;
         }
         //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
