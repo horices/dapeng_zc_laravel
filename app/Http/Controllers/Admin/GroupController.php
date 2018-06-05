@@ -66,6 +66,7 @@ class GroupController extends BaseController
     function postSave(Request $request){
         $rules = [
             'qq_group'  =>  'sometimes|required|unique:user_qqgroup,qq_group',
+            'group_name'    =>  "nullable|unique:user_qqgroup,group_name",
             'leader_id' =>  'sometimes|required|exists:user_headmaster,uid'
         ];
         $messages = [
@@ -77,6 +78,7 @@ class GroupController extends BaseController
         if($request->input("id")){
             $group = GroupModel::find($request->input("id"));
             $rules['qq_group'] = $rules['qq_group'].",".$group->id;
+            $rules['group_name'] = $rules['group_name'].",".$group->id;
             Validator::make($request->all(),$rules,$messages)->validate();
             if($group->update($request->input())){
                 $returnData['code'] = Util::SUCCESS ;
