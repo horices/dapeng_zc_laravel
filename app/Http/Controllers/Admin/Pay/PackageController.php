@@ -44,7 +44,7 @@ class PackageController extends BaseController {
         $package->school_id = Util::getSchoolName();
         return view("admin.pay.package.detail",[
             'r'              =>  $package,
-            'course_attach'  =>  $package->course_attach,
+            'course_attach'  =>  collect($package->course_attach_data)->toJson(),
             'leftNav'        => "admin.pay.package"
         ]);
     }

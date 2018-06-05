@@ -25,8 +25,6 @@
             <th>学院名称</th>
             <th>套餐名称</th>
             <th>附加课程</th>
-            <th>赠送课程</th>
-            <th>优惠活动</th>
             <th>套餐金额</th>
             <th>创建时间</th>
             <th>操作</th>
@@ -40,23 +38,9 @@
                     <td>{{$v->school_text}}</td>
                     <td>{{$v->title}}</td>
                     <td>
-                        @if(isset($v->course_attach_data['attach']))
-                            @foreach($v->course_attach_data['attach'] as $i=>$l)
-                                {{$l['title']}}<br/>
-                            @endforeach
-                        @endif
-                    </td>
-                    <td>
-                        @if(isset($v->course_attach_data['give']))
-                            @foreach($v->course_attach_data['give'] as $i=>$l)
-                                {{$l['title']}}<br/>
-                            @endforeach
-                        @endif
-                    </td>
-                    <td>
-                        @if(isset($v->course_attach_data['rebate']))
-                            @foreach($v->course_attach_data['rebate'] as $i=>$l)
-                                {{$l['title']}}<br/>
+                        @if(isset($v->course_attach_data))
+                            @foreach($v->course_attach_data as $l)
+                                {{$l['title'] or ''}}<br/>
                             @endforeach
                         @endif
                     </td>
@@ -65,6 +49,7 @@
                     </td>
                     <td>{{$v->create_time}}</td>
                     <td>
+                        <a href="{{route('admin.pay.rebate.list',['package_id'=>$v->id])}}">活动详情</a>|
                         <a href="{{route('admin.pay.package.edit',['id'=>$v->id])}}">修改</a>|
                         <a url="{{route('admin.pay.package.delete')}}" warning = '确认删除？' data="{id:{{$v->id}}}" class="ajaxLink">删除</a>
                     </td>

@@ -1,0 +1,78 @@
+.fleft{ float:left;}
+.dblock{ display:block; }
+.ml5{margin-left:5px; }
+.ml10{margin-left:10px; }
+.ml15{margin-left:15px; }
+.common-button{width:auto; text-align:center; color:#FFF; font:bold; border-radius:5px;  cursor:pointer;padding:5px 12px;font-size:14px; line-height: 26px; }
+.combg1{  background:#00cc33; }/*绿色*/
+.combg2{  background:#0591b2; }/*蓝色*/
+.combg3{  background:#ff1e00; }/*红色*/
+.combg4{  background:#ff7f00; }/*黄色*/
+.combg5{  background:#b9b9b9; }/*灰色*/
+
+
+
+/*滑动单选*/
+
+/* .slideThree */
+.slideThree {
+  width: 80px;
+  height: 26px;
+  background: #333;
+  position: relative;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+  -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+}
+.slideThree:after {
+  content: attr(off);
+  color: #000;
+  position: absolute;
+  right: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
+}
+.slideThree:before {
+  content: attr(on);
+  color: #00bf00;
+  position: absolute;
+  left: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+}
+.slideThree label {
+  display: block;
+  width: 34px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  background: #fcfff4;
+  background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+.slideThree input[type=checkbox] {
+  visibility: hidden;
+}
+.slideThree input[type=checkbox]:checked + label {
+  left: 43px;
+}
