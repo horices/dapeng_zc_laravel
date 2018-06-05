@@ -50,7 +50,7 @@
                     <td>{{$v->create_time}}</td>
                     <td>
                         <a href="{{route('admin.pay.rebate.list',['package_id'=>$v->id])}}">活动详情</a>|
-                        <a href="{{route('admin.pay.package.edit',['id'=>$v->id])}}">修改</a>|
+                        <a href="{{route('admin.pay.package.edit',['id'=>$v->id])}}">编辑</a>|
                         <a url="{{route('admin.pay.package.delete')}}" warning = '确认删除？' data="{id:{{$v->id}}}" class="ajaxLink">删除</a>
                     </td>
                 </tr>
