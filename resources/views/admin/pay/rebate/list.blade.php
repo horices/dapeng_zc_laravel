@@ -3,7 +3,7 @@
 <div class="row search-row" style="padding:9px 0 15px 15px;">
     <form class="form-inline" role="form">
         <div class="form-group">
-            <a class="common-button combg4" href="{{route('admin.pay.rebate.add')}}">新增活动</a>
+            <a class="common-button combg4" href="{{route('admin.pay.rebate.add',['package_id'=>Request::input('package_id')])}}">新增活动</a>
         </div>
         <div class="form-group">
             <input type="text" name="title" class="form-control" placeholder="活动标题" value="{{Request::input('title')}}" style="width: 110px;"/>
@@ -29,10 +29,10 @@
                 <tr>
                     <td>{{$v->id+1}}</td>
                     <td>{{$v->title}}</td>
-                    <td>{{$v->price}}</td>
+                    <td>{{$v->price_max}}</td>
                     <td>{{$v->create_time}}</td>
                     <td>
-                        <a href="{{route('admin.pay.rebate.edit',['id'=>$v->id])}}">修改</a>|
+                        <a href="{{route('admin.pay.rebate.edit',['id'=>$v->id,'package_id'=>Request::get('package_id')])}}">修改</a>|
                         <a url="{{route('admin.pay.rebate.delete',['id'=>$v->id])}}" warning="确认删除？" class="ajaxLink">删除</a>
                     </td>
                 </tr>

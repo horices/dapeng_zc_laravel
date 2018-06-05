@@ -22,7 +22,11 @@ class RebateController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getList(Request $request){
+        if(!$request->has("package_id")){
+            throw new UserValidateException("请先选择套餐！");
+        }
         $RebateActivityModel = RebateActivityModel::query()->where("status",'USE');
+        $RebateActivityModel->where('package_id',$request->get('package_id'));
         $title = $request->get("title");
         if(!empty($title)){
             $RebateActivityModel->where('title','like','%'.$title.'%');
@@ -47,6 +51,7 @@ class RebateController extends BaseController {
     function getAdd(RebateActivityModel $rebate){
         return view("admin.pay.rebate.detial",[
             'r'                 =>  $rebate,
+            'course_give'       =>  collect($rebate->course_give_data)->toJson(JSON_UNESCAPED_UNICODE),
             'leftNav'           => "admin.pay.rebate"
         ]);
     }
@@ -57,9 +62,10 @@ class RebateController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getEdit(Request $request){
-        $detial = RebateActivityModel::find($request->get("id"));
+        $rebate = RebateActivityModel::find($request->get("id"));
         return view("admin.pay.rebate.detial",[
-            'r'                 =>  $detial,
+            'r'                 =>  $rebate,
+            'course_give'       =>  collect($rebate->course_give_data)->toJson(JSON_UNESCAPED_UNICODE),
             'leftNav'           => "admin.pay.rebate"
         ]);
     }

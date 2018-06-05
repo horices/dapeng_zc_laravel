@@ -26,18 +26,6 @@ class CoursePackageModel extends BaseModel {
         'course_attach_data'
     ];
 
-    public function getCourseAttachAttribute($value){
-        if(!$value){
-            $data = [
-                'attach'    =>  [],
-                'give'      =>  [],
-                'rebate'    =>  []
-            ];
-            $value = collect($data)->toJson();
-        }
-        return $value;
-    }
-
     /**
      * 获取学院标题
      * @return \Illuminate\Config\Repository|mixed
@@ -55,10 +43,21 @@ class CoursePackageModel extends BaseModel {
         $return = [];
         if($this->course_attach){
             $return = json_decode($this->course_attach,1);
-            if(isset($return['rebate']) && $return['rebate']){
-                $temp = $return['rebate'];
-                $return['rebate'] = [];
-                $return['rebate'][] = $temp;
+        }
+        return $return;
+    }
+    /**
+     * 获取附加的套餐信息 字符串类型
+     * @return mixed
+     */
+    public function getCourseAttachTextAttribute(){
+        $return = "";
+        if($this->course_attach){
+            $data = json_decode($this->course_attach,1);
+            foreach ($data as $key => $val){
+                if(isset($val['title']) && $val['title']){
+                    $return .= $val['title']."\n";
+                }
             }
         }
         return $return;
@@ -79,43 +78,26 @@ class CoursePackageModel extends BaseModel {
      */
     static function addData($post){
         $validator = Validator::make($post,[
+            'school_id'             =>  'required',
+            'title'                 =>  'required',
+            'price'                 =>  'required|numeric',
             'attach_title'          =>  'required',
             'attach_price'          =>  'required',
-            'give_title'            =>  'required',
-            'rebate_price'          =>   'required_with:rebate_title',
-            'rebate_start_date'     =>   'required_with:rebate_title',
-            'rebate_end_date'       =>   'required_with:rebate_title',
         ],[
-            'attach_title.required'    =>  '请填写附加课程！',
-            'give_title.required'      =>  '请填写赠送课程！',
-            'attach_price.required'    =>  '请输入正确的附加课程金额！',
-            'rebate_price.required_with'=>  '请填写优惠金额！',
-            'rebate_start_date.required_with'=>  '请填写优惠开启时间！',
-            'rebate_end_date.required_with'=>  '请填写优惠结束时间！',
+            'school_id.required'        =>  '请选择所属学院！',
+            'title.required'            =>  '请输入套餐标题！',
+            'price.required'            =>  '请输入套餐价格！',
+            'price.numeric'             =>  '请输入正确的套餐价格！',
+            'attach_title.required'     =>  '请填写附加课程！',
+            'attach_price.required'     =>  '请输入正确的附加课程金额！',
         ]);
         //执行验证
         $validator->validate();
-
         $data = [];
         foreach ($post['attach_title'] as $key=>$val){
-            $data['attach'][$key] = [
+            $data[$key] = [
                 'title' =>  $val,
                 'price' =>  $post['attach_price'][$key]
-            ];
-        }
-        if(isset($post['give_title'])){
-            foreach ($post['give_title'] as $key=>$val){
-                $data['give'][$key] = ['title'=>$val];
-            }
-        }
-
-        //判断优惠活动
-        if($post['rebate_title']){
-            $data['rebate'] = [
-                'title'         =>  $post['rebate_title'],
-                'price'         =>  $post['rebate_price'],
-                'start_date'    =>  $post['rebate_start_date'],
-                'end_date'      =>  $post['rebate_end_date'],
             ];
         }
         unset($post['attach_title'],$post['attach_price']);
@@ -130,43 +112,27 @@ class CoursePackageModel extends BaseModel {
      */
     static function updateData($post){
         $validator = Validator::make($post,[
+            'school_id'             =>  'sometimes|required',
+            'title'                 =>  'sometimes|required',
+            'price'                 =>  'sometimes|required|numeric',
             'attach_title'          =>  'sometimes|required',
             'attach_price'          =>  'sometimes|required',
-            'give_title'            =>  'sometimes|required',
-            'rebate_price'          =>   'sometimes|required_with:rebate_title',
-            'rebate_start_date'     =>   'sometimes|required_with:rebate_title',
-            'rebate_end_date'       =>   'sometimes|required_with:rebate_title',
         ],[
-            'attach_title.required'    =>  '请填写附加课程！',
-            'give_title.required'      =>  '请填写赠送课程！',
-            'attach_price.required'    =>  '请输入正确的附加课程金额！',
-            'rebate_price.required_with'=>  '请填写优惠金额！',
-            'rebate_start_date.required_with'=>  '请填写优惠开启时间！',
-            'rebate_end_date.required_with'=>  '请填写优惠结束时间！',
+            'school_id.required'        =>  '请选择所属学院！',
+            'title.required'            =>  '请输入套餐标题！',
+            'price.required'            =>  '请输入套餐价格！',
+            'price.numeric'             =>  '请输入正确的套餐价格！',
+            'attach_title.required'     =>  '请填写附加课程！',
+            'attach_price.required'     =>  '请输入正确的附加课程金额！',
         ]);
         //执行验证
         $validator->validate();
         //附加信息整理json
         $data = [];
         foreach ($post['attach_title'] as $key=>$val){
-            $data['attach'][$key] = [
+            $data[$key] = [
                 'title' =>  $val,
                 'price' =>  $post['attach_price'][$key]
-            ];
-        }
-        if(isset($post['give_title'])){
-            foreach ($post['give_title'] as $key=>$val){
-                $data['give'][$key] = ['title'=>$val];
-            }
-        }
-
-        //判断优惠活动
-        if($post['rebate_title']){
-            $data['rebate'] = [
-                'title'         =>  $post['rebate_title'],
-                'price'         =>  $post['rebate_price'],
-                'start_date'    =>  $post['rebate_start_date'],
-                'end_date'      =>  $post['rebate_end_date'],
             ];
         }
         unset($post['attach_title'],$post['attach_price']);

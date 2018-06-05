@@ -27,27 +27,13 @@
                         layer.msg('请填写附加课程价格！',{icon:0,time:2000});
                         return ;
                     }
-                    this.course_attach.attach.push({'title':attachTitle,'price':attachPrice});
+                    this.course_attach.push({'title':attachTitle,'price':attachPrice});
                     $(".course_attach_title").val("");
                     $(".course_attach_price").val("");
                 },
                 //删除附加课程
                 minus_course_attach:function (index) {
-                    this.course_attach.attach.splice(index,1);
-                },
-                //新增赠送课程
-                add_course_give:function () {
-                    var giveTitle = $(".course_give_title").val();
-                    if(!giveTitle){
-                        layer.msg('请填写赠送课程标题！',{icon:0,time:2000});
-                        return ;
-                    }
-                    this.course_attach.give.push({'title':giveTitle});
-                    $(".course_give_title").val("");
-                },
-                //删除赠送课程
-                minus_course_give:function (index) {
-                    this.course_attach.give.splice(index,1);
+                    this.course_attach.splice(index,1);
                 }
             }
         });
@@ -57,7 +43,7 @@
     <div class="btn-back">
         <a href="{{route('admin.pay.package.list')}}">&lt;&lt;返回</a>
     </div>
-    <h4 class="col-md-4" style="padding-left:0"> 新增课程套餐</h4>
+    <h4 class="col-md-4" style="padding-left:0"> 课程套餐</h4>
 </div>
 <div id="content-vue" class="row dp-member-body-2">
     <form class="form-horizontal main_container add_tc_form" onsubmit="return beforeOnSubmitAction(this);">
@@ -93,49 +79,12 @@
                     <span class="pull-left btn_add" style="cursor:pointer" @click="add_course_attach">+</span>
                     <p class="pull-left">点击添加附加课程</p>
 
-                    <div class="add_tc pull-left" v-for="(l,index) in course_attach.attach">
-                        <input type="text" name="attach_title[]" placeholder="请输入附加课程名称" class="form-control pull-left" v-model="l.title" />
-                        <input type="number" name="attach_price[]" placeholder="请输入金额" class="form-control  pull-left" v-model="l.price" />
+                    <div class="add_tc pull-left" v-for="(l,index) in course_attach" v-if="course_attach">
+                        <input type="text" readonly name="attach_title[]" placeholder="请输入附加课程名称" class="form-control pull-left" v-model="l.title" />
+                        <input type="number" readonly name="attach_price[]" placeholder="请输入金额" class="form-control  pull-left" v-model="l.price" />
                         <span class="pull-left btn_add" @click="minus_course_attach(index)">-</span>
                         <p class="pull-left">点击删除附加课程</p>
                     </div>
-                </div>
-            </div>
-
-            <div class="form-group tc_fj sent_course">
-                <!-- Text input-->
-                <label class="col-md-2 control-label" for="input01">赠送课程：</label>
-                <div class="col-md-8 controls">
-                    <input type="text"  class="form-control pull-left course_give_title" placeholder="请输入赠送课程名称" />
-                    <span class="pull-left btn_add" style="cursor:pointer" @click="add_course_give">+</span>
-                    <p class="pull-left">点击添加赠送课程</p>
-
-                    <div class="add_tc pull-left" v-for="(l,index) in course_attach.give">
-                        <input type="text" name="give_title[]" v-model="l.title" class="form-control pull-left" />
-                        <span class="pull-left btn_add" style="cursor:pointer" @click="minus_course_give(index)">-</span>
-                        <p class="pull-left" style="cursor:pointer">点击删除赠送课程</p>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="form-group tc_fj ">
-                <!-- Text input-->
-                <label class="col-md-2 control-label" for="input01">优惠活动：</label>
-                <div class="col-md-8 controls">
-                    <input type="text" name="rebate_title" :value="course_attach.rebate.title" placeholder="请输入活动名称" class="form-control pull-left">
-                    <input type="number" name="rebate_price" :value="course_attach.rebate.price" placeholder="金额" class="form-control pull-left">
-                </div>
-            </div>
-
-            <div class="form-group tc_fj ">
-                <!-- Text input-->
-                <label class="col-md-2 control-label" for="input01">活动时间：</label>
-                <div class="input-group form_datetime pull-left">
-                    <input class="form-control form_width_3 select_date" name="rebate_start_date" type="text" :value="course_attach.rebate.start_date" />
-                </div>
-                <div class="input-group form_datetime" >
-                    <input class="form-control form_width_3 select_date" name="rebate_end_date" type="text" :value="course_attach.rebate.end_date" />
                 </div>
             </div>
             <input type="hidden" name="id" v-model="r.id" />
