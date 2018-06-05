@@ -77,7 +77,7 @@ class RebateActivityModel extends BaseModel {
     public static function addData($post){
         $validator = Validator::make($post,[
             'title'             =>  'required',
-            'price_max'             =>  'required|numeric',
+            'price_max'         =>  'required|numeric|min:1',
             'start_time'        =>  'required',
             'end_time'          =>  'required',
             'package_id'        =>  'required|exists:course_package,id',
@@ -86,6 +86,7 @@ class RebateActivityModel extends BaseModel {
             'title.required'    =>  '标题不能为空！',
             'price_max.required'    =>  '价格不能为空！',
             'price_max.numeric'     =>  '请输入正确的价格！',
+            'price_max.min'         =>  '优惠金额必须大于0！',
             'start_time.required' =>  '请输入优惠开启时间！',
             'end_time.required' =>  '请输入优惠截止时间！',
             'package_id.required'=>'请先选择套餐！',
@@ -112,7 +113,7 @@ class RebateActivityModel extends BaseModel {
         $validator = Validator::make($post,[
             'id'        =>  'sometimes|numeric|exists:rebate_activity,id',
             'title'     =>  'sometimes|required',
-            'price_max'     =>  'sometimes|required|numeric',
+            'price_max'     =>  'sometimes|required|numeric|min:1',
             'start_time'        =>  'sometimes|required',
             'end_time'          =>  'sometimes|required',
             'package_id'=>  'sometimes|required|exists:course_package,id',
@@ -123,6 +124,7 @@ class RebateActivityModel extends BaseModel {
             'title.required'    =>  '标题不能为空！',
             'price_max.required'    =>  '价格不能为空！',
             'price_max.numeric'     =>  '请输入正确的价格！',
+            'price_max.min'         =>  '优惠金额必须大于0！',
             'start_time.required' =>  '请输入优惠开启时间！',
             'end_time.required' =>  '请输入优惠截止时间！',
             'package_id.required'=>'请先选择套餐！',
