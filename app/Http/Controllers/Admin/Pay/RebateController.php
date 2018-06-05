@@ -53,8 +53,8 @@ class RebateController extends BaseController {
      * @param RebateActivityModel $rebate
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    function getAdd(RebateActivityModel $rebate){
-        session(["backUrl"=>route("admin.pay.rebate.list",['package_id'=>Request::get('package_id')])]);
+    function getAdd(RebateActivityModel $rebate,Request $request){
+        session(["backUrl"=>route("admin.pay.rebate.list",['package_id'=>$request->get('package_id')])]);
         return view("admin.pay.rebate.detial",[
             'r'                 =>  $rebate,
             'course_give'       =>  collect($rebate->course_give_data)->toJson(JSON_UNESCAPED_UNICODE),
