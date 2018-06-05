@@ -39,6 +39,7 @@ class RebateController extends BaseController {
             $RebateActivityModel->where('type',$type);
         }
         $list = $RebateActivityModel->orderBy('id','desc')->paginate(15);
+
         return view("admin.pay.rebate.list",[
             'package'       =>  $packageDetail,
             'list'          =>  $list,
