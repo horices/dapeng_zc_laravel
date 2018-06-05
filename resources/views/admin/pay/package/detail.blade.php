@@ -80,8 +80,8 @@
                     <p class="pull-left">点击添加附加课程</p>
 
                     <div class="add_tc pull-left" v-for="(l,index) in course_attach" v-if="course_attach">
-                        <input type="text" readonly name="attach_title[]" placeholder="请输入附加课程名称" class="form-control pull-left" v-model="l.title" />
-                        <input type="number" readonly name="attach_price[]" placeholder="请输入金额" class="form-control  pull-left" v-model="l.price" />
+                        <input type="text" name="attach_title[]" placeholder="请输入附加课程名称" class="form-control pull-left" v-model="l.title" />
+                        <input type="number" name="attach_price[]" placeholder="请输入金额" class="form-control  pull-left" v-model="l.price" />
                         <span class="pull-left btn_add" @click="minus_course_attach(index)">-</span>
                         <p class="pull-left">点击删除附加课程</p>
                     </div>

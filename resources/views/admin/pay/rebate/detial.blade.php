@@ -85,7 +85,7 @@
                         <p class="pull-left">点击添加赠送课程</p>
 
                         <div class="add_tc pull-left" v-for="(l,index) in course_give" v-if="course_give">
-                            <input type="text" name="give_title[]" v-model="l" class="form-control pull-left" readonly />
+                            <input type="text" name="give_title[]" v-model="l" class="form-control pull-left" />
                             <span class="pull-left btn_add" style="cursor:pointer" @click="minus_course_give(index)">-</span>
                             <p class="pull-left" style="cursor:pointer">点击删除赠送课程</p>
                         </div>
