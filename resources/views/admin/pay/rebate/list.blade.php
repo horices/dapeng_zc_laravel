@@ -1,7 +1,15 @@
 @extends("admin.public.layout")
 @section("right_content")
 <div class="row search-row" style="padding:9px 0 15px 15px;">
+    <div class="row dp-member-title-2">
+        <div class="btn-back">
+            <a href="{{route('admin.pay.package.list')}}">&lt;&lt;返回</a>
+        </div>
+        <h5 class="col-md-2" style="padding-left:0"> 学院名称：{{$package->school_text}}</h5>
+        <h5 class="col-md-4" style="padding-left:0">套餐名称：{{$package->title}}</h5>
+    </div>
     <form class="form-inline" role="form">
+        <input type="hidden" name="package_id" value="{{Request::get('package_id')}}" />
         <div class="form-group">
             <a class="common-button combg4" href="{{route('admin.pay.rebate.add',['package_id'=>Request::input('package_id')])}}">新增活动</a>
         </div>

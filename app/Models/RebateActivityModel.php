@@ -56,7 +56,7 @@ class RebateActivityModel extends BaseModel {
      * @return false|int
      */
     public function setStartTimeAttribute($value){
-        return strtotime($value);
+        $this->attributes['start_time'] = strtotime($value);
     }
 
     /**
@@ -65,7 +65,7 @@ class RebateActivityModel extends BaseModel {
      * @return false|int
      */
     public function setEndTimeAttribute($value){
-        return strtotime($value);
+        $this->attributes['end_time'] = strtotime($value);
     }
 
     /**
@@ -76,14 +76,14 @@ class RebateActivityModel extends BaseModel {
     public static function addData($post){
         $validator = Validator::make($post,[
             'title'             =>  'required',
-            'price'             =>  'required|numeric',
+            'price_max'             =>  'required|numeric',
             'start_time'        =>  'required',
             'end_time'          =>  'required',
             'package_id'        =>  'required|exists:course_package,id',
         ],[
             'title.required'    =>  '标题不能为空！',
-            'price.required'    =>  '价格不能为空！',
-            'price.numeric'     =>  '请输入正确的价格！',
+            'price_max.required'    =>  '价格不能为空！',
+            'price_max.numeric'     =>  '请输入正确的价格！',
             'start_time.required' =>  '请输入优惠开启时间！',
             'end_time.required' =>  '请输入优惠截止时间！',
             'package_id.required'=>'请先选择套餐！',
@@ -99,32 +99,32 @@ class RebateActivityModel extends BaseModel {
      * @param $data
      * @return mixed
      */
-    static function updateData($data){
-        $validator = Validator::make($data,[
+    static function updateData($post){
+        $validator = Validator::make($post,[
             'id'        =>  'sometimes|numeric|exists:rebate_activity,id',
             'title'     =>  'sometimes|required',
-            'price'     =>  'sometimes|required|numeric',
+            'price_max'     =>  'sometimes|required|numeric',
+            'start_time'        =>  'sometimes|required',
+            'end_time'          =>  'sometimes|required',
             'package_id'=>  'sometimes|required|exists:course_package,id',
         ],[
             'id.numeric'        =>  '请选择要修改的优惠！',
             'id.exists'         =>  '请选择要修改的优惠！',
             'title.required'    =>  '标题不能为空！',
-            'price.required'    =>  '价格不能为空！',
-            'price.numeric'     =>  '请输入正确的价格！',
+            'price_max.required'    =>  '价格不能为空！',
+            'price_max.numeric'     =>  '请输入正确的价格！',
+            'start_time.required' =>  '请输入优惠开启时间！',
+            'end_time.required' =>  '请输入优惠截止时间！',
             'package_id.required'=>'请先选择套餐！',
             'package_id.exists' =>'请先选择套餐！',
         ]);
         //执行验证
         $validator->validate();
-        $detail = self::find($data['id']);
-        return DB::transaction(function () use($data,$detail){
-            $detail->status = 'MOD';
-            $detail->save();
-            $data['status'] = "USE";
-            $data['rebate_id'] = $detail->rebate_id;
-            unset($data['id']);
-            return self::create($data);
-        });
+        $post['course_give'] = collect($post['give_title'])->toJson(JSON_UNESCAPED_UNICODE);
+        $detail = self::find($post['id']);
+        $detail->fill($post);
+        //dd($detail);
+        return $detail->save();
     }
 
 

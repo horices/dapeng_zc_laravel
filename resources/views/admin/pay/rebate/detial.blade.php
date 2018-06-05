@@ -22,7 +22,7 @@
                             layer.msg('请填写赠送课程标题！',{icon:0,time:2000});
                             return ;
                         }
-                        this.course_give.push({'title':giveTitle});
+                        this.course_give.push(giveTitle);
                         $(".course_give_title").val("");
                     },
                     //删除赠送课程
@@ -60,7 +60,7 @@
                     <!-- Text input-->
                     <label class="col-md-2 control-label" for="input01">套餐金额：</label>
                     <div class="col-md-8 controls">
-                        <input type="number" name="price" v-model="r.price_max" class="form-control" />
+                        <input type="number" name="price_max" v-model="r.price_max" class="form-control" />
                         <p class="help-block"></p>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                         <p class="pull-left">点击添加赠送课程</p>
 
                         <div class="add_tc pull-left" v-for="(l,index) in course_give" v-if="course_give">
-                            <input type="text" name="give_title[]" v-model="l.title" class="form-control pull-left" readonly />
+                            <input type="text" name="give_title[]" v-model="l" class="form-control pull-left" readonly />
                             <span class="pull-left btn_add" style="cursor:pointer" @click="minus_course_give(index)">-</span>
                             <p class="pull-left" style="cursor:pointer">点击删除赠送课程</p>
                         </div>
