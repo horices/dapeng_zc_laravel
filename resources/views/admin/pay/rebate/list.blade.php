@@ -25,8 +25,10 @@
         <thead>
         <tr>
             <th>序号</th>
-            <th>标题</th>
-            <th>金额</th>
+            <th>优惠活动</th>
+            <th>赠送课程</th>
+            <th>优惠金额</th>
+            <th>活动时间</th>
             <th>创建时间</th>
             <th>操作</th>
         </tr>
@@ -37,10 +39,18 @@
                 <tr>
                     <td>{{$v->id+1}}</td>
                     <td>{{$v->title}}</td>
+                    <td>
+                        @if($v->course_give_data)
+                            @foreach($v->course_give_data as $l)
+                                {{$l or ''}}<br/>
+                            @endforeach
+                        @endif
+                    </td>
                     <td>{{$v->price_max}}</td>
+                    <td>{{$v->start_time_text}}-{{$v->end_time_text}}</td>
                     <td>{{$v->create_time}}</td>
                     <td>
-                        <a href="{{route('admin.pay.rebate.edit',['id'=>$v->id,'package_id'=>Request::get('package_id')])}}">修改</a>|
+                        <a href="{{route('admin.pay.rebate.edit',['id'=>$v->id,'package_id'=>Request::get('package_id')])}}">编辑</a>|
                         <a url="{{route('admin.pay.rebate.delete',['id'=>$v->id])}}" warning="确认删除？" class="ajaxLink">删除</a>
                     </td>
                 </tr>
