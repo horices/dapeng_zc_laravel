@@ -72,6 +72,12 @@ class CoursePackageModel extends BaseModel {
     }
 
     /**
+     * 关联活动表
+     */
+    function rebate(){
+        return $this->hasMany(RebateActivityModel::class,"package_id","id");
+    }
+    /**
      * 新增数据
      * @param $data
      * @return mixed

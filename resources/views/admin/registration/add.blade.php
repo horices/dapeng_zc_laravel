@@ -105,7 +105,7 @@
                 title:"添加支付信息",
                 shadeClose:true,
                 area:['500px','300px'],
-                content:$(".tc_dialog").find(".tc_pay").prop("outerHTML")
+                content:$(".tc_pay")
             })
             $(".layui-layer .datetime").each(function(){
                 var _this = $(this);
@@ -298,59 +298,94 @@
                             this.first.name = oldName;
                             return ;
                         }
-                        if(newName)
+                        if(newName){
                             this.first.data.packageList = this.packageList[newName];
+                            //清空所有的信息
+                            this.first.data.selectedPackage = [];
+                            this.first.data.selectedPackageAttach = [];
+                            this.first.data.packageAttach = [];
+                            this.first.data.selectedPackageRebate = '';
+                            this.first.data.packageRebate = [];
+                            this.first.data.selectedPackageCourse = [];
+                            this.first.data.packageCourse = [];
+                        }
                     },
                     "second.name":function(newName,oldName){
                         if(newName == this.first.name){
                             this.second.name = oldName;
                             return ;
                         }
-                        if(newName)
+                        if(newName){
                             this.second.data.packageList = this.packageList[newName];
+                            //清空所有的信息
+                            this.second.data.selectedPackage = [];
+                            this.second.data.selectedPackageAttach = [];
+                            this.second.data.packageAttach = [];
+                            this.second.data.selectedPackageRebate = '';
+                            this.second.data.packageRebate = [];
+                            this.second.data.selectedPackageCourse = [];
+                            this.second.data.packageCourse = [];
+                        }
                     },
                     //选择主套餐后，变更主套餐信息
                     "first.data.selectedPackage":function(newVal,oldVal){
                         for(var i=0;i<newVal.length;i++){
                             var packageInfo = this.first.data.packageList[newVal[i]];
-                            this.first.data.packageAttach = packageInfo.course_attach_data.attach;
-                            this.first.data.packageCourse = packageInfo.course_attach_data.give;
-                            this.first.data.packageRebate = packageInfo.course_attach_data.rebate;
+                            this.first.data.packageAttach = packageInfo.course_attach_data;
+                            this.first.data.packageRebate = packageInfo.rebate;
+                        }
+                        //清空其它信息
+                        if(!newVal.length){
+                            this.first.data.selectedPackageAttach = [];
+                            this.first.data.packageAttach = [];
+                            this.first.data.selectedPackageRebate = '';
+                            this.first.data.packageRebate = [];
+                            this.first.data.selectedPackageCourse = [];
+                            this.first.data.packageCourse = [];
+                        }
+                    },
+                    //选择优惠活动后，变更赠送课程
+                    "first.data.selectedPackageRebate":function(newVal,oldVal){
+                        if(newVal === ''){
+                            //没有选中优惠
+                            this.first.data.rebatePrice = 0;
+                            this.first.data.packageCourse = [];
+                        }else{
+                            this.first.data.packageCourse = this.first.data.packageRebate[newVal].course_give_data;
+                            this.first.data.rebatePrice = this.first.data.packageRebate[newVal].price_max;
                         }
                     },
                     "first.data.rebatePrice":function(newVal,oldVal){
-                        if(this.first.data.selectedPackageRebate === ''){
+                        if(!this.first.data.selectedPackageRebate){
                             //没有选中优惠活动则跳过
                             return ;
                         }
                         //获取当前优惠最大数字
                         newVal = parseFloat(newVal);
-                        if(newVal < 1 || newVal > parseFloat(this.first.data.packageRebate[0].price)){
-                            layer.msg("数字不合法,只能在1-"+this.first.data.packageRebate[0].price+'之间');
+                        if(newVal < 1 || newVal > parseFloat(this.first.data.packageRebate[this.first.data.selectedPackageRebate].price_max)){
+                            layer.msg("数字不合法,只能在1-"+this.first.data.packageRebate[this.first.data.selectedPackageRebate].price_max+'之间');
                             this.first.data.rebatePrice = oldVal;
                         }
                     },
-                    "first.data.selectedPackageRebate":function(newVal,oldVal){
-                        if(newVal === ''){
-                            //没有选中优惠
-                            this.first.data.rebatePrice = 0;
-                        }else{
-                            this.first.data.rebatePrice = this.first.data.packageRebate[newVal].price;
-                        }
-                    },
-
-
                     //选择主套餐后，变更主套餐信息
                     "second.data.selectedPackage":function(newVal,oldVal){
                         for(var i=0;i<newVal.length;i++){
                             var packageInfo = this.second.data.packageList[newVal[i]];
-                            this.second.data.packageAttach = packageInfo.course_attach_data.attach;
-                            this.second.data.packageCourse = packageInfo.course_attach_data.give;
-                            this.second.data.packageRebate = packageInfo.course_attach_data.rebate;
+                            this.second.data.packageAttach = packageInfo.course_attach_data;
+                            this.second.data.packageRebate = packageInfo.rebate;
+                        }
+                        //清空其它信息
+                        if(!newVal.length){
+                            this.second.data.selectedPackageAttach = [];
+                            this.second.data.packageAttach = [];
+                            this.second.data.selectedPackageRebate = '';
+                            this.second.data.packageRebate = [];
+                            this.second.data.selectedPackageCourse = [];
+                            this.second.data.packageCourse = [];
                         }
                     },
                     "second.data.rebatePrice":function(newVal,oldVal){
-                        if(this.second.data.selectedPackageRebate === ''){
+                        if(!this.second.data.selectedPackageRebate){
                             //没有选中优惠活动则跳过
                             return ;
                         }
@@ -365,8 +400,10 @@
                         if(newVal === ''){
                             //没有选中优惠
                             this.second.data.rebatePrice = 0;
+                            this.second.data.packageCourse = [];
                         }else{
-                            this.second.data.rebatePrice = this.second.data.packageRebate[newVal].price;
+                            this.second.data.packageCourse = this.second.data.packageRebate[newVal].course_give_data;
+                            this.second.data.rebatePrice = this.second.data.packageRebate[newVal].price_max;
                         }
                     },
                     list:function (newVal,oldVal) {
@@ -508,30 +545,30 @@
              <p class="tc_list" v-for="item in first.data.selectedPackage">@{{ first.data.packageList[item].title }}</p>
          </div>
          </div>
-         <div class="div_input_one fj_tc">
-          <label for="input01 " class="col-md-3 control-label " > 附加课程： </label>
-          <p class="tc_list pull-left" onclick="selectPackageAttach('first');" v-cloak>选择附加课程</p>
-          <div class="fj_list" v-show="first.data.selectedPackageAttach.length >0 " v-cloak>
-          	<h3>已选附加课程：</h3>
-          	<p v-for="item in first.data.selectedPackageAttach">@{{ first.data.packageAttach[item].title }}（@{{ first.data.packageAttach[item].price }}元）</p>
-          </div>
-         </div>
-         <div class="div_input_one fj_tc">
-          <label for="input01" class="col-md-3 control-label "> 赠送课程： </label>
-         <p class="tc_list pull-left" onclick="selectPackageCourse('first');" v-cloak>选择赠送课程</p>
-         <div class="fj_list" v-show="first.data.selectedPackageCourse.length >0 " v-cloak>
-         	<h3 class="pull-left">已选赠送课程：</h3>
-             <span v-for="(item,index) in first.data.selectedPackageCourse">@{{ first.data.packageCourse[item].title }}<a v-if="(index+1) < first.data.selectedPackageCourse.length">、</a></span>
-         </div>
-         </div>
-         <div class="div_input_one">
-          <label for="input01" class="col-md-3 control-label "> 优惠活动： </label>
-          <select class="form-control fleft pull-left" v-model="first.data.selectedPackageRebate" :disabled="first.data.readonly == true">
-           <option value="" selected>无优惠</option>
-           <option v-for="(item,index) in first.data.packageRebate" :value="index">@{{ item.title }}</option>
-          </select>
-          <input type="text" v-model="first.data.rebatePrice" class="form-control rebate_price  pull-left " :readonly="first.data.selectedPackageRebate === '' || first.data.readonly == true " max="500" min="1" value="0" />
-         </div>
+        <div class="div_input_one fj_tc">
+            <label for="input01 " class="col-md-3 control-label " > 附加课程： </label>
+            <p class="tc_list pull-left" onclick="selectPackageAttach('first');" v-cloak>选择附加课程</p>
+            <div class="fj_list" v-show="first.data.selectedPackageAttach.length >0 " v-cloak>
+                <h3>已选附加课程：</h3>
+                <p v-for="item in first.data.selectedPackageAttach">@{{ first.data.packageAttach[item].title }}（@{{ first.data.packageAttach[item].price }}元）</p>
+            </div>
+        </div>
+        <div class="div_input_one">
+            <label for="input01" class="col-md-3 control-label "> 优惠活动： </label>
+            <select class="form-control fleft pull-left" v-model="first.data.selectedPackageRebate" :disabled="first.data.readonly == true">
+                <option value="" selected>无优惠</option>
+                <option v-for="(item,index) in first.data.packageRebate" :value="index">@{{ item.title }}</option>
+            </select>
+            <input type="text" v-model="first.data.rebatePrice" class="form-control rebate_price  pull-left " :readonly="first.data.selectedPackageRebate === '' || first.data.readonly == true " max="500" min="1" value="0" />
+        </div>
+        <div class="div_input_one fj_tc">
+            <label for="input01" class="col-md-3 control-label "> 赠送课程： </label>
+            <p class="tc_list pull-left" onclick="selectPackageCourse('first');" v-cloak>选择赠送课程</p>
+            <div class="fj_list" v-show="first.data.selectedPackageCourse.length >0 " v-cloak>
+                <h3 class="pull-left">已选赠送课程：</h3>
+                <span v-for="(item,index) in first.data.selectedPackageCourse">@{{ first.data.packageCourse[item] }}<a v-if="(index+1) < first.data.selectedPackageCourse.length">、</a></span>
+            </div>
+        </div>
          <div class="div_input_one ">
           <label for="input01" class="col-md-4 control-label text-left"> 套餐总金额： </label>
           <p class="pull-left num_price" v-cloak>@{{firstTotalPrice}}</p>
@@ -583,14 +620,6 @@
                        <p v-for="item in second.data.selectedPackageAttach">@{{ second.data.packageAttach[item].title }}（@{{ second.data.packageAttach[item].price }}元）</p>
                    </div>
                </div>
-               <div class="div_input_one fj_tc">
-                   <label for="input01" class="col-md-3 control-label "> 赠送课程： </label>
-                   <p class="tc_list pull-left" onclick="selectPackageCourse('second');" v-cloak>选择赠送课程</p>
-                   <div class="fj_list" v-show="second.data.selectedPackageCourse.length >0 " v-cloak>
-                       <h3 class="pull-left">已选赠送课程：</h3>
-                       <span v-for="(item,index) in second.data.selectedPackageCourse">@{{ second.data.packageCourse[item].title }}<a v-if="((index+1) < second.data.selectedPackageCourse.length)">、</a></span>
-                   </div>
-               </div>
                <div class="div_input_one">
                    <label for="input01" class="col-md-3 control-label "> 优惠活动： </label>
                    <select class="form-control fleft pull-left" v-model="second.data.selectedPackageRebate" :disabled="second.data.readonly == true">
@@ -598,6 +627,14 @@
                        <option v-for="(item,index) in second.data.packageRebate" :value="index">@{{ item.title }}</option>
                    </select>
                    <input type="text" v-model="second.data.rebatePrice" class="form-control rebate_price  pull-left " :readonly="second.data.selectedPackageRebate === '' || second.data.readonly == true" max="500" min="1" value="0" />
+               </div>
+               <div class="div_input_one fj_tc">
+                   <label for="input01" class="col-md-3 control-label "> 赠送课程： </label>
+                   <p class="tc_list pull-left" onclick="selectPackageCourse('second');" v-cloak>选择赠送课程</p>
+                   <div class="fj_list" v-show="second.data.selectedPackageCourse.length >0 " v-cloak>
+                       <h3 class="pull-left">已选赠送课程：</h3>
+                       <span v-for="(item,index) in second.data.selectedPackageCourse">@{{ second.data.packageCourse[item] }}<a v-if="((index+1) < second.data.selectedPackageCourse.length)">、</a></span>
+                   </div>
                </div>
                <div class="div_input_one ">
                    <label for="input01" class="col-md-4 control-label "> 套餐总金额： </label>
@@ -655,9 +692,9 @@
          <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_course_id]'" v-model="first.data.selectedPackageCourse" />
          <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_rebate_id]'" v-model="first.data.selectedPackageRebate" />
          <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_info]'" v-if="first.data.selectedPackage" :value="objtostr(first.data.packageList[first.data.selectedPackage])" />
-         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_attach][]'" v-for="attach in first.data.selectedPackageAttach" :value="objtostr(first.data.packageAttach[attach])" />
+         {{--<input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_attach][]'" v-for="attach in first.data.selectedPackageAttach" :value="objtostr(first.data.packageAttach[attach])" />
          <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_course][]'" v-for="course in first.data.selectedPackageCourse" :value="objtostr(first.data.packageCourse[course])" />
-         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_rebate]'" v-if="first.data.selectedPackageRebate !== '' " :value="objtostr(first.data.packageRebate[first.data.selectedPackageRebate])" />
+         <input type="hidden" :name="'registration['+first.name+'][package_attach_content][package_rebate]'" v-if="first.data.selectedPackageRebate !== '' " :value="objtostr(first.data.packageRebate[first.data.selectedPackageRebate])" />--}}
          <input type="hidden" :name="'registration['+first.name+'][pay_list][]'" v-for="pay in first.data.payList" :value="objtostr(pay)" />
 
          <div v-if="second.name != ''">
@@ -673,9 +710,9 @@
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_course_id]'" v-model="second.data.selectedPackageCourse" />
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_rebate_id]'" v-model="second.data.selectedPackageRebate" />
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_info]'" v-if="second.data.selectedPackage" :value="objtostr(second.data.packageList[second.data.selectedPackage])" />
-         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_attach][]'" v-for="attach in second.data.selectedPackageAttach" :value="objtostr(second.data.packageAttach[attach])" />
+         {{--<input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_attach][]'" v-for="attach in second.data.selectedPackageAttach" :value="objtostr(second.data.packageAttach[attach])" />
          <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_course][]'" v-for="course in second.data.selectedPackageCourse" :value="objtostr(second.data.packageCourse[course])" />
-         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_rebate]'" v-if="second.data.selectedPackageRebate !== '' " :value="objtostr(second.data.packageRebate[second.data.selectedPackageRebate])" />
+         <input type="hidden" :name="'registration['+second.name+'][package_attach_content][package_rebate]'" v-if="second.data.selectedPackageRebate !== '' " :value="objtostr(second.data.packageRebate[second.data.selectedPackageRebate])" />--}}
          <input type="hidden" :name="'registration['+second.name+'][pay_list][]'" v-for="pay in second.data.payList" :value="objtostr(pay)" />
          </div>
       <button type="button" class="btn btn-primary ajaxSubmit" url="{{ route("admin.registration.add-registration") }}" beforeAction="checkPayList" showloading="true">确认提交</button>
@@ -832,7 +869,7 @@
                                      <label :for="'package_course_check'+index"></label>
                                  </div>
                              </td>
-                             <td>@{{ item.title }}</td>
+                             <td>@{{ item }}</td>
                              <!--<td>@{{ item.price }}</td>-->
                          </tr>
                          </tbody>
