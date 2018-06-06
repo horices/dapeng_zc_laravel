@@ -71,6 +71,7 @@ return array(
     'App\\Models\\UserRegistrationModel' => $baseDir . '/app/Models/UserRegistrationModel.php',
     'App\\Modules\\api\\Controllers\\IndexController' => $baseDir . '/app/Modules/api/Controllers/IndexController.php',
     'App\\Observers\\BaseObserver' => $baseDir . '/app/Observers/BaseObserver.php',
+    'App\\Observers\\CoursePackageObserver' => $baseDir . '/app/Observers/CoursePackageObserver.php',
     'App\\Observers\\EventGroupLogObserver' => $baseDir . '/app/Observers/EventGroupLogObserver.php',
     'App\\Observers\\GroupObserver' => $baseDir . '/app/Observers/GroupObserver.php',
     'App\\Observers\\RebateObserver' => $baseDir . '/app/Observers/RebateObserver.php',

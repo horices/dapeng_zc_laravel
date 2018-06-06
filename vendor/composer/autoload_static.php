@@ -466,6 +466,7 @@ class ComposerStaticInit5495c515eb94fbe1c403335db2963795
         'App\\Models\\UserRegistrationModel' => __DIR__ . '/../..' . '/app/Models/UserRegistrationModel.php',
         'App\\Modules\\api\\Controllers\\IndexController' => __DIR__ . '/../..' . '/app/Modules/api/Controllers/IndexController.php',
         'App\\Observers\\BaseObserver' => __DIR__ . '/../..' . '/app/Observers/BaseObserver.php',
+        'App\\Observers\\CoursePackageObserver' => __DIR__ . '/../..' . '/app/Observers/CoursePackageObserver.php',
         'App\\Observers\\EventGroupLogObserver' => __DIR__ . '/../..' . '/app/Observers/EventGroupLogObserver.php',
         'App\\Observers\\GroupObserver' => __DIR__ . '/../..' . '/app/Observers/GroupObserver.php',
         'App\\Observers\\RebateObserver' => __DIR__ . '/../..' . '/app/Observers/RebateObserver.php',
