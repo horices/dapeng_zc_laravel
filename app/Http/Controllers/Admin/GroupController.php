@@ -72,6 +72,7 @@ class GroupController extends BaseController
         $messages = [
             'qq_group.required' =>  '群号码为必填项',
             'qq_group.unique'   =>  '该群号码已存在',
+            'group_name.unique' =>  '班级代号已经存在',
             'leader_id.required'    =>  "请选择课程顾问",
             "leader_id.exists"  =>  "请选择正确的课程顾问"
         ];
