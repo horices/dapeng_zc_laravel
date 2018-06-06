@@ -133,7 +133,7 @@ class UserRegistrationModel extends BaseModel{
      * @return mixed
      */
     public function getSelectedRebateAttribute(){
-        if($this->package_attach_content['package_rebate_id'] != '' && isset($this->package_attach_content['package_info']['rebate'])){
+        if($this->package_attach_content['package_rebate_id'] !== null && isset($this->package_attach_content['package_info']['rebate'])){
             return $this->package_attach_content['package_info']['rebate'][$this->package_attach_content['package_rebate_id']];
         }
         return [];
@@ -147,7 +147,7 @@ class UserRegistrationModel extends BaseModel{
         $selectGiveCourse = collect();
         $packageAttachContent = $this->package_attach_content;
         $selectedRebate = $this->selected_rebate;
-        if($this->package_attach_content['package_course_id'] != '' && isset($selectedRebate['course_give_data'])){
+        if($this->package_attach_content['package_course_id'] !== null && isset($selectedRebate['course_give_data'])){
             $selectGiveCourse = collect($selectedRebate['course_give_data'])->filter(function($val,$key)use($packageAttachContent){
                 return in_array($key,explode(',',$packageAttachContent['package_course_id']));
             });

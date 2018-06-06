@@ -83,11 +83,12 @@
                 <th width="80">学员</th>
                 <th>开课手机</th>
                 <th>QQ/微信</th>
-                <th>学院</th>
                 <th width="120">套餐名称</th>
-                <th>应交</th>
-                <th>收款</th>
-                <th width="80">方式</th>
+                <th>应交总金额</th>
+                <th>已交总金额</th>
+                <th>设计学院</th>
+                <th>美术学院</th>
+                <th width="80">支付方式</th>
                 <th>支付时间</th>
                 <th>提交时间</th>
                 <th width="80">操作</th>
@@ -101,14 +102,16 @@
                         @if($adminInfo['grade'] <= 5)<td>{{$v->adviser_name}}</td>@endif
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
-                        <td>{{$v->userRegistration->account}}</td>
-                        <td>{{$v->userRegistration->school_text}}</td>
                         <td>
-                            {{$v->userRegistration->package_all_title}}
+                            @foreach($v->userRegistration as $l)
+                                {{$l->package_all_title}}
+                            @endforeach
                         </td>
-                        <td>{{$v->userRegistration->package_total_price}}</td>
-                        <td>{{floatval($v->amount)}}</td>
-                        <td>{{$v->pay_type_text}}</td>
+                        <td>{{$v->total_should_price}}</td>
+                        <td>{{$v->total_submitted_price}}</td>
+                        <td>{{$v->submitted_price['SJ']}}</td>
+                        <td>{{$v->submitted_price['MS']}}</td>
+                        <td> ---- </td>
                         <td>{{$v->pay_time_text}}</td>
                         <!--<td>{$v[package_total_price] - $v[rebate]}</td>
                         <td>{$v.amount_submitted}</td>-->
@@ -116,7 +119,7 @@
                         <td style="text-align: center">
 <a href="{{route("admin.registration.add",['mobile'=>$v->mobile,'back_url'=>\Illuminate\Support\Facades\URL::full()])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
-                                    |<a url="{{route('admin.registration.delete')}}" data="{id:'{{$v->id}}'}" class="ajaxLink" warning="确认删除？">删除</a>
+                                    |<a url="" class="ajaxLink" warning="确认删除？">删除</a>
                                 @endif
                         </td>
                     </tr>
