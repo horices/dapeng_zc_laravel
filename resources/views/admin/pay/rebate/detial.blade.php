@@ -28,6 +28,14 @@
                     //删除赠送课程
                     minus_course_give:function (index) {
                         this.course_give.splice(index,1);
+                    },
+                    setAttrNameArr:function (str,val) {
+                        return str+"["+val+"]";
+                    }
+                },
+                computed:{
+                    giveLength:function () {
+                        return this.course_give.length;
                     }
                 }
             });
@@ -96,6 +104,7 @@
 
                 <input type="hidden" name="id" v-model="r.id" />
                 <input type="hidden" name="package_id" value="{{Request::get('package_id')}}" />
+                <input type="hidden" name="give_length" :value="giveLength"/>
                 <button class="btn btn-primary ajaxSubmit" url="{{route('admin.pay.rebate.save')}}" type="button">确认提交</button>
             </fieldset>
         </form>

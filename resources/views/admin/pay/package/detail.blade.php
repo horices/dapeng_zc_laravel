@@ -34,6 +34,14 @@
                 //删除附加课程
                 minus_course_attach:function (index) {
                     this.course_attach.splice(index,1);
+                },
+                setAttrNameArr:function (str,val) {
+                    return str+"["+val+"]";
+                }
+            },
+            computed:{
+                attachLength:function () {
+                    return this.course_attach.length;
                 }
             }
         });
@@ -81,13 +89,16 @@
 
                     <div class="add_tc pull-left" v-for="(l,index) in course_attach" v-if="course_attach">
                         <input type="text" name="attach_title[]" placeholder="请输入附加课程名称" class="form-control pull-left" v-model="l.title" />
-                        <input type="number" name="attach_price[]" placeholder="请输入金额" class="form-control  pull-left" v-model="l.price" />
+                        <input type="number" name="attach_price[]" placeholder="请输入金额" class="form-control pull-left" v-model="l.price" />
                         <span class="pull-left btn_add" @click="minus_course_attach(index)">-</span>
                         <p class="pull-left">点击删除附加课程</p>
                     </div>
                 </div>
             </div>
             <input type="hidden" name="id" v-model="r.id" />
+            <input type="hidden" :name="setAttrNameArr('attach_title',index)" :value="l.title" v-for="(l,index) in course_attach "/>
+            <input type="hidden" :name="setAttrNameArr('attach_price',index)" :value="l.price" v-for="(l,index) in course_attach "/>
+            <input type="hidden" name="attach_length" :value="attachLength"/>
             <button class="btn btn-primary ajaxSubmit" url="{{route('admin.pay.package.save')}}" type="button">确认提交</button>
         </fieldset>
     </form>

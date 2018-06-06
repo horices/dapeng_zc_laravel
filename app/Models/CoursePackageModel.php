@@ -85,13 +85,15 @@ class CoursePackageModel extends BaseModel {
     static function addData($post){
         $validator = Validator::make($post,[
             'school_id'             =>  'required',
+            'attach_length'         =>  'required',
             'title'                 =>  'required',
             'price'                 =>  'required|numeric',
             'attach_title'          =>  'required',
             'attach_price'          =>  'required',
         ],[
             'school_id.required'        =>  '请选择所属学院！',
-            'title.required'            =>  '请输入套餐标题！',
+            'attach_length.required'    =>  '请先添加课程套餐！',
+            'title.required'            =>  '请输入套餐名称！',
             'price.required'            =>  '请输入套餐价格！',
             'price.numeric'             =>  '请输入正确的套餐价格！',
             'attach_title.required'     =>  '请填写附加课程！',
@@ -99,6 +101,15 @@ class CoursePackageModel extends BaseModel {
         ]);
         //执行验证
         $validator->validate();
+        //验证添加的附加课程是否满足格式
+        for($i=0;$i<$post['attach_length'];$i++){
+            if(!isset($post['attach_title'][$i])){
+                throw new UserValidateException("附加课程必须填写标题!");
+            }
+            if(!isset($post['attach_price'][$i])){
+                throw new UserValidateException("附加课程必须填写价格!");
+            }
+        }
         $data = [];
         foreach ($post['attach_title'] as $key=>$val){
             $data[$key] = [
@@ -117,22 +128,31 @@ class CoursePackageModel extends BaseModel {
      * @return mixed
      */
     static function updateData($post){
+        //$post['attach_title']=array_filter($post['attach_title']);
+
         $validator = Validator::make($post,[
             'school_id'             =>  'sometimes|required',
+            'attach_length'         =>  'sometimes|required',
             'title'                 =>  'sometimes|required',
             'price'                 =>  'sometimes|required|numeric',
-            'attach_title'          =>  'sometimes|required',
-            'attach_price'          =>  'sometimes|required',
         ],[
             'school_id.required'        =>  '请选择所属学院！',
-            'title.required'            =>  '请输入套餐标题！',
+            'attach_length.required'    =>  '请先添加课程套餐！',
+            'title.required'            =>  '请输入套餐名称！',
             'price.required'            =>  '请输入套餐价格！',
             'price.numeric'             =>  '请输入正确的套餐价格！',
-            'attach_title.required'     =>  '请填写附加课程！',
-            'attach_price.required'     =>  '请输入正确的附加课程金额！',
         ]);
         //执行验证
         $validator->validate();
+        //验证添加的附加课程是否满足格式
+        for($i=0;$i<$post['attach_length'];$i++){
+            if(!isset($post['attach_title'][$i])){
+                throw new UserValidateException("附加课程必须填写标题!");
+            }
+            if(!isset($post['attach_price'][$i])){
+                throw new UserValidateException("附加课程必须填写价格!");
+            }
+        }
         //附加信息整理json
         $data = [];
         foreach ($post['attach_title'] as $key=>$val){
@@ -143,8 +163,6 @@ class CoursePackageModel extends BaseModel {
         }
         unset($post['attach_title'],$post['attach_price']);
         $post['course_attach'] = json_encode($data,JSON_UNESCAPED_UNICODE);
-
-        $post['uid'] = Util::getUserInfo()['uid'];
         $detail = self::find($post['id']);
         if(!$detail){
             throw new UserValidateException("未找到套餐信息！");
