@@ -102,18 +102,57 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
-     * 获取附加课程 换行的字符串
+     * 获取附加课程 换行的字符串 (做导出用)
      * @return string
      */
     public function getAttachCourseTextAttribute(){
-        $test = "";
-        if(isset($this->attach_data['package_attach']) && $this->attach_data['package_attach']){
-            foreach ($this->attach_data['package_attach'] as $key=>$val){
-                $test .= $val['title']."\n";
-            }
+        $courseTitle = "";
+        foreach ($this->selected_attach_course as $key=>$val){
+            $courseTitle .= $val['title']."\n";
         }
-        return $test;
+        return $courseTitle;
+    }
 
+    /**
+     * 获取附加的课程信息
+     * @return mixed
+     */
+    public function getSelectedAttachCourseAttribute(){
+        $selectAttachCourse = collect();
+        $packageAttachContent = $this->package_attach_content;
+        if(isset($this->package_attach_content['package_info']['course_attach_data'])){
+            $selectAttachCourse = collect($this->package_attach_content['package_info']['course_attach_data'])->filter(function($val,$key)use($packageAttachContent){
+                return in_array($key,explode(',',$packageAttachContent['package_attach_id']));
+            });
+        }
+        return $selectAttachCourse;
+    }
+
+    /**
+     * 获取优惠活动的信息
+     * @return mixed
+     */
+    public function getSelectedRebateAttribute(){
+        if($this->package_attach_content['package_rebate_id'] != '' && isset($this->package_attach_content['package_info']['rebate'])){
+            return $this->package_attach_content['package_info']['rebate'][$this->package_attach_content['package_rebate_id']];
+        }
+        return [];
+    }
+
+    /**
+     * 获取已选的赠送课程
+     * @return \Illuminate\Support\Collection|static
+     */
+    public function getSelectedGiveCourseAttribute(){
+        $selectGiveCourse = collect();
+        $packageAttachContent = $this->package_attach_content;
+        $selectedRebate = $this->selected_rebate;
+        if($this->package_attach_content['package_course_id'] != '' && isset($selectedRebate['course_give_data'])){
+            $selectGiveCourse = collect($selectedRebate['course_give_data'])->filter(function($val,$key)use($packageAttachContent){
+                return in_array($key,explode(',',$packageAttachContent['package_course_id']));
+            });
+        }
+        return $selectGiveCourse;
     }
 
     /**

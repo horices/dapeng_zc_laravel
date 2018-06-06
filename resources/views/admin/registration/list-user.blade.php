@@ -107,15 +107,13 @@
                 <th>QQ/微信</th>
                 <th>学院名称</th>
                 <th width="130">套餐名称</th>
-                <th>套餐金额</th>
                 <th width="70">附加课程</th>
-                <th width="70">附加金额</th>
-                @if($adminInfo['grade']<=5)<th>是否开课</th>@endif
-                <th>赠送</th>
+                @if($adminInfo['grade']<=5)<th>开课状态</th>@endif
+                <th>套餐总金额</th>
                 <th>优惠</th>
                 <th>应交</th>
                 <th>已交</th>
-                {{--<th width="100">提交时间</th>--}}
+                <th width="100">提交时间</th>
                 @if($adminInfo['grade'] <= 5)
                     <th>导学</th>
                     <th width="60">操作</th>
@@ -135,29 +133,25 @@
                         <td>
                             {{$v->package_all_title}}
                         </td>
-                        <th>{{ $v->package_price }}</th>
                         <td>
-                            @if(isset($v->attach_data['package_attach']))
-                                @foreach($v->attach_data['package_attach'] as $i=>$l)
-                                    {{$l['title']}}<br/>
+                            @if($v->selected_attach_course->count()>0)
+                                @foreach($v->selected_attach_course as $l)
+                                    {{$l['title'] or ''}}<br/>
                                 @endforeach
                             @endif
                         </td>
-                        <td>{{ $v->course_attach_all_price }}</td>
                         @if($adminInfo['grade']<=5)
                         <td>
                             {{$v->is_open_text}}
                         </td>
                         @endif
-                        <td>@if(isset($v->attach_data['package_course']))
-                                @foreach($v->attach_data['package_course'] as $l)
-                                    {{$l['title']}}<br/>
-                                @endforeach
-                            @endif</td>
+                        <td>
+                            {{$v->package_all_price}}
+                        </td>
                         <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
-                        {{--<td>{{$v->last_pay_time_text}}</td>--}}
+                        <td>{{$v->create_time}}</td>
                         @if($adminInfo['grade'] <= 5)
                             <td>{{$v->guide_text}}</td>
                             <td>
