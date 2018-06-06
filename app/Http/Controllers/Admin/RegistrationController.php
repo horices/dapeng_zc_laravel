@@ -216,6 +216,7 @@ class RegistrationController extends BaseController{
                     $tempdata['pay_time'] = strtotime($v['pay_time']);
                     $tempdata['mobile'] = $enroll->mobile;
                     $tempdata['name'] = $enroll->name;
+                    $tempdata['enroll_id'] = $enroll->id;
                     if(!isset($v['id'])){
                         UserPayLogModel::create($tempdata);
                     }else{
