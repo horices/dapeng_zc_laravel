@@ -413,55 +413,61 @@ class RegistrationController extends BaseController{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getPayList(Request $request){
-        $userPayLogModel = UserPayLogModel::with(["userRegistration","userHeadmaster"]);
+        $UserEnrollModel = UserEnrollModel::with(["userRegistration.userPayLog"=>function($payLog){
+            $payLog->orderBy("id","desc");
+        }]);
         //根据学员姓名检索
         $name = $request->get("name");
         if(!empty($name)){
-            $userPayLogModel->where("name","like",'%'.$name.'%');
+            $UserEnrollModel->where("name","like",'%'.$name.'%');
         }
         //根据开课手机号检索
         $mobile = $request->get("mobile");
         if($mobile){
-            $userPayLogModel->where("mobile","like",'%'.$mobile.'%');
+            $UserEnrollModel->where("mobile","like",'%'.$mobile.'%');
         }
         //根据课程顾问ID来筛选所属学员的统计信息
         $adminInfo = $this->getUserInfo();
         if($adminInfo['grade'] >=9 ){
-            $userPayLogModel->where("adviser_id",$adminInfo['uid']);
+            $UserEnrollModel->where("adviser_id",$adminInfo['uid']);
         }
         //根据课程顾问姓名检索
         $adviserName = $request->get("adviserName");
-        $userPayLogModel->whereHas('userHeadmaster' , function($query) use ($adviserName){
-            if(!empty($adviserName)){
-                $query->where("name","like",'%'.$adviserName.'%');
-            }
-        })->with("userHeadmaster");
+
+        if(!empty($adviserName)){
+            $UserEnrollModel->where("name","like",'%'.$adviserName.'%');
+        }
+
 
 
         //根据导学状态检索
-        $isOpen = $request->get("is_open");
-        $userPayLogModel->whereHas('userRegistration',function ($query) use ($isOpen){
-            if($isOpen != ''){
-                $query->where("is_open",$isOpen);
-            }
-        })->with('userRegistration');
+//        $isOpen = $request->get("is_open");
+//        $UserEnrollModel->whereHas('userRegistration',function ($query) use ($isOpen){
+//            if($isOpen != ''){
+//                $query->where("is_open",$isOpen);
+//            }
+//        })->with('userRegistration');
 
         //根据时间来检索
         $startDate = $request->get("startDate");
         if(!empty($startDate)){
-            $userPayLogModel->where("create_time",">=",strtotime($startDate));
+            $UserEnrollModel->where("create_time",">=",strtotime($startDate));
         }
 
         $endDate = $request->get("endDate");
         if(!empty($endDate)){
-            $userPayLogModel->where("create_time","<=",strtotime($endDate)+1);
+            $UserEnrollModel->where("create_time","<=",strtotime($endDate)+1);
         }
-        //月统计条总金额
-        $userPayLogModel->orderBy("id","desc");
+
+        $UserEnrollModel->orderBy("id","desc");
+        //导出
         if($request->input("export") == 1){
-            return $this->exportPayList($userPayLogModel);
+            return $this->exportPayList($UserEnrollModel);
         }
-        $list = $userPayLogModel->paginate(15);
+
+        $list = $UserEnrollModel->paginate(15);
+        //月统计条总金额
+        $userPayLogModel = UserPayLogModel::query();
         $allSubmitAmount = $userPayLogModel->whereBetween('create_time',[strtotime(date('Y-m-1 00:00:00')),time()])->sum("amount");
         //总记录条数
         return view("admin.registration.list-pay",[
