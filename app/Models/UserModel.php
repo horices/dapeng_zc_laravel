@@ -58,35 +58,6 @@ class UserModel extends BaseModel
     protected function getStatusTextAttribute($v){
         return $this->status == 1 ? '正常':'暂停';
     }
-    protected function getStatisticsAttribute(){
-    }
-    protected function setPasswordAttribute($v){
-        if(!$v && !$this->uid){
-            $v = "123456";
-        }
-        if($v){
-            $this->attributes['password'] = md5($v);
-        }
-    }
-    function setDapengUserMobileAttribute($v){
-        if($this->dapeng_user_mobile != $v){
-            //判断当前主站账号是否已经绑定
-            if($temp = $this->where("dapeng_user_mobile",$v)->first()){
-                throw new UserValidateException($temp->name." 已绑定该主站账号");
-            }
-            $return = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$v]);
-            if($return['code'] != Util::SUCCESS){
-                throw new UserValidateException("获取主站用户信息失败");
-            }
-            $dapengUserInfo = $return['data'];
-            if(!collect($dapengUserInfo['roleList'])->contains("consultant")){
-                throw new UserValidateException("该用户没有课程顾问权限");
-            }
-            $this->dapeng_user_id = $dapengUserInfo['user']['userId'];
-            $this->attributes['dapeng_user_mobile'] = $v;
-        }
-    }
-
     /**
      * 获取用户在职状态
      * @return string

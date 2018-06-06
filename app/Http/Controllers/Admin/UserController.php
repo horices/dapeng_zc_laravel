@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\Utils\Util;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController
 {
@@ -64,10 +65,11 @@ class UserController extends BaseController
      * 添加或删除记录
      */
     function postSave(UserRequest $request){
-
+        $input = $request->all();
         if($request->input("uid")){
             $user = UserModel::withoutGlobalScope('status')->find($request->input("uid"));
-            $user->fill($request->input());
+            if(!$request->get("password")) $input = $request->except("password");
+            $user->fill($input);
             if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
                 $returnData['msg'] = "修改成功";
@@ -79,7 +81,7 @@ class UserController extends BaseController
                 $returnData['msg'] = "修改失败".$user->errors;
             }
         } else {
-            if(UserModel::create($request->input())){
+            if(UserModel::create($input)){
                 $returnData['code'] = Util::SUCCESS;
                 $returnData['msg'] = "添加成功";
                 $returnData['url'] = route("admin.user.list");
