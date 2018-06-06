@@ -10,6 +10,8 @@
             if(vm[vm.currentPos].data.readonly == true){
                 return false;
             }
+            //每次重置列表
+            vm[vm.currentPos].data.packageList = vm.packageList[vm[vm.currentPos].name];
             vm.list = vm[vm.currentPos].data.packageList;
             layer.open({
                 type:1,
@@ -431,6 +433,8 @@
                     }else{
                         var t = 0;
                         for(var schoolName in this.enroll.registrations){
+                            var registration = this.enroll.registrations[schoolName];
+                            var packageInfo = registration.package_attach_content.package_info;
                             var package_attach_content =  this.enroll.registrations[schoolName].package_attach_content;
                             var packageInfo = package_attach_content.package_info;
                             t++;
@@ -440,33 +444,38 @@
                                 if(this.userRole == "adviser"){
                                     this.first.data.readonly = true;
                                 }
-                                this.first.data.registration_id = this.enroll.registrations[this.first.name].id;
-                                //this.first.data.packageList[packageInfo.id] = packageInfo;
-                                this.first.data.selectedPackage.push(packageInfo.id);
-                                package_attach_content.package_attach_id && (this.first.data.selectedPackageAttach = package_attach_content.package_attach_id.split(','));
-                                package_attach_content.package_course_id && (this.first.data.selectedPackageCourse = package_attach_content.package_course_id.split(','));
-                                this.first.data.selectedPackageRebate = package_attach_content.package_rebate_id;
-                                this.first.data.payList = this.enroll.registrations[this.first.name].payList || [];
+                                //若学院名称改变，则需要先做一些初始化，再选中
                                 this.$nextTick(function(){
-                                    this.first.data.rebatePrice = parseFloat(this.enroll.registrations[this.first.name].rebate);
-                                })
+                                    this.first.data.registration_id = registration.id;
+                                    this.first.data.packageList = {};
+                                    this.first.data.packageList[packageInfo.id] = packageInfo;
+                                    this.first.data.selectedPackage = packageInfo.id.toString().split(',');
+                                    this.first.data.selectedPackageAttach = package_attach_content.package_attach_id.toString().split(',');
+                                    this.first.data.selectedPackageRebate = package_attach_content.package_rebate_id;
+                                    this.first.data.rebatePrice = registration.rebate;
+                                    this.first.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                });
+                                this.first.data.payList = registration.payList || [];
                                 //添加附加套餐
                             }else if (t == 2){
+
                                 this.second.name = schoolName;
                                 //课程顾问只有查看权限
                                 if(this.userRole == "adviser"){
                                     this.second.data.readonly = true;
                                 }
-                                this.second.data.registration_id = this.enroll.registrations[this.second.name].id;
-                                //this.second.data.packageList[packageInfo.id] = packageInfo;
-                                this.second.data.selectedPackage.push(packageInfo.id);
-                                package_attach_content.package_attach_id && (this.second.data.selectedPackageAttach = package_attach_content.package_attach_id.split(','));
-                                package_attach_content.package_course_id && (this.second.data.selectedPackageCourse = package_attach_content.package_course_id.split(','));
-                                this.second.data.selectedPackageRebate = package_attach_content.package_rebate_id;
-                                this.second.data.payList = this.enroll.registrations[this.second.name].payList;
+                                //若学院名称改变，则需要先做一些初始化，再选中
                                 this.$nextTick(function(){
-                                    this.second.data.rebatePrice = parseFloat(this.enroll.registrations[this.second.name].rebate);
-                                })
+                                    this.second.data.registration_id = registration.id;
+                                    this.second.data.packageList = {};
+                                    this.second.data.packageList[packageInfo.id] = packageInfo;
+                                    this.second.data.selectedPackage = packageInfo.id.toString().split(',');
+                                    this.second.data.selectedPackageAttach = package_attach_content.package_attach_id.toString().split(',');
+                                    this.second.data.selectedPackageRebate = package_attach_content.package_rebate_id;
+                                    this.second.data.rebatePrice = registration.rebate;
+                                    this.second.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                });
+                                this.second.data.payList = registration.payList || [];
                             }
                         }
                         //即没有添加美术学院，也没有添加设计学院

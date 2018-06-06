@@ -27,7 +27,7 @@ class UserRegistrationModel extends BaseModel{
         //'last_pay_time'
     ];
     protected $appends = [
-        "is_belong","is_open_text","last_pay_time_text","is_bright","account","school_text","attach_data","guide_text","package_all_price","attach_course_text","amount_bill"
+        "is_belong","is_open_text","last_pay_time_text","is_bright","account","school_text","guide_text","package_all_price","attach_course_text","amount_bill"
     ];
 
     //开课状态数组
@@ -99,13 +99,6 @@ class UserRegistrationModel extends BaseModel{
     }
     public function getPackageAttachContentAttribute($v){
         return Util::jsonDecode($v);
-    }
-    /**
-     * 获取附加的套餐信息
-     * @return mixed
-     */
-    public function getAttachDataAttribute(){
-        return $this->package_attach_content;
     }
 
     /**
