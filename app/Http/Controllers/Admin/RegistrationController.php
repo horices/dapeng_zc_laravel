@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 
 class RegistrationController extends BaseController{
@@ -126,12 +127,36 @@ class RegistrationController extends BaseController{
                     $v = $t;
                 }
             };
-            $enrollId = $request->input("enroll.id");
+            $enrollData = $request->get("enroll");
+            if($enrollData['qq'] && $enrollData['wx']){
+                throw new UserValidateException("QQ和微信只能填一项");
+            }
+            $validator = Validator::make($enrollData,[
+                'name'  =>  "required",
+                "mobile"    =>  ["required","unique:user_enroll,mobile,".collect($enrollData)->get('id')],
+                "is_guide"  =>  'required',
+            ],[
+                "name.required" =>  "姓名必须填写",
+                "mobile.required"        =>  "请输入学员手机号",
+                "mobile.unique" =>  "该手机号已经存在",
+                "qq.required"   =>  "QQ号和微信号至少填一项",
+                "qq.regex"   =>  "请输入正确的QQ号",
+                "wx.required"   =>  "QQ号和微信号至少填一项",
+                "wx.regex"   =>  "请输入正确的微信号",
+                "is_guide.required"     =>  "请选择是否导学"
+            ]);
+            $validator->sometimes("qq",["required","regex:/^\d{5,10}$/"],function($input){
+                return $input->wx == '';
+            });
+            $validator->sometimes("wx",["required","regex:/^[\-a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}+$/"],function($input){
+                return $input->qq == '';
+            });
+            $validator->validate();
             //添加新的主报名信息
-            if(!$enrollId){
+            if(!isset($enrollData['id'])){
                 $enroll = UserEnrollModel::create($request->get("enroll"));
             }else{
-                $enroll = UserEnrollModel::find($enrollId);
+                $enroll = UserEnrollModel::find($enrollData['id']);
                 $enroll->fill($request->get("enroll"));
                 if($enroll->save() === false){
                     throw new UserException("更新主站失败");
@@ -158,7 +183,12 @@ class RegistrationController extends BaseController{
                 $registrationData['mobile'] = $enroll->mobile;
                 $registrationData['qq'] = $enroll->qq;
                 $registrationData['wx'] = $enroll->wx;
-                array_walk_recursive($registrationData,$jsonDecode);
+                Validator::make($registrationData,[
+                    'package_id'    =>  "required"
+                ],[
+                    "package_id.required"   =>  "请选择主套餐"
+                ])->validate();
+                //array_walk_recursive($registrationData,$jsonDecode);
                 array_walk_recursive($registrationData,$jsonDecode);
                 $registrationData['package_price'] = $registrationData['package_attach_content']['package_info']["price"];
                 if(!isset($registrationData['id'])){
