@@ -439,6 +439,8 @@
                             var packageInfo = package_attach_content.package_info;
                             t++;
                             if(t == 1){
+                                //闭包中使用该变量
+                                var firstRegistration = registration;
                                 this.first.name = schoolName;
                                 //课程顾问只有查看权限
                                 if(this.userRole == "adviser"){
@@ -446,19 +448,22 @@
                                 }
                                 //若学院名称改变，则需要先做一些初始化，再选中
                                 this.$nextTick(function(){
-                                    this.first.data.registration_id = registration.id;
+                                    this.first.data.registration_id = firstRegistration.id;
                                     this.first.data.packageList = {};
                                     this.first.data.packageList[packageInfo.id] = packageInfo;
                                     this.first.data.selectedPackage = packageInfo.id.toString().split(',');
                                     this.first.data.selectedPackageAttach = package_attach_content.package_attach_id.toString().split(',');
                                     this.first.data.selectedPackageRebate = package_attach_content.package_rebate_id;
-                                    this.first.data.rebatePrice = registration.rebate;
-                                    this.first.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                    //this.$nextTick(function() {
+                                        this.first.data.rebatePrice = firstRegistration.rebate;
+                                        this.first.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                    //});
                                 });
-                                this.first.data.payList = registration.payList || [];
+                                this.first.data.payList = firstRegistration.payList || [];
                                 //添加附加套餐
                             }else if (t == 2){
-
+                                //闭包中使用该变量
+                                var secondRegistration = registration;
                                 this.second.name = schoolName;
                                 //课程顾问只有查看权限
                                 if(this.userRole == "adviser"){
@@ -466,16 +471,19 @@
                                 }
                                 //若学院名称改变，则需要先做一些初始化，再选中
                                 this.$nextTick(function(){
-                                    this.second.data.registration_id = registration.id;
+                                    console.log(secondRegistration);
+                                    this.second.data.registration_id = secondRegistration.id;
                                     this.second.data.packageList = {};
                                     this.second.data.packageList[packageInfo.id] = packageInfo;
                                     this.second.data.selectedPackage = packageInfo.id.toString().split(',');
                                     this.second.data.selectedPackageAttach = package_attach_content.package_attach_id.toString().split(',');
                                     this.second.data.selectedPackageRebate = package_attach_content.package_rebate_id;
-                                    this.second.data.rebatePrice = registration.rebate;
-                                    this.second.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                    //this.$nextTick(function() {
+                                        this.second.data.rebatePrice = secondRegistration.rebate;
+                                        this.second.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                    //});
                                 });
-                                this.second.data.payList = registration.payList || [];
+                                this.second.data.payList = secondRegistration.payList || [];
                             }
                         }
                         //即没有添加美术学院，也没有添加设计学院
