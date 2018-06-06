@@ -414,7 +414,7 @@ class RegistrationController extends BaseController{
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getPayList(Request $request){
-        $UserEnrollModel = UserEnrollModel::with(["userRegistration.userPayLog"=>function($payLog){
+        $UserEnrollModel = UserEnrollModel::with(["userRegistration","userPayLog"=>function($payLog){
             $payLog->orderBy("id","desc");
         }]);
         //根据学员姓名检索
@@ -491,16 +491,16 @@ class RegistrationController extends BaseController{
             'adviser_name'           =>  '课程顾问',
             'name'                      =>  '学员姓名',
             'mobile'                    =>  '开课手机',
-            'amount'                    =>  '支付总金额',
-            'pay_type_text'             =>  '付款方式',
-            'userRegistration.package_total_price'       =>  "套餐总金额",    //主套餐+附加课程
-            'userRegistration.amount_bill'       =>  '应交总金额',    //套餐总金额-优惠
-            'userRegistration.rebate'                    =>  '优惠金额',
+//            'total_submitted_price'       =>  '支付总金额',
+            'last_pay_type_text'          =>  '付款方式',
+            'package_all_price'           =>  "套餐总金额",    //主套餐+附加课程
+            'total_should_price'          =>  '应交总金额',    //套餐总金额-优惠
+            'total_rebate'                =>  '优惠金额',
             'qq'                        =>  'QQ号',
             'wx'                        =>  "微信号",
-            'userRegistration.school_text'               =>  '学院名称',
-            'userRegistration.package_all_title'         =>  '报名套餐',
-            'create_time_text'          =>  "提交时间",
+            'userRegistration.submitted_price.SJ'  =>  '设计学院',
+            'userRegistration.submitted_price.MS'  =>  '美术学院',
+            'package_title_text'         =>  '报名套餐',
         ];
         $exportData['data'] = $model->take(3000)->get();
         return $this->export($exportData);

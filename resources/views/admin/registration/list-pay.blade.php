@@ -102,19 +102,18 @@
                         @if($adminInfo['grade'] <= 5)<td>{{$v->adviser_name}}</td>@endif
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
+                        <td>{{$v->account}}</td>
                         <td>
                             @foreach($v->userRegistration as $l)
-                                {{$l->package_all_title}}
+                                {{$l->package_all_title}}<br/>
                             @endforeach
                         </td>
                         <td>{{$v->total_should_price}}</td>
                         <td>{{$v->total_submitted_price}}</td>
                         <td>{{$v->submitted_price['SJ']}}</td>
                         <td>{{$v->submitted_price['MS']}}</td>
-                        <td> ---- </td>
-                        <td>{{$v->pay_time_text}}</td>
-                        <!--<td>{$v[package_total_price] - $v[rebate]}</td>
-                        <td>{$v.amount_submitted}</td>-->
+                        <td>{{$v->last_pay_type_text}} </td>
+                        <td>{{$v->last_pay_time_text}}</td>
                         <td>{{$v->create_time}}</td>
                         <td style="text-align: center">
 <a href="{{route("admin.registration.add",['mobile'=>$v->mobile,'back_url'=>\Illuminate\Support\Facades\URL::full()])}}">查看</a>
