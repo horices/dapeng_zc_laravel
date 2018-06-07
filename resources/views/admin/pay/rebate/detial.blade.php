@@ -66,7 +66,7 @@
                 </div>
                 <div class="form-group">
                     <!-- Text input-->
-                    <label class="col-md-2 control-label" for="input01">套餐金额：</label>
+                    <label class="col-md-2 control-label" for="input01">优惠金额：</label>
                     <div class="col-md-8 controls">
                         <input type="number" name="price_max" v-model="r.price_max" class="form-control" />
                         <p class="help-block"></p>

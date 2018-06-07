@@ -22,9 +22,9 @@ class GitNotifyController extends BaseController
     ];
     //远程用户
     protected $user = [
-        Util::MASTER => 'zhang',
-        Util::TEST => 'zhang',
-        Util::DEV => 'zhang',
+        Util::MASTER => 'horice',
+        Util::TEST => 'horice',
+        Util::DEV => 'horice',
     ];
     function getRemoteUser(){
         return $this->user[Util::getCurrentBranch()];

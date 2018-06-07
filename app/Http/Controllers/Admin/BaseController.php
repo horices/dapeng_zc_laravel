@@ -110,7 +110,7 @@ class BaseController extends Controller{
                     }elseif($result instanceof Collection){
                         $result = $result->get($key);
                     }elseif(is_array($result)){
-                        $result = $result[$key];
+                        $result = $result[$key] ?? '';
                     }
 
                 });
