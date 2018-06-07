@@ -50,6 +50,23 @@ class UserRegistrationModel extends BaseModel{
     public function getPackageAllPriceAttribute(){
         return $this->package_price+$this->course_attach_all_price;
     }
+
+    public function getPackagePriceAttribute($value){
+        return floatval($value);
+    }
+
+    public function getCourseAttachAllPriceAttribute($value){
+        return floatval($value);
+    }
+
+    public function getPackageTotalPriceAttribute($value){
+        return floatval($value);
+    }
+
+    public function getAmountSubmittedAttribute($value){
+        return floatval($value);
+    }
+
     /**
      * 获取isBelong
      * @return int
@@ -168,6 +185,7 @@ class UserRegistrationModel extends BaseModel{
     public function getGuideTextAttribute(){
         return $this->is_guide ? '是' : '否';
     }
+
 
     /**
      * 是否记录高亮显示

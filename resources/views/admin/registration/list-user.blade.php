@@ -111,9 +111,9 @@
                 <th width="70">赠送课程</th>
                 @if($adminInfo['grade']<=5)<th>开课状态</th>@endif
                 <th>套餐总金额</th>
-                <th>优惠金额</th>
-                <th>应交金额</th>
-                <th>已交金额</th>
+                <th>优惠</th>
+                <th>应交</th>
+                <th>已交</th>
                 @if($adminInfo['grade'] <= 5)
                     <th width="100">提交时间</th>
                     <th>导学</th>
@@ -141,6 +141,14 @@
                                 @endforeach
                             @endif
                         </td>
+                        @if($adminInfo['grade']<=5)
+                            <td>
+                                {{$v->is_open_text}}
+                            </td>
+                        @endif
+                        <td>
+                            {{$v->package_all_price}}
+                        </td>
                         <td>
                             @if($v->selected_give_course->count()>0)
                                 @foreach($v->selected_give_course as $l)
@@ -148,14 +156,7 @@
                                 @endforeach
                             @endif
                         </td>
-                        @if($adminInfo['grade']<=5)
-                        <td>
-                            {{$v->is_open_text}}
-                        </td>
-                        @endif
-                        <td>
-                            {{$v->package_all_price}}
-                        </td>
+
                         <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
