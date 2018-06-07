@@ -107,9 +107,7 @@ class PackageController extends BaseController {
             if(!$detail){
                 throw new UserValidateException("未找到要删除的套餐！");
             }
-            $detail->status = "DEL";
-            $eff = $detail->save();
-            if($eff){
+            if($detail->delete()){
                 return response()->json(['code'=>Util::SUCCESS,'msg'=>'删除成功！']);
             }else{
                 throw new UserValidateException("删除失败！");
