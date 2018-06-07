@@ -143,6 +143,8 @@
                 return ;
             }
             vm[vm.currentPos].data.payList.push(json);
+            form.find("input[name='amount']").val('');
+            form.find("input[name='pay_time']").val('');
             layer.closeAll();
         }
 
