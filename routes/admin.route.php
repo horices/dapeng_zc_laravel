@@ -94,6 +94,8 @@ Route::post("registration/post-package-list","RegistrationController@postPackage
 Route::get("registration/list-user","RegistrationController@getUserList")->name("admin.registration.list.user");
 //支付记录列表
 Route::get("registration/list-pay","RegistrationController@getPayList")->name("admin.registration.list.pay");
+//删除支付
+Route::get("registration/delete-pay","RegistrationController@getDeletePay")->name("admin.registration.delete.pay");
 //支付记录详情
 Route::get("registration/list-detail","RegistrationController@getListDetail")->name("admin.registration.list.detail");
 Route::post("registration/mod-field","RegistrationController@postModField")->name("admin.registration.mod-field");

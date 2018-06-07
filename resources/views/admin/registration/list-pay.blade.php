@@ -118,7 +118,7 @@
                         <td style="text-align: center">
 <a href="{{route("admin.registration.add",['mobile'=>$v->mobile,'back_url'=>\Illuminate\Support\Facades\URL::full()])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
-                                    |<a url="" class="ajaxLink" warning="确认删除？">删除</a>
+                                    |<a url="{{route('admin.registration.delete.pay',['id'=>$v['id']])}}" method="get" class="ajaxLink" warning="确认删除？">删除</a>
                                 @endif
                         </td>
                     </tr>

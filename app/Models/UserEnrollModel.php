@@ -9,15 +9,18 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 
 class UserEnrollModel extends BaseModel {
+    use SoftDeletes;
     protected $table = "user_enroll";
     public $timestamps = true;
     protected $dateFormat = 'U';
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
-    const DELETE_AT  = 'delete_time';
+    const DELETED_AT  = 'delete_time';
+    protected $dates = ['delete_time'];
     protected $appends = [
         'account','package_all_price','total_submitted_price','submitted_price','total_should_price',
         'should_price','total_rebate_price','package_title_text','last_pay_type_text','last_pay_time_text'

@@ -623,4 +623,24 @@ class RegistrationController extends BaseController{
             throw new UserValidateException("修改失败");
         }
     }
+
+    /**
+     * 支付记录软删除
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws UserValidateException
+     */
+    function getDeletePay(Request $request){
+        $id = $request->get('id');
+        $detail = UserEnrollModel::find($id);
+        if(!$detail){
+            throw new UserValidateException('未找到用户信息！');
+        }
+        $eff = $detail->delete();
+        if(!$eff){
+            throw new UserValidateException('删除失败！');
+        }
+        return Util::ajaxReturn(Util::SUCCESS,'删除成功！');
+    }
+
 }
