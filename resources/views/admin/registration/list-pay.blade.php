@@ -89,8 +89,8 @@
                 <th>设计学院</th>
                 <th>美术学院</th>
                 <th width="80">支付方式</th>
-                <th>支付时间</th>
-                <th>提交时间</th>
+                <th width="80">支付时间</th>
+                <th width="80">提交时间</th>
                 <th width="80">操作</th>
             </tr>
             </thead>
@@ -124,11 +124,11 @@
                     </tr>
                 @endforeach
                 <tr>
-                    <td colspan="13" ><div class="pagenav"> <ul>{{$list->appends(Request::input())->links()}} </ul></div></td>
+                    <td colspan="15" ><div class="pagenav"> <ul>{{$list->appends(Request::input())->links()}} </ul></div></td>
                 </tr>
             @else
                 <tr>
-                    <td colspan="13">暂无信息</td>
+                    <td colspan="15">暂无信息</td>
                 </tr>
             @endif
             </tbody>
