@@ -135,7 +135,7 @@ class RebateActivityModel extends BaseModel {
         $validator->validate();
         //验证添加的附加课程是否满足格式
         for($i=0;$i<$post['give_length'];$i++){
-            if(!isset($post['course_give'][$i])){
+            if(!isset($post['give_title'][$i])){
                 throw new UserValidateException("赠送课程必须填写标题!");
             }
         }
