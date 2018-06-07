@@ -108,13 +108,14 @@
                 <th>学院名称</th>
                 <th width="130">套餐名称</th>
                 <th width="70">附加课程</th>
+                <th width="70">赠送课程</th>
                 @if($adminInfo['grade']<=5)<th>开课状态</th>@endif
                 <th>套餐总金额</th>
-                <th>优惠</th>
-                <th>应交</th>
-                <th>已交</th>
-                <th width="100">提交时间</th>
+                <th>优惠金额</th>
+                <th>应交金额</th>
+                <th>已交金额</th>
                 @if($adminInfo['grade'] <= 5)
+                    <th width="100">提交时间</th>
                     <th>导学</th>
                     <th width="60">操作</th>
                 @endif
@@ -140,6 +141,13 @@
                                 @endforeach
                             @endif
                         </td>
+                        <td>
+                            @if($v->selected_give_course->count()>0)
+                                @foreach($v->selected_give_course as $l)
+                                    {{$l or ''}}<br/>
+                                @endforeach
+                            @endif
+                        </td>
                         @if($adminInfo['grade']<=5)
                         <td>
                             {{$v->is_open_text}}
@@ -151,8 +159,8 @@
                         <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
-                        <td>{{$v->create_time}}</td>
                         @if($adminInfo['grade'] <= 5)
+                            <td>{{$v->create_time}}</td>
                             <td>{{$v->guide_text}}</td>
                             <td>
                                 <a class="set-is-open-a" onclick="setIsOpen(this)">开课</a>

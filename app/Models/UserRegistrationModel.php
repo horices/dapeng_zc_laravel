@@ -127,7 +127,7 @@ class UserRegistrationModel extends BaseModel{
      * @return mixed
      */
     public function getSelectedRebateAttribute(){
-        if($this->package_attach_content['package_rebate_id'] !== null && isset($this->package_attach_content['package_info']['rebate'])){
+        if($this->package_attach_content['package_rebate_id'] !== "" && isset($this->package_attach_content['package_info']['rebate'])){
             return $this->package_attach_content['package_info']['rebate'][$this->package_attach_content['package_rebate_id']];
         }
         return [];
@@ -147,6 +147,18 @@ class UserRegistrationModel extends BaseModel{
             });
         }
         return $selectGiveCourse;
+    }
+
+    /**
+     * 获取赠送课程 换行的字符串 (做导出用)
+     * @return string
+     */
+    public function getGiveCourseTextAttribute(){
+        $courseTitle = "";
+        foreach ($this->selected_give_course as $key=>$val){
+            $courseTitle .= $val."\n";
+        }
+        return $courseTitle;
     }
 
     /**
