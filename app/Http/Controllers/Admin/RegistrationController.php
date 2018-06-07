@@ -183,6 +183,7 @@ class RegistrationController extends BaseController{
                 $registrationData['mobile'] = $enroll->mobile;
                 $registrationData['qq'] = $enroll->qq;
                 $registrationData['wx'] = $enroll->wx;
+                $registrationData['is_guide'] = $enroll->is_guide;
                 Validator::make($registrationData,[
                     'package_id'    =>  "required"
                 ],[
