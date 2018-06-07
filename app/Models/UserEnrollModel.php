@@ -80,7 +80,7 @@ class UserEnrollModel extends BaseModel {
     public function getPackageTitleTextAttribute(){
         $value = "";
         foreach ($this->userRegistration as $v){
-            $value .= $v['package_all_title']."<br/>";
+            $value .= $v['package_all_title']."\n";
         }
         return $value;
     }

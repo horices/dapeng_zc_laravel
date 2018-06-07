@@ -50,6 +50,23 @@ class UserRegistrationModel extends BaseModel{
     public function getPackageAllPriceAttribute(){
         return $this->package_price+$this->course_attach_all_price;
     }
+
+    public function getPackagePriceAttribute($value){
+        return floatval($value);
+    }
+
+    public function getCourseAttachAllPriceAttribute($value){
+        return floatval($value);
+    }
+
+    public function getPackageTotalPriceAttribute($value){
+        return floatval($value);
+    }
+
+    public function getAmountSubmittedAttribute($value){
+        return floatval($value);
+    }
+
     /**
      * 获取isBelong
      * @return int
@@ -127,7 +144,7 @@ class UserRegistrationModel extends BaseModel{
      * @return mixed
      */
     public function getSelectedRebateAttribute(){
-        if($this->package_attach_content['package_rebate_id'] !== null && isset($this->package_attach_content['package_info']['rebate'])){
+        if($this->package_attach_content['package_rebate_id'] !== "" && isset($this->package_attach_content['package_info']['rebate'])){
             return $this->package_attach_content['package_info']['rebate'][$this->package_attach_content['package_rebate_id']];
         }
         return [];
@@ -150,12 +167,25 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
+     * 获取赠送课程 换行的字符串 (做导出用)
+     * @return string
+     */
+    public function getGiveCourseTextAttribute(){
+        $courseTitle = "";
+        foreach ($this->selected_give_course as $key=>$val){
+            $courseTitle .= $val."\n";
+        }
+        return $courseTitle;
+    }
+
+    /**
      * 获取导学状态
      * @return string
      */
     public function getGuideTextAttribute(){
         return $this->is_guide ? '是' : '否';
     }
+
 
     /**
      * 是否记录高亮显示
