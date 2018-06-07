@@ -20,6 +20,7 @@ return [
         'bzr.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'zc.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_MS,
+        'test.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'test.ms.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_MS,
         //'laravel.local.zc.com'      =>  \App\Utils\Util::SCHOOL_NAME_MS
