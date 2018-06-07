@@ -22,7 +22,7 @@ class UserEnrollModel extends BaseModel {
     const DELETED_AT  = 'delete_time';
     protected $dates = ['delete_time'];
     protected $appends = [
-        'account','package_all_price','total_submitted_price','submitted_price','total_should_price','total_rebate_price','package_title_text','last_pay_type_text','last_pay_time_text'
+        'account'
     ];
 
     /**
@@ -80,7 +80,7 @@ class UserEnrollModel extends BaseModel {
     public function getPackageTitleTextAttribute(){
         $value = "";
         foreach ($this->userRegistration as $v){
-            $value .= $v['package_total_title']."<br/>";
+            $value .= $v['package_all_title']."<br/>";
         }
         return $value;
     }
