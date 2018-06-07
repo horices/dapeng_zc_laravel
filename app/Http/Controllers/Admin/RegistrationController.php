@@ -90,7 +90,9 @@ class RegistrationController extends BaseController{
 
         $packageList = [];
         //查询所有的套餐列表
-        CoursePackageModel::with("rebate")->where("course_attach","!=",'')->get()->mapWithKeys(function($v){
+        CoursePackageModel::with(["rebate"=>function($rebate){
+            $rebate->where("start_time",">=",time())->where("end_time","<",time());
+        }])->where("course_attach","!=",'')->get()->mapWithKeys(function($v){
             return [$v['id']=>$v];
         })->each(function($v) use (&$packageList){
             $packageList[$v['school_id']][$v['id']] = $v;
