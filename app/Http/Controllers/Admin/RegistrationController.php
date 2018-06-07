@@ -487,7 +487,7 @@ class RegistrationController extends BaseController{
         $exportData['filename'] = "用户支付记录导出".date("Y-m-d_H:i:s");
         $exportData['title'] = [
             //'id'                       =>  '序号',
-            'pay_time_text'            =>   '收款日期',
+            'last_pay_time_text'     =>   '收款日期',
             'adviser_name'           =>  '课程顾问',
             'name'                      =>  '学员姓名',
             'mobile'                    =>  '开课手机',
@@ -495,11 +495,11 @@ class RegistrationController extends BaseController{
             'last_pay_type_text'          =>  '付款方式',
             'package_all_price'           =>  "套餐总金额",    //主套餐+附加课程
             'total_should_price'          =>  '应交总金额',    //套餐总金额-优惠
-            'total_rebate'                =>  '优惠金额',
+            'total_rebate_price'         =>  '优惠金额',
             'qq'                        =>  'QQ号',
             'wx'                        =>  "微信号",
-            'userRegistration.submitted_price.SJ'  =>  '设计学院',
-            'userRegistration.submitted_price.MS'  =>  '美术学院',
+            'submitted_price.SJ'  =>  '设计学院',
+            'submitted_price.MS'  =>  '美术学院',
             'package_title_text'         =>  '报名套餐',
         ];
         $exportData['data'] = $model->take(3000)->get();
