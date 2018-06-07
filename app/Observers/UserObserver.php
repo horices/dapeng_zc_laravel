@@ -43,10 +43,6 @@ class UserObserver extends  BaseObserver {
 
     //新增前
     function creating(UserModel $userModel){
-        //补全用户的密码
-        if(!$userModel->password){
-            $userModel->password = md5(123456);
-        }
     }
 
     //更新前
