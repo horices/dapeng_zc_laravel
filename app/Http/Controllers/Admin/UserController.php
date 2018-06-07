@@ -68,7 +68,11 @@ class UserController extends BaseController
         $input = $request->all();
         if($request->input("uid")){
             $user = UserModel::withoutGlobalScope('status')->find($request->input("uid"));
-            if(!$request->get("password")) $input = $request->except("password");
+            if(!$request->get("password")) {
+                $input = $request->except("password");
+            }else{
+                $input['password'] = md5($request->get("password"));
+            }
             $user->fill($input);
             if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
@@ -81,6 +85,7 @@ class UserController extends BaseController
                 $returnData['msg'] = "修改失败".$user->errors;
             }
         } else {
+            $request->merge(['password'=>md5($request->get('password','123456'))]);
             if(UserModel::create($input)){
                 $returnData['code'] = Util::SUCCESS;
                 $returnData['msg'] = "添加成功";
