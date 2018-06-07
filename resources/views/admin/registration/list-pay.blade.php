@@ -110,8 +110,8 @@
                         </td>
                         <td>{{$v->total_should_price}}</td>
                         <td>{{$v->total_submitted_price}}</td>
-                        <td>{{$v->submitted_price['SJ']}}</td>
-                        <td>{{$v->submitted_price['MS']}}</td>
+                        <td>{{$v->submitted_price['SJ'] or ''}}</td>
+                        <td>{{$v->submitted_price['MS'] or ''}}</td>
                         <td>{{$v->last_pay_type_text}} </td>
                         <td>{{$v->last_pay_time_text}}</td>
                         <td>{{$v->create_time}}</td>
