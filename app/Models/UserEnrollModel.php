@@ -22,8 +22,7 @@ class UserEnrollModel extends BaseModel {
     const DELETED_AT  = 'delete_time';
     protected $dates = ['delete_time'];
     protected $appends = [
-        'account','package_all_price','total_submitted_price','submitted_price','total_should_price',
-        'should_price','total_rebate_price','package_title_text','last_pay_type_text','last_pay_time_text'
+        'account','package_all_price','total_submitted_price','submitted_price','total_should_price','total_rebate_price','package_title_text','last_pay_type_text','last_pay_time_text'
     ];
 
     /**
