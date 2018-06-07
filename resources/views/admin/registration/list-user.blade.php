@@ -141,14 +141,6 @@
                                 @endforeach
                             @endif
                         </td>
-                        @if($adminInfo['grade']<=5)
-                            <td>
-                                {{$v->is_open_text}}
-                            </td>
-                        @endif
-                        <td>
-                            {{$v->package_all_price}}
-                        </td>
                         <td>
                             @if($v->selected_give_course->count()>0)
                                 @foreach($v->selected_give_course as $l)
@@ -156,6 +148,13 @@
                                 @endforeach
                             @endif
                         </td>
+                        @if($adminInfo['grade']<=5)
+                            <td>{{$v->is_open_text}}</td>
+                        @endif
+                        <td>
+                            {{$v->package_all_price}}
+                        </td>
+
 
                         <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>
