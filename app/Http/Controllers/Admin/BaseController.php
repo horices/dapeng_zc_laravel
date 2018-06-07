@@ -104,7 +104,11 @@ class BaseController extends Controller{
             //判断字段中是否存在点的语法,进行多级获取
             $data->get("title")->keys()->transform(function($column) use (&$v,&$row){
                 $result = $v;
-                collect(explode('.',$column))->each(function($key) use (&$v,&$result){
+                collect(explode('.',$column))->each(function($key) use (&$result){
+                    if(!$result){
+                        $result = '';
+                        return false;
+                    }
                     if($result instanceof Model){
                         $result = $result->$key;
                     }elseif($result instanceof Collection){
