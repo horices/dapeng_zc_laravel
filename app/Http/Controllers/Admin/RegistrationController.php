@@ -494,7 +494,7 @@ class RegistrationController extends BaseController{
             'adviser_name'           =>  '课程顾问',
             'name'                      =>  '学员姓名',
             'mobile'                    =>  '开课手机',
-//            'total_submitted_price'       =>  '支付总金额',
+            'total_submitted_price'       =>  '支付总金额',
             'last_pay_type_text'          =>  '付款方式',
             'package_all_price'           =>  "套餐总金额",    //主套餐+附加课程
             'total_should_price'          =>  '应交总金额',    //套餐总金额-优惠
