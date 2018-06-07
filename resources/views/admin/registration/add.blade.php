@@ -275,7 +275,6 @@
                     },
                     //删除支付记录
                     removePayList:function(key,index){
-                        console.log(this[key].data.payList[index]);
                         this[key].data.payList.splice(index,1);
                     },
                     addSecond:function(){
@@ -434,9 +433,6 @@
                         var t = 0;
                         for(var schoolName in this.enroll.registrations){
                             var registration = this.enroll.registrations[schoolName];
-                            var packageInfo = registration.package_attach_content.package_info;
-                            var package_attach_content =  this.enroll.registrations[schoolName].package_attach_content;
-                            var packageInfo = package_attach_content.package_info;
                             t++;
                             if(t == 1){
                                 //闭包中使用该变量
@@ -448,16 +444,18 @@
                                 }
                                 //若学院名称改变，则需要先做一些初始化，再选中
                                 this.$nextTick(function(){
+                                    var package_attach_content =  firstRegistration.package_attach_content;
+                                    var packageInfo = package_attach_content.package_info;
                                     this.first.data.registration_id = firstRegistration.id;
                                     this.first.data.packageList = {};
                                     this.first.data.packageList[packageInfo.id] = packageInfo;
                                     this.first.data.selectedPackage = packageInfo.id.toString().split(',');
                                     this.first.data.selectedPackageAttach = package_attach_content.package_attach_id.toString().split(',');
                                     this.first.data.selectedPackageRebate = package_attach_content.package_rebate_id;
-                                    //this.$nextTick(function() {
+                                    this.$nextTick(function() {
                                         this.first.data.rebatePrice = firstRegistration.rebate;
                                         this.first.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
-                                    //});
+                                    });
                                 });
                                 this.first.data.payList = firstRegistration.payList || [];
                                 //添加附加套餐
@@ -471,17 +469,18 @@
                                 }
                                 //若学院名称改变，则需要先做一些初始化，再选中
                                 this.$nextTick(function(){
-                                    console.log(secondRegistration);
+                                    var package_attach_content =  secondRegistration.package_attach_content;
+                                    var packageInfo = package_attach_content.package_info;
                                     this.second.data.registration_id = secondRegistration.id;
                                     this.second.data.packageList = {};
                                     this.second.data.packageList[packageInfo.id] = packageInfo;
                                     this.second.data.selectedPackage = packageInfo.id.toString().split(',');
                                     this.second.data.selectedPackageAttach = package_attach_content.package_attach_id.toString().split(',');
                                     this.second.data.selectedPackageRebate = package_attach_content.package_rebate_id;
-                                    //this.$nextTick(function() {
+                                    this.$nextTick(function() {
                                         this.second.data.rebatePrice = secondRegistration.rebate;
                                         this.second.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
-                                    //});
+                                    });
                                 });
                                 this.second.data.payList = secondRegistration.payList || [];
                             }
