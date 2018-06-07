@@ -21,6 +21,7 @@ class RegistrationForm extends FormRequest{
     {
         return [
             'mobile.required'       =>  "请输入正确格式的手机号！",
+            'mobile.numeric'       =>  "请输入正确格式的手机号！",
             'mobile.regex'          =>  "请输入正确格式的手机号！",
             'adviser_mobile.required'=> "请输入课程顾问手机号！",
             'adviser_mobile.regex'   => "课程顾问手机号格式错误！",

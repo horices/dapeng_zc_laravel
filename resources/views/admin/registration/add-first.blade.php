@@ -28,8 +28,9 @@ function hasRegistration(data){
             </div>
             <div class="div_input_one ">
                 <label for="input01 " class="col-md-3 control-label "> 学员手机： </label>
+                <input type="text" value="" style="width:0px;height:0px;" />
                 <input type="text " id="mobile" name="enroll[mobile]" value="" maxlength="11 " class="form-control pull-left " />
-                <a data="{mobile:$( '#mobile').val(),client_submit: 'PC'} " url="{{ route('admin.registration.has-registration') }}" callback="hasRegistration" class="common-button dblock fleft combg2 ml5 ajaxSubmit" >下一步</a>
+                <a data="{mobile:$( '#mobile').val(),client_submit: 'PC'} " url="{{ route('admin.registration.has-registration') }}" callback="hasRegistration" class="common-button dblock fleft combg2 ml5 ajaxSubmit" showloading="true" >下一步</a>
             </div>
         </div>
     </form>
