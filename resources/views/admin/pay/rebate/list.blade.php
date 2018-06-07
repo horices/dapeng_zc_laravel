@@ -37,7 +37,7 @@
         @if(count($list)>0)
             @foreach($list as $k=>$v)
                 <tr>
-                    <td>{{$v->id+1}}</td>
+                    <td>{{ $loop->index+1}}</td>
                     <td>{{$v->title}}</td>
                     <td>
                         @if($v->course_give_data)
