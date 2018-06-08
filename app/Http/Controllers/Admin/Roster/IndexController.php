@@ -66,7 +66,7 @@ class IndexController extends BaseController
         if(!$data){
             $data = $request->all();
         }
-        if($roster = RosterModel::addRoster(collect($data)->filter()->toArray())){
+        if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
             $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
             $returnData['msg'] = "添加成功";

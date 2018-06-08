@@ -226,14 +226,17 @@ class RosterModel extends BaseModel
         $validator->validate();
 
         if($multiSchool){
+            unset($temp);
+            $temp['roster_type'] = $data['roster_type'];
+            $temp['roster_no'] = $data['roster_no'];
             //验证其它学院，是否正常
             if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-                ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$data);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-                ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$data);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
             }
         }
         return array_merge($data,$createData);
@@ -248,11 +251,12 @@ class RosterModel extends BaseModel
      *              qq_group_id：群ID号，不传该值时，系统会自带分配一个群
      *              is_admin_add:是否是管理员添加，[1是，0否]
      *              from_type:来源类型,[1:正常提交 2:大鹏PC站 3:大鹏WAP站 4:Android 5:IOS 6.批量导入]
+     * @param $multiSchool 是否开启多学院验证，默认为false;
      */
-    public static function addRoster(array $data){
+    public static function addRoster(array $data,$multiSchool = false){
 
         //验证数据是否存在问题，并补全部分信息
-        $data = self::validateRosterData($data);
+        $data = self::validateRosterData($data,$multiSchool);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
