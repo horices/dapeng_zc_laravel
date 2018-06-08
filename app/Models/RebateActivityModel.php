@@ -10,6 +10,7 @@ namespace App\Models;
 
 
 use App\Exceptions\UserValidateException;
+use App\Utils\Util;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -94,6 +95,7 @@ class RebateActivityModel extends BaseModel {
             'give_length.required'=>'请先添加赠送课程！',
         ]);
         $validator->validate();
+        Util::setDefault($post['give_title'],[]);
         //验证添加的附加课程是否满足格式
         for($i=0;$i<$post['give_length'];$i++){
             if(!isset($post['give_title'][$i])){
@@ -133,6 +135,7 @@ class RebateActivityModel extends BaseModel {
         ]);
         //执行验证
         $validator->validate();
+        Util::setDefault($post['give_title'],[]);
         //验证添加的附加课程是否满足格式
         for($i=0;$i<$post['give_length'];$i++){
             if(!isset($post['give_title'][$i])){
