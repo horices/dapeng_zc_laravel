@@ -36,7 +36,7 @@ class GitNotifyController extends BaseController
      * coding webHook
      */
     function coding(){
-        //推送时，自动更新
+        //coding推送时，自动更新
         if(Request::header("x-coding-event") == "push"){
             if(Str::endsWith(Request::input("ref"),$this->getBranchName())){
                 $this->deploy();
