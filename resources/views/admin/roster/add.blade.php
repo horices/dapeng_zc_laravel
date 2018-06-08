@@ -2,6 +2,7 @@
 @section("right_content")
     <script>
         var isValidate = false;
+        var validateMsg = "等待验证数据...";
         $(function(){
             $("input[name='roster_type']").click(function () {
                 $(".select_group").attr("group_type",$(this).val());
@@ -22,6 +23,7 @@
             AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.check-roster-status") }}' data=\"{roster_no:'"+value+"',roster_type:'"+roster_type+"'}\" showloading='true'></a>",function(data){
                 if(!data.code){
                     CustomDialog.failDialog(data.msg);
+                    validateMsg = data.msg;
                 }else{
                     CustomDialog.successDialog(data.msg);
                     isValidate = true;
@@ -30,9 +32,9 @@
         }
         function checkRosterValidated(obj){
             if(!isValidate){
-                CustomDialog.failDialog("正在验证数据");
+                    CustomDialog.failDialog(validateMsg);
+                return false;
             }
-            return false;
         }
     </script>
         <form method="post">
