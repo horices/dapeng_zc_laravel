@@ -1,6 +1,7 @@
 @extends("admin.public.layout")
 @section("right_content")
     <script>
+        var isValidate = false;
         $(function(){
             $("input[name='roster_type']").click(function () {
                 $(".select_group").attr("group_type",$(this).val());
@@ -15,11 +16,23 @@
             $("input[name='group']").val(group.qq_group);
             $("input[name='qq_group_id']").val(group.id);
         }
-        function checkRosterStatus(value) {
-            var roster_type = $("input[name='roster_type']").val();
-            AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.check-roster-status") }}' data=\"{roster_no:'"+value+"',roster_type:'"+roster_type+"'}\"></a>",function(data){
-                console.log(data);
+        function checkRosterStatus() {
+            var value = $("input[name='roster_no']").val();
+            var roster_type = $("input[name='roster_type']:checked").val();
+            AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.check-roster-status") }}' data=\"{roster_no:'"+value+"',roster_type:'"+roster_type+"'}\" showloading='true'></a>",function(data){
+                if(!data.code){
+                    CustomDialog.failDialog(data.msg);
+                }else{
+                    CustomDialog.successDialog(data.msg);
+                    isValidate = true;
+                }
             })
+        }
+        function checkRosterValidated(obj){
+            if(!isValidate){
+                CustomDialog.failDialog("正在验证数据");
+            }
+            return false;
         }
     </script>
         <form method="post">
@@ -69,7 +82,7 @@
             </div>
 
             <div class="form-group ">
-                <button class="btn btn-info ajaxSubmit" showloading="true" type="button">提交</button>
+                <button class="btn btn-info ajaxSubmit" showloading="true" type="button" beforeAction="checkRosterValidated">提交</button>
             </div>
           <style>
                 .success-notice{ background:#E0FFE4; border:1px #76E77F solid; width:415px; border-radius:8px; padding:0px 20px; color:#2B6330; margin:30px 0 0 15px}

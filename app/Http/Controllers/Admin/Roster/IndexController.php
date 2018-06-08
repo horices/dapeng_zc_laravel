@@ -46,9 +46,7 @@ class IndexController extends BaseController
         $userInfo = $this->getUserInfo();
         $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>$request->get("roster_type")]);
         if($request->post("validate") == 1){
-            if(!RosterModel::validateRosterData($request->all())){
-                throw new UserValidateException("非法操作");
-            }
+            RosterModel::validateRosterData($request->all(),1);
             return Util::ajaxReturn([
                 'code'  => Util::SUCCESS,
                 'msg'   =>  '该量可以被提交',
@@ -87,7 +85,7 @@ class IndexController extends BaseController
      * @throws ValidationException
      */
     public function postCheckRosterStatus(Request $request){
-        RosterModel::validateRosterData($request->all());
+        RosterModel::validateRosterData($request->all(),true);
         return Util::ajaxReturn(['code'=>Util::SUCCESS,"msg"=>"可以正常添加"]);
     }
     /**
