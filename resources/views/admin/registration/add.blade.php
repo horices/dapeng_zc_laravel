@@ -280,7 +280,7 @@
                         this[key].data.payList.splice(index,1);
                     },
                     addSecond:function(){
-                        if(this.first.name="SJ"){
+                        if(this.first.name=="SJ"){
                             this.second.name="MS";
                         }else {
                             this.second.name="SJ";
@@ -334,8 +334,8 @@
                     "first.data.selectedPackage":function(newVal,oldVal){
                         for(var i=0;i<newVal.length;i++){
                             var packageInfo = this.first.data.packageList[newVal[i]];
-                            this.first.data.packageAttach = packageInfo.course_attach_data;
-                            this.first.data.packageRebate = packageInfo.rebate;
+                            this.first.data.packageAttach = packageInfo.course_attach_data || [];
+                            this.first.data.packageRebate = packageInfo.rebate || [];
                         }
                         //清空其它信息
                         if(!newVal.length){
@@ -374,8 +374,8 @@
                     "second.data.selectedPackage":function(newVal,oldVal){
                         for(var i=0;i<newVal.length;i++){
                             var packageInfo = this.second.data.packageList[newVal[i]];
-                            this.second.data.packageAttach = packageInfo.course_attach_data;
-                            this.second.data.packageRebate = packageInfo.rebate;
+                            this.second.data.packageAttach = packageInfo.course_attach_data || [];
+                            this.second.data.packageRebate = packageInfo.rebate || [];
                         }
                         //清空其它信息
                         if(!newVal.length){
