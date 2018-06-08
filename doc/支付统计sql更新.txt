@@ -22,6 +22,7 @@ MODIFY COLUMN `is_open`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '0.未开课 1.�
 
 ###################以上已更新到正式和测试#####################
 
+
 #优惠活动表#
 ALTER TABLE `rebate_activity`
 ADD COLUMN `rebate_id`  int NOT NULL DEFAULT 0 COMMENT '优惠活动的id,一个优惠活动拥有唯一一个course_id,可能会在多条记录（同一优惠不同版本）中出现' AFTER `id`,
@@ -37,9 +38,6 @@ ADD INDEX `package_id` (`package_id`) USING BTREE ;
 #支付记录字段修改#
 ALTER TABLE `user_pay_log`
 ADD COLUMN `status`  varchar(10) NOT NULL DEFAULT 'USE' COMMENT '当前支付记录状态,USE:正常,DEL:已删除,暂时用不到' AFTER `id`;
-
-
-
 
 #开始#2018.5.3# 修改支付统计系统#
 
@@ -101,13 +99,6 @@ ADD COLUMN `adviser_name`  varchar(30) NOT NULL DEFAULT '' COMMENT '课程顾问
 #结束#2018.5.3# 
 
 
-#用户报名表添加 外键enroll_id#
-ALTER TABLE `user_registration`
-ADD COLUMN `enroll_id`  int NOT NULL DEFAULT 0 COMMENT '学员登记(user_enroll)外键ID' AFTER `uid`;
-
-#结束 2018.5.4#
-
-
 #开始 2018.5.8#
 #套餐表，新增course_package字段#
 ALTER TABLE `course_package`
@@ -124,6 +115,11 @@ MODIFY COLUMN `package_total_price`  decimal(10,2) NOT NULL DEFAULT 0.00 COMMENT
 
 ALTER TABLE `user_registration`
 MODIFY COLUMN `package_all_title`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '套餐名称' AFTER `rebate_id`;
+
+#优惠活动表，添加package_id字段#
+ALTER TABLE `rebate_activity`
+ADD COLUMN `package_id`  int NOT NULL DEFAULT 0 COMMENT '关联套餐ID' AFTER `uid`;
+
 
 
 #结束 修改支付统计系统#

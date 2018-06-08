@@ -87,12 +87,12 @@ class RebateController extends BaseController {
         if ($request->has('id') && $request->input('id')) {
             $eff = RebateActivityModel::updateData($request->input());
             if($eff){
-                return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
+                return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！','url'=>session()->get("backUrl")]);
             }
         }else{
             $eff = RebateActivityModel::addData($request->input());
             if($eff){
-                return response()->json(['code'=>Util::SUCCESS,'msg'=>'新增成功！']);
+                return response()->json(['code'=>Util::SUCCESS,'msg'=>'新增成功！','url'=>session()->get("backUrl")]);
             }
         }
     }
