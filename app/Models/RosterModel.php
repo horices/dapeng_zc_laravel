@@ -226,14 +226,17 @@ class RosterModel extends BaseModel
         $validator->validate();
 
         if($multiSchool){
+            unset($temp);
+            $temp['roster_type'] = $data['roster_type'];
+            $temp['roster_no'] = $data['roster_no'];
             //验证其它学院，是否正常
             if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-                ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$data);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-                ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$data);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
             }
         }
         return array_merge($data,$createData);
