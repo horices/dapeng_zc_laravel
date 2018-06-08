@@ -14,6 +14,10 @@ use App\Exceptions\UserValidateException;
 use App\Utils\Util;
 
 class ZcApi extends BaseApi {
+
+    protected static $url = [
+        'checkRosterStatus' =>  "/Api/User/checkRosterStatus",
+    ];
     protected static function getApiKey()
     {
         return "8934031001776A04444F72154425DDBC";
@@ -27,7 +31,7 @@ class ZcApi extends BaseApi {
      */
     public static function validateRoster($schoolName,array $data){
         //获取学院的地址
-        $url = Util::getWebSiteConfig("ZC_URL.".$schoolName);
+        $url = Util::getWebSiteConfig("ZC_URL.".$schoolName).static::$url['checkRosterStatus'];
         $data = static :: api($url,$data,"post");
         return $data;
     }
