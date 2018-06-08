@@ -251,11 +251,12 @@ class RosterModel extends BaseModel
      *              qq_group_id：群ID号，不传该值时，系统会自带分配一个群
      *              is_admin_add:是否是管理员添加，[1是，0否]
      *              from_type:来源类型,[1:正常提交 2:大鹏PC站 3:大鹏WAP站 4:Android 5:IOS 6.批量导入]
+     * @param $multiSchool 是否开启多学院验证，默认为false;
      */
-    public static function addRoster(array $data){
+    public static function addRoster(array $data,$multiSchool = false){
 
         //验证数据是否存在问题，并补全部分信息
-        $data = self::validateRosterData($data,true);
+        $data = self::validateRosterData($data,$multiSchool);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
