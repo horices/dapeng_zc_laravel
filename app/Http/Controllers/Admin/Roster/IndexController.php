@@ -81,6 +81,16 @@ class IndexController extends BaseController
     }
 
     /**
+     * 检查该量量是否允许被添加
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ValidationException
+     */
+    public function postCheckRosterStatus(Request $request){
+        RosterModel::validateRosterData($request->all());
+        return Util::ajaxReturn(['code'=>Util::SUCCESS,"msg"=>"可以正常添加"]);
+    }
+    /**
      * 解除绑定，可以重新输入手机号
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

@@ -128,13 +128,9 @@ class RosterController extends BaseController
      *                      roster_no: 量的号码
      */
     function checkRosterStatus(Request $request){
-        $data['roster_type'] = $request->get("roster_type");
-        $data['roster_no'] = $request->get("roster_no");
-        $code = Util::SUCCESS;
-        $msg = "可以正常添加";
-        //验证时，需要验证seoer身份，这里随意补全一个推广专员的身份
-        $seoer = UserModel::seoer()->first();
-        $data['seoer_id'] = $seoer->uid;
+        RosterModel::validateRosterData($request->all());
+        return Util::ajaxReturn(Util::SUCCESS,"可以正常添加","");
+        //有异常直接抛出，在外部进行捕获
         try{
             // 对验证进行异常捕获，有异常表示数据错误，不能正常提交
             RosterModel::validateRosterData($data);

@@ -15,6 +15,12 @@
             $("input[name='group']").val(group.qq_group);
             $("input[name='qq_group_id']").val(group.id);
         }
+        function checkRosterStatus(value) {
+            var roster_type = $("input[name='roster_type']").val();
+            AjaxAction.ajaxLinkAction("<a url='{{ route("admin.roster.check-roster-status") }}' data=\"{roster_no:'"+value+"',roster_type:'"+roster_type+"'}\"></a>",function(data){
+                console.log(data);
+            })
+        }
     </script>
         <form method="post">
             <input type="hidden" name="is_admin_add" value="1" />
@@ -38,7 +44,7 @@
                 <label for="">新量号码:</label>
                 <div class="row">
                     <div class="col-lg-3">
-                        <input type="text" class="form-control " name="roster_no" placeholder="填写新量号码">
+                        <input type="text" class="form-control " name="roster_no" placeholder="填写新量号码" onblur="checkRosterStatus(this.value)">
                     </div>
                 </div>
             </div>

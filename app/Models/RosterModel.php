@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
+use App\Utils\Api\ZcApi;
 use App\Utils\Util;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -145,8 +146,8 @@ class RosterModel extends BaseModel
             'roster_no' =>  'required',
             'roster_type'   =>  'required|in:1,2',
             //'qq_group_id'   =>  'required|exists:user_qqgroup,id',
-            'qq_group_id'   =>  'required_if:from_type,6|exists:user_qqgroup,id',
-            'seoer_id'   =>  'required|exists:user_headmaster,uid'
+            'qq_group_id'   =>  'sometimes|required_if:from_type,6|exists:user_qqgroup,id',
+            'seoer_id'   =>  'sometimes|required|exists:user_headmaster,uid'
         ],[
             'roster_no.required' =>  '请输入'.$columnText.'号码',
             'roster_no.unique'  =>  '该'.$columnText.'号码已存在',
@@ -222,6 +223,15 @@ class RosterModel extends BaseModel
         });
         //调用系统验证，验证失败时，抛出一个异常
         $validator->validate();
+        //验证其它学院，是否正常
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
+            //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
+            ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$data);
+        }
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
+            //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
+            ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$data);
+        }
         return array_merge($data,$createData);
     }
     /**
