@@ -255,7 +255,7 @@ class RosterModel extends BaseModel
     public static function addRoster(array $data){
 
         //验证数据是否存在问题，并补全部分信息
-        $data = self::validateRosterData($data);
+        $data = self::validateRosterData($data,true);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
