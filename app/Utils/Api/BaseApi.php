@@ -53,7 +53,7 @@ abstract class BaseApi {
      * @param string $data
      */
     public static function getPostData(array $data = null){
-        Util::setDefault($data['timestamp'], ceil(microtime(true)*1000));
+        Util::setDefault($data['timestamp'], strval(ceil(microtime(true)*1000)));
         $data['sign'] = strtoupper(static::makeSign($data));
         return $data;
     }

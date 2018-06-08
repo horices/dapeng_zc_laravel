@@ -122,7 +122,7 @@ class RosterController extends BaseController
     }
 
     /**
-     * 判断一个量否可以被提交
+     * 判断一个量当前学院否可以被提交
      * @params array $data 需要验证的数据
      *               keys:  roster_type:[1:qq,2:微信]
      *                      roster_no: 量的号码
@@ -130,20 +130,5 @@ class RosterController extends BaseController
     function checkRosterStatus(Request $request){
         RosterModel::validateRosterData($request->all());
         return Util::ajaxReturn(Util::SUCCESS,"可以正常添加","");
-        //有异常直接抛出，在外部进行捕获
-        try{
-            // 对验证进行异常捕获，有异常表示数据错误，不能正常提交
-            RosterModel::validateRosterData($data);
-        }catch (UserException $e){
-            $code = Util::FAIL;
-            $msg = $e->getMessage();
-        }catch (ValidationException $e){
-            $code = Util::FAIL;
-            $msg = collect($e->errors())->first()[0];
-        }catch (\Exception $e){
-            $code = Util::FAIL;
-            $msg = "未知错误:".$e->getMessage();
-        }
-        return Util::ajaxReturn($code,$msg);
     }
 }

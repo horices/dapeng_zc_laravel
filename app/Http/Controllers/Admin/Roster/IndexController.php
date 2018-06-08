@@ -88,6 +88,15 @@ class IndexController extends BaseController
      */
     public function postCheckRosterStatus(Request $request){
         RosterModel::validateRosterData($request->all());
+        //验证其它学院，是否正常
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
+            //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
+            ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$request->all());
+        }
+        if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
+            //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
+            ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$request->all());
+        }
         return Util::ajaxReturn(['code'=>Util::SUCCESS,"msg"=>"可以正常添加"]);
     }
     /**

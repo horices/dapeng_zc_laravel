@@ -125,7 +125,7 @@ class RosterModel extends BaseModel
     }
 
     /**
-     * 验证数据
+     * 验证数据 不能调用接口，防止进入死循环
      * @param array $data
      * @return bool
      * @throws \Illuminate\Validation\ValidationException
@@ -223,15 +223,6 @@ class RosterModel extends BaseModel
         });
         //调用系统验证，验证失败时，抛出一个异常
         $validator->validate();
-        //验证其它学院，是否正常
-        if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
-            //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-            ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$data);
-        }
-        if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
-            //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-            ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$data);
-        }
         return array_merge($data,$createData);
     }
     /**
