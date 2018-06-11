@@ -93,6 +93,32 @@ class DapengNotifyController extends BaseController
         }
         return Util::ajaxReturn(Util::SUCCESS,"success");
     }
+
+    /**
+     * 开课通知
+     */
+    function openCourseMulti(Request $request,RosterCourseLogModel $courseLog){
+        //查询这个QQ号的情况
+        /*$roster = RosterModel::where("qq",Input::get("qq"))->orderBy("id","desc")->first();
+        $request->merge([
+            'action'=>1,
+            'roster_id' => $roster->id,
+            'addtime'   =>  time(),
+            'user_type' => $roster->type,
+            'course_type'=>app('status')->getCourseTypeColumnValue(Input::get('type'))
+        ]);
+        //修改注册状态和时间
+        if(!$roster->dapeng_reg_time){
+            $roster->is_reg = 1;
+            $roster->dapeng_reg_time = ceil($request->get("dapeng_reg_time",time()*1000)/1000);
+            $roster->save();
+        }
+
+        if(!RosterCourseLogModel::create(Input::get())){
+            Log::error("开课通知处理失败");
+        }*/
+        return Util::ajaxReturn(Util::SUCCESS,"success");
+    }
     /**
      * 关闭课程通知
      */

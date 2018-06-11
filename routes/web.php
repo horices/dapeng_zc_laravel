@@ -33,6 +33,7 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth:
 Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
     Route::post("Index/index.html","DapengNotifyController@reg")->middleware(\App\Http\Middleware\NotifyValidate::class)->name("notify.dapeng.reg");
     Route::post("Index/openCourse.html","DapengNotifyController@openCourse")->middleware(\App\Http\Middleware\NotifyValidate::class)->name("notify.dapeng.course.open");
+    Route::post("Index/openCourseMulti.html","DapengNotifyController@openCourseMulti")->middleware(\App\Http\Middleware\NotifyValidate::class)->name("notify.dapeng.course.open.multi");
     Route::post("Index/closeCourse.html","DapengNotifyController@closeCourse")->middleware(\App\Http\Middleware\NotifyValidate::class)->name("notify.dapeng.course.close");
     Route::post("QQGroupRebotEvent/index.html","QQGroupEventNotifyController@index")->name("notify.dapeng.index");;
     Route::post("git/coding","GitNotifyController@coding")->name("notify.git.coding");
