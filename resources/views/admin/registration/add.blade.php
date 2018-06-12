@@ -171,6 +171,7 @@
                         'name': '',
                         'data':{
                             readonly:false,
+                            isLoad:false,
                             registration_id:'',  //报名ID
                             packageList:[], //主套餐列表
                             packageAttach:[], //附加课程
@@ -188,6 +189,7 @@
                         'name': '',
                         'data':{
                             readonly:false,
+                            isLoad:false,
                             registration_id:'',  //报名ID
                             packageList:[], //主套餐列表
                             packageAttach:[], //附加课程
@@ -363,6 +365,9 @@
                             //没有选中优惠活动则跳过
                             return ;
                         }
+                        if(this.first.data.isLoad){
+                            return ;
+                        }
                         //获取当前优惠最大数字
                         newVal = parseFloat(newVal);
                         if(newVal < 1 || newVal > parseFloat(this.first.data.packageRebate[this.first.data.selectedPackageRebate].price_max)){
@@ -390,6 +395,9 @@
                     "second.data.rebatePrice":function(newVal,oldVal){
                         if(!this.second.data.selectedPackageRebate){
                             //没有选中优惠活动则跳过
+                            return ;
+                        }
+                        if(this.second.data.isLoad){
                             return ;
                         }
                         //获取当前优惠最大数字
@@ -432,6 +440,7 @@
                     if(JSON.stringify(this.enroll) == '{}'){
                         this.first.name="SJ";
                     }else{
+                        this.isInit = 1;
                         var t = 0;
                         for(var schoolName in this.enroll.registrations){
                             var registration = this.enroll.registrations[schoolName];
@@ -440,6 +449,7 @@
                                 //闭包中使用该变量
                                 var firstRegistration = registration;
                                 this.first.name = schoolName;
+                                this.first.data.isLoad = true;
                                 //课程顾问只有查看权限
                                 if(this.userRole == "adviser"){
                                     this.first.data.readonly = true;
@@ -457,6 +467,7 @@
                                     this.$nextTick(function() {
                                         this.first.data.rebatePrice = firstRegistration.rebate;
                                         this.first.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                        this.first.data.isLoad = false;
                                     });
                                 });
                                 this.first.data.payList = firstRegistration.payList || [];
@@ -465,6 +476,7 @@
                                 //闭包中使用该变量
                                 var secondRegistration = registration;
                                 this.second.name = schoolName;
+                                this.second.data.isLoad = true;
                                 //课程顾问只有查看权限
                                 if(this.userRole == "adviser"){
                                     this.second.data.readonly = true;
@@ -482,11 +494,15 @@
                                     this.$nextTick(function() {
                                         this.second.data.rebatePrice = secondRegistration.rebate;
                                         this.second.data.selectedPackageCourse = package_attach_content.package_course_id.toString().split(',');
+                                        this.second.data.isLoad = false;
                                     });
                                 });
                                 this.second.data.payList = secondRegistration.payList || [];
                             }
                         }
+                        this.$nextTick(function () {
+                            this.isInit = 0;    //初始化数据结束
+                        })
                         //即没有添加美术学院，也没有添加设计学院
                         if(t == 0){
                             this.first.name = 'SJ';
