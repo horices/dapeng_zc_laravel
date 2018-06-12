@@ -2,6 +2,7 @@
 @section("right_content")
 
 <style>
+    .container{width: 1240px}
     .act_list{ position:relative; background:#f00; zoom:1;}
     .act_list .sel{ margin:0; padding:0; width:80px; height:22px; line-height:22px; overflow:hidden; position:absolute; border:1px transparent solid; left:0; top:0;}
     .act_list .sel li a{ display:block; width:100%; height:22px; line-height:22px; margin:0; padding:0 0 0 10px; outline:0; text-decoration:none;}
@@ -63,9 +64,6 @@
 
 
     <div class="row search-row" style="padding:9px 0 15px 15px;">
-        <div class="row dp-member-title-2">
-            <h4 class="col-md-4">用户统计：</h4>
-        </div>
         <form class="form-inline" role="form">
             <div class="form-group" style="margin-right:0px ">
                 <a class="common-button combg4" href="{{route('admin.registration.list.pay')}}">切换到支付记录</a>
@@ -90,7 +88,7 @@
             <div class="form-group">
                 <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
                 @if($adminInfo['grade'] <= 5)
-                    <a class="common-button combg2 linkSubmit" data="{'export':'1'}" showloading="true">导出</a>
+                    <a class="common-button combg2 linkSubmit" data="{'export':'1'}" href="{{route('admin.registration.list.user')}}">导出</a>
                 @endif
             </div>
         </form>
@@ -101,22 +99,19 @@
             <thead>
             <tr>
                 <th>序号</th>
-                @if($adminInfo['grade']<=5)<th width="70">顾问</th>@endif
+                <th>顾问</th>
                 <th>学员</th>
                 <th>开课手机</th>
-                <th>QQ/微信</th>
-                <th>学院名称</th>
-                <th width="130">套餐名称</th>
-                <th width="70">附加课程</th>
-                <th width="70">赠送课程</th>
-                @if($adminInfo['grade']<=5)<th>开课状态</th>@endif
-                <th>套餐总金额</th>
+                <th>QQ号</th>
+                <th width="130">课程套餐</th>
+                <th>分期</th>
+                <th>开课</th>
+                <th>总金额</th>
                 <th>优惠</th>
                 <th>应交</th>
                 <th>已交</th>
+                <th width="100">提交时间</th>
                 @if($adminInfo['grade'] <= 5)
-                    <th width="100">提交时间</th>
-                    <th>导学</th>
                     <th width="60">操作</th>
                 @endif
             </tr>
@@ -125,43 +120,24 @@
             @if (count($list) > 0)
                 @foreach ($list as $v)
                     <tr class="listCurrent @if($v->is_bright == 1) bg_color @endif">
-                        <td>{{ $loop->index + 1 }}</td>
-                        @if($adminInfo['grade']<=5)<td>{{$v->adviser_name}}</td>@endif
+                        <td>{{$v->id}}</td>
+                        <td>{{$v->adviser_name}}</td>
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
-                        <td>{{$v->account}}</td>
-                        <td>{{$v->school_text}}</td>
+                        <td>{{$v->qq}}</td>
                         <td>
                             {{$v->package_all_title}}
                         </td>
+                        <td>{{$v->fq_type_text}}</td>
                         <td>
-                            @if($v->selected_attach_course->count()>0)
-                                @foreach($v->selected_attach_course as $l)
-                                    {{$l['title'] or ''}}<br/>
-                                @endforeach
-                            @endif
+                            {{$v->is_open_text}}
                         </td>
-                        <td>
-                            @if($v->selected_give_course->count()>0)
-                                @foreach($v->selected_give_course as $l)
-                                    {{$l or ''}}<br/>
-                                @endforeach
-                            @endif
-                        </td>
-                        @if($adminInfo['grade']<=5)
-                            <td>{{$v->is_open_text}}</td>
-                        @endif
-                        <td>
-                            {{$v->package_all_price}}
-                        </td>
-
-
-                        <td>{{floatval($v->rebate)}}</td>
                         <td>{{$v->package_total_price}}</td>
+                        <td>{{floatval($v->rebate)}}</td>
+                        <td>{{$v->sub_price}}</td>
                         <td>{{$v->amount_submitted}}</td>
-                        @if($adminInfo['grade'] <= 5)
-                            <td>{{$v->create_time}}</td>
-                            <td>{{$v->guide_text}}</td>
+                        <td>{{$v->last_pay_time_text}}</td>
+                            @if($adminInfo['grade'] <= 5)
                             <td>
                                 <a class="set-is-open-a" onclick="setIsOpen(this)">开课</a>
                                 <div class="set-open">

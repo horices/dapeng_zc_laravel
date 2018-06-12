@@ -11,7 +11,6 @@ namespace App\Http\Controllers\Admin\Pay;
 
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Admin\BaseController;
-use App\Models\CoursePackageModel;
 use App\Models\RebateActivityModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
@@ -23,13 +22,7 @@ class RebateController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getList(Request $request){
-        if(!$request->has("package_id")){
-            throw new UserValidateException("请先选择套餐！");
-        }
-        //先获取套餐的信息
-        $packageDetail = CoursePackageModel::find($request->get("package_id"));
         $RebateActivityModel = RebateActivityModel::query()->where("status",'USE');
-        $RebateActivityModel->where('package_id',$request->get('package_id'));
         $title = $request->get("title");
         if(!empty($title)){
             $RebateActivityModel->where('title','like','%'.$title.'%');
@@ -39,9 +32,7 @@ class RebateController extends BaseController {
             $RebateActivityModel->where('type',$type);
         }
         $list = $RebateActivityModel->orderBy('id','desc')->paginate(15);
-
         return view("admin.pay.rebate.list",[
-            'package'       =>  $packageDetail,
             'list'          =>  $list,
             'adminInfo'     =>  $this->getUserInfo(),
             'leftNav'           => "admin.pay.rebate"
@@ -53,11 +44,9 @@ class RebateController extends BaseController {
      * @param RebateActivityModel $rebate
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    function getAdd(RebateActivityModel $rebate,Request $request){
-        session(["backUrl"=>route("admin.pay.rebate.list",['package_id'=>$request->get('package_id')])]);
+    function getAdd(RebateActivityModel $rebate){
         return view("admin.pay.rebate.detial",[
             'r'                 =>  $rebate,
-            'course_give'       =>  collect($rebate->course_give_data)->toJson(JSON_UNESCAPED_UNICODE),
             'leftNav'           => "admin.pay.rebate"
         ]);
     }
@@ -68,11 +57,14 @@ class RebateController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getEdit(Request $request){
-        session(["backUrl"=>url()->previous()]);
-        $rebate = RebateActivityModel::find($request->get("id"));
+        $data = RebateActivityModel::find($request->get("id"));
+        $detial = RebateActivityModel::query();
+        $detial = $detial->where([
+            ['rebate_id','=',$data->rebate_id],
+            ['status','=','USE']
+        ])->orderBy('id','desc')->first();
         return view("admin.pay.rebate.detial",[
-            'r'                 =>  $rebate,
-            'course_give'       =>  collect($rebate->course_give_data)->toJson(JSON_UNESCAPED_UNICODE),
+            'r'                 =>  $detial,
             'leftNav'           => "admin.pay.rebate"
         ]);
     }
@@ -87,12 +79,12 @@ class RebateController extends BaseController {
         if ($request->has('id') && $request->input('id')) {
             $eff = RebateActivityModel::updateData($request->input());
             if($eff){
-                return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！','url'=>session()->get("backUrl")]);
+                return response()->json(['code'=>Util::SUCCESS,'msg'=>'修改成功！']);
             }
         }else{
             $eff = RebateActivityModel::addData($request->input());
             if($eff){
-                return response()->json(['code'=>Util::SUCCESS,'msg'=>'新增成功！','url'=>session()->get("backUrl")]);
+                return response()->json(['code'=>Util::SUCCESS,'msg'=>'新增成功！']);
             }
         }
     }
@@ -104,7 +96,9 @@ class RebateController extends BaseController {
             if(!$detail){
                 throw new UserValidateException("未找到要删除的套餐！");
             }
-            if($detail->delete()){
+            $detail->status = "DEL";
+            $eff = $detail->save();
+            if($eff){
                 return response()->json(['code'=>Util::SUCCESS,'msg'=>'删除成功！']);
             }else{
                 throw new UserValidateException("删除失败！");

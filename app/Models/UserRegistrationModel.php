@@ -8,7 +8,6 @@
 
 namespace App\Models;
 
-
 use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
 use App\Utils\Api\DapengUserApi;
@@ -27,7 +26,13 @@ class UserRegistrationModel extends BaseModel{
         //'last_pay_time'
     ];
     protected $appends = [
-        "is_belong","is_open_text","last_pay_time_text","is_bright","account","school_text","guide_text","package_all_price","attach_course_text"
+        "is_belong","is_open_text","fq_type_text","sub_price","last_pay_time_text","is_bright"
+    ];
+    //报名分期付款方式
+    public $fqType = [
+        'CASH'      =>  '现金分期',
+        'HUABEI'    =>  '花呗分期',
+        'MYFQ'      =>  '蚂蚁分期',
     ];
 
     //开课状态数组
@@ -42,37 +47,25 @@ class UserRegistrationModel extends BaseModel{
     }
     //获取开课状态
     public function getIsOpenTextAttribute(){
-        if($this->is_open !== null){
-            return $this->isOpenArr[$this->is_open];
-        }
+        return $this->isOpenArr[$this->is_open];
     }
     //获取套餐总价格
-    public function getPackageAllPriceAttribute(){
-        return $this->package_price+$this->course_attach_all_price;
+    public function getPackageTotalPriceAttribute(){
+        return floatval($this->coursePackage->price) + floatval($this->coursePackageAttach->price);
     }
-
-    public function getPackagePriceAttribute($value){
-        return floatval($value);
-    }
-
-    public function getCourseAttachAllPriceAttribute($value){
-        return floatval($value);
-    }
-
-    public function getPackageTotalPriceAttribute($value){
-        return floatval($value);
-    }
-
-    public function getAmountSubmittedAttribute($value){
-        return floatval($value);
-    }
-
     /**
      * 获取isBelong
      * @return int
      */
     public function getIsBelongAttribute(){
         return 1;
+    }
+    /**
+     * 获取应交金额
+     * @return mixed
+     */
+    public function getSubPriceAttribute(){
+        return $this->package_total_price - $this->rebate;
     }
 
     /**
@@ -83,109 +76,6 @@ class UserRegistrationModel extends BaseModel{
         //$pay_time = UserPayLogModel::where("registration_id",$this->id)->orderBy("id","desc")->value("pay_time");
         return date("Y-m-d H:i:s",$this->last_pay_time);
     }
-
-    /**
-     * 获取用户的qq或者wx 做为账号
-     * @return mixed
-     */
-    public function getAccountAttribute(){
-        return $this->qq ? $this->qq : $this->wx;
-    }
-
-    /**
-     * 获取所属学院名称
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    public function getSchoolTextAttribute(){
-        $this->school_id = $this->school_id ? $this->school_id : 'SJ';
-        return Util::getSchoolNameText($this->school_id);
-    }
-
-    public function setPackageAttachContentAttribute($v){
-        //防止为0时，JS 判断失败
-        $v['package_attach_id'] = strval($v['package_attach_id']);
-        $v['package_course_id'] = strval($v['package_course_id']);
-        $v['package_rebate_id'] = strval($v['package_rebate_id']);
-        $this->attributes['package_attach_content'] = collect($v)->toJson();
-    }
-    public function getPackageAttachContentAttribute($v){
-        return Util::jsonDecode($v);
-    }
-
-    /**
-     * 获取附加课程 换行的字符串 (做导出用)
-     * @return string
-     */
-    public function getAttachCourseTextAttribute(){
-        $courseTitle = "";
-        foreach ($this->selected_attach_course as $key=>$val){
-            $courseTitle .= $val['title']."\n";
-        }
-        return $courseTitle;
-    }
-
-    /**
-     * 获取附加的课程信息
-     * @return mixed
-     */
-    public function getSelectedAttachCourseAttribute(){
-        $selectAttachCourse = collect();
-        $packageAttachContent = $this->package_attach_content;
-        if($packageAttachContent['package_attach_id'] !== "" && isset($this->package_attach_content['package_info']['course_attach_data'])){
-            $selectAttachCourse = collect($this->package_attach_content['package_info']['course_attach_data'])->filter(function($val,$key)use($packageAttachContent){
-                return in_array($key,explode(',',$packageAttachContent['package_attach_id']));
-            });
-        }
-        return $selectAttachCourse;
-    }
-
-    /**
-     * 获取优惠活动的信息
-     * @return mixed
-     */
-    public function getSelectedRebateAttribute(){
-        if($this->package_attach_content['package_rebate_id'] !== "" && isset($this->package_attach_content['package_info']['rebate'])){
-            return $this->package_attach_content['package_info']['rebate'][$this->package_attach_content['package_rebate_id']];
-        }
-        return [];
-    }
-
-    /**
-     * 获取已选的赠送课程
-     * @return \Illuminate\Support\Collection|static
-     */
-    public function getSelectedGiveCourseAttribute(){
-        $selectGiveCourse = collect();
-        $packageAttachContent = $this->package_attach_content;
-        $selectedRebate = $this->selected_rebate;
-        if($this->package_attach_content['package_course_id'] !== "" && isset($selectedRebate['course_give_data'])){
-            $selectGiveCourse = collect($selectedRebate['course_give_data'])->filter(function($val,$key)use($packageAttachContent){
-                return in_array($key,explode(',',$packageAttachContent['package_course_id']));
-            });
-        }
-        return $selectGiveCourse;
-    }
-
-    /**
-     * 获取赠送课程 换行的字符串 (做导出用)
-     * @return string
-     */
-    public function getGiveCourseTextAttribute(){
-        $courseTitle = "";
-        foreach ($this->selected_give_course as $key=>$val){
-            $courseTitle .= $val."\n";
-        }
-        return $courseTitle;
-    }
-
-    /**
-     * 获取导学状态
-     * @return string
-     */
-    public function getGuideTextAttribute(){
-        return $this->is_guide ? '是' : '否';
-    }
-
 
     /**
      * 是否记录高亮显示
@@ -204,19 +94,34 @@ class UserRegistrationModel extends BaseModel{
     }
 
     /**
+     * 获得关联的主套餐课程。
+     */
+    public function coursePackage()
+    {
+        return $this->belongsTo(CoursePackageModel::class,'package_id','id')->withDefault();
+    }
+    /**
+     * 获得关联的副套餐课程。
+     */
+    public function coursePackageAttach()
+    {
+        return $this->belongsTo(CoursePackageModel::class,'package_attach_id','id')->withDefault();
+    }
+
+    /**
+     * 获取优惠活动信息
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rebateActivity(){
+        return $this->belongsTo(RebateActivityModel::class,'rebate_id','id')->withDefault();
+    }
+
+    /**
      * 获取管理员记录买模型信息
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function userHeadmaster(){
         return $this->belongsTo(UserModel::class,'adviser_id','uid')->withDefault();
-    }
-
-    /**
-     * 关联用户登记表
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function userEnroll(){
-        return $this->belongsTo(UserEnrollModel::class,'enroll_id','id')->withDefault();
     }
 
     /**
@@ -231,29 +136,32 @@ class UserRegistrationModel extends BaseModel{
                 'sometimes',
                 'required',
                 'regex:/\d{11}/',
-                //Rule::unique('user_registration')->ignore($data['registration_id']),
+                Rule::unique('user_registration')->ignore($data['registration_id']),
             ],
             'name'              => 'sometimes|max:255',
             'qq'                => [
                 'sometimes',
                 'required',
                 'regex:/\d{5,11}/',
-                //Rule::unique('user_registration')->ignore($data['registration_id']),
+                Rule::unique('user_registration')->ignore($data['registration_id']),
             ],
             'package_id'        => 'sometimes|exists:course_package,id',
+            'package_attach_id' => 'sometimes|exists:course_package,id',
+            'rebate_id'         => 'sometimes|exists:rebate_activity,id',
             'amount_submitted'  =>  'sometimes|required|numeric'
         ],[
             'registration_id.required'       =>  '更新的支付记录错误！',
             'registration_id.numeric'        =>  '更新的支付记录错误！',
             'registration_id.exists'         =>  '未找到要修改的支付记录',
             'mobile.required'   =>  '请输入正确的学员手机号！',
-            //'mobile.unique'     =>  '该学员手机号已存在！',
+            'mobile.unique'     =>  '该学员手机号已存在！',
             'name.required'     =>  '请输入学员姓名！',
             'name.max'          =>  '学员姓名格式错误！',
             'qq.required'       =>  '请输入学员QQ号！',
             'qq.regex'          =>  '学员QQ号格式错误！',
-            //'qq.unique'         =>  '学员QQ号已存在！',
+            'qq.unique'         =>  '学员QQ号已存在！',
             'package_id.exists' =>  '请选择正确的课程主套餐！',
+            'package_attach_id.exists' =>  '请选择正确的课程副套餐！',
             'rebate_id.exists'  =>  '请选择正确的优惠活动！',
             'amount_submitted,required'=>   '已提交金额有误！',
             'amount_submitted,numeric'=>   '已提交金额有误！',

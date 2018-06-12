@@ -15,208 +15,7 @@
         }
     </style>
     <link rel="stylesheet" href="/js/datetimepicker/jquery.datetimepicker.css">
-<script>
-        var isAjax = 0;
-        function loadInit() {
-            vm = new Vue({
-                el:"#content-main",
-                data:{
-                    userPayInfo	:   {!! $r !!},
-                    noMod		:	true,
-                    modData		:	{
-                        field:'',
-                    },
-                    payTypeList:{!! $payTypeList !!},
-                    //套餐列表
-                    packageList:[],
-                    //附加套餐列表
-                    packageAttachList:{!! $packageAttachList !!},
-                    //优惠活动列表
-                    rebateList:{!! $rebateList !!},
-                    //赠送课程列表
-                    giveList:{!! $giveList !!},
-                    //分期方式列表
-                    fqTypeList:{!! $fqTypeList !!},
-                    //权限grade
-                    adminInfo:{!! $adminInfo !!}
-                },
-                mounted:function () {
-                    var _this = this;
-                    _this.$nextTick(function(){
-                        //数据员一下的权限没有修改功能
-                        if(_this.grade > 5){
-                            $(".help-block").remove();
-                        }
-                    });
-                },
-                methods:{
-                    searchPackage:function () { //搜索相关套餐
-                        var _this = this;
-//                        if(isAjax == 1){
-//                            return ;
-//                        }
-//                        isAjax = 1;
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            url         :   "{{url('admin/registration/post-package-list')}}",
-                            dataType    :   'json',
-                            method      :   'post',
-                            data        :   {'title':_this.userPayInfo.user_registration.course_package.title},
-                            success     :   function (data) {
-                                if(data.data.length > 0){
-                                    $(".course-package").show();
-                                }else{
-                                    $(".course-package").hide();
-                                }
-                                //vm.userPayInfo.package_total_price = "";
-                                _this.packageList = data.data;
-                                isAjax = 0;
-                            }
-                        })
-                    },
-                    setPackAttach:function () {
-                        var attachId;
-                        var _this = this;
-                        //如果没有选附加套餐
-                        if(_this.userPayInfo.user_registration.course_package_attach.id == 0){
-                            _this.userPayInfo.user_registration.course_package_attach.title = "";
-                            _this.userPayInfo.user_registration.course_package_attach.price = 0
-                        }
-                        //选择附加附加套餐后重新赋值标题和价格
-                        $.each(this.packageAttachList, function(i, val){
-                            if(_this.userPayInfo.user_registration.course_package_attach.id == val.id){
-                                _this.userPayInfo.user_registration.course_package_attach.title = val.title;
-                                _this.userPayInfo.user_registration.course_package_attach.price = val.price;
-                            }
-                        });
-                        //用each获取每个元素
-                        setPackageTotal();
-                    },
-                    setRebate:function () {
-                        var _this = this;
-                        //用each获取每个元素
-                        $.each(this.rebateList, function(i, val){
-                            if(_this.userPayInfo.rebate_id == val.id){
-                                _this.userPayInfo.rebate_title = val.title;
-                                _this.userPayInfo.rebate_price = val.price;
-                            }
-                        });
-                    },
-                    searchRebate:function () {
-                        var _this = this;
-                        if(isAjax == 1){
-                            return ;
-                        }
-                        isAjax = 1;
-                        $.ajax({
-                            url         :   "{:U('Adviser/getRebateList')}",
-                            dataType    :   'json',
-                            method      :   'post',
-                            data        :   {'title':_this.userPayInfo.rebate_title},
-                            success     :   function (data) {
-                                if(data.data.length > 0){
-                                    $(".rebate-activity").show();
-                                }else{
-                                    $(".rebate-activity").hide();
-                                }
-                                //vm.userPayInfo.package_total_price = "";
-                                _this.rebateList = data.data;
-                                isAjax = 0;
-                            }
-                        })
-                    },
-                    //控制赠送课程 只要选择了否，则前面的
-                    giveSelect:function (obj) {
-                        var _this = this;
-                        var giveListLen = _this.giveList.length-1;
-                        if(_this.giveList[giveListLen].checked == true){
-                            for(var i=0;i<giveListLen;i++){
-                                _this.giveList[i].checked = false;
-                            }
-//                            for (var key in _this.giveList) {
-//                                _this.giveList[key].checked = false;
-//                            }
-                        }
-                        _this.userPayInfo.give_id = _this.giveList.filter(item => item.checked).map(item => item.id).toString();
-                    }
-                }
-            });
-        }
 
-        $(".input-two").click(function () {
-            var _this = this;
-            obj = $(this).parent(".form-group").find(".form-control");
-//            if(!confirm("确认修改？")){
-//                return false;
-//            }
-            $.ajax({
-                url:"{:U('modPayInfo')}",
-                dataType:'json',
-                method:"post",
-                data:{
-                    field		:	$(obj).attr("name"),
-                    val			:	$(obj).val(),
-                    pay_id		:	vm.userPayInfo.pay_id,
-                    package_id	:	vm.userPayInfo.package_id,
-                    registration_id:vm.userPayInfo.registration_id,
-                    id			:	vm.userPayInfo.id,
-                },
-                success:function (jsonData) {
-                    if(jsonData.code == 1){
-                        layer.msg(jsonData.msg,{icon:1,time:2000});
-                    }else{
-                        layer.msg(jsonData.msg,{icon:2,time:2000});
-                    }
-                }
-            })
-        })
-        /**
-         *  选择课程套餐
-         * @param obj
-         */
-        function setPackName(obj) {
-//            $("#package-title").val($(obj).text());
-            vm.userPayInfo.user_registration.course_package.title = $(obj).find('a').text();
-            vm.userPayInfo.package_tmp_title = vm.userPayInfo.package_title;
-            $(".course-package").hide();
-            console.log($(obj).attr("price"));
-            if($(obj).attr("price"))
-                vm.userPayInfo.user_registration.course_package.price = $(obj).attr("price");
-            //套餐ID
-            console.log($(obj).attr("package-id"));
-            if($(obj).attr("package-id"))
-                vm.userPayInfo.package_id = $(obj).attr("package-id");
-                vm.userPayInfo.user_registration.package_id = $(obj).attr("package-id");
-            setPackageTotal(); //计算最终套餐价格
-        }
-
-        //重新计算套餐总价
-        function setPackageTotal() {
-            vm.userPayInfo.user_registration.package_total_price = parseFloat(vm.userPayInfo.user_registration.course_package.price)+parseFloat(vm.userPayInfo.user_registration.course_package_attach.price);
-        }
-
-        /**
-         *  判断赠送课程是否包含
-         * @param str
-         * @param id
-         * @returns {boolean}
-         */
-        function checkCourseIdInStr(str,id) {
-            id = parseInt(id);
-            var arr = str.split(",");
-            $.each(arr,function (index) {
-                arr[index] = parseInt(arr[index]);
-            });
-            if($.inArray(id, arr) > -1){
-                return true;
-            }else{
-                return false;
-            }
-        }
-
-    </script>
 <div class="row dp-member-title-2">
     <h4 class="col-md-4" style="padding-left:0">学员支付详情</h4>
 </div>
@@ -237,9 +36,9 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">学员QQ：</label>
                 <div class="col-md-8 controls">
-                    <input type="text" name="qq" class="form-control" v-model="userPayInfo.user_registration.qq" />
+                    <input type="text" name="qq" class="form-control" v-model="userPayInfo.user_registration.qq" :data="'{id:\''+userPayInfo.registration_id+'\',field:\'qq\',val:\''+userPayInfo.user_registration.qq+'\'}'" />
                 </div>
-                <p class="help-block input-two ajaxLink" :data="'{id:\''+userPayInfo.registration_id+'\',field:\'qq\',val:\''+userPayInfo.user_registration.qq+'\'}'" url="{{route('admin.registration.mod-field')}}" >修改</p>
+                <p class="help-block input-two" >修改</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="input01">学员姓名：</label>
@@ -397,11 +196,213 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">备注：</label>
                 <div class="col-md-8 controls">
-                    <textarea name="remark" class="form-control" style="width:400px; height:120px;" v-model="userPayInfo.user_registration.remark"></textarea>
+                    <textarea name="remark" class="form-control" style="width:400px; height:120px;" v-model="userPayInfo.user_registration.remark" :data="'{field:\'remark\',val:\''+userPayInfo.user_registration.remark+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}"></textarea>
                 </div>
-                <p class="help-block ajaxLink" :data="'{field:\'remark\',val:\''+userPayInfo.user_registration.remark+'\',id:\''+userPayInfo.registration_id+'\'}'" url="{{route('admin.registration.mod-field')}}">修改</p>
+                <p class="help-block input-two">修改</p>
             </div>
         </fieldset>
     </form>
 </div>
+<script>
+var isAjax = 0;
+vm = new Vue({
+    el:"#content-main",
+    data:{
+        userPayInfo	:   {!! $r !!},
+        noMod		:	true,
+        modData		:	{
+            field:'',
+        },
+        payTypeList:{!! $payTypeList !!},
+        //套餐列表
+        packageList:[],
+        //附加套餐列表
+        packageAttachList:{!! $packageAttachList !!},
+        //优惠活动列表
+        rebateList:{!! $rebateList !!},
+        //赠送课程列表
+        giveList:{!! $giveList !!},
+        //分期方式列表
+        fqTypeList:{!! $fqTypeList !!},
+        //权限grade
+        adminInfo:{!! $adminInfo !!}
+    },
+    mounted:function () {
+        var _this = this;
+        _this.$nextTick(function(){
+            //数据员一下的权限没有修改功能
+            if(_this.grade > 5){
+                $(".help-block").remove();
+            }
+        });
+    },
+    methods:{
+        searchPackage:function () { //搜索相关套餐
+            var _this = this;
+//                        if(isAjax == 1){
+//                            return ;
+//                        }
+//                        isAjax = 1;
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url         :   "{{url('admin/registration/post-package-list')}}",
+                dataType    :   'json',
+                method      :   'post',
+                data        :   {'title':_this.userPayInfo.user_registration.course_package.title},
+                success     :   function (data) {
+                    if(data.data.length > 0){
+                        $(".course-package").show();
+                    }else{
+                        $(".course-package").hide();
+                    }
+                    //vm.userPayInfo.package_total_price = "";
+                    _this.packageList = data.data;
+                    isAjax = 0;
+                }
+            })
+        },
+        setPackAttach:function () {
+            var attachId;
+            var _this = this;
+            //如果没有选附加套餐
+            if(_this.userPayInfo.user_registration.course_package_attach.id == 0){
+                _this.userPayInfo.user_registration.course_package_attach.title = "";
+                _this.userPayInfo.user_registration.course_package_attach.price = 0
+            }
+            //选择附加附加套餐后重新赋值标题和价格
+            $.each(this.packageAttachList, function(i, val){
+                if(_this.userPayInfo.user_registration.course_package_attach.id == val.id){
+                    _this.userPayInfo.user_registration.course_package_attach.title = val.title;
+                    _this.userPayInfo.user_registration.course_package_attach.price = val.price;
+                }
+            });
+            //用each获取每个元素
+            setPackageTotal();
+        },
+        setRebate:function () {
+            var _this = this;
+            //用each获取每个元素
+            $.each(this.rebateList, function(i, val){
+                if(_this.userPayInfo.rebate_id == val.id){
+                    _this.userPayInfo.rebate_title = val.title;
+                    _this.userPayInfo.rebate_price = val.price;
+                }
+            });
+        },
+        searchRebate:function () {
+            var _this = this;
+            if(isAjax == 1){
+                return ;
+            }
+            isAjax = 1;
+            $.ajax({
+                url         :   "{:U('Adviser/getRebateList')}",
+                dataType    :   'json',
+                method      :   'post',
+                data        :   {'title':_this.userPayInfo.rebate_title},
+                success     :   function (data) {
+                    if(data.data.length > 0){
+                        $(".rebate-activity").show();
+                    }else{
+                        $(".rebate-activity").hide();
+                    }
+                    //vm.userPayInfo.package_total_price = "";
+                    _this.rebateList = data.data;
+                    isAjax = 0;
+                }
+            })
+        },
+        //控制赠送课程 只要选择了否，则前面的
+        giveSelect:function (obj) {
+            var _this = this;
+            var giveListLen = _this.giveList.length-1;
+            if(_this.giveList[giveListLen].checked == true){
+                for(var i=0;i<giveListLen;i++){
+                    _this.giveList[i].checked = false;
+                }
+//                            for (var key in _this.giveList) {
+//                                _this.giveList[key].checked = false;
+//                            }
+            }
+            _this.userPayInfo.give_id = _this.giveList.filter(item => item.checked).map(item => item.id).toString();
+        }
+    }
+});
+
+$(".input-two").click(function () {
+    obj = $(this).parent(".form-group").find(".form-control");
+//            if(!confirm("确认修改？")){
+//                return false;
+//            }
+    $.ajax({
+        url:"{{route('admin.registration.mod-field')}}",
+        dataType:'json',
+        method:"post",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data:{
+            field		:	$(obj).attr("name"),
+            val			:	$(obj).val(),
+            pay_id		:	vm.userPayInfo.pay_id,
+            package_id	:	vm.userPayInfo.package_id,
+            registration_id:vm.userPayInfo.registration_id,
+            id			:	vm.userPayInfo.id,
+        },
+        success:function (jsonData) {
+            if(jsonData.code == 1){
+                layer.msg(jsonData.msg,{icon:1,time:2000});
+            }else{
+                layer.msg(jsonData.msg,{icon:2,time:2000});
+            }
+        }
+    })
+})
+/**
+ *  选择课程套餐
+ * @param obj
+ */
+function setPackName(obj) {
+//            $("#package-title").val($(obj).text());
+    vm.userPayInfo.user_registration.course_package.title = $(obj).find('a').text();
+    vm.userPayInfo.package_tmp_title = vm.userPayInfo.package_title;
+    $(".course-package").hide();
+    console.log($(obj).attr("price"));
+    if($(obj).attr("price"))
+        vm.userPayInfo.user_registration.course_package.price = $(obj).attr("price");
+    //套餐ID
+    console.log($(obj).attr("package-id"));
+    if($(obj).attr("package-id"))
+        vm.userPayInfo.package_id = $(obj).attr("package-id");
+    vm.userPayInfo.user_registration.package_id = $(obj).attr("package-id");
+    setPackageTotal(); //计算最终套餐价格
+}
+
+//重新计算套餐总价
+function setPackageTotal() {
+    vm.userPayInfo.user_registration.package_total_price = parseFloat(vm.userPayInfo.user_registration.course_package.price)+parseFloat(vm.userPayInfo.user_registration.course_package_attach.price);
+}
+
+/**
+ *  判断赠送课程是否包含
+ * @param str
+ * @param id
+ * @returns {boolean}
+ */
+function checkCourseIdInStr(str,id) {
+    id = parseInt(id);
+    var arr = str.split(",");
+    $.each(arr,function (index) {
+        arr[index] = parseInt(arr[index]);
+    });
+    if($.inArray(id, arr) > -1){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+</script>
 @endsection

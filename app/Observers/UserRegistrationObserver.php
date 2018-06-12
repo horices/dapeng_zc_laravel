@@ -30,11 +30,11 @@ class UserRegistrationObserver extends BaseObserver {
 
     function saving(UserRegistrationModel $registration){
         Validator::make($registration->toArray(),[
-            'school_id'  =>  "required",
-            "enroll_id"    =>  "required",
+            //'school_id'  =>  "required",
+            //"enroll_id"    =>  "required",
         ],[
-            "school_id.required" =>  "未找到学院",
-            "enroll_id.required"    =>  "主报名信息错误",
+            //"school_id.required" =>  "未找到学院",
+            //"enroll_id.required"    =>  "主报名信息错误",
         ])->validate();
     }
 }

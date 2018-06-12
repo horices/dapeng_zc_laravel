@@ -40,11 +40,10 @@ class PackageController extends BaseController {
     }
 
     function getAdd(CoursePackageModel $package){
-        session(["backUrl"=>route("admin.pay.package.list")]);
-        $package->school_id = Util::getSchoolName();
+        $package->school_id = 'SJ';
         return view("admin.pay.package.detail",[
             'r'              =>  $package,
-            'course_attach'  =>  collect($package->course_attach_data)->toJson(),
+            'course_attach'  =>  '',
             'leftNav'        => "admin.pay.package"
         ]);
     }
@@ -55,13 +54,11 @@ class PackageController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getEdit(Request $request){
-        session(["backUrl"=>url()->previous()]);
         $packageId = $request->get("id");
         $detail = CoursePackageModel::where("id",$packageId)->orderBy("id","desc")->first();
         //dd(collect($detail->course_attach)->toArray());
         return view("admin.pay.package.detail",[
-            'r'                 =>  $detail->toJson(),
-            'course_attach'     =>  $detail->course_attach,
+            'r'                 =>  $detail,
             'leftNav'           => "admin.pay.package"
         ]);
     }
@@ -87,7 +84,7 @@ class PackageController extends BaseController {
         }
         if($eff){
             $msg = isset($post['id']) && $post['id'] ? '修改成功！' : '新增成功！';
-            return response()->json(['code'=>Util::SUCCESS,'msg'=>$msg,'url'=>session()->get("backUrl")]);
+            return response()->json(['code'=>Util::SUCCESS,'msg'=>$msg]);
         }else{
             $msg = isset($post['id']) && $post['id'] ? '修改失败！' : '新增失败！';
             throw new UserValidateException($msg);
@@ -107,7 +104,9 @@ class PackageController extends BaseController {
             if(!$detail){
                 throw new UserValidateException("未找到要删除的套餐！");
             }
-            if($detail->delete()){
+            $detail->status = "DEL";
+            $eff = $detail->save();
+            if($eff){
                 return response()->json(['code'=>Util::SUCCESS,'msg'=>'删除成功！']);
             }else{
                 throw new UserValidateException("删除失败！");

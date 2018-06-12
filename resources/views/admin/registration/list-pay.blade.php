@@ -2,6 +2,13 @@
 @section("right_content")
     <script type="text/javascript">
         $(function(){
+            var currentGroupStatus = "{$Think.get.group_status|default=''}";
+            var courseType = "{$Think.get.course_type}";
+            var isReg = "{$Think.get.is_reg}";
+            $("select[name='group_status'] option[value='"+currentGroupStatus+"']").prop("selected","selected");
+            $("select[name='course_type'] option[value='"+courseType+"']").prop("selected","selected");
+            $("select[name='is_reg'] option[value='"+isReg+"']").prop("selected","selected");
+            $("select[name='dateType'] option[value='{$Think.get.dateType}']").prop("selected",true);
             //列表点击变色
             $(".listCurrent").click(function () {
                 $(this).css('background-color','darkgrey').siblings().css('background-color','')
@@ -37,9 +44,6 @@
 
 
     <div class="row search-row" style="padding:9px 0 0px 15px;">
-        <div class="row dp-member-title-2">
-            <h4 class="col-md-4">支付记录：</h4>
-        </div>
         <form class="form-inline" role="form">
             <div class="form-group">
                 <a class="common-button combg4" href="{{route('admin.registration.list.user')}}">切换到用户统计</a>
@@ -64,9 +68,9 @@
             </div>
             <div class="form-group">
                 <a class="common-button combg1 linkSubmit" href="{{\Illuminate\Support\Facades\URL::current()}}">搜索</a>
-                @if($adminInfo->grade <= 5)
-                    <a class="common-button combg2 linkSubmit" data="{'export':'1'}" showloading="true">导出</a>
-                @endif
+                <elt name="_SESSION['dapeng']['member_auth']['grade']" value="5">
+                    <a class="common-button combg2 linkSubmit" href="{:U('exportPayList')}">导出</a>
+                </elt>
             </div>
         </form>
     </div>
@@ -79,56 +83,59 @@
             <thead>
             <tr>
                 <th width="50">序号</th>
-                @if($adminInfo['grade'] <= 5)<th width="80">顾问</th>@endif
+                <th width="80">顾问</th>
                 <th width="80">学员</th>
                 <th>开课手机</th>
-                <th>QQ/微信</th>
-                <th width="120">套餐名称</th>
-                <th>应交总金额</th>
-                <th>已交总金额</th>
-                <th>设计学院</th>
-                <th>美术学院</th>
-                <th width="80">支付方式</th>
-                <th width="80">支付时间</th>
-                <th width="80">提交时间</th>
-                <th width="80">操作</th>
+                <th>QQ号</th>
+                <th>收款</th>
+                <th width="80">方式</th>
+                <th width="120">课程套餐</th>
+                <th width="60">总金额</th>
+                <th>支付时间</th>
+                <!--<th>应交</th>
+                <th>已交</th>-->
+                <th>提交时间</th>
+                <th width="80">开课状态</th>
+                <th style="padding-left:19px" width="80">操作</th>
             </tr>
             </thead>
             <tbody>
             @if (count($list) > 0)
                 @foreach ($list as $k=>$v)
                     <tr class="listCurrent">
-                        <td>{{ $loop->index + 1 }}</td>
-                        @if($adminInfo['grade'] <= 5)<td>{{$v->adviser_name}}</td>@endif
+                        <td>{{$v->id}}</td>
+                        <td>{{$v->adviser_name}}</td>
                         <td>{{$v->name}}</td>
                         <td>{{$v->mobile}}</td>
-                        <td>{{$v->account}}</td>
+                        <td>{{$v->qq}}</td>
+                        <td>{{floatval($v->amount)}}</td>
+                        <td>{{$v->pay_type_text}}</td>
                         <td>
-                            @foreach($v->userRegistration as $l)
-                                {{$l->package_all_title}}<br/>
-                            @endforeach
+                            {{$v->userRegistration->package_all_title}}
                         </td>
-                        <td>{{$v->total_should_price}}</td>
-                        <td>{{$v->total_submitted_price}}</td>
-                        <td>{{$v->submitted_price['SJ'] or ''}}</td>
-                        <td>{{$v->submitted_price['MS'] or ''}}</td>
-                        <td>{{$v->last_pay_type_text}} </td>
-                        <td>{{$v->last_pay_time_text}}</td>
+                        <!--<td>{$v.title}</td>-->
+                        <td>{{floatval($v->userRegistration->package_total_price)}}</td>
+                        <td>{{$v->pay_time_text}}</td>
+                        <!--<td>{$v[package_total_price] - $v[rebate]}</td>
+                        <td>{$v.amount_submitted}</td>-->
                         <td>{{$v->create_time}}</td>
+                        <td>{{$v->userRegistration->is_open_text}}</td>
                         <td style="text-align: center">
-<a href="{{route("admin.registration.add",['mobile'=>$v->mobile,'back_url'=>\Illuminate\Support\Facades\URL::full()])}}">查看</a>
+                            <!--<a onclick="showDetail(this)" pay-log-id="{$v.id}">
+                                查看</a>-->
+<a href="{{route('admin.registration.list.detail',['payLogId'=>$v->id])}}">查看</a>
                                 @if($adminInfo['grade'] <= 5)
-                                    |<a url="{{route('admin.registration.delete.pay',['id'=>$v['id']])}}" method="get" class="ajaxLink" warning="确认删除？">删除</a>
+                                    |<a url="{{route('admin.registration.delete')}}" data="{id:'{{$v->id}}'}" class="ajaxLink" warning="确认删除？">删除</a>
                                 @endif
                         </td>
                     </tr>
                 @endforeach
                 <tr>
-                    <td colspan="15" ><div class="pagenav"> <ul>{{$list->appends(Request::input())->links()}} </ul></div></td>
+                    <td colspan="13" ><div class="pagenav"> <ul>{{$list->appends(Request::input())->links()}} </ul></div></td>
                 </tr>
             @else
                 <tr>
-                    <td colspan="15">暂无信息</td>
+                    <td colspan="13">暂无信息</td>
                 </tr>
             @endif
             </tbody>

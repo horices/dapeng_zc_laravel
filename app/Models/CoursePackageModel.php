@@ -25,6 +25,24 @@ class CoursePackageModel extends BaseModel {
         'school_text',
         'course_attach_data'
     ];
+    //赠送课程
+    public static $giveList = [
+        0=>['id'=>0,'text'=>'无','checked'=>false],
+        1=>['id'=>1,'text'=>'英语口语','checked'=>false],
+        2=>['id'=>2,'text'=>'AE','checked'=>false],
+        3=>['id'=>'3','text'=>'转手绘','checked'=>false],
+        4=>['id'=>'4','text'=>'H5','checked'=>false],
+        5=>['id'=>'5','text'=>'JAVA','checked'=>false],
+        6=>['id'=>'6','text'=>'手绘','checked'=>false],
+        7=>['id'=>'7','text'=>'素描','checked'=>false],
+        8=>['id'=>'8','text'=>'色彩','checked'=>false],
+        9=>['id'=>'9','text'=>'广告','checked'=>false],
+        10=>['id'=>'10','text'=>'摄影','checked'=>false],
+        11=>['id'=>'11','text'=>'美妆','checked'=>false],
+        12=>['id'=>'12','text'=>'摄影实战班','checked'=>false],
+        13=>['id'=>'13','text'=>'C4D','checked'=>false],
+        14=>['id'=>'16','text'=>'视频摄制','checked'=>false],
+    ];
 
     /**
      * 获取学院标题
@@ -40,27 +58,10 @@ class CoursePackageModel extends BaseModel {
      * @return mixed
      */
     public function getCourseAttachDataAttribute(){
-        $return = [];
         if($this->course_attach){
-            $return = json_decode($this->course_attach,1);
+            return json_decode($this->course_attach,1);
         }
-        return $return;
-    }
-    /**
-     * 获取附加的套餐信息 字符串类型
-     * @return mixed
-     */
-    public function getCourseAttachTextAttribute(){
-        $return = "";
-        if($this->course_attach){
-            $data = json_decode($this->course_attach,1);
-            foreach ($data as $key => $val){
-                if(isset($val['title']) && $val['title']){
-                    $return .= $val['title']."\n";
-                }
-            }
-        }
-        return $return;
+        return [];
     }
 
     /**
@@ -72,53 +73,20 @@ class CoursePackageModel extends BaseModel {
     }
 
     /**
-     * 关联活动表
-     */
-    function rebate(){
-        return $this->hasMany(RebateActivityModel::class,"package_id","id");
-    }
-    /**
      * 新增数据
      * @param $data
      * @return mixed
      */
     static function addData($post){
         $validator = Validator::make($post,[
-            'school_id'             =>  'required',
-            'attach_length'         =>  'required',
-            'title'                 =>  'required',
-            'price'                 =>  'required|numeric',
-            'attach_title'          =>  'required',
-            'attach_price'          =>  'required',
+            'title'          =>   'required',
+            'price'          =>   'required',
         ],[
-            'school_id.required'        =>  '请选择所属学院！',
-            'attach_length.required'    =>  '请先添加课程套餐！',
-            'title.required'            =>  '请输入套餐名称！',
-            'price.required'            =>  '请输入套餐价格！',
-            'price.numeric'             =>  '请输入正确的套餐价格！',
-            'attach_title.required'     =>  '请填写附加课程！',
-            'attach_price.required'     =>  '请输入正确的附加课程金额！',
+            'title.required'=>  '请填写套餐名称！',
+            'price.required'=>  '请填写套餐价格！',
         ]);
         //执行验证
         $validator->validate();
-        //验证添加的附加课程是否满足格式
-        for($i=0;$i<$post['attach_length'];$i++){
-            if(!isset($post['attach_title'][$i])){
-                throw new UserValidateException("附加课程必须填写标题!");
-            }
-            if(!isset($post['attach_price'][$i])){
-                throw new UserValidateException("附加课程必须填写价格!");
-            }
-        }
-        $data = [];
-        foreach ($post['attach_title'] as $key=>$val){
-            $data[$key] = [
-                'title' =>  $val,
-                'price' =>  $post['attach_price'][$key]
-            ];
-        }
-        unset($post['attach_title'],$post['attach_price']);
-        $post['course_attach'] = json_encode($data,JSON_UNESCAPED_UNICODE);
         return self::create($post);
     }
 
@@ -128,46 +96,24 @@ class CoursePackageModel extends BaseModel {
      * @return mixed
      */
     static function updateData($post){
-        //$post['attach_title']=array_filter($post['attach_title']);
-
         $validator = Validator::make($post,[
-            'school_id'             =>  'sometimes|required',
-            'attach_length'         =>  'sometimes|required',
-            'title'                 =>  'sometimes|required',
-            'price'                 =>  'sometimes|required|numeric',
+            'title'          =>   'sometimes|required',
+            'price'          =>   'sometimes|required',
         ],[
-            'school_id.required'        =>  '请选择所属学院！',
-            'attach_length.required'    =>  '请先添加课程套餐！',
-            'title.required'            =>  '请输入套餐名称！',
-            'price.required'            =>  '请输入套餐价格！',
-            'price.numeric'             =>  '请输入正确的套餐价格！',
+            'title.required'=>  '请填写套餐名称！',
+            'price.required'=>  '请填写套餐价格！',
         ]);
         //执行验证
         $validator->validate();
-        //验证添加的附加课程是否满足格式
-        for($i=0;$i<$post['attach_length'];$i++){
-            if(!isset($post['attach_title'][$i])){
-                throw new UserValidateException("附加课程必须填写标题!");
-            }
-            if(!isset($post['attach_price'][$i])){
-                throw new UserValidateException("附加课程必须填写价格!");
-            }
-        }
-        //附加信息整理json
-        $data = [];
-        foreach ($post['attach_title'] as $key=>$val){
-            $data[$key] = [
-                'title' =>  $val,
-                'price' =>  $post['attach_price'][$key]
-            ];
-        }
-        unset($post['attach_title'],$post['attach_price']);
-        $post['course_attach'] = json_encode($data,JSON_UNESCAPED_UNICODE);
         $detail = self::find($post['id']);
         if(!$detail){
             throw new UserValidateException("未找到套餐信息！");
         }
-        //$query = self::query();
+        $detail->status = "MOD";
+        $detail->save();
+        $query = self::query();
+        $detail->status = "USE";
+        $query->create();
         return $detail->update($post);
     }
 
