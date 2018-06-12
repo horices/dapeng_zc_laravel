@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Notify;
-use App\Exceptions\UserException;
 use App\Exceptions\UserNotifyException;
+use App\Exceptions\UserValidateException;
 use App\Models\RosterCourseLogModel;
-use App\Models\RosterCourseModel;
 use App\Models\RosterModel;
 use App\Utils\Util;
 use Curl\Curl;
@@ -13,6 +12,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 
 /**
@@ -32,11 +32,12 @@ class DapengNotifyController extends BaseController
         parent::__construct($curl);
         //校验签名是否正确
         if($this->checkSign($request->get("sign")) === false){
-            throw new UserNotifyException("签名错误");
+        //    throw new UserNotifyException("签名错误");
         }
         $baseUrl = URL::route(Route::currentRouteName(),[],false);
         //设计学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){
+
             //通知设计学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_SJ.".".Util::DEV,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
@@ -99,24 +100,26 @@ class DapengNotifyController extends BaseController
      */
     function openCourseMulti(Request $request,RosterCourseLogModel $courseLog){
         //查询这个QQ号的情况
-        /*$roster = RosterModel::where("qq",Input::get("qq"))->orderBy("id","desc")->first();
-        $request->merge([
-            'action'=>1,
-            'roster_id' => $roster->id,
-            'addtime'   =>  time(),
-            'user_type' => $roster->type,
-            'course_type'=>app('status')->getCourseTypeColumnValue(Input::get('type'))
-        ]);
+        $roster = RosterModel::where("qq",Input::get("qq"))->orderBy("id","desc")->first();
         //修改注册状态和时间
         if(!$roster->dapeng_reg_time){
             $roster->is_reg = 1;
             $roster->dapeng_reg_time = ceil($request->get("dapeng_reg_time",time()*1000)/1000);
             $roster->save();
         }
-
-        if(!RosterCourseLogModel::create(Input::get())){
-            Log::error("开课通知处理失败");
-        }*/
+        $data = $request->only("dapeng_user_id","qq","operator_id","opeartor_name","operator_ip");
+        $data['course_type'] = app('status')->getCourseTypeColumnValue(Input::get('course_type'));
+        $data['roster_id'] = $roster->id;
+        $data['addtime'] = time();
+        $data['user_type'] = $roster->type;
+        $data['action'] = 1;
+        $courseIdMap = collect(explode(',',trim($request->get("course_id_map"),'[]')));
+        $courseTitleMap = collect(explode(',',trim($request->get("course_title_map"),'[]')));
+        foreach($courseIdMap as $k=>$v){
+            $data['course_id'] = $v;
+            $data['course_name'] = $courseTitleMap->get($k);
+            RosterCourseLogModel::create($data);
+        }
         return Util::ajaxReturn(Util::SUCCESS,"success");
     }
     /**
