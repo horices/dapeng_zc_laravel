@@ -1,6 +1,7 @@
 <?php 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\UserValidateException;
 use App\Http\Requests\LoginForm;
 use App\Http\Requests\RegRequest;
 use App\Http\Requests\SendSMSRequest;
@@ -23,6 +24,7 @@ class AuthController extends  BaseController{
         return view("admin.auth.login");
     }
     function postLogin(LoginForm $request){
+        throw new UserValidateException("此功能已关闭！");
         $user = UserModel::checkLogin($request->input("username"), $request->input("password"));
         $this->login($user,$request->get("remember_me"));
         //返回登陆成功的信息

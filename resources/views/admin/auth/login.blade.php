@@ -334,7 +334,7 @@ body { background: #f5f5f5 url("/admin/images/rebc.gif"); }
                     <div class="tabs">
                         <ul>
                             <li class="active" onClick="$(this).addClass('active').siblings().removeClass('active'); $('#step_2').hide(); $('#step_1').show();">登录</li>
-                            <li onClick="$(this).addClass('active').siblings().removeClass('active'); $('#step_1').hide(); $('#step_2').show();">注册</li>
+                            {{--<li onClick="$(this).addClass('active').siblings().removeClass('active'); $('#step_1').hide(); $('#step_2').show();">注册</li>--}}
                         </ul>
                     </div>
                     <div class="tabbed">
