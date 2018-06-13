@@ -24,7 +24,6 @@ class AuthController extends  BaseController{
         return view("admin.auth.login");
     }
     function postLogin(LoginForm $request){
-        throw new UserValidateException("此功能已关闭！");
         $user = UserModel::checkLogin($request->input("username"), $request->input("password"));
         $this->login($user,$request->get("remember_me"));
         //返回登陆成功的信息
@@ -36,6 +35,7 @@ class AuthController extends  BaseController{
      * 注册
      */
     function postReg(RegRequest $request){
+        throw new UserValidateException("此功能已关闭！");
         $request->merge([
             'grade' =>  12,
             'addtime'   => time(),
