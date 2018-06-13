@@ -16,6 +16,12 @@ class Util{
 
     const SCHOOL_NAME_MS = 'MS';
     const SCHOOL_NAME_SJ = 'SJ';
+    /**
+     * 跳转到老版展翅相关
+     */
+    const PAY_URL_KEY   = '987654321zxcv';
+    const PAY_URL_HOST   = 'http://dev.bzr.dapengjiaoyu.com';
+    const PAY_URL_JUMP   = '/Member/Portal/logino';
 
     /**
      * @note json返回数据
@@ -191,7 +197,7 @@ class Util{
      */
     static function think_encrypt($data, $key = '', $expire = 0) {
         //$key    = md5(empty($key) ? C('DATA_AUTH_KEY') : $key);
-        $key = "987654321zxcv";
+        $key = self::PAY_URL_KEY;
         $key    = md5(empty($key));
         $data = base64_encode($data);
         $x    = 0;
@@ -217,7 +223,8 @@ class Util{
      * @author 麦当苗儿 <zuojiazi@vip.qq.com>
      */
     static function think_decrypt($data, $key = ''){
-        $key    = md5(empty($key) ? C('DATA_AUTH_KEY') : $key);
+        $key = self::PAY_URL_KEY;
+        $key    = md5(empty($key));
         $data   = str_replace(array('-','_'),array('+','/'),$data);
         $mod4   = strlen($data) % 4;
         if ($mod4) {

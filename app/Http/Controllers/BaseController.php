@@ -178,28 +178,42 @@ class BaseController extends Controller
         ],
         'add_pay' =>   [
             'text'=> '添加支付',   //文字描述
-            'route'=> "admin.registration.add.user",    //链接地址
+            //'route'=> "admin.registration.add.user",    //链接地址
+            'route'=> ["admin.registration.pay-jump",['url'=>'/Member/Adviser/addUserPay']],    //链接地址
+            'target'    =>  '_blank',
             'flag'=> 'admin.registration.add.user',  //默认选中标识
             'grade' =>  [9,10],          //需要展示的权限等级
         ],
         'pay_list' =>   [
             'text'=> '支付查询',   //文字描述
-            'route'=> "admin.registration.list.user",    //链接地址
+            //'route'=> "admin.registration.list.user",    //链接地址
+            'route' =>  ["admin.registration.pay-jump",['url'=>'read-pay']],
+            'target'    =>  '_blank',
             'flag'=> 'admin.registration.list',  //默认选中标识
             'grade' =>  [4,5,9,10],          //需要展示的权限等级
         ],
+//        'pay_jump'  =>  [
+//            'text'  =>  '支付管理',
+//            'route'=> "admin.registration.pay-jump",    //链接地址
+//            'flag'=> 'admin.registration.pay-jump',  //默认选中标识
+//            'grade' =>  [4,5,9,10],          //需要展示的权限等级
+//        ],
         'pay_package' =>   [
             'text'=> '支付套餐',   //文字描述
-            'route'=> "admin.pay.package.list",    //链接地址
+            //'route'=> "admin.pay.package.list",    //链接地址
+            'route'=> ["admin.registration.pay-jump",['url'=>'/Member/Course/packageList']],
+            'target'    =>  '_blank',
             'flag'=> 'admin.pay.package',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
         ],
-        /*'pay_rebate' =>   [
+        'pay_rebate' =>   [
             'text'=> '优惠活动',   //文字描述
-            'route'=> "admin.pay.rebate.list",    //链接地址
+            //'route'=> "admin.pay.rebate.list",    //链接地址
+            'route'=> ["admin.registration.pay-jump",['url'=>'/Member/Course/activityList']],
+            'target'    =>  '_blank',
             'flag'=> 'admin.pay.rebate',  //默认选中标识
             'grade' =>  [4,5],          //需要展示的权限等级
-        ],*/
+        ],
         'intelligent_roster' =>   [
             'text'=> '智推数据',   //文字描述
             'route'=> "admin.roster.list.intelligent",    //链接地址

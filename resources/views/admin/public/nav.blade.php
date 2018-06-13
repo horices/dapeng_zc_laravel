@@ -4,7 +4,7 @@
 			<div class="list-group-panel">
 				<ul class="list-group dp-side-menu-2" id="subnav">
 					@foreach ($navList as $nav)
-					<li><a class="list-group-item" flag="{{$nav['flag']}}" href="{{ route(collect($nav['route'])->first(),collect($nav['route'])->get(1,[]))}}">{{$nav['text']}}</a></li>
+					<li><a class="list-group-item" flag="{{$nav['flag']}}" target="{{$nav['target'] or '_self'}}" href="{{ route(collect($nav['route'])->first(),collect($nav['route'])->get(1,[]))}}">{{$nav['text']}}</a></li>
 					@endforeach
 				</ul>
 			</div>
