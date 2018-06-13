@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class UserRequest extends FormRequest
 {
@@ -23,11 +24,12 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        $uid = Request::get("uid");
         return [
             'name'  =>  "sometimes|required",
-            'mobile'    =>  "sometimes|required|digits_between:11,11",
+            'mobile'    =>  "sometimes|required|digits_between:11,11|unique:user_headmaster,mobile,".$uid.",uid",
             'grade' =>  'sometimes|required',
-            'dapeng_user_mobile'   =>   "sometimes|required_if:grade,9,10",
+            'dapeng_user_mobile'   =>   "sometimes|unique:user_headmaster,dapeng_user_mobile,".$uid.",uid|required_if:grade,9,10",
         ];
     }
 
@@ -38,7 +40,9 @@ class UserRequest extends FormRequest
             'grade.required'    =>  '请选择用户级别',
             "dapeng_user_mobile.required_if"    =>  "请输入主站帐号",
             "mobile.required"  =>  "展翅系统账号为必填",
-            "mobile.digits_between"   =>  "展翅系统账号为11位的数字"
+            "mobile.digits_between"   =>  "展翅系统账号为11位的数字",
+            "mobile.unique" =>  "展翅账号已经存在",
+            "dapeng_user_mobile"    =>  "该主站账号已经被占用"
         ];
     }
     public function getValidatorInstance()
