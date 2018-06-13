@@ -294,7 +294,7 @@
                             <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}">解绑</a>
                             @endif
                         @else
-                        <a href="javascript:;" @if($roster->is_old != 1) onclick="alertOpenCourse('{{ $roster->id }}')" @endif >开通</a>
+                        <a href="javascript:;" account="{{$roster->account}}" roster-type="{{ $roster->roster_type_text }}" @if($roster->is_old != 1) onclick="alertOpenCourse('{{ $roster->id }}',this)" @endif >开通</a>
                         @endif
                         <a class="@if($roster->is_old != 1) ajaxLink @endif" data="{url:'{{$roster->reg_url_prama}}'}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" url="{{route('admin.roster.index.set-reg-url')}}" callback="registerUrl" >链接</a>
                     </td>
@@ -324,12 +324,12 @@
 <script>
 
     //开通课程弹窗
-    function alertOpenCourse(user_roster_id){
+    function alertOpenCourse(user_roster_id,obj){
         $("#open-course").find("input[name='id']").val(user_roster_id);
-        //$("input[name='user_roster_id']").val(user_roster_id);
+        var title = $(obj).attr("roster-type")+" "+$(obj).attr("account")+" 开通课程";
         layer.open({
             type: 1,
-            title: "开通课程",
+            title: title,
             closeBtn: 1,
             shadeClose: true,
             content: $("#open-course")
