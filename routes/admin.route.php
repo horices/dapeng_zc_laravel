@@ -102,6 +102,8 @@ Route::get("registration/list-detail","RegistrationController@getListDetail")->n
 Route::post("registration/mod-field","RegistrationController@postModField")->name("admin.registration.mod-field");
 Route::post("registration/mod-log-field","RegistrationController@postModLogField")->name("admin.registration.mod-log-field");;
 Route::post("registration/delete","RegistrationController@postDelete")->name("admin.registration.delete");
+//跳转到老版展翅的支付系统
+Route::get("registration/pay-jump","RegistrationController@getPayJump")->name("admin.registration.pay-jump");
 
 /**
  * 课程套餐

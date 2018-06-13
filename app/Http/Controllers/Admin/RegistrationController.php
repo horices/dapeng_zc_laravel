@@ -53,6 +53,22 @@ class RegistrationController extends BaseController{
     }*/
 
     /**
+     * 跳转到老版展翅系统
+     */
+    public function getPayJump(Request $request){
+        $userInfo = $this->getUserInfo();
+        $uid = $userInfo->uid;
+        $payUrl = $request->get('url');
+        if($payUrl == "read-pay"){
+            $payUrl = $userInfo->grade <= 5 ? "Member/Index/userList" : "Member/Adviser/userList";
+        }
+        $sign = Util::think_encrypt("user_id=".$uid."&url=".$payUrl);
+        $url = Util::PAY_URL_HOST.Util::PAY_URL_JUMP."?sign=".$sign;
+        //echo "<script>window.open('".$url."')</script>";
+        return redirect()->away($url);
+    }
+
+    /**
      * 可修改权限
      * @param UserEnrollModel $enroll
      * @param Request $request
