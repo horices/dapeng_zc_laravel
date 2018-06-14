@@ -66,7 +66,7 @@ class Curl
     /**
      * @var string The user agent name which is set when making a request
      */
-    const USER_AGENT = 'PHP Curl/1.6 (+https://github.com/php-mod/curl)';
+    const USER_AGENT = 'PHP Curl/1.9 (+https://github.com/php-mod/curl)';
 
     private $_cookies = array();
 
@@ -78,7 +78,7 @@ class Curl
     public $curl;
 
     /**
-     * @var booelan Whether an error occured or not
+     * @var bool Whether an error occured or not
      */
     public $error = false;
 
@@ -113,7 +113,7 @@ class Curl
     public $http_error = false;
 
     /**
-     * @var int Contains the error code of the curren request, 0 means no error happend
+     * @var int Contains the status code of the current processed request.
      */
     public $http_status_code = 0;
 
@@ -138,7 +138,7 @@ class Curl
     public $response = null;
 
     /**
-     * @var boolean Whether the current section of response headers is after 'HTTP/1.1 100 Continue'
+     * @var bool Whether the current section of response headers is after 'HTTP/1.1 100 Continue'
      */
     protected $response_header_continue = false;
 
@@ -292,7 +292,7 @@ class Curl
     /**
      * Make a post request with optional post data.
      *
-     * @param string $url  The url to make the get request
+     * @param string $url  The url to make the post request
      * @param array  $data Post data to pass to the url
      * @return self
      */
@@ -309,9 +309,9 @@ class Curl
      *
      * The put request data can be either sent via payload or as get paramters of the string.
      *
-     * @param string $url     The url to make the get request
-     * @param array  $data    Optional data to pass to the $url
-     * @param bool   $payload Whether the data should be transmitted trough payload or as get parameters of the string
+     * @param string $url The url to make the put request
+     * @param array $data Optional data to pass to the $url
+     * @param bool $payload Whether the data should be transmitted trough payload or as get parameters of the string
      * @return self
      */
     public function put($url, $data = array(), $payload = false)
@@ -335,9 +335,9 @@ class Curl
      *
      * The patch request data can be either sent via payload or as get paramters of the string.
      *
-     * @param string $url     The url to make the get request
-     * @param array  $data    Optional data to pass to the $url
-     * @param bool   $payload Whether the data should be transmitted trough payload or as get parameters of the string
+     * @param string $url The url to make the patch request
+     * @param array $data Optional data to pass to the $url
+     * @param bool $payload Whether the data should be transmitted trough payload or as get parameters of the string
      * @return self
      */
     public function patch($url, $data = array(), $payload = false)
@@ -359,9 +359,9 @@ class Curl
     /**
      * Make a delete request with optional data.
      *
-     * @param string $url     The url to make the delete request
-     * @param array  $data    Optional data to pass to the $url
-     * @param bool   $payload Whether the data should be transmitted trough payload or as get parameters of the string
+     * @param string $url The url to make the delete request
+     * @param array $data Optional data to pass to the $url
+     * @param bool $payload Whether the data should be transmitted trough payload or as get parameters of the string
      * @return self
      */
     public function delete($url, $data = array(), $payload = false)
@@ -638,5 +638,49 @@ class Curl
     public function isServerError()
     {
         return $this->http_status_code >= 500 && $this->http_status_code < 600;
+    }
+    
+    /**
+     * Get a specific response header key or all values from the response headers array.
+     * 
+     * Usage example:
+     * 
+     * ```php
+     * $curl = (new Curl())->get('http://example.com');
+     * 
+     * echo $curl->getResponseHeaders('Content-Type');
+     * ```
+     * 
+     * Or in order to dump all keys with the given values use:
+     * 
+     * ```php
+     * $curl = (new Curl())->get('http://example.com');
+     * 
+     * var_dump($curl->getResponseHeaders());
+     * ```
+     * 
+     * @param string $headerKey Optional key to get from the array.
+     * @return boolean|string
+     * @since 1.9
+     */
+    public function getResponseHeaders($headerKey = null)
+    {
+        $headers = [];
+        $headerKey = strtolower($headerKey);
+        
+        foreach ($this->response_headers as $header) {
+            $parts = explode(":", $header, 2);
+            
+            $key = isset($parts[0]) ? $parts[0] : null;
+            $value = isset($parts[1]) ? $parts[1] : null;
+            
+            $headers[trim(strtolower($key))] = trim($value);
+        }
+        
+        if ($headerKey) {
+            return isset($headers[$headerKey]) ? $headers[$headerKey] : false;
+        }
+        
+        return $headers;
     }
 }
