@@ -2,6 +2,7 @@
 namespace App\Utils;
 use App\Exceptions\UserValidateException;
 use App\Models\UserModel;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
@@ -55,7 +56,7 @@ class Util{
     static function getWebSiteConfig($key,$getSub = 1,$default = ""){
         $key = "website.".$key;
         if($getSub){
-            $host = $_SERVER['HTTP_HOST'];
+            $host = Request::getHost();
             $subKey = collect(config("website.HOST_ALL"))->get($host,Util::DEV);
             $key.= ".".$subKey;
         }
@@ -67,7 +68,7 @@ class Util{
      * @return mixed
      */
     static function getCurrentBranch($default = Util::DEV){
-        $host = $_SERVER['HTTP_HOST'];
+        $host = Request::getHost();
         return collect(config("website.HOST_ALL"))->get($host,$default);
     }
     /**
@@ -78,7 +79,7 @@ class Util{
      */
     static function getSchoolName($host = "",$default = self::SCHOOL_NAME_SJ){
         if(!$host)
-            $host = $_SERVER['HTTP_HOST'];
+            $host = Request::getHost();
         return collect(self::getWebSiteConfig("SCHOOL_NAME",false))->get($host,$default);
     }
 
