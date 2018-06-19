@@ -22,7 +22,7 @@ class PackageController extends BaseController {
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getList(Request $request){
-        $CoursePackageModel = CoursePackageModel::query()->where("status",'USE');
+        $CoursePackageModel = CoursePackageModel::query()->where(["status"=>'USE','type'=>0]);
         $title = $request->get("title");
         if(!empty($title)){
             $CoursePackageModel->where('title','like','%'.$title.'%');
