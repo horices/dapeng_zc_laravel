@@ -70,19 +70,20 @@
 
 <form role="form" class="form-inline" action="{{ route("admin.roster.user.add.post") }}">
     <input type="hidden" name="roster_type" value="{{ \Illuminate\Support\Facades\Request::input('roster_type') }}" />
+    <input style="display: none;" />
     <fieldset>
 
         <div class="form-group">
 
             <div class="col-md-12">
-                <input type="text"  name="roster_no" class="form-control" maxlength="26" style="width:300px" placeholder="" > <button class="btn btn-primary ajaxSubmit" data="{validate:1}" callback="checkRosterNoCallback" showloading="true"  > 提交检查</button>
+                <input type="text"  name="roster_no" class="form-control" maxlength="26" style="width:300px" placeholder="" > <button type="button" class="btn btn-primary ajaxSubmit" data="{validate:1}" callback="checkRosterNoCallback" showloading="true"  > 提交检查</button>
             </div>
         </div>
         <div id="addQQ" class="showmsg success-notice showmsg1" style="display:none">
             <p class="s1">微信号检测正常</p>
             <p class="s3"></p>
             <p class="s4" style="text-align:right">
-                <button class="btn btn-primary ajaxSubmit" callback="addRosterCallback" showloading="true">确认提交</button>
+                <button type="button" class="btn btn-primary ajaxSubmit" callback="addRosterCallback" showloading="true">确认提交</button>
             </p>
         </div>
 
