@@ -84,8 +84,11 @@ class UserController extends BaseController
                 $returnData['code'] = Util::FAIL ;
                 $returnData['msg'] = "修改失败".$user->errors;
             }
-        } else {
-            $request->merge(['password'=>md5($request->get('password','123456'))]);
+        } else{
+            if(!collect($input)->get('password')){
+                $input['password'] = '123456';
+            }
+            $input['password'] = md5($input['password']);
             if(UserModel::create($input)){
                 $returnData['code'] = Util::SUCCESS;
                 $returnData['msg'] = "添加成功";
