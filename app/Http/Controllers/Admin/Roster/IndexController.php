@@ -517,7 +517,7 @@ class IndexController extends BaseController
             $query->where(function($query) use ($keywords){
                 $query->where("qq",$keywords)->orWhere("wx",$keywords);
             });
-            $roster = $query->first();
+            $roster = $query->orderBy("id","desc")->first();
         }
         //$request->merge(['startdate'=>null,'search_type'=>'roster_no','keywords'=>$keywords,'show_statistics'=>1,'form_ele'=>'.search_type,.search']);
         return view("admin.roster.select-one",[
