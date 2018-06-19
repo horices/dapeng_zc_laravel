@@ -60,7 +60,7 @@ a
 </div>
 <div class="form_main">
 	<div class="form_inner">
-    	<h2 class="login_title" align="center">登录</h2>
+    	<h2 class="login_title" align="center">登录账号</h2>
     	<form role="form"  action="{{ route('admin.auth.login')}}">
             {{ csrf_field() }}
         <div  class="form-group">
