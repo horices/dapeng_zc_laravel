@@ -39,7 +39,7 @@ class QQGroupEventNotifyController extends BaseController
     {
         parent::__construct($curl);
         $baseUrl = URL::route(Route::currentRouteName(),[],false);
-        //设计学院正式站
+        /*//设计学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){
             //通知设计学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_SJ.".".Util::DEV,false);
@@ -53,7 +53,7 @@ class QQGroupEventNotifyController extends BaseController
             //通知美术学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::DEV,false);
             $curl->post($host.$baseUrl,$request->all())->response;
-        }
+        }*/
     }
 
     /**
