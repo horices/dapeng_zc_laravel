@@ -18,7 +18,7 @@ class UserObserver extends  BaseObserver {
 
         //Validator::make($userModel->toArray(),[],[]);
         //如果用户的主站手机号被改变，则需要进行验证
-        if($userModel->dapeng_user_mobile != $userModel->getOriginal("dapeng_user_mobile")){
+        if($userModel->dapeng_user_mobile && $userModel->dapeng_user_mobile != $userModel->getOriginal("dapeng_user_mobile")){
             //判断当前主站账号是否已经绑定
             if($temp = $userModel->where("dapeng_user_mobile",$userModel->dapeng_user_mobile)->first()){
                 throw new UserValidateException($temp->name." 已绑定该主站账号");
