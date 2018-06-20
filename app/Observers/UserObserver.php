@@ -44,6 +44,7 @@ class UserObserver extends  BaseObserver {
 
     //新增前
     function creating(UserModel $userModel){
+        $userModel->addtime = time();
     }
 
     //更新前
