@@ -83,12 +83,19 @@ class BaseController extends Controller{
      *      data    : 数据
      */
     protected function export(&$data,$query = null,$exportType = 'xls'){
-        if(!collect($data)->get('data') && $query){
-            $data['data'] = $query->limit(10000)->get();
-        }
+
         //导出最长为五分钟
         set_time_limit(60*2);
         ini_set("memory_limit","100M");
+
+        if ($exportType == "csv"){
+            $this->exportCsv($data,$query);
+            return ;
+        }
+
+        if(!collect($data)->get('data') && $query){
+            $data['data'] = $query->take(10)->get();
+        }
         //将数组全部转化为 Collect
         if(is_array($data)){
             $data = collect($data);
@@ -99,30 +106,15 @@ class BaseController extends Controller{
             }
             return $v;
         });
+
+
+
         //需要导出的全部数据
         $exportData = [];
         //重新整理数组,取出多级数据
         $data->get("data")->transform(function($v) use ($data,&$exportData){
-            $row = [];//处理单选数据
-            //判断字段中是否存在点的语法,进行多级获取
-            $data->get("title")->keys()->transform(function($column) use (&$v,&$row){
-                $result = $v;
-                collect(explode('.',$column))->each(function($key) use (&$result){
-                    if(!$result){
-                        $result = '';
-                        return false;
-                    }
-                    if($result instanceof Model){
-                        $result = $result->$key;
-                    }elseif($result instanceof Collection){
-                        $result = $result->get($key);
-                    }elseif(is_array($result)){
-                        $result = $result[$key] ?? '';
-                    }
-
-                });
-                $row[$column] = $result;
-            });
+            //处理单行数据
+            $row = $this->parseExportTitle($data["title"],$v);
             $exportData[] = $row;
         });
         //添加标头行
@@ -141,6 +133,71 @@ class BaseController extends Controller{
         })->export($exportType);
     }
 
+    /**
+     * 判断字段中是否存在点的语法,进行多级获取
+     * @param $titles
+     * @param $rowIn
+     * @param $rowOut
+     * @return mixed
+     */
+    private function parseExportTitle(&$titles,&$rowIn){
+        $rowOut = [];
+        collect($titles)->keys()->transform(function($column) use (&$rowIn,&$rowOut){
+            $result = $rowIn;
+            collect(explode('.',$column))->each(function($key) use (&$result){
+                if(!$result){
+                    $result = '';
+                    return false;
+                }
+                if($result instanceof Model){
+                    $result = $result->$key;
+                }elseif($result instanceof Collection){
+                    $result = $result->get($key);
+                }elseif(is_array($result)){
+                    $result = $result[$key] ?? '';
+                }
+
+            });
+            $rowOut[$column] = $result;
+        });
+        return $rowOut;
+    }
+
+    /**
+     * 导出csv格式
+     * @param $data
+     * @param null $query
+     */
+    private function exportCsv(&$data,$query = null){
+        $i = 1;
+        $max = 30000;
+        $fileName = $data['filename'].".csv";
+        //设置好告诉浏览器要下载excel文件的headers
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="'. $fileName .'"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        $fp = fopen('php://output', 'a');//打开output流
+        mb_convert_variables('GBK', 'UTF-8', $data['title']);
+        fputcsv($fp,$data['title']);
+        $query->chunk(1000, function ($rows) use (&$data,&$i,$max,&$fp) {
+            foreach ($rows as $row) {
+                $rowOut = $this->parseExportTitle($data['title'],$row);
+                mb_convert_variables('GBK', 'UTF-8', $rowOut);
+                fputcsv($fp, $rowOut);
+                //刷新输出缓冲到浏览器
+                ob_flush();
+                flush();//必须同时使用 ob_flush() 和flush() 函数来刷新输出缓冲。
+                if($i++ >= $max){
+                    return false;
+                }
+            }
+        });
+        fclose($fp);
+        exit;
+    }
 
     /**
      * 通用处理统计

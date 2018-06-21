@@ -63,6 +63,7 @@ class BaseController extends Controller
         10    =>  "课程顾问",
         11    =>  "智能推广专员",
         12    =>  "推广专员",
+        '13'  =>    "学管师",
     ];
 
     //私聊深度

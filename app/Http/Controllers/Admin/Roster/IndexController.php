@@ -340,7 +340,7 @@ class IndexController extends BaseController
             "group_status_text" =>  "进群状态",
         ];
         //$data['data'] = $query->take(5000)->get();
-        return $this->export($data,$query);
+        return $this->export($data,$query,'csv');
     }
 
     /**
