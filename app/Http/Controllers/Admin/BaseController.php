@@ -82,7 +82,10 @@ class BaseController extends Controller{
      *      title :     字段名,支持点 多级选择
      *      data    : 数据
      */
-    protected function export(&$data,$exportType = 'xls'){
+    protected function export(&$data,$query = null,$exportType = 'xls'){
+        if(!collect($data)->get('data') && $query){
+            $data['data'] = $query->limit(10000)->get();
+        }
         //导出最长为五分钟
         set_time_limit(60*2);
         ini_set("memory_limit","100M");

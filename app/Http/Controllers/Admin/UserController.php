@@ -112,8 +112,8 @@ class UserController extends BaseController
             'grade_text'          =>  '用户级别'
 
         ];
-        $data['data'] = $query->take(5000)->get();
-        return $this->export($data,'xls');
+        //$data['data'] = $query->take(5000)->get();
+        return $this->export($data,$query);
     }
 
     /**

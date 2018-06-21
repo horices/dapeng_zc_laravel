@@ -423,8 +423,8 @@ class RegistrationController extends BaseController{
             'last_pay_time_text'        =>  '提交时间',
             'guide_text'                =>  '是否导学',
         ];
-        $exportData['data'] = $query->take(3000)->get();
-        return $this->export($exportData);
+        //$exportData['data'] = $query->take(3000)->get();
+        return $this->export($exportData,$query);
     }
 
     /**

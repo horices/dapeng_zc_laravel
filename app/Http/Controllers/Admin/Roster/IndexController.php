@@ -339,8 +339,8 @@ class IndexController extends BaseController
             "course_type_text"  =>  "课程类型",
             "group_status_text" =>  "进群状态",
         ];
-        $data['data'] = $query->take(5000)->get();
-        return $this->export($data);
+        //$data['data'] = $query->take(5000)->get();
+        return $this->export($data,$query);
     }
 
     /**
