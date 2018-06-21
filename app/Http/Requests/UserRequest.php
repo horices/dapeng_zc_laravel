@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
             'name'  =>  "sometimes|required",
             'mobile'    =>  "sometimes|required|digits_between:11,11|unique:user_headmaster,mobile,".$uid.",uid",
             'grade' =>  'sometimes|required',
-            'dapeng_user_mobile'   =>   "sometimes|unique:user_headmaster,dapeng_user_mobile,".$uid.",uid|required_if:grade,9,10",
+            'dapeng_user_mobile'   =>   "nullable|sometimes|unique:user_headmaster,dapeng_user_mobile,".$uid.",uid"//|required_if:grade,9,10",
         ];
     }
 
