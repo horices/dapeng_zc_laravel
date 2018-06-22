@@ -69,8 +69,8 @@ class GroupModel extends BaseModel
     protected static function boot()
     {
         parent::boot();
-        self::addGlobalScope('status',function (Builder $builder){
+        /*self::addGlobalScope('status',function (Builder $builder){
             $builder->where("status",1);
-        });
+        });*/
     }
 }
