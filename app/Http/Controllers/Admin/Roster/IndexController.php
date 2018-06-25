@@ -336,9 +336,79 @@ class IndexController extends BaseController
             'last_adviser_name' =>  '课程顾问',
             'addtime_export_text'   =>  '提交时间',
             'is_reg_text'   =>  "是否注册",
+            'dapeng_reg_time_export_text'  =>  '注册时间',
             "course_type_text"  =>  "课程类型",
             "group_status_text" =>  "进群状态",
+            "group_status_1_last_time"    =>  "申请进群时间",
+            "group_status_2_last_time"    =>  "进群时间",
+            "group_status_full_text"     =>  "群状态变更时间"
         ];
+        set_time_limit(0);
+        ini_set("memory_limit","100M");
+        //查询所有的用户
+        $users = [];//UserModel::all()->keyBy("uid");
+        //查询所有的群信息
+        $groups = [];//GroupModel::all()->keyBy("id");
+        $i = 1;
+        $max = 2000;   //最大导出数量
+        $fileName = $data['filename'].".csv";
+        //设置好告诉浏览器要下载excel文件的headers
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="'. $fileName .'"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        $fp = fopen('php://output', 'a');//打开output流
+        mb_convert_variables('GBK', 'UTF-8', $data['title']);
+        fputcsv($fp,$data['title']);
+        $query->without(['group','adviser'])->orderBy("id","desc")->select(DB::raw('id,qq,wx,type,inviter_name,addtime,dapeng_reg_time,is_reg,course_type,group_status,qq_group_id'))->chunk(2000, function ($rows) use (&$data,&$i,$max,&$fp,&$users,&$groups) {
+            foreach ($rows as $row) {
+                $row['group'] = [];
+                $row['adviser'] = [];
+                if($row->qq_group_id){
+                    if(!isset($groups[$row->qq_group_id])){
+                        $groups[$row->qq_group_id] = GroupModel::find($row->qq_group_id);
+                        if(!isset($users[$row->qq_group_id])){
+                            $users[$row->qq_group_id] = UserModel::find($groups[$row->qq_group_id]->leader_id);
+                        }
+                    }
+                    $row['group'] = $groups[$row->qq_group_id];
+                    $row['adviser'] = $users[$row->qq_group_id];
+                }
+                if($row['adviser']){
+                    $row['last_adviser_name'] =  $row['adviser']->name;
+                }
+                //存在群变更记录
+                if($row->group_event_log->count()){
+                    if($log = $row->group_event_log->first(function($groupEventLog){
+                        return $groupEventLog->group_status == 1;
+                    })){
+                        $row['group_status_1_last_time'] = $log->addtime_full_text;
+                    };
+                    if($log = $row->group_event_log->first(function($groupEventLog){
+                        return $groupEventLog->group_status == 2;
+                    })){
+                        $row['group_status_2_last_time'] = $log->addtime_full_text;
+                    };
+                    foreach($row->group_event_log as $log){
+                        $row['group_status_full_text'] .= app('status')->getGroupStatus($log->group_status).":".$log->addtime_full_text."\r\n";
+                    }
+                }
+                //$row['adviser'] = $users[$row->last_adviser_id];
+                $rowOut = $this->parseExportTitle($data['title'],$row);
+                mb_convert_variables('GBK', 'UTF-8', $rowOut);
+                fputcsv($fp, $rowOut);
+                //刷新输出缓冲到浏览器
+                ob_flush();
+                flush();//必须同时使用 ob_flush() 和flush() 函数来刷新输出缓冲。
+                if($i++ >= $max){
+                    return false;
+                }
+            }
+        });
+        fclose($fp);
+        exit();
         //$data['data'] = $query->take(5000)->get();
         return $this->export($data,$query,'csv');
     }

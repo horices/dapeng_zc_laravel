@@ -67,6 +67,11 @@ class RosterModel extends BaseModel
             return date('m-d', $this->addtime) . "<br />" . date('H:i', $this->addtime);
         }
     }
+    function getDapengRegTimeExportTextAttribute(){
+        if($this->dapeng_reg_time){
+            return date('Y-m-d H:i:s',$this->dapeng_reg_time);
+        }
+    }
 
     /**
      * 获取专属注册链接的地址参数

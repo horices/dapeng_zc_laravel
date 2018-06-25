@@ -94,7 +94,7 @@ class BaseController extends Controller{
         }
 
         if(!collect($data)->get('data') && $query){
-            $data['data'] = $query->take(10)->get();
+            $data['data'] = $query->take(5000)->get();
         }
         //将数组全部转化为 Collect
         if(is_array($data)){
@@ -140,7 +140,7 @@ class BaseController extends Controller{
      * @param $rowOut
      * @return mixed
      */
-    private function parseExportTitle(&$titles,&$rowIn){
+    protected function parseExportTitle(&$titles,&$rowIn){
         $rowOut = [];
         collect($titles)->keys()->transform(function($column) use (&$rowIn,&$rowOut){
             $result = $rowIn;

@@ -113,7 +113,7 @@ class UserController extends BaseController
 
         ];
         //$data['data'] = $query->take(5000)->get();
-        return $this->export($data,$query,'csv');
+        return $this->export($data,$query);
     }
 
     /**
