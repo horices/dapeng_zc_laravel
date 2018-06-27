@@ -11,6 +11,7 @@ use App\Http\Controllers\BaseController as Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class BaseController extends Controller
@@ -59,7 +60,7 @@ class BaseController extends Controller
         Log::info("返回数据:".$response);
         $curlData = Util::jsonDecode($response);
         if(!$curlData || $curlData['code'] == Util::FAIL){
-            throw new UserValidateException("接口转发返回失败".$response);
+            throw new UserValidateException($curlData['msg']);
         }
         $this->forwardData = $curlData['data'];
         return $curlData;
@@ -80,23 +81,16 @@ class BaseController extends Controller
      */
     function validateApi(){
         $data = request()->input();
-        //return Util::ajaxReturn(1,$data);
-//        $data = [
-//            'type'      =>  'id',
-//            'keyword'   =>  129,
-//            'timestamp' =>  1494472570116,
-//        ];
-//        $validateData = self::getPostData($data);
-
-        $sign       = isset($data['sign']) ? $data['sign'] : "";
-        $timestamp       = isset($data['timestamp']) ? $data['timestamp'] : "";
-        unset($data['sign']);
+        Validator::make($data,[
+            'timestamp' =>  'required',
+            'sign'      =>  'required'
+        ],[
+            'timestamp.required'    =>  "缺少必要参数",
+            'sign.required' =>  "缺少必要参数"
+        ])->validate();
         $validateData = $this->getPostData($data);
-        if(empty($sign) || empty($timestamp)){
-            return false;
-        }
-        if(($validateData['sign'] != $sign)){
-            Log::error("签名不一致:".$validateData['sign']."==".$sign);
+        if(($validateData['sign'] != $data['sign'])){
+            Log::error("签名不一致:".$validateData['sign']."==".$data['sign']);
             return false;
         }
         return true;
