@@ -52,12 +52,17 @@ class BaseController extends Controller
         }
         $method = $method ? $method : Str::lower(request()->getMethod());
         $curl = app(Curl::class);
+        Log::info("开始转发请求:".$url);
+        Log::info("请求数据:");
+        Log::info($data);
         $response = $curl->$method($url,$data)->response;
+        Log::info("返回数据:".$response);
         $curlData = Util::jsonDecode($response);
         if(!$curlData || $curlData['code'] == Util::FAIL){
             throw new UserValidateException("接口转发返回失败".$response);
         }
         $this->forwardData = $curlData['data'];
+        return $curlData;
     }
 
     /**
@@ -90,8 +95,8 @@ class BaseController extends Controller
         if(empty($sign) || empty($timestamp)){
             return false;
         }
-        //return Util::ajaxReturn(1,$validateData);
-        if(($validateData['sign'] != $sign) || ($validateData['timestamp'] != $timestamp)){
+        if(($validateData['sign'] != $sign)){
+            Log::error("签名不一致:".$validateData['sign']."==".$sign);
             return false;
         }
         return true;
