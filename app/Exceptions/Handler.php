@@ -56,7 +56,7 @@ class Handler extends ExceptionHandler
         }
 
         if($exception instanceof  UserException){
-            return response()->json(['code'=>Util::FAIL,'msg'=>$exception->getMessage()]);
+            return response()->json(['code'=>Util::FAIL,'msg'=>$exception->getMessage(),'data'=>null]);
         }
         return parent::render($request, $exception);
     }

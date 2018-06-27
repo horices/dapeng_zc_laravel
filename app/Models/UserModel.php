@@ -27,7 +27,7 @@ class UserModel extends BaseModel
     ]; */
     //该字段不显示
     protected $hidden = [
-        'password'
+        'password','code','email','qq','login','coins','last_login_time','last_login_ip','pid','path','grade_up_time','up_ing','mark'
     ];
 
     protected $appends = [

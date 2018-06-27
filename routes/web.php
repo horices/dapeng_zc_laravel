@@ -42,10 +42,10 @@ Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
 });
 //向外提供接口的地址(外部添加新量和修改部分信息)
 Route::group(['prefix'=>'Api','namespace'=>"Api"], function(){
-    Route::get("User/getInfo","RosterController@getInfo")->name("api.roster.info.get");
-    Route::post("User/addQQ","RosterController@add")->name("api.roster.add");
-    Route::post("User/setInfo","RosterController@setInfo")->name("api.roster.info.set");
-    Route::post("User/checkRosterStatus","RosterController@checkRosterStatus")->name("api.roster.status.check");
+    include "api.route.php";
+});
+Route::group(['prefix'=>'api','namespace'=>"Api"], function(){
+    include "api.route.php";
 });
 //Auth::routes();
 
