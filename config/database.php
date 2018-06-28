@@ -38,8 +38,7 @@ return [
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
         ],
-
-        'SJ' => [
+        'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
@@ -47,6 +46,20 @@ return [
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
+        'SJ' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_SJ', '127.0.0.1'),
+            'port' => env('DB_PORT_SJ', '3306'),
+            'database' => env('DB_DATABASE_SJ', 'forge'),
+            'username' => env('DB_USERNAME_SJ', 'forge'),
+            'password' => env('DB_PASSWORD_SJ', ''),
+            'unix_socket' => env('DB_SOCKET_SJ', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
