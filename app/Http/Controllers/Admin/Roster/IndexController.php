@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin\Roster;
 
 
+use App\Jobs\SendOpenCourseNotification;
 use App\Utils\Api\DapengUserApi;
 use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
@@ -472,6 +473,8 @@ class IndexController extends BaseController
         $rosterData->dapeng_user_mobile = $studentMobile;
         //$rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
         $rosterData->save();
+        //发送开课通知
+        SendOpenCourseNotification::dispatch($rosterData);
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
 

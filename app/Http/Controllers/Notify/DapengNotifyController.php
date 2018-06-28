@@ -88,7 +88,6 @@ class DapengNotifyController extends BaseController
             $roster->dapeng_reg_time = ceil($request->get("dapeng_reg_time",time()*1000)/1000);
             $roster->save();
         }
-
         if(!RosterCourseLogModel::create(Input::get())){
             Log::error("开课通知处理失败");
         }
