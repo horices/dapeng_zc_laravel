@@ -17,6 +17,12 @@ class UserObserver extends  BaseObserver {
     function saving(UserModel $userModel){
 
         //Validator::make($userModel->toArray(),[],[]);
+        if($userModel->grade == 9 || $userModel->grade == 10){
+            //课程顾问如果状态为正常，必须需要有主站手机号
+            if($userModel->status != 0 && !$userModel->dapeng_user_mobile){
+                throw new UserValidateException("请补全主站账号");
+            }
+        }
         //如果用户的主站手机号被改变，则需要进行验证
         if($userModel->dapeng_user_mobile && $userModel->dapeng_user_mobile != $userModel->getOriginal("dapeng_user_mobile")){
             //判断当前主站账号是否已经绑定
