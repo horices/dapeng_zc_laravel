@@ -91,7 +91,7 @@ class BaseController extends Controller
         ])->validate();
         $validateData = $this->getPostData($data);
         if(($validateData['sign'] != $sign)){
-            Log::error("签名不一致:".$validateData['sign']."==".$data);
+            Log::error("签名不一致:".$validateData['sign']."==".$sign);
             return false;
         }
         return true;
