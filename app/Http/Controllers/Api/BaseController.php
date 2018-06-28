@@ -80,8 +80,9 @@ class BaseController extends Controller
      * @return bool
      */
     function validateApi(){
-        $data = request()->except("sign");
-        Validator::make($data,[
+        $sign = request()->get("sign");
+        $data = request()->except('sign');
+        Validator::make(request()->all(),[
             'timestamp' =>  'required',
             'sign'      =>  'required'
         ],[
@@ -89,7 +90,7 @@ class BaseController extends Controller
             'sign.required' =>  "缺少必要参数"
         ])->validate();
         $validateData = $this->getPostData($data);
-        if(($validateData['sign'] != $data['sign'])){
+        if(($validateData['sign'] != $sign)){
             Log::error("签名不一致:".$validateData['sign']."==".$data['sign']);
             return false;
         }
