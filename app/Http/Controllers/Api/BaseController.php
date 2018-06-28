@@ -83,7 +83,7 @@ class BaseController extends Controller
         $data = request()->except("sign");
         Validator::make($data,[
             'timestamp' =>  'required',
-            //'sign'      =>  'required'
+            'sign'      =>  'required'
         ],[
             'timestamp.required'    =>  "缺少必要参数",
             'sign.required' =>  "缺少必要参数"
