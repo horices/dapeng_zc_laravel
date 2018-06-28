@@ -122,3 +122,9 @@ input[type="hidden" i] {
 .add_tc_form .div_input_one label,.add_tc_form .control-label{ width:140px}
 .add_tc { clear:both}
 .dp-member-title-2 h5{ font-size:16px}
+/*错误提示页面*/
+.mistake_box{ width:628px; overflow:hidden; margin:150px auto}
+.mistake_box>img{ width:400px}
+.mistake_box .mis_wz img{ margin:125px 0 13px 0}
+.mistake_box .mis_wz button{ background: -moz-linear-gradient(top, #49c258, #32a73e);background: -webkit-linear-gradient(top, #49c258, #32a73e); padding:6px 20px; border-radius:20px;}
+
