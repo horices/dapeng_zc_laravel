@@ -273,7 +273,7 @@
 
 
                             @if($roster->group_status == 0)
-                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 9 && $userInfo->grade != 10 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加吗">无</span>
+                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 11 && $userInfo->grade != 12 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加吗">无</span>
                             @else
                             <span class="group_status_{{ $roster->group_status }} group_status_type_{{ $roster->roster_type }}">{{ $roster->group_status_text }}</span>
                             @endif
