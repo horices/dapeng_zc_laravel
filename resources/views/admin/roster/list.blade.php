@@ -242,14 +242,14 @@
                     <th width="80">班级代号</th>
                     <th width="95">群号/微信号</th>
                     <th width="80">推广专员</th>
-                    <th width="80">课程顾问</th>
+                    {{--<th width="80">课程顾问</th>--}}
                     <th width="80">提交时间</th>
                     <th width="80">是否注册</th>
                     <th width="80">开通课程</th>
                     <th width="80">进群状态</th>
                     <th width="80">进群时间</th>
                     <th width="80" class="grade grade4 grade5">销售数据</th>
-                    <th width="90" class="grade grade4 grade5 grade9 grade10">操作</th>
+                    <th width="90" class="grade grade4 grade5 grade9 grade10 grade11 grade12">操作</th>
 
                     <!-- <th style="padding-left:19px" width="80">操作</th> -->
                 </tr>
@@ -264,7 +264,7 @@
                     <td>{{ $roster->group->group_name }}</td>
                     <td>{{ $roster->group->qq_group }}</td>
                     <td>{{ $roster->inviter_name }}</td>
-                    <td>{{ $roster->adviser->name }}</td>
+                    {{--<td>{{ $roster->adviser->name }}</td>--}}
                     <td>{!! $roster->addtime_text !!}</td>
                     <td class="register_status_{{ $roster->is_reg }}">{{ $roster->is_reg_text }}</td>
                     <td title="{{ $roster->course_name }}" @if($roster->course_type) onclick="openCourseLog({{ $roster->toJson() }});" @endif style="cursor:pointer;" class="open_course_status_{{ $roster->course_type }}">
@@ -273,7 +273,7 @@
 
 
                             @if($roster->group_status == 0)
-                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 11 && $userInfo->grade != 12 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加吗">无</span>
+                                <span class="group_status_{{ $roster->group_status }} @if($userInfo->grade != 9 && $userInfo->grade != 10 && $roster->roster_type == 2) ajaxLink group_status_underline @endif group_status_type_{{ $roster->roster_type }}" url="{{ route('admin.roster.change-group-status') }}" data="{roster_id:'{{ $roster->id }}',group_status:2}" warning="您确定要将{{ $roster->roster_no }}添加状态更改为已添加吗">无</span>
                             @else
                             <span class="group_status_{{ $roster->group_status }} group_status_type_{{ $roster->roster_type }}">{{ $roster->group_status_text }}</span>
                             @endif
@@ -287,7 +287,7 @@
                     <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}">点击添加</a>
                     @endif
                     </td>
-                    <td class="grade grade4 grade5 grade9 grade10">
+                    <td class="grade grade4 grade5 grade9 grade10 grade11 grade12">
                         @if($roster->dapeng_user_mobile)
                         <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}" @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif>开通</a>
                             @if($userInfo->grade <= 5 )
