@@ -42,7 +42,7 @@ class UserRequest extends FormRequest
             "mobile.required"  =>  "展翅系统账号为必填",
             "mobile.digits_between"   =>  "展翅系统账号为11位的数字",
             "mobile.unique" =>  "展翅账号已经存在",
-            "dapeng_user_mobile"    =>  "该主站账号已经被占用"
+            "dapeng_user_mobile.unique"    =>  "该主站账号已经被占用"
         ];
     }
     public function getValidatorInstance()
