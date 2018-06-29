@@ -90,9 +90,7 @@ class Util{
      * @return mixed
      */
     static function getSchoolId($host = "",$default = self::SCHOOL_NAME_SJ){
-        $data['SJ'] = "j5m484vz";
-        $data['MS'] = "j5m48deg";
-        return $data[self::getSchoolName()];
+        return self::getWebSiteConfig("SCHOOL_ID.".self::getSchoolName());
     }
 
     /**

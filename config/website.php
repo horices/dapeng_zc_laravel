@@ -34,6 +34,21 @@ return [
         \App\Utils\Util::SCHOOL_NAME_MS =>  '美术学院',
         \App\Utils\Util::SCHOOL_NAME_IT =>  'IT学院',
     ],
+    //学院ID号，接口使用,
+    'SCHOOL_ID'  =>  [
+        \App\Utils\Util::SCHOOL_NAME_SJ =>  [
+            \App\Utils\Util::MASTER    =>  'j5m484vz',
+            \App\Utils\Util::DEV      =>  'j5m484vz',
+        ],
+        \App\Utils\Util::SCHOOL_NAME_MS =>  [
+            \App\Utils\Util::MASTER    =>  'j5m48deg',
+            \App\Utils\Util::DEV      =>  'j5m48deg',
+        ],
+        \App\Utils\Util::SCHOOL_NAME_IT =>  [
+            \App\Utils\Util::MASTER    =>  '',
+            \App\Utils\Util::DEV      =>  '',
+        ],
+    ],
     //大鹏主站URL
     'PC_URL'   =>  [
         \App\Utils\Util::MASTER    =>  'http://www.dapengjiaoyu.com',
