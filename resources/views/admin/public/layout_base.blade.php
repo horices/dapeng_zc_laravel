@@ -119,10 +119,10 @@ $(function(){
         <div class="container-gap">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-                <a class="navbar-brand logo" href="#"> <img src="/admin/images/member_logo.png" alt="大鹏教育-高品质的设计师在线教育" /> </a>
+                <a class="navbar-brand logo" href="/"> <img src="/admin/images/member_logo.png" alt="大鹏教育-高品质的设计师在线教育" /> </a>
             </div>
             <div class="navbar-collapse collapse dp-collapse">
-                
+                @if(session("userInfo.name"))
                 <ul class="nav navbar-nav navbar-right dp-navbar">
                     <li class="dropdown hidden-lt-ie8">
                     	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade_text")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
@@ -135,6 +135,7 @@ $(function(){
                     </li>
                     <li><a href="{{ \App\Utils\Util::getWebSiteConfig("PC_URL") }}/signin" class="" target="_blank">橱窗管理系统登录</a></li>
                 </ul>
+                @endif
             </div>
             <!--/.navbar-collapse -->
         </div>

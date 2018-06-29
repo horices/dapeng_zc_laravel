@@ -16,8 +16,8 @@
             <label class="control-label">数据状态</label>
             <select name="status" class="form-control">
                 <option value="">请选择</option>
-                <option value="1">正常</option>
-                <option value="0">已暂停</option>
+                <option value="1" @if(Request::input('status') === "1") selected @endif>正常</option>
+                <option value="0" @if(Request::input('status') === "0") selected @endif>已暂停</option>
             </select>
         </div>
 

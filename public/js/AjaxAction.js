@@ -616,9 +616,9 @@
 /**
  * 修改后退，用 AJAX 方式获取最新数据
  */
-window.onpopstate = function(event) {
+/*window.onpopstate = function(event) {
 	//先执行销毁方法
 	AjaxAction.exfn(AjaxAction.options.event.uninit)();
 	AjaxAction.ajaxLoadAction($("<a url='"+location.href+"' storage='false'></a>"));
 	return true;
-};
+};*/

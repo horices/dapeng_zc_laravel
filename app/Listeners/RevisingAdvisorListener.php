@@ -36,7 +36,7 @@ class RevisingAdvisorListener
         }
         $data = DapengUserApi::revisingAdvisor([
             'qqList'=>collect($event->qqList)->implode(','),
-            'schoolId'  => Util::getSchoolName(),
+            'schoolId'  => Util::getSchoolId(),
             'newAdviserId'  => $event->newAdviser->dapeng_user_id
             ]);
         if($data['code'] == Util::FAIL){

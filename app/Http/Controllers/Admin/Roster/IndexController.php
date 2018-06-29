@@ -461,7 +461,7 @@ class IndexController extends BaseController
             'classCode'                 =>  $groupData->group_name,
             'qq'                        =>  $rosterData->qq,
             'wx'                        =>  $rosterData->wx,
-            'affiliatedCollege'         =>  Util::getSchoolName()
+            'affiliatedCollege'         =>  Util::getSchoolId()
         ];
         if(!$userData->dapeng_user_mobile){
             throw new UserValidateException("该课程顾问还未绑定主站账号,不能进行该操作");
