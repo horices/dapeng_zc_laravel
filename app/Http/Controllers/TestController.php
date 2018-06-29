@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\CoursePackageModel;
 use App\Models\RebateActivityModel;
 use App\Models\UserEnrollModel;
+use App\Models\UserPayLogModel;
 use App\Models\UserRegistrationModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TestController extends BaseController
 {
@@ -17,7 +19,11 @@ class TestController extends BaseController
     }
 
     function test(){
-        $this->setRebate();
+        //return view("test.test");
+        //$this->setPackage();
+        //$this->setRebate();
+        $this->setRegistrationAttach();
+        //$this->setEnroll();
     }
 
     /**
@@ -83,6 +89,7 @@ class TestController extends BaseController
     }
 
     function setRegistrationAttach(){
+        set_time_limit (0);
         //package_attach_content
         $data = [];
         //套餐
@@ -90,49 +97,84 @@ class TestController extends BaseController
         //优惠
         $rebateList = RebateActivityModel::all();
         //报名
-        $userList = UserRegistrationModel::all();
-        foreach ($userList as $key=>$val){
-            $PackageModel = CoursePackageModel::with("rebate")->find($val['package_id']);
-            $data['package_info'] = $PackageModel->toArray();
-            //设置package_attach_id 附加套餐
-            foreach ($attachList as $k=>$v){
-                if($val->package_attach_id == $v->id){
-                    $data['package_attach_id'] = $k;
-                }
-            }
-            //设置package_rebate_id 优惠活动
-            foreach ($rebateList as $k=>$v){
-                if($val->package_rebate_id == $v->id){
-                    $data['package_rebate_id'] = $k;
-                }
-            }
-            //设置package_course_id 赠送课程
-            $data['package_course_id'] = $val->give_id;
+        //$userList = UserRegistrationModel::all();
+        $i = 0;
+        UserRegistrationModel::where("id",">",21187)->select("package_id","give_id","id","package_attach_id","rebate_id")->chunk(3000, function ($list,$page) use(&$attachList,&$rebateList,&$i){
+                foreach ($list as $key=>$val){
+                    echo $i++."\n<br/>";
+                    $PackageModel = CoursePackageModel::with("rebate")->find($val['package_id']);
+                    if(!$PackageModel){
+                        continue;
+                    }
+                    $data['package_info'] = $PackageModel->toArray();
+                    unset($data['package_info']['course_attach']);
+                    //设置package_attach_id 附加套餐
+                    $data['package_attach_id'] = "";
+                    if($val->package_attach_id){
+                        foreach ($attachList as $k=>$v){
+                            if($val->package_attach_id == $v->id){
+                                $data['package_attach_id'] = $k;
+                            }
+                        }
+                    }
 
-            UserRegistrationModel::query()->where("id",$val->id)->update([
-                'package_attach_content'    =>  json_encode($data,JSON_UNESCAPED_UNICODE)
-            ]);
-        }
+                    //设置rebate_id 优惠活动
+                    $data['package_rebate_id'] = "";
+                    if($val->rebate_id){
+                        foreach ($rebateList as $k=>$v){
+                            if($val->rebate_id == $v->id){
+                                $data['package_rebate_id'] = $k;
+                            }
+                        }
+                    }
+
+                    //设置package_course_id 赠送课程
+                    $data['package_course_id'] = $val->give_id;
+                    UserRegistrationModel::query()->where("id",$val->id)->update([
+                        'package_attach_content'    =>  json_encode($data,JSON_UNESCAPED_UNICODE)
+                    ]);
+                }
+                if($page == 1){
+                    exit;
+                }
+        });
+
     }
 
     /**
      * 设置登记表的信息
      */
     function setEnroll(){
-        $userList = UserRegistrationModel::all();
-        foreach ($userList as $key=>$val){
-            $enroll = [
-                'name'              =>  $val->name,
-                'adviser_id'        =>  $val->adviser_id,
-                'adviser_name'      =>  $val->adviser_name,
-                'mobile'            =>  $val->mobile,
-                'qq'                =>  $val->qq,
-                'wx'                =>  '',
-                'is_guide'          =>  $val->is_guide
-            ];
-            $lastId = UserEnrollModel::query()->create();
-            UserRegistrationModel::query()->where('id',$val->id)->update(['enrolle_id'=>$lastId]);
-        }
+        set_time_limit(0);
+        $i = 0;
+        UserRegistrationModel::select("id","name","adviser_id","adviser_name","mobile","qq")->chunk(1000, function (&$list,$page) use(&$i){
+            if($page == 1){
+                foreach ($list as $key=>$val){
+                    echo $i++."\n<br/>";
+                    $enroll = [
+                        'name'              =>  $val->name,
+                        'adviser_id'        =>  $val->adviser_id,
+                        'adviser_name'      =>  $val->adviser_name,
+                        'mobile'            =>  $val->mobile,
+                        'qq'                =>  $val->qq,
+                        'wx'                =>  '',
+                        'is_guide'          =>  0
+                    ];
+                    $lastData = UserEnrollModel::query()->create($enroll);
+                    UserRegistrationModel::query()->where('id',$val->id)->update([
+                        'enroll_id' =>  $lastData->id,
+                        'school_id' =>  'SJ'
+                    ]);
+                }
+            }else{
+                return false;
+            }
+        });
+    }
+
+
+    function setUserPayLog(){
+        DB::update('update user_pay_log upl JOIN user_registration ur on upl.registration_id = ur.id set upl.enroll_id = ur.enroll_id');
     }
 
 }
