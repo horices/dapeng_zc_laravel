@@ -122,7 +122,7 @@ $(function(){
                 <a class="navbar-brand logo" href="/"> <img src="/admin/images/member_logo.png" alt="大鹏教育-高品质的设计师在线教育" /> </a>
             </div>
             <div class="navbar-collapse collapse dp-collapse">
-                @if(Session::get("user.name"))
+                @if(session("userInfo.name"))
                 <ul class="nav navbar-nav navbar-right dp-navbar">
                     <li class="dropdown hidden-lt-ie8">
                     	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" style="padding-left:0px;padding-right:0px;">{{Session::get("userInfo.name")}} ({{Session::get("userInfo.grade_text")}})<i class="glyphicon glyphicon-user"></i><span class="new-message-count"></span> </a>
