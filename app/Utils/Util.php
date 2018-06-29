@@ -11,12 +11,12 @@ class Util{
     const WARNING = 2;
     const FAIL = 0;
 
-    const MASTER = 'MASTER';
-    const TEST  = "TEST";
-    const DEV = "DEV";
+    const MASTER = 'MASTER';    //正式站
+    const DEV = "DEV";          //测试站
 
-    const SCHOOL_NAME_MS = 'MS';
-    const SCHOOL_NAME_SJ = 'SJ';
+    const SCHOOL_NAME_MS = 'MS';    //美术学院
+    const SCHOOL_NAME_SJ = 'SJ';    //设计学院
+    const SCHOOL_NAME_IT = 'IT';    //IT学院
     /**
      * 跳转到老版展翅相关
      */

@@ -14,21 +14,25 @@ return [
         'test.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
         'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
         'test.ms.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
+        'it.dapengjiaoyu.com'   =>  \App\Utils\Util::MASTER,
+        'test.it.dapengjiaoyu.com'  =>  \App\Utils\Util::DEV,
     ],
     //学院名字
     'SCHOOL_NAME'   =>  [
         'bzr.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'zc.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_SJ,
-        'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_MS,
         'test.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_SJ,
         'dev.bzr.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_SJ,
+        'ms.dapengjiaoyu.com'   =>  \App\Utils\Util::SCHOOL_NAME_MS,
         'test.ms.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_MS,
-        //'laravel.local.zc.com'      =>  \App\Utils\Util::SCHOOL_NAME_MS
+        'it.dapengjiaoyu.com'       =>  \App\Utils\Util::SCHOOL_NAME_IT,
+        'test.it.dapengjiaoyu.com'  =>  \App\Utils\Util::SCHOOL_NAME_IT,
     ],
     //学院标题
     'SCHOOL_NAME_TEXT'  =>  [
         \App\Utils\Util::SCHOOL_NAME_SJ =>  '设计学院',
         \App\Utils\Util::SCHOOL_NAME_MS =>  '美术学院',
+        \App\Utils\Util::SCHOOL_NAME_IT =>  'IT学院',
     ],
     //大鹏主站URL
     'PC_URL'   =>  [
