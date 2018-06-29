@@ -131,7 +131,7 @@ class UserController extends BaseController
         },'groups as groups_wx_count'=>function($group){
             $group->where('type',2);
         }])->whereIn('grade',[9,10]);
-        if($status){
+        if($status !== null){
             $qyery->where('status',$status);
         }
         if($field_k && $field_v){
