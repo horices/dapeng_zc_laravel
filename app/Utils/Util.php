@@ -84,6 +84,18 @@ class Util{
     }
 
     /**
+     * 获取学院ID号
+     * @param string $host
+     * @param string $default
+     * @return mixed
+     */
+    static function getSchoolId($host = "",$default = self::SCHOOL_NAME_SJ){
+        $data['SJ'] = "j5m484vz";
+        $data['MS'] = "j5m48deg";
+        return $data[self::getSchoolName()];
+    }
+
+    /**
      * 获取学员标题
      * @param string $key
      * @return \Illuminate\Config\Repository|mixed
