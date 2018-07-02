@@ -65,6 +65,11 @@ return [
         \App\Utils\Util::SCHOOL_NAME_MS    =>  [
             \App\Utils\Util::MASTER    =>  'http://ms.dapengjiaoyu.com',
             \App\Utils\Util::DEV      =>  'http://test.ms.dapengjiaoyu.com',
+        ],
+        //IT学院
+        \App\Utils\Util::SCHOOL_NAME_MS    =>  [
+            \App\Utils\Util::MASTER    =>  'http://it.dapengjiaoyu.com',
+            \App\Utils\Util::DEV      =>  'http://test.it.dapengjiaoyu.com',
         ]
     ],
     //M站地址
