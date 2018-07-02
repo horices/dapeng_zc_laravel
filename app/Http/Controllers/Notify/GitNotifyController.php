@@ -16,8 +16,8 @@ class GitNotifyController extends BaseController
         //Util::MASTER    =>
     ];
     protected $branch = [
-        Util::MASTER    =>  "master",
-        Util::DEV   =>  "dev",
+        Util::MASTER    =>  "master-it",
+        Util::DEV   =>  "dev-it",
     ];
     //远程用户
     protected $user = [
