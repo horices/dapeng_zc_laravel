@@ -58,7 +58,7 @@ class RosterController extends BaseController
             $baseUrl = URL::route(Route::currentRouteName(),[],false);
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
             $request->merge($this->getPostData($request->except('sign')));
-            $response = $curl->get($host.$baseUrl,$request->all())->response;
+            $response = $curl->get($host.$baseUrl."?".http_build_query($request->all()))->response;
             $curlData = Util::jsonDecode($response);
             if(!$curlData){
                 throw new UserValidateException("获取美术学院信息返回失败".$response);
