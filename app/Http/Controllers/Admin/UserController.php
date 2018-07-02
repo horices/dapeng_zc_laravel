@@ -137,7 +137,7 @@ class UserController extends BaseController
         if($field_k && $field_v){
             $qyery->where($field_k,'like',$field_v.'%');
         }
-        $list = $qyery->paginate();
+        $list = $qyery->orderBy("uid","desc")->paginate();
         return view("admin.user.quantity-list",[
             'list' => $list,
             'userInfo'  => $this->getUserInfo(),
