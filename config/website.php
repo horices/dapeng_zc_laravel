@@ -45,8 +45,8 @@ return [
             \App\Utils\Util::DEV      =>  'j5m48deg',
         ],
         \App\Utils\Util::SCHOOL_NAME_IT =>  [
-            \App\Utils\Util::MASTER    =>  '',
-            \App\Utils\Util::DEV      =>  '',
+            \App\Utils\Util::MASTER    =>  'jio9llum',
+            \App\Utils\Util::DEV      =>  'jio9llum',
         ],
     ],
     //大鹏主站URL

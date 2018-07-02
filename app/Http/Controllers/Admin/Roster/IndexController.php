@@ -466,6 +466,7 @@ class IndexController extends BaseController
         if(!$userData->dapeng_user_mobile){
             throw new UserValidateException("该课程顾问还未绑定主站账号,不能进行该操作");
         }
+        //$data['test'] = 1;
         $res = DapengUserApi::openCourse($data); //接口59
         if($res['code'] == Util::FAIL){
             throw new DapengApiException($res['msg']);
