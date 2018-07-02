@@ -43,14 +43,13 @@ class RosterController extends BaseController
         if(!$request->get("schoolId") || Util::getSchoolName() == $request->get("schoolId")){
             $roster = RosterModel::with('group','adviser')->where(Input::get("type"),Input::get("keyword"))->orderBy("id","desc")->first();
             if($roster){
-                $roster = $roster->toArray();
                 $roster['origin'] = Str::lower(Util::getSchoolName());
-                $roster['adviser_qq'] = $roster['adviser']['qq'];
-                $roster['adviser_name'] = $roster['adviser']['name'];
-                $roster['adviser_mobile'] = $roster['adviser']['mobile'];
-                $roster['qq_group_url'] = $roster['group']['qrc_link'];
-                $roster['qq_group_qrc'] = $roster['group']['qrc_url'];
-                $result[Str::lower(Util::getSchoolName())] = $roster;
+                $roster['adviser_qq'] = $roster->adviser->qq;
+                $roster['adviser_name'] = $roster->adviser->name;
+                $roster['adviser_mobile'] = $roster->adviser->mobile;
+                $roster['qq_group_url'] = $roster->group->qrc_link;
+                $roster['qq_group_qrc'] = $roster->group->qrc_url;
+                $result[Str::lower(Util::getSchoolName())] = $roster->toArray();
             }
         }
         //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
@@ -59,7 +58,7 @@ class RosterController extends BaseController
             $baseUrl = URL::route(Route::currentRouteName(),[],false);
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
             $request->merge($this->getPostData($request->except('sign')));
-            $response = $curl->get($host.$baseUrl,$request->all())->response;
+            $response = $curl->get($host.$baseUrl."?".http_build_query($request->all()))->response;
             $curlData = Util::jsonDecode($response);
             if(!$curlData){
                 throw new UserValidateException("获取美术学院信息返回失败".$response);
