@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Notify;
 use App\Exceptions\UserNotifyException;
 use App\Exceptions\UserValidateException;
+use App\Jobs\SendNotification;
 use App\Models\RosterCourseLogModel;
 use App\Models\RosterModel;
 use App\Utils\Util;
@@ -25,45 +26,44 @@ class DapengNotifyController extends BaseController
     /**
      * 初始化实例对象,转发请求,因为每个通知的签名验证方式不统一，所以需要单独进行转发
      * DapengNotifyController constructor.
-     * @param Curl $curl
      */
-    function __construct(Curl $curl,Request $request)
+    function __construct(Request $request)
     {
-        parent::__construct($curl);
+        parent::__construct();
         //校验签名是否正确
         if($this->checkSign($request->get("sign")) === false){
-        //    throw new UserNotifyException("签名错误");
+            throw new UserNotifyException("签名错误");
         }
+        $curl = app("curl");
         $baseUrl = URL::route(Route::currentRouteName(),[],false);
         //设计学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){
-
             //通知设计学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_SJ.".".Util::DEV,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            $curl->post($host.$baseUrl,$request->all())->response;
+            SendNotification::dispatch($host.$baseUrl,$request->all());
             //通知美术学院正式站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::MASTER,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            $curl->post($host.$baseUrl,$request->all())->response;
+            SendNotification::dispatch($host.$baseUrl,$request->all());
             //通知IT学院正式站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_IT.".".Util::MASTER,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            $curl->post($host.$baseUrl,$request->all())->response;
+            SendNotification::dispatch($host.$baseUrl,$request->all());
         }
         //美术学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_MS && Util::getCurrentBranch() == Util::MASTER){
             //通知美术学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::DEV,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            $curl->post($host.$baseUrl,$request->all())->response;
+            SendNotification::dispatch($host.$baseUrl,$request->all());
         }
         //IT学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_IT && Util::getCurrentBranch() == Util::MASTER){
             //通知美术学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_IT.".".Util::DEV,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            $curl->post($host.$baseUrl,$request->all())->response;
+            SendNotification::dispatch($host.$baseUrl,$request->all());
         }
     }
 

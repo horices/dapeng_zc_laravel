@@ -32,8 +32,9 @@ class SendOpenCourseNotification implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Curl $curl)
+    public function handle()
     {
+        $curl = app("curl");
         $data['qq'] = $this->roster->qq;
         $url = Util::getWebSiteConfig("ZC_URL.".Util::SCHOOL_NAME_SJ.".".Util::MASTER,false).route("notify.dapeng.course.open",[],false);
         //$url = route("notify.dapeng.course.open",[],true);
@@ -45,12 +46,6 @@ class SendOpenCourseNotification implements ShouldQueue
         $data['operator_id'] = '';
         $data['operator_name'] = '';
         $data['operator_ip'] = '';
-        Log::info("发送开课通知");
-        Log::info("通知地址：".$url);
-        Log::info("通知参数：");
-        Log::info($data);
-        $response = $curl->post($url,$data)->response;
-        Log::info("返回数据：".$response);
-        $data = Util::jsonDecode($response);
+        SendNotification::dispatch($url,$data);
     }
 }

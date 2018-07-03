@@ -20,8 +20,13 @@ use App\Observers\UserEnrollObserver;
 use App\Observers\UserPayLogObserver;
 use App\Observers\UserPayObserver;
 use App\Observers\UserRegistrationObserver;
+use Curl\Curl;
+use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\BaseController;
@@ -88,6 +93,18 @@ class AppServiceProvider extends ServiceProvider
             Log::info("\r\n\r\n===================================================================\r\n");
             Log::info($sql);
         });
+        //处理列队前
+        Queue::before(function (JobProcessing $event) {
+            Log::info("开始进入列队:".$event->connectionName);
+        });
+        //处理列队后
+        Queue::after(function (JobProcessed $event) {
+            Log::info("列队处理完成:".$event->connectionName);
+        });
+        //队列任务失败日志
+        Queue::failing(function (JobFailed $event) {
+            Log::error($event->connectionName."队列任务失败:".$event->exception->getMessage());
+        });
     }
 
     /**
@@ -100,6 +117,9 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->app->singleton("status",function(){
             return new \App\Http\Controllers\Admin\BaseController();
+        });
+        $this->app->singleton("curl",function(){
+            return new Curl();
         });
     }
 }
