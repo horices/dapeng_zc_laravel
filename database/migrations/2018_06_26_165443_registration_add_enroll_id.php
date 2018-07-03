@@ -20,7 +20,7 @@ class RegistrationAddEnrollId extends Migration
             $table->decimal('course_attach_all_price', 8,2)->default(0)->comment("附加课程总金额");
             $table->integer("enroll_id")->default(0)->comment("关联user_enroll表");
             $table->text("package_attach_content")->comment("附加套餐的信息json格式");
-            $table->decimal("package_total_price",8,2)->default(0)->comment("应交总金额");
+            //$table->decimal("package_total_price",8,2)->default(0)->comment("应交总金额");
         });
     }
 
