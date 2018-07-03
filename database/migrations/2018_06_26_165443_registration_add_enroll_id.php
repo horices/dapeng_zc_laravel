@@ -32,7 +32,7 @@ class RegistrationAddEnrollId extends Migration
     public function down()
     {
         Schema::table('user_registration', function (Blueprint $table) {
-            $table->dropColumn(["school_id","wx","package_price","course_attach_all_price","enroll_id","package_attach_content","package_total_price"]);
+            $table->dropColumn(["school_id","wx","package_price","course_attach_all_price","enroll_id","package_attach_content"]);
         });
     }
 }
