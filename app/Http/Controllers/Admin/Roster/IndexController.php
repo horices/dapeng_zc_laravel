@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin\Roster;
 
 
 use App\Jobs\SendOpenCourseNotification;
+use App\Models\RosterCourseLogModel;
 use App\Utils\Api\DapengUserApi;
 use App\Exceptions\DapengApiException;
 use App\Exceptions\UserValidateException;
@@ -473,6 +474,17 @@ class IndexController extends BaseController
         $rosterData->dapeng_user_mobile = $studentMobile;
         //$rosterData->dapeng_user_id  = $dapengUserInfo['data']['user']['userId'];
         $rosterData->save();
+        unset($data);
+        //添加开课日志
+        $data['roster_id'] = $rosterData->id;
+        $data['qq'] = $rosterData->qq;
+        $data['action'] = 1;
+        $data['course_type'] = 1;
+        $data['course_id'] = '00000001';
+        $data['course_name'] = '大鹏所有试学课';
+        $data['addtime'] = time();
+        $data['user_type'] = $rosterData->type;
+        RosterCourseLogModel::create($data);
         //发送开课通知
         SendOpenCourseNotification::dispatch($rosterData);
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);

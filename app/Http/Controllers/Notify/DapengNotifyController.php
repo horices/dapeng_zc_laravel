@@ -123,6 +123,7 @@ class DapengNotifyController extends BaseController
         $data['addtime'] = time();
         $data['user_type'] = $roster->type;
         $data['action'] = 1;
+        $data['qq'] = $roster->qq;
         $courseIdMap = collect(explode(',',trim($request->get("course_id_map"),'[]')));
         $courseTitleMap = collect(explode(',',trim($request->get("course_title_map"),'[]')));
         foreach($courseIdMap as $k=>$v){
