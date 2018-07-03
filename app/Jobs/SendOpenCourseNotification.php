@@ -46,12 +46,6 @@ class SendOpenCourseNotification implements ShouldQueue
         $data['operator_id'] = '';
         $data['operator_name'] = '';
         $data['operator_ip'] = '';
-        Log::info("发送开课通知");
-        Log::info("通知地址：".$url);
-        Log::info("通知参数：");
-        Log::info($data);
-        $response = $curl->post($url,$data)->response;
-        Log::info("返回数据：".$response);
-        $data = Util::jsonDecode($response);
+        SendNotification::dispatch($url,$data);
     }
 }

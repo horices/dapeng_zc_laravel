@@ -37,23 +37,22 @@ class QQGroupEventNotifyController extends BaseController
     function __construct(Request $request)
     {
         parent::__construct();
-        $curl = app("curl");
         $baseUrl = URL::route(Route::currentRouteName(),[],false);
-        /*//设计学院正式站
+        //设计学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){
             //通知设计学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_SJ.".".Util::DEV,false);
-            $curl->post($host.$baseUrl,$request->all())->response;
+            SendNotification::dispatch($host.$baseUrl,$request->all());
             //通知美术学院正式站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::MASTER,false);
-            $curl->post($host.$baseUrl,$request->all())->response;
+            SendNotification::dispatch($host.$baseUrl,$request->all());
         }
         //美术学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_MS && Util::getCurrentBranch() == Util::MASTER){
             //通知美术学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::DEV,false);
-            $curl->post($host.$baseUrl,$request->all())->response;
-        }*/
+            SendNotification::dispatch($host.$baseUrl,$request->all());
+        }
     }
 
     /**
