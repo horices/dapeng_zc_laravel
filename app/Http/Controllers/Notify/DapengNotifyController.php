@@ -25,15 +25,15 @@ class DapengNotifyController extends BaseController
     /**
      * 初始化实例对象,转发请求,因为每个通知的签名验证方式不统一，所以需要单独进行转发
      * DapengNotifyController constructor.
-     * @param Curl $curl
      */
-    function __construct(Curl $curl,Request $request)
+    function __construct(Request $request)
     {
-        parent::__construct($curl);
+        parent::__construct();
         //校验签名是否正确
         if($this->checkSign($request->get("sign")) === false){
-        //    throw new UserNotifyException("签名错误");
+            throw new UserNotifyException("签名错误");
         }
+        $curl = app("curl");
         $baseUrl = URL::route(Route::currentRouteName(),[],false);
         //设计学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){

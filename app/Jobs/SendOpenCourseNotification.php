@@ -32,8 +32,9 @@ class SendOpenCourseNotification implements ShouldQueue
      *
      * @return void
      */
-    public function handle(Curl $curl)
+    public function handle()
     {
+        $curl = app("curl");
         $data['qq'] = $this->roster->qq;
         $url = Util::getWebSiteConfig("ZC_URL.".Util::SCHOOL_NAME_SJ.".".Util::MASTER,false).route("notify.dapeng.course.open",[],false);
         //$url = route("notify.dapeng.course.open",[],true);
