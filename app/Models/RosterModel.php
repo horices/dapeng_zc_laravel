@@ -238,10 +238,17 @@ class RosterModel extends BaseModel
             if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
                 ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
                 ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+            }
+            if(Util::getSchoolName() == Util::SCHOOL_NAME_IT){
+                //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
+                ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
             }
         }
         return array_merge($data,$createData);
