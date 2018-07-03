@@ -485,8 +485,14 @@ class IndexController extends BaseController
         $data['addtime'] = time();
         $data['user_type'] = $rosterData->type;
         RosterCourseLogModel::create($data);
+        //修改注册状态和时间
+        if(!$rosterData->dapeng_reg_time){
+            $rosterData->is_reg = 1;
+            $rosterData->dapeng_reg_time = time();
+            $rosterData->save();
+        }
         //发送开课通知
-        SendOpenCourseNotification::dispatch($rosterData);
+        //SendOpenCourseNotification::dispatch($rosterData);
         return response()->json(['code'=>Util::SUCCESS,'msg'=>'开课成功！']);
     }
 
