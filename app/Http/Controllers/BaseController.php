@@ -449,7 +449,7 @@ class BaseController extends Controller
         if(!file_exists(dirname($filename))){
             mkdir(dirname($filename),0777,true);
         }
-        if(!file_exists($filename)){
+        if(!file_exists($filename) || !filesize($filename)){
             $resource = fopen($filename, "w+");
             flock($resource, LOCK_EX);
             if(filesize($filename)){
