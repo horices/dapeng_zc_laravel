@@ -452,7 +452,7 @@ class BaseController extends Controller
         if(!file_exists($filename)){
             $resource = fopen($filename, "w+");
             flock($resource, LOCK_EX);
-            if(filesize($resource)){
+            if(filesize($filename)){
                 //存在表示该文件已被写入，重新执行
                 return $this->getNextGroupInfo($type);
             }
