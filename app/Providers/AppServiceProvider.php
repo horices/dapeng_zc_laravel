@@ -20,6 +20,7 @@ use App\Observers\UserEnrollObserver;
 use App\Observers\UserPayLogObserver;
 use App\Observers\UserPayObserver;
 use App\Observers\UserRegistrationObserver;
+use Curl\Curl;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
@@ -100,6 +101,9 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->app->singleton("status",function(){
             return new \App\Http\Controllers\Admin\BaseController();
+        });
+        $this->app->singleton("curl",function(){
+            return new Curl();
         });
     }
 }

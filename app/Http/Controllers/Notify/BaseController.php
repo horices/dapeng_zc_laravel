@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 class BaseController extends Controller
 {
-    function __construct(Curl $curl)
+    function __construct()
     {
         /**
          * 当前学院没设计学院时，需要对该通知进行转发

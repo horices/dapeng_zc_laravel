@@ -52,7 +52,7 @@ class BaseController extends Controller
             $data = request()->all();
         }
         $method = $method ? $method : Str::lower(request()->getMethod());
-        $curl = app(Curl::class);
+        $curl = app("curl");
         Log::info("开始转发请求:".$url);
         Log::info("请求数据:");
         Log::info($data);

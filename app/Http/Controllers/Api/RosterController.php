@@ -25,7 +25,7 @@ class RosterController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    function getInfo(Request $request,Curl $curl){
+    function getInfo(Request $request){
         Validator::make($request->all(),[
             'schoolId'  =>  "nullable|in:SJ,MS",
             'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",
@@ -36,6 +36,7 @@ class RosterController extends BaseController
             'schoolId.in' =>  "请选择正确的学院",
             'keyword.required'   =>  "请输入查询的关键字"
         ])->validate();
+        $curl = app("curl");
         $result = [];
         $result['sj'] = new \stdClass();
         $result['ms'] = new \stdClass();;
@@ -78,7 +79,7 @@ class RosterController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    function setInfo(Request $request,Curl $curl){
+    function setInfo(Request $request){
         Validator::make($request->all(),[
             'schoolId'  =>  "required|in:SJ,MS",
             'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",
@@ -89,6 +90,7 @@ class RosterController extends BaseController
             'schoolId.in' =>  "请选择正确的学院",
             'keyword.required'   =>  "请输入查询的关键字"
         ])->validate();
+        $curl = app("curl");
         //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
         //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && $request->get("schoolId") != 'SJ'){
