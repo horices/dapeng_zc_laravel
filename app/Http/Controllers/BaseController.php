@@ -449,13 +449,13 @@ class BaseController extends Controller
         if(!file_exists(dirname($filename))){
             mkdir(dirname($filename),0777,true);
         }
-        if(!file_exists($filename)){
+        if(!file_exists($filename) || !filesize($filename)){
             $resource = fopen($filename, "w+");
             flock($resource, LOCK_EX);
-            if(filesize($resource)){
+            /*if(filesize($filename)){
                 //存在表示该文件已被写入，重新执行
                 return $this->getNextGroupInfo($type);
-            }
+            }*/
             //获取所有可用的咨询师
             $advisers = UserModel::adviser()->select('uid','grade','name','per_max_num_'.$column)->get()->toArray();
             //设置最大分配数量
@@ -483,10 +483,10 @@ class BaseController extends Controller
         unset($data,$advisers);
         $resource = fopen($filename, "a+");
         flock($resource, LOCK_EX);  //排他锁，禁止别人访问
-        if(!filesize($filename)){
+        /*if(!filesize($filename)){
             //不存在内容，表示该文件内容已被删除
             return $this->getNextGroupInfo($type);
-        }
+        }*/
         //获取排序规则
         $json = fread($resource, filesize($filename));
         $advisersOrderInfo = json_decode($json,true);
@@ -517,11 +517,6 @@ class BaseController extends Controller
                     //该课程顾问参与分量,记录下次起点
                     $adviser = $orderInfo[$m]; //当前课程顾问
                     //logData("第".$currentCircle."小轮参与人:".$adviser['name']);
-                    /*$tempWhere['leader_id'] = $adviser['uid'];
-                    $tempWhere['status'] = 1;
-                    $tempWhere['is_open'] = 1;
-                    $tempWhere['type'] = $type; //判断是获取微信群还是qq群
-                    $row = GroupModel::where($tempWhere)->first();*/
                     $row = $groupInfo->get($adviser['uid']);
                     if(!$row){
                         //若该课程顾问未进入到
