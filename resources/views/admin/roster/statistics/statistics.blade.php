@@ -75,10 +75,10 @@
     <div class="row search-row" style="padding:9px 0 15px 15px;">
         <form class="form-inline" style="width:1100px; height:auto;" method="get">
             <div class="" style="float:left; height:30px;">
-                <select name="searchType" class="form-control" style="width:80px; padding:3px;">
-                    <option value="name">姓名</option>
+                <select name="search_user_type" class="form-control" style="width:80px; padding:3px;">
+                    <option value="name" @if(Request::input("search_type") == 'name') selected @endif>姓名</option>
                     {{--<option value="qq">QQ号</option>--}}
-                    <option value="mobile">手机号</option>
+                    <option value="mobile" @if(Request::input("search_type") == 'mobile') selected @endif>手机号</option>
                 </select>
                 <input type="text" name="keywords" class="form-control"
                        style="height:30px; margin-bottom:3px; width:120px;" id="name" placeholder=""
@@ -203,7 +203,7 @@
                     </td>
                     <!--                                     <td><a href="{:U('my_data?subnavAction=adviser_statistics&adviser_id='.$l['uid'],$_GET)}">查看</a></td> -->
                     <!--                                     <td><a href="{:U('data_all?subnavAction=adviser_statistics&adviser_name='.$l['name'],$_GET)}">查看</a></td> -->
-                    <td><a href="{{ route("admin.roster.list",\Illuminate\Support\Facades\Input::merge([$user_id_str=>$user->uid,'show_statistics'=>1])->merge($url_data)->except(["keywords"])) }}">查看</a></td>
+                    <td><a href="{{ route("admin.roster.list",\Illuminate\Support\Facades\Input::merge([$user_id_str=>$user->uid,'show_statistics'=>1])->merge($url_data)->except(["search_type","keywords"])) }}">查看</a></td>
                 </tr>
             @endforeach
             <tr>
