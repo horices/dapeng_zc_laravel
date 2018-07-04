@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Notify;
 
+use App\Jobs\SendNotification;
 use App\Models\EventGroupLogModel;
 use App\Models\RosterModel;
 use App\Utils\Util;
