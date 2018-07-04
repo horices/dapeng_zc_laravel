@@ -546,6 +546,7 @@ class BaseController extends Controller
             fwrite($resource, json_encode($advisersOrderInfo,JSON_UNESCAPED_UNICODE));
             //找到QQ组，跳出
         }
+        fflush($resource);
         flock($resource, LOCK_UN);
         fclose($resource);
         return $row;
