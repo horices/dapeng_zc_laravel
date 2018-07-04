@@ -192,7 +192,7 @@ class BaseController extends Controller
             'route' =>  ["admin.registration.pay-jump",['url'=>'read-pay']],
             'target'    =>  '_blank',
             'flag'=> 'admin.registration.list',  //默认选中标识
-            'grade' =>  [4,5,9,10],          //需要展示的权限等级
+            'grade' =>  [4,5,9,10,13],          //需要展示的权限等级
         ],
 //        'pay_jump'  =>  [
 //            'text'  =>  '支付管理',
@@ -270,6 +270,15 @@ class BaseController extends Controller
                 "admin.roster.follow.add"
             ],
             'default_route'=>'admin.roster.user.add',
+        ],
+        '13'    =>  [
+            'allow' =>  [
+                'admin.index.index',
+                'admin.registration.list.user',
+                'admin.registration.list.pay',
+                'admin.public.account'
+            ],
+            'default_route'=>'admin.registration.list.user',
         ],
 
     ];
