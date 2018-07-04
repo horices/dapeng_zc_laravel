@@ -85,14 +85,17 @@ class StatisticsController extends BaseController
         }
         $allUids = $user->pluck("uid")->toArray();
         $list = $user->paginate();
-        $statistics = $this->getStatistics(["last_adviser_id"],function ($query) use ($allUids){
-            $query->whereIn("last_adviser_id",$allUids);
+        $statistics = $this->getStatistics(["last_adviser_id"],function ($query) use ($list){
+            $query->whereIn("last_adviser_id",$list->pluck("uid")->toArray());
         });
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.adviser",
             'list'  => $list,
             'user_id_str'   => "adviser_id",
-            'statistics'    => $this->getStatistics(),
+            'statistics'    => $this->getStatistics(null,function($roster) use($allUids){
+                //不包括智能推广的数据
+                $roster->whereIn("last_adviser_id",$allUids);
+            }),
             'user_statistics'    => $statistics,
             'url_data'  =>  ['leftNav'=>"admin.roster.statistics.adviser"]
         ]);
