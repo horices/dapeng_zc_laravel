@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class BaseController extends Controller
@@ -449,10 +450,12 @@ class BaseController extends Controller
         if(!file_exists(dirname($filename))){
             mkdir(dirname($filename),0777,true);
         }
-        if(!file_exists($filename) || !filesize($filename)){
+        if(!file_exists($filename)){
+            Log::info("创建分量文件:开始");
             $resource = fopen($filename, "w+");
             flock($resource, LOCK_EX);
             if(filesize($filename)){
+                Log::info("创建分量文件：该文件已经存在");
                 //存在表示该文件已被写入，重新执行
                 return $this->getNextGroupInfo($type);
             }
@@ -477,11 +480,14 @@ class BaseController extends Controller
             $data['currentCircle'] = 1;  //当前分配轮数
             //file_put_contents($filename, json_encode($data,JSON_UNESCAPED_UNICODE));
             fwrite($resource, json_encode($data,JSON_UNESCAPED_UNICODE));
+            Log::info("创建分量文件:内容输出到文件");
             fflush($resource);
+            Log::info("创建分量文件:结束");
             flock($resource, LOCK_UN);
             fclose($resource);
         }
         unset($data,$advisers);
+        Log::info("打开分量文件:开始");
         $resource = fopen($filename, "a+");
         flock($resource, LOCK_EX);  //排他锁，禁止别人访问
         /*if(!filesize($filename)){
@@ -545,6 +551,9 @@ class BaseController extends Controller
             ftruncate($resource, 0);    //清空文件内容
             fwrite($resource, json_encode($advisersOrderInfo,JSON_UNESCAPED_UNICODE));
             //找到QQ组，跳出
+            Log::info("打开分量文件:输出内容到文件");
+            fflush($resource);
+            Log::info("打开分量文件:结束");
         }
         flock($resource, LOCK_UN);
         fclose($resource);
