@@ -463,7 +463,7 @@ class IndexController extends BaseController
         //所属群
         $groupData = GroupModel::find($rosterData->qq_group_id);
         //所属课程顾问信息
-        $userData = UserModel::find($rosterData->adviser->uid);
+        $userData = UserModel::find($rosterData->group->user->uid);
         //获取主站信息
         $dapengUserInfo = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$studentMobile]);
         if($dapengUserInfo['code'] == Util::FAIL){
