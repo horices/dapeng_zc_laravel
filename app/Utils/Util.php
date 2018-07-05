@@ -94,7 +94,7 @@ class Util{
     }
 
     /**
-     * 获取学员标题
+     * 获取学院标题
      * @param string $key
      * @return \Illuminate\Config\Repository|mixed
      */
@@ -104,6 +104,14 @@ class Util{
         }else{
             return self::getWebSiteConfig('SCHOOL_NAME_TEXT',false);
         }
+    }
+
+    /**
+     * 获取当前学院名称
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    static function getCurrentSchoolName(){
+        return self::getSchoolNameText(self::getSchoolName());
     }
     /**
      *  获取大鹏主站的接口host地址
