@@ -98,7 +98,7 @@
 
         <div id="success" class="success-notice showmsg" style="display:none">
             <p class="s1">微信号已成功提交！</p>
-            <p class="s2">
+            {{--<p class="s2">
                 请加课程顾问微信号：
                 <em id="qq_group"></em>
                 <p>
@@ -109,7 +109,7 @@
             <p class="s3">请告知该学员添加课程顾问为好友，完成流量提交！ </p>
             <p class="s4" style="text-align:right">
                 <button type="button" class="btn btn-primary" onClick="resetForm();">确认</button>
-            </p>
+            </p>--}}
         </div>
 
         <div id="error" class="error-notice showmsg" style="display:none">

@@ -95,11 +95,11 @@
 
         <div id="success" class="success-notice showmsg" style="display:none">
             <p class="s1">QQ号码已成功提交！</p>
-            <p class="s2">请加QQ群 <em id="qq_group"></em>  <input type="button" class="btn btn-primary" value="点击复制QQ群号" data-clipboard-target="#qq_group" id="clipboarder"/></p>
+            {{--<p class="s2">请加QQ群 <em id="qq_group"></em>  <input type="button" class="btn btn-primary" value="点击复制QQ群号" data-clipboard-target="#qq_group" id="clipboarder"/></p>
             <p class="s3">请告知该QQ号码加入QQ群，完成流量提交！ </p>
             <p class="s4" style="text-align:right">
                 <button type="button" class="btn btn-primary" onClick="resetForm();">确认</button>
-            </p>
+            </p>--}}
         </div>
 
         {{--<div id="error" class="error-notice showmsg" style="display:none">

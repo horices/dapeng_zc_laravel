@@ -79,6 +79,9 @@ class UserModel extends BaseModel
         if(!$userInfo->status){
             throw new UserValidateException("该账号已经被暂停。请联系管理员");
         }
+        if(!in_array($userInfo->grade,['12','4','5'])){
+            throw new UserValidateException("您没有权限登录该系统！");
+        }
         return $userInfo;
     }
 

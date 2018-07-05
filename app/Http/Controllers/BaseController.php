@@ -122,7 +122,7 @@ class BaseController extends Controller
             'text'=> '群管理',   //文字描述
             'route'=> "admin.group.list",    //链接地址
             'flag'=> 'admin.group.list',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
+            'grade' =>  [],          //需要展示的权限等级
         ],
         'user_list' =>   [
             'text'=> '成员管理',   //文字描述
@@ -158,19 +158,19 @@ class BaseController extends Controller
             'text'=> '顾问统计',   //文字描述
             'route'=> "admin.roster.statistics.adviser",    //链接地址
             'flag'=> 'admin.roster.statistics.adviser',  //默认选中标识
-            'grade' =>  [4,5,9],          //需要展示的权限等级
+            'grade' =>  [9],          //需要展示的权限等级
         ],
         'roster_follow' =>   [
             'text'=> '销售数据',   //文字描述
             'route'=> "admin.roster.follow.index",    //链接地址
             'flag'=> 'admin.roster.follow.index',  //默认选中标识
-            'grade' =>  [4,5],          //权限显示
+            'grade' =>  [],          //权限显示
         ],
         'adviser_quantity_list' =>   [
             'text'=> '分量管理',   //文字描述
             'route'=> "admin.user.quantity-list",    //链接地址
             'flag'=> 'admin.user.quantity-list',  //默认选中标识
-            'grade' =>  [4,5],          //权限显示
+            'grade' =>  [],          //权限显示
         ],
         'roster_follow_adviser' =>   [
             'text'=> '销售数据',   //文字描述
@@ -192,7 +192,7 @@ class BaseController extends Controller
             'route' =>  ["admin.registration.pay-jump",['url'=>'read-pay']],
             'target'    =>  '_blank',
             'flag'=> 'admin.registration.list',  //默认选中标识
-            'grade' =>  [4,5,9,10,13],          //需要展示的权限等级
+            'grade' =>  [9,10,13],          //需要展示的权限等级
         ],
 //        'pay_jump'  =>  [
 //            'text'  =>  '支付管理',
@@ -206,7 +206,7 @@ class BaseController extends Controller
             'route'=> ["admin.registration.pay-jump",['url'=>'/Member/Course/packageList']],
             'target'    =>  '_blank',
             'flag'=> 'admin.pay.package',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
+            'grade' =>  [],          //需要展示的权限等级
         ],
         'pay_rebate' =>   [
             'text'=> '优惠活动',   //文字描述
@@ -214,19 +214,19 @@ class BaseController extends Controller
             'route'=> ["admin.registration.pay-jump",['url'=>'/Member/Course/activityList']],
             'target'    =>  '_blank',
             'flag'=> 'admin.pay.rebate',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
+            'grade' =>  [],          //需要展示的权限等级
         ],
         'intelligent_roster' =>   [
             'text'=> '智推数据',   //文字描述
             'route'=> "admin.roster.list.intelligent",    //链接地址
             'flag'=> 'admin.roster.list.intelligent',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
+            'grade' =>  [],          //需要展示的权限等级
         ],
         'intelligent_roster_statistics' =>   [
             'text'=> '智推统计',   //文字描述
             'route'=> "admin.roster.statistics.intelligent",    //链接地址
             'flag'=> 'admin.roster.statistics.intelligent',  //默认选中标识
-            'grade' =>  [4,5],          //需要展示的权限等级
+            'grade' =>  [],          //需要展示的权限等级
         ],
         'accounts' =>   [
             'text'=> '个人中心',   //文字描述
@@ -251,10 +251,12 @@ class BaseController extends Controller
         ],
         '9' =>  [
             'allow'    =>  '*',
+            'deny'      =>  '*',
             'default_route'=>'admin.roster.list.user',
         ],
         '10' =>  [
             'allow'    =>  '*',
+            'deny'      =>  '*',
             'default_route'=>'admin.roster.list.user',
         ],
         '11' =>  [
