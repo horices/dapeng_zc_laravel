@@ -372,7 +372,7 @@ class RegistrationController extends BaseController{
         }
         //根据课程顾问ID来筛选所属学员的统计信息
         $adminInfo = $this->getUserInfo();
-        if($adminInfo['grade'] >=9 ){
+        if($adminInfo['grade'] >=9 && $adminInfo['grade']<13){
             $query->where("adviser_id",$adminInfo['uid']);
         }
 //        $adviserId = I("get.adviserId",0,"intval");
@@ -448,7 +448,7 @@ class RegistrationController extends BaseController{
         }
         //根据课程顾问ID来筛选所属学员的统计信息
         $adminInfo = $this->getUserInfo();
-        if($adminInfo['grade'] >=9 ){
+        if($adminInfo['grade'] >=9 && $adminInfo['grade']<13){
             $UserEnrollModel->where("adviser_id",$adminInfo['uid']);
         }
         //根据课程顾问姓名检索

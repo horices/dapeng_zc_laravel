@@ -352,7 +352,7 @@ class IndexController extends BaseController
         //查询所有的群信息
         $groups = [];//GroupModel::all()->keyBy("id");
         $i = 1;
-        $max = 2000;   //最大导出数量
+        $max = 30000;   //最大导出数量
         $fileName = $data['filename'].".csv";
         //设置好告诉浏览器要下载excel文件的headers
         header('Content-Description: File Transfer');

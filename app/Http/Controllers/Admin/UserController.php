@@ -24,7 +24,7 @@ class UserController extends BaseController
         //允许查询所有的人员
         $query = UserModel::withoutGlobalScope('status');
         if($field_v !== null){
-            $query->where($field_k,"=",$field_v);
+            $query->where($field_k,"like","%".$field_v."%");
         }
         if($status !== null){
             $query->where("status",$status);

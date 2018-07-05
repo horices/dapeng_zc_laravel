@@ -15,11 +15,11 @@ class StatisticsController extends BaseController
      */
     function getSeoerStatistics(Request $request){
         $user = UserModel::query();
-        $searchType = Input::get("searchType");
+        $searchUserType = Input::get("search_user_type");
         $keywords = Input::get("keywords");
         $seoerGrade = Input::get("seoer_grade",12);
-        if($searchType && $keywords !== null){
-            $user->where($searchType,$keywords);
+        if($searchUserType && $keywords !== null){
+            $user->where($searchUserType,"like","%".$keywords."%");
         }
         $user->where('status',1);
 
@@ -39,11 +39,10 @@ class StatisticsController extends BaseController
             });
             return $this->exportStatisticsList($users);
         }
-
+        $allUids = $user->pluck('uid')->toArray();
         $list = $user->paginate();
-        $uids = $list->pluck('uid')->toArray();
-        $statistics = $this->getStatistics(["inviter_id"],function ($query) use ($uids){
-            $query->whereIn('inviter_id',$uids);
+        $statistics = $this->getStatistics(["inviter_id"],function ($query) use ($list){
+            $query->whereIn('inviter_id',$list->pluck('uid')->toArray());
         });
         //左侧导航高亮
         $leftNav = Input::get("leftNav") ? Input::get("leftNav") : "admin.roster.statistics.seoer";
@@ -53,9 +52,9 @@ class StatisticsController extends BaseController
             'leftNav'   => $leftNav,
             'list'  => $list,
             'user_id_str'  =>  'seoer_id',
-            'statistics'    => $this->getStatistics(null,function($roster) use($seoerGrade){
+            'statistics'    => $this->getStatistics(null,function($roster) use($allUids){
                 //不包括智能推广的数据
-                $roster->whereIn("inviter_id",UserModel::where("grade",$seoerGrade)->pluck("uid"));
+                $roster->whereIn("inviter_id",$allUids);
             }),
             'user_statistics'    => $statistics,
             'url_data'  =>  ['leftNav'=>$leftNav]
@@ -66,10 +65,10 @@ class StatisticsController extends BaseController
      */
     function getAdviserStatistics(){
         $user = UserModel::query();
-        $searchType = Input::get("searchType");
+        $searchUserType = Input::get("search_user_type");
         $keywords = Input::get("keywords");
-        if($searchType && $keywords !== null){
-            $user->where($searchType,$keywords);
+        if($searchUserType && $keywords !== null){
+            $user->where($searchUserType,"like","%".$keywords."%");
         }
         $user->where('status',1)->adviser();
 
@@ -84,16 +83,19 @@ class StatisticsController extends BaseController
             });
             return $this->exportStatisticsList($users);
         }
+        $allUids = $user->pluck("uid")->toArray();
         $list = $user->paginate();
-        $uids = $list->pluck('uid')->toArray();
-        $statistics = $this->getStatistics(["last_adviser_id"],function ($query) use ($uids){
-            $query->whereIn("last_adviser_id",$uids);
+        $statistics = $this->getStatistics(["last_adviser_id"],function ($query) use ($list){
+            $query->whereIn("last_adviser_id",$list->pluck("uid")->toArray());
         });
         return view("admin.roster.statistics.statistics",[
             'leftNav'   => "admin.roster.statistics.adviser",
             'list'  => $list,
             'user_id_str'   => "adviser_id",
-            'statistics'    => $this->getStatistics(),
+            'statistics'    => $this->getStatistics(null,function($roster) use($allUids){
+                //不包括智能推广的数据
+                $roster->whereIn("last_adviser_id",$allUids);
+            }),
             'user_statistics'    => $statistics,
             'url_data'  =>  ['leftNav'=>"admin.roster.statistics.adviser"]
         ]);
