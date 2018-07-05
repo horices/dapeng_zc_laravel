@@ -32,7 +32,7 @@ return [
     'SCHOOL_NAME_TEXT'  =>  [
         \App\Utils\Util::SCHOOL_NAME_SJ =>  '设计学院',
         \App\Utils\Util::SCHOOL_NAME_MS =>  '美术学院',
-        \App\Utils\Util::SCHOOL_NAME_IT =>  'IT学院',
+        \App\Utils\Util::SCHOOL_NAME_IT =>  '开发学院',
     ],
     //学院ID号，接口使用,
     'SCHOOL_ID'  =>  [
