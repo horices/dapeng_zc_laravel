@@ -28,9 +28,11 @@
             <label class="control-label">身份</label>
             <select name="grade" class="form-control">
                 <option value="">请选择</option>
-                @foreach($userGradeList as $key=> $grade)
+                <option value="4" {{ Request::input("grade") == 4 ? 'selected':'' }}>管理员</option>
+                <option value="12" {{ Request::input("grade") == 12 ? 'selected':'' }}>推广专员</option>
+                {{--@foreach($userGradeList as $key=> $grade)
                 <option value="{{$key}}" {{ Request::input("grade") == $key?'selected':'' }}>{{$grade}}</option>
-                @endforeach
+                @endforeach--}}
             </select>
         </div>
         
