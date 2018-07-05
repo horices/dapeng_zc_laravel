@@ -206,11 +206,15 @@ class IndexController extends BaseController
         }
         //课程顾问姓名搜索
         if($adviserName){
-            $query->whereHas("adviser",function ($query)use ($adviserName){
-                $query->adviser()->where([
+            $groupIds = GroupModel::whereHas("user",function($user) use ($adviserName){
+                $user->where("name","like",$adviserName."%");
+            })->pluck("id");
+            $query->whereIn("qq_group_id",$groupIds);
+            /*$query->whereHas("adviser",function ($query)use ($adviserName){
+                $query->group()->user()->where([
                     ['name','like',$adviserName."%"]
                 ]);
-            });
+            });*/
         }
 
         //推广专员姓名搜索
