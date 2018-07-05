@@ -334,7 +334,9 @@ class IndexController extends BaseController
             'group.group_name'    =>  '班级代号',
             'group.qq_group'    =>  '群号',
             'roster_type_text'    =>  '类型',
+            'seoer_staff_no'    => '推广工号',
             'inviter_name'    => '推广专员',
+            'adviser_staff_no' =>  '顾问工号',
             'last_adviser_name' =>  '课程顾问',
             'addtime_export_text'   =>  '提交时间',
             'is_reg_text'   =>  "是否注册",
@@ -378,7 +380,14 @@ class IndexController extends BaseController
                     $row['group'] = $groups[$row->qq_group_id];
                     $row['adviser'] = $users[$row->qq_group_id];
                 }
+                if($row->inviter_id){
+                    if($users[$row->inviter_id]  = UserModel::find($row->inviter_id)){
+
+                        $row['seoer_staff_no'] = "\'".$users[$row->inviter_id]->staff_no;
+                    }
+                }
                 if($row['adviser']){
+                    $row['adviser_staff_no'] = $users[$row->qq_group_id]->staff_no."\t";
                     $row['last_adviser_name'] =  $row['adviser']->name;
                 }
                 //存在群变更记录
