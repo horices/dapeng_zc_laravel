@@ -8,6 +8,7 @@ use App\Exceptions\UserValidateException;
 use App\Http\Requests\UserRequest;
 use App\Models\UserModel;
 use DebugBar\DebugBar;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class UserController extends BaseController
         $status = Input::get("status");
         $grade = Input::get("grade");
         //允许查询所有的人员
-        $query = UserModel::withoutGlobalScope('status');
+        $query = UserModel::withoutGlobalScope('status')->whereIn("grade",[4,12]);
         if($field_v !== null){
             $query->where($field_k,"like","%".$field_v."%");
         }
