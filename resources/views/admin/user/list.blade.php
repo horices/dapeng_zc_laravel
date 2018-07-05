@@ -79,14 +79,14 @@
                 <td>{{$user->incumbency_text}}</td>
                 <td>{{$user->grade_text}}</td>
                 <td>
-                    @if($user->grade > \App\Utils\Util::getUserInfo()['grade'] && \App\Utils\Util::getUserInfo()['grade'] != 10)
+                    @if($user->grade > \App\Utils\Util::getUserInfo()['grade'] && $user->grade != 10)
                     <a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a>
                     @endif
                 </td>
 
                 <td>
                     @if(in_array($user->grade,['10','9']) && !$user->is_open_course)
-                        <a class="ajaxSubmit" data="{uid:{{$user->uid}}}" showloading="true" url="{{route('admin.user.open-course-head')}}">开课</a>
+                        {{--<a class="ajaxSubmit" data="{uid:{{$user->uid}}}" showloading="true" url="{{route('admin.user.open-course-head')}}">开课</a>--}}
                     @endif
                 </td>
             </tr>

@@ -59,7 +59,7 @@ class BaseController extends Controller
     //用户身份级别
     private static $_USER_GRADE = [
         4     =>  "管理员",
-        5     =>  "数据员",
+        //5     =>  "数据员",
         //9     =>  "课程顾问战队长",
         10    =>  "课程顾问",
         //11    =>  "智能推广专员",
