@@ -183,7 +183,7 @@
                 <input type="text" name="startdate" class="form-control select_date" style="width:140px;" value="{{ Request::input("startdate") }}" callback="selectDateCallback" /> 至
                 <input type="text" name="enddate" class="form-control select_date" style="width:140px;" value="{{ Request::input("enddate") }}" callback="selectDateCallback" />
 
-                <input type="text" placeholder="课程顾问" name="adviser_name" class="form-control" style="width: 100px;" value="{{ Request::input("adviser_name") }}" />
+                {{--<input type="text" placeholder="课程顾问" name="adviser_name" class="form-control" style="width: 100px;" value="{{ Request::input("adviser_name") }}" />--}}
 
                 <input type="text" placeholder="推广专员" name="seoer_name" class="form-control" style="width: 100px;" value="{{ Request::input("seoer_name") }}" />
             </div>
@@ -248,7 +248,7 @@
                     <th width="80">开通课程</th>
                     <th width="80">进群状态</th>
                     <th width="80">进群时间</th>
-                    <th width="80" class="grade grade4 grade5">销售数据</th>
+                    {{--<th width="80" class="grade grade4 grade5">销售数据</th>--}}
                     <th width="90" class="grade grade4 grade5 grade9 grade10 grade11 grade12">操作</th>
 
                     <!-- <th style="padding-left:19px" width="80">操作</th> -->
@@ -282,11 +282,11 @@
                     <td @if($roster->group_status) onclick="openGroupLog({{ $roster->toJson() }})" @endif style="cursor:pointer;">
                     {!! $roster->group_event_log->count() ? $roster->group_event_log->first()->addtime_text : '无' !!}
                     </td>
-                    <td class="grade grade4 grade5">
+                    {{--<td class="grade grade4 grade5">
                     @if( $roster->is_old == 0)
                     <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}">点击添加</a>
                     @endif
-                    </td>
+                    </td>--}}
                     <td class="grade grade4 grade5 grade9 grade10 grade11 grade12">
                         @if($roster->dapeng_user_mobile)
                         <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}" @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif>开通</a>
