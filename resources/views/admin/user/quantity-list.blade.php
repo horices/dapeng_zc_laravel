@@ -4,9 +4,8 @@
     <form class="form-inline" role="form">
         <div class="form-group">
             <select name="field_k" class="form-control">
-                <option value="">请选择</option>
-                <option value="qq">QQ号</option>
                 <option value="name">姓名</option>
+                <option value="qq">QQ号</option>
                 <option value="mobile">手机号</option>
                 <option value="dapeng_user_mobile">主站手机号</option>
             </select>
