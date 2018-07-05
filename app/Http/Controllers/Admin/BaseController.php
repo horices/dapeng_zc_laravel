@@ -206,6 +206,11 @@ class BaseController extends Controller{
      * @return mixed
      */
     protected function getStatistics(array $column = null,\Closure $rosterWhere = null){
+        //若没有选择时间，则默认选择当天时间
+        $request = app("request");
+        if(!$request->has("startdate")){
+            $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
+        }
         $roster = RosterModel::query();
         $searchType = Input::get("search_type");
         $keywords = Input::get("keywords");
