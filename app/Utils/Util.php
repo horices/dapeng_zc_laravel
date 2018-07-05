@@ -2,6 +2,7 @@
 namespace App\Utils;
 use App\Exceptions\UserValidateException;
 use App\Models\UserModel;
+use Faker\Provider\bn_BD\Utils;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -110,7 +111,7 @@ class Util{
      * 获取当前学院名称
      * @return \Illuminate\Config\Repository|mixed
      */
-    static function getCurrentSchoolName(){
+    static function getCurrentSchoolNameText(){
         return self::getSchoolNameText(self::getSchoolName());
     }
     /**
@@ -125,6 +126,16 @@ class Util{
         return self::getWebSiteConfig("WAP_URL");
     }
 
+    /**
+     * 获取支付地址
+     * @param $schoolName
+     */
+    public static function getPayUrl($schoolName = null){
+        if(!$schoolName){
+            $schoolName = Util::getSchoolName();
+        }
+        return self::getWebSiteConfig("PAY_URL.".$schoolName);
+    }
     /**
      * 添加图片域名
      * @param unknown $url

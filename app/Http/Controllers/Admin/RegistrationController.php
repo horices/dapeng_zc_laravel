@@ -63,7 +63,7 @@ class RegistrationController extends BaseController{
             $payUrl = $userInfo->grade <= 5 ? "Member/Index/userList" : "Member/Adviser/userList";
         }
         $sign = Util::think_encrypt("user_id=".$uid."&url=".$payUrl);
-        $url = Util::PAY_URL_HOST.Util::PAY_URL_JUMP."?sign=".$sign;
+        $url = Util::getPayUrl()."?sign=".$sign;
         //echo "<script>window.open('".$url."')</script>";
         return redirect()->away($url);
     }

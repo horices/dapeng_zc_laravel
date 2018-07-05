@@ -72,6 +72,24 @@ return [
             \App\Utils\Util::DEV      =>  'http://test.it.dapengjiaoyu.com',
         ]
     ],
+    //支付地址
+    'PAY_URL'  => [
+        //设计学院
+        \App\Utils\Util::SCHOOL_NAME_SJ    =>  [
+            \App\Utils\Util::MASTER    =>  'http://enroll.dapengjiaoyu.com/Member/Portal/logino',
+            \App\Utils\Util::DEV      =>  'http://test.enroll.dapengjiaoyu.com/Member/Portal/logino',
+        ],
+        //美术学院
+        \App\Utils\Util::SCHOOL_NAME_MS    =>  [
+            \App\Utils\Util::MASTER    =>  'http://enroll.dapengjiaoyu.com/Member/Portal/logino',
+            \App\Utils\Util::DEV      =>  'http://test.enroll.dapengjiaoyu.com/Member/Portal/logino',
+        ],
+        //IT学院
+        \App\Utils\Util::SCHOOL_NAME_IT    =>  [
+            \App\Utils\Util::MASTER    =>  'http://enroll.dapengjiaoyu.com/Member/Portal/logino',
+            \App\Utils\Util::DEV      =>  'http://test.enroll.dapengjiaoyu.com/Member/Portal/logino',
+        ]
+    ],
     //M站地址
     'WAP_URL'   =>  [
         \App\Utils\Util::DEV      =>  'http://test.m.dapengjiaoyu.com',
