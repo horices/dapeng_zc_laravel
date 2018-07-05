@@ -114,7 +114,7 @@ class IndexController extends BaseController
         $where = [];
         $statistics = [];
         $isLoadStatistics = false;  //是否已经加载统计，没有加载的话，加载全部统计
-        if(!$request->has("startdate")){
+        if(!$request->get("startdate")){
             $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
         }
         //查询所有列表
