@@ -47,7 +47,7 @@ class UserController extends BaseController
         return view("admin.user.add",[
             'user'  =>  $user,
             'userGradeList'=>collect($this->getUserGradeList())->filter(function($v,$k){
-                return $k == 12;
+                return in_array($k,['4','5','12']);
             }),
             'leftNav' => "admin.user.list"
         ]);
@@ -56,7 +56,7 @@ class UserController extends BaseController
         return view("admin.user.add",[
             'user'=>$user,
             'userGradeList'=>collect($this->getUserGradeList())->filter(function($v,$k){
-                return $k == 12;
+                return in_array($k,['4','5','12']);
             }),
             'leftNav' => "admin.user.list"
         ]);

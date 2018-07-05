@@ -79,7 +79,7 @@
                 <td>{{$user->incumbency_text}}</td>
                 <td>{{$user->grade_text}}</td>
                 <td>
-                    @if($user->grade > \App\Utils\Util::getUserInfo()['grade'])
+                    @if($user->grade > \App\Utils\Util::getUserInfo()['grade'] && \App\Utils\Util::getUserInfo()['grade'] != 10)
                     <a href="{{ route('admin.user.edit',['id'=>$user->uid])}}">修改帐号</a>
                     @endif
                 </td>
