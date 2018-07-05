@@ -129,13 +129,13 @@ class IndexController extends BaseController
                     $query->where("qq",$keywords)->orWhere("wx",$keywords);
                 });
                 //搜索指定的QQ号或微信号时，自动清除其它条件，除推广专员，其它人搜索没有条件限制
-                /*$request->replace([
+                $request->replace([
                     'search_type'  =>   $seachType,
                     'keywords'  => $keywords,
-                    'startdate' =>  null,
-                    'enddate'   =>  null,
-                    'seoer_id'=>$request->get("seoer_id")
-                ]);*/
+                    'seoer_id'=> Input::get("seoer_id"),
+                    'adviser_id'    => Input::get("adviser_id"),
+                    'show_statistics'   =>  Input::get('show_statistics'),
+                ]);
             }elseif ($seachType == "group_name"){
                 $query->whereHas("group",function ($group) use($keywords) {
                     $group->where('group_name',$keywords);
