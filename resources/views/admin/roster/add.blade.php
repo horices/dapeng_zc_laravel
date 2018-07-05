@@ -17,6 +17,11 @@
             $("input[name='group']").val(group.qq_group);
             $("input[name='qq_group_id']").val(group.id);
         }
+        function validateQQ(obj) {
+            if($("input[name='roster_type']:checked").val() != 1)
+                return ;
+            obj.value = obj.value.replace(/\D/ig, "");
+        }
         function checkRosterStatus() {
             var value = $("input[name='roster_no']").val();
             var roster_type = $("input[name='roster_type']:checked").val();
@@ -59,7 +64,7 @@
                 <label for="">新量号码:</label>
                 <div class="row">
                     <div class="col-lg-3">
-                        <input type="text" class="form-control " name="roster_no" placeholder="填写新量号码" onblur="checkRosterStatus(this.value)">
+                        <input type="text" class="form-control " name="roster_no" placeholder="填写新量号码" onkeyup="validateQQ(this);" onblur="checkRosterStatus(this.value)">
                     </div>
                 </div>
             </div>
