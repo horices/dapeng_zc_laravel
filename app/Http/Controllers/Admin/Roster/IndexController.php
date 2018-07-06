@@ -68,6 +68,9 @@ class IndexController extends BaseController
         if(!$data){
             $data = $request->all();
         }
+        //防止并发时，重复提交量的问题
+        $resource = fopen("roster.lock","w+");
+        //flock($resource,LOCK_EX);
         if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
             $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
@@ -77,6 +80,8 @@ class IndexController extends BaseController
             $returnData['code'] = Util::FAIL;
             $returnData['msg'] = "添加失败";
         }
+        flock($resource,LOCK_UN);
+        fclose($resource);
         return response()->json($returnData);
     }
 

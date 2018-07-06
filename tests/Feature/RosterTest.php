@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RosterTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic test example.
      *
