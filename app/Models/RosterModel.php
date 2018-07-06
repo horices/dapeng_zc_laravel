@@ -156,7 +156,7 @@ class RosterModel extends BaseModel
             'seoer_id'   =>  'sometimes|required|exists:user_headmaster,uid'
         ],[
             'roster_no.required' =>  '请输入'.$columnText.'号码',
-            'roster_no.unique'  =>  '该'.$columnText.'号码已存在',
+            'roster_no.unique'  =>  '该'.$columnText.'号码已存在'.Util::getCurrentSchoolNameText(),
             'roster_no.digits_between'  =>  'QQ号码必须为全数字，且长度在5-10位',
             'roster_no.regex'  =>  '该微信号不符合规则',
             'roster_type.required'  =>  '请选择正确的提交类型',
@@ -238,12 +238,12 @@ class RosterModel extends BaseModel
             if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
                 ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
-                //ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
                 ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
-                //ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_IT){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况

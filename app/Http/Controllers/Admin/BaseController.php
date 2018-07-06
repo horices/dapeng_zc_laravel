@@ -212,7 +212,6 @@ class BaseController extends Controller{
             $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
         }
         $roster = RosterModel::query();
-        $user = UserModel::query();
         $searchType = Input::get("search_type");
         $keywords = Input::get("keywords");
         $rosterType = Input::get("roster_type");

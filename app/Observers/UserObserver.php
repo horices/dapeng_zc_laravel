@@ -51,6 +51,7 @@ class UserObserver extends  BaseObserver {
     //新增前
     function creating(UserModel $userModel){
         $userModel->addtime = time();
+        $userModel->status = 1; //添加时，状态默认为正常
     }
 
     //更新前

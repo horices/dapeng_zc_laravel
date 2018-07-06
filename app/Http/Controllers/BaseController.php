@@ -276,7 +276,8 @@ class BaseController extends Controller
                 'admin.index.index',
                 'admin.registration.list.user',
                 'admin.registration.list.pay',
-                'admin.public.account'
+                'admin.public.account',
+                'admin.auth.logout'
             ],
             'default_route'=>'admin.registration.list.user',
         ],

@@ -132,9 +132,9 @@ class IndexController extends BaseController
                 /*$request->replace([
                     'search_type'  =>   $seachType,
                     'keywords'  => $keywords,
-                    'startdate' =>  null,
-                    'enddate'   =>  null,
-                    'seoer_id'=>$request->get("seoer_id")
+                    'seoer_id'=> Input::get("seoer_id"),
+                    'adviser_id'    => Input::get("adviser_id"),
+                    'show_statistics'   =>  Input::get('show_statistics'),
                 ]);*/
             }elseif ($seachType == "group_name"){
                 $query->whereHas("group",function ($group) use($keywords) {
@@ -206,11 +206,15 @@ class IndexController extends BaseController
         }
         //课程顾问姓名搜索
         if($adviserName){
-            $query->whereHas("adviser",function ($query)use ($adviserName){
-                $query->adviser()->where([
+            $groupIds = GroupModel::whereHas("user",function($user) use ($adviserName){
+                $user->where("name","like",$adviserName."%");
+            })->pluck("id");
+            $query->whereIn("qq_group_id",$groupIds);
+            /*$query->whereHas("adviser",function ($query)use ($adviserName){
+                $query->group()->user()->where([
                     ['name','like',$adviserName."%"]
                 ]);
-            });
+            });*/
         }
 
         //推广专员姓名搜索
@@ -334,7 +338,9 @@ class IndexController extends BaseController
             'group.group_name'    =>  '班级代号',
             'group.qq_group'    =>  '群号',
             'roster_type_text'    =>  '类型',
+            'seoer_staff_no'    => '推广工号',
             'inviter_name'    => '推广专员',
+            'adviser_staff_no' =>  '顾问工号',
             'last_adviser_name' =>  '课程顾问',
             'addtime_export_text'   =>  '提交时间',
             'is_reg_text'   =>  "是否注册",
@@ -378,7 +384,14 @@ class IndexController extends BaseController
                     $row['group'] = $groups[$row->qq_group_id];
                     $row['adviser'] = $users[$row->qq_group_id];
                 }
+                if($row->inviter_id){
+                    if($users[$row->inviter_id]  = UserModel::find($row->inviter_id)){
+
+                        $row['seoer_staff_no'] = "\'".$users[$row->inviter_id]->staff_no;
+                    }
+                }
                 if($row['adviser']){
+                    $row['adviser_staff_no'] = $users[$row->qq_group_id]->staff_no."\t";
                     $row['last_adviser_name'] =  $row['adviser']->name;
                 }
                 //存在群变更记录
@@ -450,7 +463,7 @@ class IndexController extends BaseController
         //所属群
         $groupData = GroupModel::find($rosterData->qq_group_id);
         //所属课程顾问信息
-        $userData = UserModel::find($rosterData->adviser->uid);
+        $userData = UserModel::find($rosterData->group->user->uid);
         //获取主站信息
         $dapengUserInfo = DapengUserApi::getInfo(['type'=>'MOBILE','keyword'=>$studentMobile]);
         if($dapengUserInfo['code'] == Util::FAIL){
