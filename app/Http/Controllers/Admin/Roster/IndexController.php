@@ -68,6 +68,9 @@ class IndexController extends BaseController
         if(!$data){
             $data = $request->all();
         }
+        //防止并发时，重复提交量的问题
+        $resource = fopen("roster.lock","w+");
+        flock($resource,LOCK_EX);
         if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
             $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
@@ -77,6 +80,8 @@ class IndexController extends BaseController
             $returnData['code'] = Util::FAIL;
             $returnData['msg'] = "添加失败";
         }
+        flock($resource,LOCK_UN);
+        fclose($resource);
         return response()->json($returnData);
     }
 
@@ -370,7 +375,7 @@ class IndexController extends BaseController
         $fp = fopen('php://output', 'a');//打开output流
         mb_convert_variables('GBK', 'UTF-8', $data['title']);
         fputcsv($fp,$data['title']);
-        $query->without(['group','adviser'])->orderBy("id","desc")->select(DB::raw('id,qq,wx,type,inviter_name,addtime,dapeng_reg_time,is_reg,course_type,group_status,qq_group_id'))->chunk(2000, function ($rows) use (&$data,&$i,$max,&$fp,&$users,&$groups) {
+        $query->without(['group','adviser'])->orderBy("id","desc")->select(DB::raw('id,qq,wx,type,inviter_id,inviter_name,addtime,dapeng_reg_time,is_reg,course_type,group_status,qq_group_id'))->chunk(2000, function ($rows) use (&$data,&$i,$max,&$fp,&$users,&$groups) {
             foreach ($rows as $row) {
                 $row['group'] = [];
                 $row['adviser'] = [];
@@ -386,8 +391,7 @@ class IndexController extends BaseController
                 }
                 if($row->inviter_id){
                     if($users[$row->inviter_id]  = UserModel::find($row->inviter_id)){
-
-                        $row['seoer_staff_no'] = "\'".$users[$row->inviter_id]->staff_no;
+                        $row['seoer_staff_no'] = $users[$row->inviter_id]->staff_no."\t";
                     }
                 }
                 if($row['adviser']){
