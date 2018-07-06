@@ -70,7 +70,7 @@ class IndexController extends BaseController
         }
         //防止并发时，重复提交量的问题
         $resource = fopen("roster.lock","w+");
-        //flock($resource,LOCK_EX);
+        flock($resource,LOCK_EX);
         if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
             $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
