@@ -29,6 +29,7 @@ class UserRequest extends FormRequest
             'name'  =>  "sometimes|required",
             'mobile'    =>  "sometimes|required|digits_between:11,11|unique:user_headmaster,mobile,".$uid.",uid",
             'grade' =>  'sometimes|required',
+            'staff_no'  => 'sometimes|unique:user_headmaster,staff_no,'.$uid.",uid",
             'dapeng_user_mobile'   =>   "nullable|sometimes|unique:user_headmaster,dapeng_user_mobile,".$uid.",uid"//|required_if:grade,9,10",
         ];
     }
@@ -38,6 +39,7 @@ class UserRequest extends FormRequest
         return [
             "name.required"  =>  "姓名为必填项",
             'grade.required'    =>  '请选择用户级别',
+            "staff_no.unique"   =>  "该员工号已被录入",
             "dapeng_user_mobile.required_if"    =>  "请输入主站帐号",
             "mobile.required"  =>  "展翅系统账号为必填",
             "mobile.digits_between"   =>  "展翅系统账号为11位的数字",
