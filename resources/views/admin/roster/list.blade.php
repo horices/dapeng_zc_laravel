@@ -284,19 +284,19 @@
                     </td>
                     <td class="grade grade4 grade5">
                     @if( $roster->is_old == 0)
-                    <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}">点击添加</a>
+                    <a class="link_3" href="{{ route("admin.roster.follow.add",['roster_id'=>$roster->id]) }}" title="点击添加">点击添加</a>
                     @endif
                     </td>
                     <td class="grade grade4 grade5 grade9 grade10">
                         @if($roster->dapeng_user_mobile)
-                        <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}" @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif>开通</a>
+                        <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}" @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif title="开通">开通</a>
                             @if($userInfo->grade <= 5 )
-                            <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}">解绑</a>
+                            <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}" title="解绑">解绑</a>
                             @endif
                         @else
-                        <a href="javascript:;" account="{{$roster->account}}" roster-type="{{ $roster->roster_type_text }}" @if($roster->is_old != 1) onclick="alertOpenCourse('{{ $roster->id }}',this)" @endif @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif>开通</a>
+                        <a href="javascript:;" account="{{$roster->account}}" roster-type="{{ $roster->roster_type_text }}" @if($roster->is_old != 1) onclick="alertOpenCourse('{{ $roster->id }}',this)" @endif @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif title="开通">开通</a>
                         @endif
-                        <a class="@if($roster->is_old != 1) ajaxLink @endif" data="{url:'{{$roster->reg_url_prama}}'}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" url="{{route('admin.roster.index.set-reg-url')}}" callback="registerUrl" @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif>链接</a>
+                        <a class="@if($roster->is_old != 1) ajaxLink @endif" data="{url:'{{$roster->reg_url_prama}}'}" wx="{{$roster->wx}}" qq="{{$roster->qq}}" url="{{route('admin.roster.index.set-reg-url')}}" callback="registerUrl" @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif title="链接">链接</a>
                     </td>
                 </tr>
                 @endforeach
