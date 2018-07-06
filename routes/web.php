@@ -28,7 +28,7 @@ Route::group(['prefix'=>'admin','namespace'=>"Admin"], function(){
     Route::post("auth/sendsms","AuthController@postSendSms")->name("admin.auth.send.sms");
 });
 //管理员后台,需要验证登陆
-Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[\App\Http\Middleware\LowerUrl::class]], function(){
+Route::group(['prefix'=>'admin','namespace'=>"Admin",'middleware'=>[BackendAuth::class,\App\Http\Middleware\LowerUrl::class]], function(){
     include("admin.route.php");
 });
 //通知接口地址(大鹏主站开课通知,QQ群机器人通知)
