@@ -40,7 +40,7 @@ class LoginForm extends FormRequest
         return [
             'username'=>'required',
             'password'  => 'required',
-            'verify'          =>   "required|captcha"
+            //'verify'          =>   "required|captcha"
         ];
     }
 }
