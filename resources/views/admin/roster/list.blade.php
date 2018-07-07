@@ -291,7 +291,7 @@
                         @if($roster->dapeng_user_mobile)
                         <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{id:{{$roster->id}}}" url="{{route('admin.roster.index.open-course')}}" @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif title="开通">开通</a>
                             @if($userInfo->grade <= 5 )
-                            <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}" title="解绑">解绑</a>
+                            <a class="@if($roster->is_old != 1) ajaxLink @endif" method="post" showLoading="1" warning="确认{{$roster->roster_no}}{{ $roster->roster_type_text}}号与手机号{{$roster->dapeng_user_mobile}}解绑吗？" data="{roster_id:{{$roster->id}}}" data="{roster_id:{{$roster->id}}}" url="{{route('admin.roster.unbind')}}" title="解绑">解绑</a>
                             @endif
                         @else
                         <a href="javascript:;" account="{{$roster->account}}" roster-type="{{ $roster->roster_type_text }}" @if($roster->is_old != 1) onclick="alertOpenCourse('{{ $roster->id }}',this)" @endif @if($roster->roster_type == 2 && $roster->group_status != 2) style='display:none;' @endif title="开通">开通</a>
