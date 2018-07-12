@@ -139,7 +139,6 @@ class RosterModel extends BaseModel
      * @throws \Illuminate\Validation\ValidationException
      */
     public static function validateRosterData(array $data,$multiSchool = false){
-        $data['addtimes'] = 1;//默认为第一次添加
         /**
          * @var $validator \Illuminate\Validation\Validator;
          */
@@ -170,6 +169,7 @@ class RosterModel extends BaseModel
             'seoer_id.exists'   => '推广专员不存在'
         ]);
         $createData = [];   //重置要添加的数据
+        $createData['addtimes'] = 1;//默认为第一次添加
         /**
          * QQ提交时，需要全数字，并且长度为5-12
          * 微信提交时，
