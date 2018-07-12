@@ -35,10 +35,12 @@ class SendCreatedRosterNotification implements ShouldQueue
     {
         //发送到设计学院
         $url = Util::getWebSiteConfig("ZC_URL.".Util::SCHOOL_NAME_SJ.".".Util::MASTER,false).route("notify.zc.roster.created",[],false);
-        $url = "http://laravel.local.zc.com".route("notify.zc.roster.created",[],false);
+        //$url = "http://laravel.local.zc.com".route("notify.zc.roster.created",[],false);
         $data["roster_type"] = $this->roster->get("roster_type");
         $data['roster_no'] = $this->roster->get("roster_no");
         $data['addtimes'] = $this->roster->get("addtimes");
+        $data['timestamp'] = time();
+        $data['sign'] = Util::makeSign($data);
         if($data['addtimes'] > 1){
             SendNotification::dispatch($url,$data);
         }

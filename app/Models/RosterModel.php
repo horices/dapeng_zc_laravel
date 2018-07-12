@@ -139,6 +139,7 @@ class RosterModel extends BaseModel
      * @throws \Illuminate\Validation\ValidationException
      */
     public static function validateRosterData(array $data,$multiSchool = false,$setDisable = false){
+        $data['addtimes'] = 1;//默认为第一次添加
         /**
          * @var $validator \Illuminate\Validation\Validator;
          */
@@ -289,7 +290,6 @@ class RosterModel extends BaseModel
      * @param $multiSchool 是否开启多学院验证，默认为false;
      */
     public static function addRoster(array $data,$multiSchool = false){
-        $data['addtimes'] = 1;//默认为第一次添加
         //验证数据是否存在问题，并补全部分信息
         $data = self::validateRosterData($data,$multiSchool);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
