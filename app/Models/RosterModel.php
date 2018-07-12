@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\BaseController;
+use App\Jobs\SendCreatedRosterNotification;
 use App\Utils\Api\ZcApi;
 use App\Utils\Util;
 use Illuminate\Support\Facades\Log;
@@ -133,6 +134,7 @@ class RosterModel extends BaseModel
      * 验证数据 不能调用接口，防止进入死循环
      * @param array $data
      * @param boolean $multiSchool 是否进行多学院认证,默认为否
+     * @param boolean $setDisable 如果该量为新量，是否进行置灰操作(默认为是)
      * @return bool
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -167,6 +169,7 @@ class RosterModel extends BaseModel
             'seoer_id.exists'   => '推广专员不存在'
         ]);
         $createData = [];   //重置要添加的数据
+        $createData['addtimes'] = 1;//默认为第一次添加
         /**
          * QQ提交时，需要全数字，并且长度为5-12
          * 微信提交时，
@@ -194,6 +197,8 @@ class RosterModel extends BaseModel
             if(!$roster){
                 return false;
             }
+            //添加次数需要加1
+            $createData['addtimes'] = $roster->addtimes + 1;
             $flag = 0 ;
             if($roster->course_type == 0 && $roster->is_reg == 0 ){
                 if($roster->group_status == 0  && date('Ymd') >  date('Ymd',$roster->addtime) ){
@@ -206,7 +211,6 @@ class RosterModel extends BaseModel
                 }
                 if($flag == 1){
                     $createData['flag'] = $flag;    //标识为新量
-                    $createData['addtimes'] = $roster->addtimes + 1;
                     //允许添加该量
                     return false;
                 }
@@ -230,21 +234,44 @@ class RosterModel extends BaseModel
             unset($temp);
             $temp['roster_type'] = $data['roster_type'];
             $temp['roster_no'] = $data['roster_no'];
-            //验证其它学院，是否正常
+            //验证其它学院，是否正常,需要返回值 addtimes 值为1是表示第一次添加,大于1，表示该学院已经有该量,需要被置为灰色
             if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-                ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
-                ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
+                if($return['data']['addtimes']>1){
+                    //判断当前量是第几次提交
+                    $createData['addtimes'] += $return['data']['addtimes'] -1;
+                }
+                /*$return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                if($return['data']['addtimes']>1){
+                    $createData['addtimes'] += $return['data']['addtimes'] -1;
+                }*/
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-                ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
-                ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
+                if($return['data']['addtimes']>1){
+                    //判断当前量是第几次提交
+                    $createData['addtimes'] += $return['data']['addtimes'] -1;
+                }
+                /*$return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                if($return['data']['addtimes']>1){
+                    //判断当前量是第几次提交
+                    $createData['addtimes'] += $return['data']['addtimes'] -1;
+                }*/
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_IT){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
-                ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
-                ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
+                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
+                if($return['data']['addtimes']>1){
+                    //判断当前量是第几次提交
+                    $createData['addtimes'] += $return['data']['addtimes'] -1;
+                }
+                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
+                if($return['data']['addtimes']>1){
+                    //判断当前量是第几次提交
+                    $createData['addtimes'] += $return['data']['addtimes'] -1;
+                }
             }
         }
         return array_merge($data,$createData);
@@ -262,16 +289,9 @@ class RosterModel extends BaseModel
      * @param $multiSchool 是否开启多学院验证，默认为false;
      */
     public static function addRoster(array $data,$multiSchool = false){
-
         //验证数据是否存在问题，并补全部分信息
         $data = self::validateRosterData($data,$multiSchool);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
-        if(collect($data)->get("addtimes") >1){
-            //将之前的该量信息标识为老量
-            if(RosterModel::where($column,$data['roster_no'])->update(['flag'=>0,'is_old'=>1]) === false){
-                Log::error("取消老量标识失败");
-            }
-        }
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
             $groupInfo = app('status')->getNextGroupInfo($data['roster_type']);

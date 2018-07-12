@@ -34,7 +34,6 @@ class DapengNotifyController extends BaseController
         if($this->checkSign($request->get("sign")) === false){
             throw new UserNotifyException("签名错误");
         }
-        $curl = app("curl");
         $baseUrl = URL::route(Route::currentRouteName(),[],false);
         //设计学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && Util::getCurrentBranch() == Util::MASTER){

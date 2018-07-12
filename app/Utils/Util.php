@@ -306,6 +306,34 @@ class Util{
         return json_decode($str,true);
     }
 
+
+    /**
+     * 生成签名串
+     * @param array $data
+     * @return string 返回签名串
+     */
+    static function makeSign(array $data):string{
+        ksort($data);
+        $str = "";
+        $data = collect($data)->except("sign");
+        foreach ($data as $k=>$v){
+            if($k && $v !== '' && $v !== null){
+                $str.=$k.$v;
+            }
+        }
+        return Str::upper(md5($str));
+    }
+
+    /**
+     * 获取签名数据
+     * @param array $data
+     * @return array
+     */
+    static function getSignData(array $data):array{
+        $data['sign'] = self::makeSign(collect($data)->except("sign"));
+        return $data;
+    }
+
 }
 
 ?>

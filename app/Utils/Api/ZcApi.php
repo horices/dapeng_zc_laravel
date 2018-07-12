@@ -10,8 +10,10 @@ namespace App\Utils\Api;
 
 
 
+use App\Exceptions\ApiException;
 use App\Exceptions\UserValidateException;
 use App\Utils\Util;
+use Illuminate\Support\Facades\Log;
 
 class ZcApi extends BaseApi {
 
@@ -37,8 +39,12 @@ class ZcApi extends BaseApi {
     }
     public static function api($url, $data = [], $method = "post")
     {
-        $curlData = static :: sendCurl($url,$data,$method);
-        $curlData = Util::jsonDecode($curlData,true);
+        $origin = static :: sendCurl($url,$data,$method);
+        $curlData = Util::jsonDecode($origin,true);
+        if(!$curlData){
+            Log::error("接口返回数据：".$origin);
+            throw new ApiException("接口出现未知错误");
+        }
         if($curlData['code'] == Util::FAIL){
             throw new UserValidateException($curlData['msg']);
         }
