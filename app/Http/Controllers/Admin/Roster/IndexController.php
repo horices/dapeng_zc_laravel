@@ -75,7 +75,7 @@ class IndexController extends BaseController
         DB::beginTransaction();
         if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
             //发送添加成功的通知(此通知需要同步发送,先将其它学院置为灰色,通知后，当前量被重置为老量,且没有新活标识)
-            SendCreatedRosterNotification::dispatch($data);
+            SendCreatedRosterNotification::dispatch($roster->toArray());
             //将重置当前学院的flag
             $roster->flag = $roster->flag;
             $roster->is_old = 0;
