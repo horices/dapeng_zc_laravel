@@ -133,10 +133,11 @@ class RosterModel extends BaseModel
      * 验证数据 不能调用接口，防止进入死循环
      * @param array $data
      * @param boolean $multiSchool 是否进行多学院认证,默认为否
+     * @param boolean $setDisable 如果该量为新量，是否进行置灰操作(默认为是)
      * @return bool
      * @throws \Illuminate\Validation\ValidationException
      */
-    public static function validateRosterData(array $data,$multiSchool = false){
+    public static function validateRosterData(array $data,$multiSchool = false,$setDisable = false){
         /**
          * @var $validator \Illuminate\Validation\Validator;
          */
@@ -181,7 +182,7 @@ class RosterModel extends BaseModel
         });
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //该量已经存在，判断该量是否允许被添加,添加验证规则，返回 false 表示允许添加  返回 true 表示进需要行验证，不能进行添加
-        $validator->sometimes('roster_no','unique:user_roster,'.$column,function($input) use($column , &$roster , &$createData){
+        $validator->sometimes('roster_no','unique:user_roster,'.$column,function($input) use($column , &$roster , &$createData,$setDisable){
             $roster = RosterModel::where($column,$input->roster_no)->orderBy('addtime','desc')->first();
             /**
              * 默认需要验证(不能进行重复添加)
@@ -205,6 +206,12 @@ class RosterModel extends BaseModel
                     $flag = 1;
                 }
                 if($flag == 1){
+                    if($setDisable){
+                        //需要对该QQ号取消所有的新量标识
+                        if(RosterModel::where($column,$input->roster_no)->update(['flag'=>0,'is_old'=>1]) === false){
+                            Log::error("取消活量标识失败");
+                        }
+                    }
                     $createData['flag'] = $flag;    //标识为新量
                     $createData['addtimes'] = $roster->addtimes + 1;
                     //允许添加该量
@@ -230,6 +237,7 @@ class RosterModel extends BaseModel
             unset($temp);
             $temp['roster_type'] = $data['roster_type'];
             $temp['roster_no'] = $data['roster_no'];
+            $temp['set_disable'] = $setDisable?1:0;
             //验证其它学院，是否正常
             if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
@@ -264,14 +272,8 @@ class RosterModel extends BaseModel
     public static function addRoster(array $data,$multiSchool = false){
 
         //验证数据是否存在问题，并补全部分信息
-        $data = self::validateRosterData($data,$multiSchool);
+        $data = self::validateRosterData($data,$multiSchool,true);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
-        if(collect($data)->get("addtimes") >1){
-            //将之前的该量信息标识为老量
-            if(RosterModel::where($column,$data['roster_no'])->update(['flag'=>0,'is_old'=>1]) === false){
-                Log::error("取消老量标识失败");
-            }
-        }
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
             $groupInfo = app('status')->getNextGroupInfo($data['roster_type']);

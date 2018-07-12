@@ -92,7 +92,7 @@ class IndexController extends BaseController
      * @throws ValidationException
      */
     public function postCheckRosterStatus(Request $request){
-        RosterModel::validateRosterData($request->all(),true);
+        RosterModel::validateRosterData($request->all(),true,false);
         return Util::ajaxReturn(['code'=>Util::SUCCESS,"msg"=>"可以正常添加"]);
     }
     /**
