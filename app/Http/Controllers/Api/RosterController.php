@@ -129,7 +129,7 @@ class RosterController extends BaseController
      *                      roster_no: 量的号码
      */
     function checkRosterStatus(Request $request){
-        RosterModel::validateRosterData($request->all(),false,$request->input("set_disable"));
-        return Util::ajaxReturn(Util::SUCCESS,"可以正常添加","");
+        $data = RosterModel::validateRosterData($request->all(),false);
+        return Util::ajaxReturn(Util::SUCCESS,"可以正常添加",$data);
     }
 }

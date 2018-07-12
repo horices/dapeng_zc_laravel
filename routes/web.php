@@ -40,6 +40,9 @@ Route::group(['prefix'=>'App','namespace'=>"Notify"], function(){
     Route::post("QQGroupRebotEvent/index.html","QQGroupEventNotifyController@index")->name("notify.dapeng.index");;
     Route::post("git/coding","GitNotifyController@coding")->name("notify.git.coding");
 });
+Route::group(['prefix'=>'notify','namespace'=>"Notify"], function(){
+    Route::post("roster/created","RosterNotifyController@created")->middleware([])->name("notify.zc.roster.created");
+});
 //向外提供接口的地址(外部添加新量和修改部分信息)
 Route::group(['prefix'=>'Api','namespace'=>"Api"], function(){
     include "api.route.php";

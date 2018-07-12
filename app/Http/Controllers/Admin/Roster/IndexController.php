@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin\Roster;
 
 
+use App\Jobs\SendCreatedRosterNotification;
 use App\Jobs\SendOpenCourseNotification;
 use App\Models\RosterCourseLogModel;
 use App\Utils\Api\DapengUserApi;
@@ -48,7 +49,7 @@ class IndexController extends BaseController
         $userInfo = $this->getUserInfo();
         $request->merge(['seoer_id'=>$userInfo->uid,'roster_type'=>$request->get("roster_type")]);
         if($request->post("validate") == 1){
-            RosterModel::validateRosterData($request->all(),1);
+            RosterModel::validateRosterData($request->all(),true);
             return Util::ajaxReturn([
                 'code'  => Util::SUCCESS,
                 'msg'   =>  '该量可以被提交',
@@ -71,12 +72,21 @@ class IndexController extends BaseController
         //防止并发时，重复提交量的问题
         $resource = fopen("roster.lock","w+");
         flock($resource,LOCK_EX);
+        DB::beginTransaction();
         if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
+            //发送添加成功的通知(此通知需要同步发送,先将其它学院置为灰色,通知后，当前量被重置为老量,且没有新活标识)
+            SendCreatedRosterNotification::dispatch($data);
+            //将重置当前学院的flag
+            $roster->flag = $roster->flag;
+            $roster->is_old = 0;
+            $roster->save();
+            DB::commit();
             $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
             $returnData['msg'] = "添加成功";
             $returnData['data'] = $roster;
         }else{
+            DB::rollback();
             $returnData['code'] = Util::FAIL;
             $returnData['msg'] = "添加失败";
         }
@@ -92,7 +102,7 @@ class IndexController extends BaseController
      * @throws ValidationException
      */
     public function postCheckRosterStatus(Request $request){
-        RosterModel::validateRosterData($request->all(),true,false);
+        RosterModel::validateRosterData($request->all(),true);
         return Util::ajaxReturn(['code'=>Util::SUCCESS,"msg"=>"可以正常添加"]);
     }
     /**
