@@ -205,11 +205,7 @@ class RosterModel extends BaseModel
                     $flag = 1;
                 }
                 if($flag == 1){
-                    //需要对该QQ号取消所有的新量标识
-                    if(RosterModel::where($column,$input->roster_no)->update(['flag'=>0,'is_old'=>1]) === false){
-                        Log::error("取消活量标识失败");
-                    }
-                    $createData['flag'] = $flag;    //标识为活量
+                    $createData['flag'] = $flag;    //标识为新量
                     $createData['addtimes'] = $roster->addtimes + 1;
                     //允许添加该量
                     return false;
@@ -270,6 +266,12 @@ class RosterModel extends BaseModel
         //验证数据是否存在问题，并补全部分信息
         $data = self::validateRosterData($data,$multiSchool);
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
+        if(collect($data)->get("addtimes") >1){
+            //将之前的该量信息标识为老量
+            if(RosterModel::where($column,$data['roster_no'])->update(['flag'=>0,'is_old'=>1]) === false){
+                Log::error("取消老量标识失败");
+            }
+        }
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
             $groupInfo = app('status')->getNextGroupInfo($data['roster_type']);
