@@ -138,7 +138,7 @@ class RosterModel extends BaseModel
      * @return bool
      * @throws \Illuminate\Validation\ValidationException
      */
-    public static function validateRosterData(array $data,$multiSchool = false,$setDisable = false){
+    public static function validateRosterData(array $data,$multiSchool = false){
         $data['addtimes'] = 1;//默认为第一次添加
         /**
          * @var $validator \Illuminate\Validation\Validator;
@@ -243,10 +243,10 @@ class RosterModel extends BaseModel
                     //判断当前量是第几次提交
                     $createData['addtimes'] += $return['data']['addtimes'] -1;
                 }
-                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                /*$return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
                 if($return['data']['addtimes']>1){
                     $createData['addtimes'] += $return['data']['addtimes'] -1;
-                }
+                }*/
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
@@ -255,11 +255,11 @@ class RosterModel extends BaseModel
                     //判断当前量是第几次提交
                     $createData['addtimes'] += $return['data']['addtimes'] -1;
                 }
-                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                /*$return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
                 if($return['data']['addtimes']>1){
                     //判断当前量是第几次提交
                     $createData['addtimes'] += $return['data']['addtimes'] -1;
-                }
+                }*/
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_IT){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
