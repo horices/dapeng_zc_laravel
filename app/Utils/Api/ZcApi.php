@@ -10,6 +10,7 @@ namespace App\Utils\Api;
 
 
 
+use App\Exceptions\ApiException;
 use App\Exceptions\UserValidateException;
 use App\Utils\Util;
 use Illuminate\Support\Facades\Log;
@@ -42,7 +43,7 @@ class ZcApi extends BaseApi {
         $curlData = Util::jsonDecode($origin,true);
         if(!$curlData){
             Log::error("接口返回数据：".$origin);
-            throw new UserException("接口出现未知错误");
+            throw new ApiException("接口出现未知错误");
         }
         if($curlData['code'] == Util::FAIL){
             throw new UserValidateException($curlData['msg']);

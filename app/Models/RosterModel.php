@@ -184,7 +184,7 @@ class RosterModel extends BaseModel
         });
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //该量已经存在，判断该量是否允许被添加,添加验证规则，返回 false 表示允许添加  返回 true 表示进需要行验证，不能进行添加
-        $validator->sometimes('roster_no','unique:user_roster,'.$column,function($input) use($column , &$roster , &$createData,$setDisable){
+        $validator->sometimes('roster_no','unique:user_roster,'.$column,function($input) use($column , &$roster , &$createData){
             $roster = RosterModel::where($column,$input->roster_no)->orderBy('addtime','desc')->first();
             /**
              * 默认需要验证(不能进行重复添加)
@@ -234,7 +234,6 @@ class RosterModel extends BaseModel
             unset($temp);
             $temp['roster_type'] = $data['roster_type'];
             $temp['roster_no'] = $data['roster_no'];
-            $temp['set_disable'] = $setDisable?1:0;
             //验证其它学院，是否正常,需要返回值 addtimes 值为1是表示第一次添加,大于1，表示该学院已经有该量,需要被置为灰色
             if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
