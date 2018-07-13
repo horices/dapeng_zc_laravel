@@ -52,12 +52,14 @@ class RosterNotifyController extends BaseController
         }
     }
     /**
-     * 创建新量时，自动将本学量的量，置为灰色
+     * 创建新量时，自动将本学院的量，置为灰色
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     function created(Request $request){
+        \Illuminate\Support\Facades\Log::info("置灰操作：".$request->input("addtimes"));
         if($request->input("addtimes") > 1){
+            \Illuminate\Support\Facades\Log::info("置灰操作：");
             //将本学院的该量，置为灰色
             RosterModel::where(app("status")->getRosterTypeColumn($request->input("roster_type")),$request->input("roster_no"))->update([
                 'flag'  =>  0,
