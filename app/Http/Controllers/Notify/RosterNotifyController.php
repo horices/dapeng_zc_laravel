@@ -57,14 +57,14 @@ class RosterNotifyController extends BaseController
      * @return \Illuminate\Http\JsonResponse
      */
     function created(Request $request){
-        //if($request->input("addtimes") > 1){
+        if($request->input("addtimes") > 1){
             \Illuminate\Support\Facades\Log::info("置灰操作：");
             //将本学院的该量，置为灰色
             RosterModel::where(app("status")->getRosterTypeColumn($request->input("roster_type")),$request->input("roster_no"))->update([
                 'flag'  =>  0,
                 'is_old'    => 1
             ]);
-        //}
+        }
         return Util::ajaxReturn(Util::SUCCESS,"通知成功");
     }
 }

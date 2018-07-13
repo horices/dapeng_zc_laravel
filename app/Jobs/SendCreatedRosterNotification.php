@@ -41,8 +41,8 @@ class SendCreatedRosterNotification implements ShouldQueue
         $data['addtimes'] = $this->roster->get("addtimes");
         $data['timestamp'] = time();
         $data['sign'] = Util::makeSign($data);
-        //if($data['addtimes'] > 1){
+        if($data['addtimes'] > 1){
             SendNotification::dispatch($url,$data);
-        //}
+        }
     }
 }
