@@ -79,7 +79,7 @@ class RosterNotifyController extends BaseController
             ]);
             Log::info("共置灰 ".$num." 条记录");
             */
-            $num = RosterModel::where($column,$rosterNo)->update([
+            $num = RosterModel::where($column,$rosterNo)->where("addtimes","<",$request->input("addtimes"))->update([
                 'flag'  =>  0,
                 'is_old'    => 1
             ]);
