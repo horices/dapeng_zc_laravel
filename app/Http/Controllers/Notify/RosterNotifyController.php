@@ -83,7 +83,7 @@ class RosterNotifyController extends BaseController
                 'flag'  =>  0,
                 'is_old'    => 1
             ]);
-            Log::info($column,$rosterNo,$num);
+            Log::info($column.$rosterNo.$num);
         }
         return Util::ajaxReturn(Util::SUCCESS,"通知成功");
     }
