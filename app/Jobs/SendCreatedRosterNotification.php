@@ -41,6 +41,8 @@ class SendCreatedRosterNotification implements ShouldQueue
         $data['addtimes'] = $this->roster->get("addtimes");
         $data['timestamp'] = time();
         $data['sign'] = Util::makeSign($data);
+        Log::info("发送通知到设计学院，进行发转");
+        Log::info($data);
         if($data['addtimes'] > 1){
             SendNotification::dispatch($url,$data);
         }

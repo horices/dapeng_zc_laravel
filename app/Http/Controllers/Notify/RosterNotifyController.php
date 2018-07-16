@@ -64,16 +64,26 @@ class RosterNotifyController extends BaseController
             //将本学院的该量，置为灰色
             $column = app("status")->getRosterTypeColumn($request->input("roster_type"));
             $rosterNo = $request->input("roster_no");
-            DB::update("update user_roster set flag=:flag,is_old=:is_old where :column=:roster",[
+            /*DB::update("update user_roster set flag=:flag,is_old=:is_old where :column=:roster",[
                 'flag'  =>  0,
                 'is_old' => 1,
                 'column' => $column,
                 'roster'    => $rosterNo
             ]);
-            /*RosterModel::where($column,$rosterNo)->update([
+            $num = DB::update("update user_roster set flag=?,is_old=? where ?=? and addtimes < ?",[
+                0,
+                1,
+                $column,
+                strval($rosterNo),
+                $request->input("addtimes")
+            ]);
+            Log::info("共置灰 ".$num." 条记录");
+            */
+            $num = RosterModel::where($column,$rosterNo)->update([
                 'flag'  =>  0,
                 'is_old'    => 1
-            ]);*/
+            ]);
+            Log::info($column,$rosterNo,$num);
         }
         return Util::ajaxReturn(Util::SUCCESS,"通知成功");
     }

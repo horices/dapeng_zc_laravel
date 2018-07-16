@@ -198,7 +198,7 @@ class RosterModel extends BaseModel
                 return false;
             }
             //添加次数需要加1
-            $createData['addtimes'] = $roster->addtimes;
+            $createData['addtimes'] += $roster->addtimes;
             $flag = 0 ;
             if($roster->course_type == 0 && $roster->is_reg == 0 ){
                 if($roster->group_status == 0  && date('Ymd') >  date('Ymd',$roster->addtime) ){
@@ -275,9 +275,9 @@ class RosterModel extends BaseModel
      * @param $multiSchool 是否开启多学院验证，默认为false;
      */
     public static function addRoster(array $data,$multiSchool = false){
-        Util::setDefault($data['addtimes'],1);
         //验证数据是否存在问题，并补全部分信息
         $data = self::validateRosterData($data,$multiSchool);
+        $data['addtimes'] += 1; //添加次数加1
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //验证成功后，获取QQ群信息
         if(!isset($data['qq_group_id'])){
