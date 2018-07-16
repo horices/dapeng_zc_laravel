@@ -10,6 +10,9 @@ use Illuminate\Support\Str;
 
 class RosterObserver extends  BaseObserver {
     function creating(RosterModel $roster){
+        if($roster->addtimes < 1){
+            $roster->addtimes = 1;  //添加时addtimes 次数最少 为1
+        }
         $roster->last_adviser_id = $roster->adviser_id;
         $roster->last_adviser_name = $roster->adviser_name;
     }

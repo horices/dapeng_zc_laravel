@@ -14,6 +14,8 @@ use App\Jobs\SendNotification;
 use App\Models\RosterModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
@@ -58,12 +60,20 @@ class RosterNotifyController extends BaseController
      */
     function created(Request $request){
         if($request->input("addtimes") > 1){
-            \Illuminate\Support\Facades\Log::info("置灰操作：");
+            Log::info("置灰操作：");
             //将本学院的该量，置为灰色
-            RosterModel::where(app("status")->getRosterTypeColumn($request->input("roster_type")),$request->input("roster_no"))->update([
+            $column = app("status")->getRosterTypeColumn($request->input("roster_type"));
+            $rosterNo = $request->input("roster_no");
+            DB::update("update user_roster set flag=:flag,is_old=:is_old where :column=:roster",[
+                'flag'  =>  0,
+                'is_old' => 1,
+                'column' => $column,
+                'roster'    => $rosterNo
+            ]);
+            /*RosterModel::where($column,$rosterNo)->update([
                 'flag'  =>  0,
                 'is_old'    => 1
-            ]);
+            ]);*/
         }
         return Util::ajaxReturn(Util::SUCCESS,"通知成功");
     }
