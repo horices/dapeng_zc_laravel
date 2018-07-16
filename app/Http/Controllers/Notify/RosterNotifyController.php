@@ -14,6 +14,8 @@ use App\Jobs\SendNotification;
 use App\Models\RosterModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
@@ -52,17 +54,36 @@ class RosterNotifyController extends BaseController
         }
     }
     /**
-     * 创建新量时，自动将本学量的量，置为灰色
+     * 创建新量时，自动将本学院的量，置为灰色
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     function created(Request $request){
         if($request->input("addtimes") > 1){
+            Log::info("置灰操作：");
             //将本学院的该量，置为灰色
-            RosterModel::where(app("status")->getRosterTypeColumn($request->input("roster_type")),$request->input("roster_no"))->update([
+            $column = app("status")->getRosterTypeColumn($request->input("roster_type"));
+            $rosterNo = $request->input("roster_no");
+            /*DB::update("update user_roster set flag=:flag,is_old=:is_old where :column=:roster",[
+                'flag'  =>  0,
+                'is_old' => 1,
+                'column' => $column,
+                'roster'    => $rosterNo
+            ]);
+            $num = DB::update("update user_roster set flag=?,is_old=? where ?=? and addtimes < ?",[
+                0,
+                1,
+                $column,
+                strval($rosterNo),
+                $request->input("addtimes")
+            ]);
+            Log::info("共置灰 ".$num." 条记录");
+            */
+            $num = RosterModel::where($column,$rosterNo)->where("addtimes","<",$request->input("addtimes"))->update([
                 'flag'  =>  0,
                 'is_old'    => 1
             ]);
+            Log::info($column."===".$rosterNo."===".$num);
         }
         return Util::ajaxReturn(Util::SUCCESS,"通知成功");
     }

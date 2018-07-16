@@ -74,13 +74,9 @@ class IndexController extends BaseController
         flock($resource,LOCK_EX);
         DB::beginTransaction();
         if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
+            DB::commit();
             //发送添加成功的通知(此通知需要同步发送,先将其它学院置为灰色,通知后，当前量被重置为老量,且没有新活标识)
             SendCreatedRosterNotification::dispatch($roster->toArray());
-            //将重置当前学院的flag
-            $roster->flag = $roster->flag;
-            $roster->is_old = 0;
-            $roster->save();
-            DB::commit();
             $roster->load("group");
             $returnData['code'] = Util::SUCCESS;
             $returnData['msg'] = "添加成功";
