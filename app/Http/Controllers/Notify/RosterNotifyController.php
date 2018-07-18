@@ -65,8 +65,7 @@ class RosterNotifyController extends BaseController
             $column = app("status")->getRosterTypeColumn($request->input("roster_type"));
             $rosterNo = $request->input("roster_no");
             /*DB::update("update user_roster set flag=:flag,is_old=:is_old where :column=:roster",[
-                'flag'  =>  0,
-                'is_old' => 1,
+                'flag'    =>  0, 'is_old' => 1,
                 'column' => $column,
                 'roster'    => $rosterNo
             ]);

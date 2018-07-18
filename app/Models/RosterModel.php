@@ -240,17 +240,15 @@ class RosterModel extends BaseModel
                 $return = ZcApi::validateRoster(Util::SCHOOL_NAME_MS,$temp);
                 //判断当前量是第几次提交
                 $createData['addtimes'] += $return['data']['addtimes'];
-                /*$return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
                 $createData['addtimes'] += $return['data']['addtimes'];
-                */
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_MS){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
                 $return = ZcApi::validateRoster(Util::SCHOOL_NAME_SJ,$temp);
                 $createData['addtimes'] += $return['data']['addtimes'];
-                /*$return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
+                $return = ZcApi::validateRoster(Util::SCHOOL_NAME_IT,$temp);
                 $createData['addtimes'] += $return['data']['addtimes'];
-                */
             }
             if(Util::getSchoolName() == Util::SCHOOL_NAME_IT){
                 //验证后，如果不能提交会有异常抛出，不需要处理成功时的情况
