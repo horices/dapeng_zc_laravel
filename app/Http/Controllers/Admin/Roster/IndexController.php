@@ -276,8 +276,7 @@ class IndexController extends BaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     function getCourseList(Request $request){
-
-        $rosterCourse = RosterCourseModel::where(['qq'=>$request->get("qq")])->orderBy('id','desc')->get();
+        $rosterCourse = RosterCourseModel::where(['roster_id'=>$request->get("roster_id")])->orderBy('id','desc')->get();
         return view("admin.roster.course-list",[
             'rosterCourse'  =>  $rosterCourse
         ]);
