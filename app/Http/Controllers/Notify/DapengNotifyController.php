@@ -40,7 +40,7 @@ class DapengNotifyController extends BaseController
             //通知设计学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_SJ.".".Util::DEV,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            SendNotification::dispatch($host.$baseUrl,$request->all());
+            //SendNotification::dispatch($host.$baseUrl,$request->all());
             //通知美术学院正式站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::MASTER,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
