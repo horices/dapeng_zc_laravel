@@ -55,14 +55,14 @@ class DapengNotifyController extends BaseController
             //通知美术学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::DEV,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            SendNotification::dispatch($host.$baseUrl,$request->all());
+            //SendNotification::dispatch($host.$baseUrl,$request->all());
         }
         //IT学院正式站
         if(Util::getSchoolName() == Util::SCHOOL_NAME_IT && Util::getCurrentBranch() == Util::MASTER){
             //通知美术学院测试站
             $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_IT.".".Util::DEV,false);
             $request->merge(['sign'=>$this->makeSign(['url'=>$host.$baseUrl])]);
-            SendNotification::dispatch($host.$baseUrl,$request->all());
+            //SendNotification::dispatch($host.$baseUrl,$request->all());
         }
     }
 
