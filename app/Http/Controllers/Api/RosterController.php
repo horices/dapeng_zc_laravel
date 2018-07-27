@@ -27,7 +27,7 @@ class RosterController extends BaseController
      */
     function getInfo(Request $request){
         Validator::make($request->all(),[
-            'schoolId'  =>  "nullable|in:SJ,MS",
+            'schoolId'  =>  "nullable|in:SJ,MS,IT",
             'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",
             'keyword'   =>  'required'
         ],[
@@ -39,7 +39,8 @@ class RosterController extends BaseController
         $curl = app("curl");
         $result = [];
         $result['sj'] = new \stdClass();
-        $result['ms'] = new \stdClass();;
+        $result['ms'] = new \stdClass();
+        $result['it'] = new \stdClass();
         //没有传入学院ID，或传入当前学院，表示需要查询当前学院的信息
         if(!$request->get("schoolId") || Util::getSchoolName() == $request->get("schoolId")){
             $roster = RosterModel::with('group','adviser')->where(Input::get("type"),Input::get("keyword"))->orderBy("id","desc")->first();
@@ -53,22 +54,43 @@ class RosterController extends BaseController
                 $result[Str::lower(Util::getSchoolName())] = $roster->toArray();
             }
         }
-        //如果当前是设计学院，且需要查询美术学院，向美术学院发送通知
+        //如果当前是设计学院，且需要查询其它学院，向其它学院发送通知
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && $request->get("schoolId") != 'SJ'){
-            //获取美术学院数据
-            $baseUrl = URL::route(Route::currentRouteName(),[],false);
-            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
-            $request->merge($this->getPostData($request->except('sign')));
-            $response = $curl->get($host.$baseUrl."?".http_build_query($request->all()))->response;
-            $curlData = Util::jsonDecode($response);
-            if(!$curlData){
-                throw new UserValidateException("获取美术学院信息返回失败".$response);
+            //判断是否需要查询美术学院的数据
+            if(!$request->get("schoolId")  || $request->get("schoolId") == Util::SCHOOL_NAME_MS){
+                //获取美术学院数据
+                $baseUrl = URL::route(Route::currentRouteName(),[],false);
+                $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
+                $request->merge($this->getPostData($request->except('sign')));
+                $response = $curl->get($host.$baseUrl."?".http_build_query($request->all()))->response;
+                $curlData = Util::jsonDecode($response);
+                if(!$curlData){
+                    throw new UserValidateException("获取美术学院信息返回失败".$response);
+                }
+                //美术学院获取失败时，直接返回
+                if($curlData['code'] == Util::FAIL){
+                    return Util::ajaxReturn(Util::FAIL,$curlData['msg']);
+                }
+                $result = collect($result)->merge(collect($curlData['data'])->filter());
             }
-            //美术学院获取失败时，直接返回
-            if($curlData['code'] == Util::FAIL){
-                return Util::ajaxReturn(Util::FAIL,$curlData['msg']);
+
+            //判断是否需要查询IT学院的数据
+            if(!$request->get("schoolId")  || $request->get("schoolId") == Util::SCHOOL_NAME_IT){
+                //获取美术学院数据
+                $baseUrl = URL::route(Route::currentRouteName(),[],false);
+                $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_IT.".".Util::getCurrentBranch(),false);
+                $request->merge($this->getPostData($request->except('sign')));
+                $response = $curl->get($host.$baseUrl."?".http_build_query($request->all()))->response;
+                $curlData = Util::jsonDecode($response);
+                if(!$curlData){
+                    throw new UserValidateException("获取美术学院信息返回失败".$response);
+                }
+                //美术学院获取失败时，直接返回
+                if($curlData['code'] == Util::FAIL){
+                    return Util::ajaxReturn(Util::FAIL,$curlData['msg']);
+                }
+                $result = collect($result)->merge(collect($curlData['data'])->filter());
             }
-            $result = collect($result)->merge(collect($curlData['data'])->filter());
         }
         return Util::ajaxReturn(Util::SUCCESS,"",$result);
     }
