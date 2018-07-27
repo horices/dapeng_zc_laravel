@@ -103,7 +103,7 @@ class RosterController extends BaseController
      */
     function setInfo(Request $request){
         Validator::make($request->all(),[
-            'schoolId'  =>  "required|in:SJ,MS",
+            'schoolId'  =>  "required|in:SJ,MS,IT",
             'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",
             'keyword'   =>  'required'
         ],[
@@ -118,17 +118,19 @@ class RosterController extends BaseController
         if(Util::getSchoolName() == Util::SCHOOL_NAME_SJ && $request->get("schoolId") != 'SJ'){
             //获取美术学院数据
             $baseUrl = URL::route(Route::currentRouteName(),[],false);
-            $host = Util::getWebSiteConfig('ZC_URL.'.Util::SCHOOL_NAME_MS.".".Util::getCurrentBranch(),false);
+            $host = Util::getWebSiteConfig('ZC_URL.'.$request->get("schoolId").".".Util::getCurrentBranch(),false);
             $request->merge($this->getPostData($request->except('sign')));
             $response = $curl->post($host.$baseUrl,$request->all())->response;
             $curlData = Util::jsonDecode($response);
             if(!$curlData){
-                throw new UserValidateException("获取美术学院信息返回失败".$response);
+                throw new UserValidateException("获取".$request->get("schoolId")."学院信息返回失败".$response);
             }
+            //通知其它学院时，直接返回，不再修改设计学院
+            return $curlData;
             //美术学院获取失败时，直接返回
-            if($curlData['code'] == Util::FAIL){
+            /*if($curlData['code'] == Util::FAIL){
                 return Util::ajaxReturn(Util::FAIL,$curlData['msg']);
-            }
+            }*/
         }
         //$rosterId = $request->get("roster_id");
         $roster = RosterModel::where(Input::get("type"),Input::get("keyword"))->first();
