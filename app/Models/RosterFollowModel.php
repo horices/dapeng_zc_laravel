@@ -49,7 +49,7 @@ class RosterFollowModel extends BaseModel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     function creator(){
-        return $this->belongsTo(UserModel::class,'create_id','uid');
+        return $this->belongsTo(UserModel::class,'create_id','uid')->withDefault();
     }
 
     /**
