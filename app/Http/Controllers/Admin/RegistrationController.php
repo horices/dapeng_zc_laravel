@@ -57,7 +57,7 @@ class RegistrationController extends BaseController{
      */
     public function getPayJump(Request $request){
         if(Util::getSchoolName() != Util::SCHOOL_NAME_SJ){
-            throw new UserValidateException("暂时没有该功能");
+            abort(502);
         }
         $userInfo = $this->getUserInfo();
         $uid = $userInfo->uid;
