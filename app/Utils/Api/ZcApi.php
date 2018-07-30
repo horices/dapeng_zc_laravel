@@ -44,7 +44,7 @@ class ZcApi extends BaseApi {
         if(!$curlData){
             Log::error("请求地址：".$url);
             Log::error("请求方式：".$method);
-            Log::error(http_build_query($data));
+            Log::error(http_build_query(static::getPostData($data)));
             Log::error("接口返回数据：".$origin);
             throw new ApiException("接口出现未知错误");
         }
