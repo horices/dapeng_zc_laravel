@@ -51,11 +51,11 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         //处理表单验证时异常
-        if($exception instanceof ValidationException && $request->ajax()){
+        if($exception instanceof ValidationException){
             return response()->json(['code'=>Util::FAIL,'msg'=>collect($exception->errors())->first()[0]]);
         }
 
-        if($exception instanceof  UserException && $request->ajax()){
+        if($exception instanceof  UserException){
             return response()->json(['code'=>Util::FAIL,'msg'=>$exception->getMessage(),'data'=>null]);
         }
         return parent::render($request, $exception);
