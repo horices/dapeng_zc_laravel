@@ -69,7 +69,7 @@
         var uploader = WebUploader.create({
             auto: true,
             // swf文件路径
-            swf: '/Public/js/webupload/Uploader.swf',
+            swf: '/js/webupload/Uploader.swf',
             //默认值：'file'文件上传域的name
             fileVal: 'download',
             // 文件接收服务端。
