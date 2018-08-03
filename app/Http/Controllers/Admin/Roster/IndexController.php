@@ -73,7 +73,7 @@ class IndexController extends BaseController
         $resource = fopen("roster.lock","w+");
         flock($resource,LOCK_EX);
         DB::beginTransaction();
-        if($roster = RosterModel::addRoster(collect($data)->filter()->toArray(),true)){
+        if($roster = RosterModel::addRoster(collect($data)->toArray(),true)){
             DB::commit();
             //发送添加成功的通知(此通知需要同步发送,先将其它学院置为灰色,通知后，当前量被重置为老量,且没有新活标识)
             SendCreatedRosterNotification::dispatch($roster->toArray());

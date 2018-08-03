@@ -154,7 +154,7 @@ class RosterModel extends BaseModel
             'roster_no' =>  'required',
             'roster_type'   =>  'required|in:1,2',
             //'qq_group_id'   =>  'required|exists:user_qqgroup,id',
-            'qq_group_id'   =>  'sometimes|required_if:from_type,6|exists:user_qqgroup,id',
+            'qq_group_id'   =>  'sometimes|required_if:from_type,6',
             'seoer_id'   =>  'sometimes|required|exists:user_headmaster,uid'
         ],[
             'roster_no.required' =>  '请输入'.$columnText.'号码',
@@ -170,6 +170,11 @@ class RosterModel extends BaseModel
         ]);
         $createData = [];   //重置要添加的数据
         Util::setDefault($createData['addtimes'],0);//默认为第一次添加
+
+
+        $validator->sometimes("qq_group_id","exists:user_qqgroup,id",function($input){
+            return $input->qq_group_id ;
+        });
         /**
          * QQ提交时，需要全数字，并且长度为5-12
          * 微信提交时，
@@ -278,7 +283,7 @@ class RosterModel extends BaseModel
         $data['addtimes'] += 1; //添加次数加1
         $column = app('status')->getRosterTypeColumn($data['roster_type']);
         //验证成功后，获取QQ群信息
-        if(!isset($data['qq_group_id'])){
+        if(!isset($data['qq_group_id']) || !$data['qq_group_id']){
             $groupInfo = app('status')->getNextGroupInfo($data['roster_type']);
             if(!$groupInfo){
                 throw new UserValidateException("未找到可用的群信息");
@@ -286,7 +291,7 @@ class RosterModel extends BaseModel
             $data['qq_group_id'] = $groupInfo['id'];
         }
         //补全推广专员信息
-        if(!isset($data['seoer_name'])){
+        if(!isset($data['seoer_name']) || !$data['seoer_name']){
             $seoer = UserModel::query()->find($data['seoer_id']);
             if(!$seoer)
                 throw new UserValidateException("本操作只能由推广专员进行操作");
