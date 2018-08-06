@@ -76,6 +76,7 @@
         <form class="form-inline" style="width:1100px; height:auto;" method="get">
             <div class="" style="float:left; height:30px;">
                 <select name="search_user_type" class="form-control" style="width:80px; padding:3px;">
+                    <option value="staff_no" @if(Request::input("search_type") == 'staff_no') selected @endif>工号</option>
                     <option value="name" @if(Request::input("search_type") == 'name') selected @endif>姓名</option>
                     {{--<option value="qq">QQ号</option>--}}
                     <option value="mobile" @if(Request::input("search_type") == 'mobile') selected @endif>手机号</option>
@@ -154,6 +155,7 @@
             </tr>
             <tr>
                 <th>ID</th>
+                <th>工号</th>
                 <th>姓名</th>
                 <th>数据量</th>
                 <th>进群量/比例</th>
@@ -169,6 +171,7 @@
             @foreach($list as $user)
                 <tr class="">
                     <td>{{ $loop->index+1 }}</td>
+                    <td>{{ $user->staff_no ? $user->staff_no : "------" }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user_statistics[$user->uid]['user_total'] ?? 0 }}</td>
                     <td>

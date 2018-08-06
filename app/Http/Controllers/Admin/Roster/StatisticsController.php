@@ -19,7 +19,7 @@ class StatisticsController extends BaseController
         $keywords = Input::get("keywords");
         $seoerGrade = Input::get("seoer_grade",12);
         if($searchUserType && $keywords !== null){
-            $user->where($searchUserType,"like","%".$keywords."%");
+            $user->where($searchUserType,"like",$keywords."%");
         }
         $user->where('status',1);
 
@@ -68,7 +68,7 @@ class StatisticsController extends BaseController
         $searchUserType = Input::get("search_user_type");
         $keywords = Input::get("keywords");
         if($searchUserType && $keywords !== null){
-            $user->where($searchUserType,"like","%".$keywords."%");
+            $user->where($searchUserType,"like",$keywords."%");
         }
         $user->where('status',1)->adviser();
 
