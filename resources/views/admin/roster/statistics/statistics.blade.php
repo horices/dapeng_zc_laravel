@@ -76,10 +76,10 @@
         <form class="form-inline" style="width:1100px; height:auto;" method="get">
             <div class="" style="float:left; height:30px;">
                 <select name="search_user_type" class="form-control" style="width:80px; padding:3px;">
-                    <option value="staff_no" @if(Request::input("search_type") == 'staff_no') selected @endif>工号</option>
-                    <option value="name" @if(Request::input("search_type") == 'name') selected @endif>姓名</option>
+                    <option value="staff_no" @if(Request::input("search_user_type") == 'staff_no') selected @endif>工号</option>
+                    <option value="name" @if(Request::input("search_user_type") == 'name') selected @endif>姓名</option>
                     {{--<option value="qq">QQ号</option>--}}
-                    <option value="mobile" @if(Request::input("search_type") == 'mobile') selected @endif>手机号</option>
+                    <option value="mobile" @if(Request::input("search_user_type") == 'mobile') selected @endif>手机号</option>
                 </select>
                 <input type="text" name="keywords" class="form-control"
                        style="height:30px; margin-bottom:3px; width:120px;" id="name" placeholder=""
