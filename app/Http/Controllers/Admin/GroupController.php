@@ -20,12 +20,17 @@ class GroupController extends BaseController
         $type = Input::get("type");
         $fieldK = Input::get("field_k");
         $fieldV = Input::get("field_v");
-        $isOpen = Input::get("is_open"); 
-        $groupModel = GroupModel::whereHas('user' , function($query) use ($fieldK,$fieldV){
-            if($fieldK == "adviser_name" && $fieldV !== null){
-                $query->where("name","like","%".$fieldV."%");
+        $isOpen = Input::get("is_open");
+        $groupModel = GroupModel::query()->with("user");
+        if($fieldV !== null){
+            if($fieldK == "adviser_name"){
+                $groupModel->whereHas('user' , function($query) use ($fieldK,$fieldV){
+                    $query->where("name","like","%".$fieldV."%");
+                });
+            }else{
+                $groupModel->where($fieldK,$fieldV);
             }
-        })->with("user");
+        }
         if($type){
             $groupModel->where("type","=",$type);
         }
