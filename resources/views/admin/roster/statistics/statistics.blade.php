@@ -125,7 +125,7 @@
         <table class="table">
             <thead class="thead" style=" font-size:14px; ">
             <tr>
-                <th colspan="2">总计</th>
+                <th colspan="3">总计</th>
                 <th>{{ $statistics['user_total'] }}</th>
                 <th><span style="color:#3bbbd9">{{ $statistics['user_total_join_group'] }}</span><span
                             style="color:#ccc;">/</span><span
