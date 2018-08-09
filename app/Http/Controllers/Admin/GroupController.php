@@ -117,8 +117,8 @@ class GroupController extends BaseController
             'type_text'          =>  '群类型'
 
         ];
-        //$data['data'] = $query->take(5000)->get();
-        return $this->export($data,$query);
+        $data['data'] = $query->get();
+        return $this->export($data,$query,'csv');
     }
 
     /**
