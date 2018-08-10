@@ -183,7 +183,7 @@ class RosterModel extends BaseModel
             return $input->roster_type == 1;
         });
         $validator->sometimes("roster_no",[
-            "regex:/^[a-zA-Z\-][\w-]{5,19}$/isU"
+            "regex:/^[a-zA-Z\-][\w-]{5,29}$/isU"
         ],function($input){
             return $input->roster_type == 2;
         });
