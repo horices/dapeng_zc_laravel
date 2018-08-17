@@ -6,6 +6,7 @@ use App\Events\RevisingAdvisor;
 use App\Models\GroupModel;
 use App\Utils\Util;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -117,7 +118,7 @@ class GroupController extends BaseController
             'type_text'          =>  '群类型'
 
         ];
-        $data['data'] = $query->get();
+        $data['data'] = $query->select(DB::raw("*,concat('\'',group_name) as group_name"))->get();
         return $this->export($data,$query,'csv');
     }
 
