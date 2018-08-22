@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Exceptions\UserException;
 use App\Exceptions\UserValidateException;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendCreatedRosterNotification;
 use App\Models\RosterModel;
 use App\Models\UserModel;
 use App\Utils\Util;
 use Curl\Curl;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -155,5 +157,33 @@ class RosterController extends BaseController
     function checkRosterStatus(Request $request){
         $data = RosterModel::validateRosterData($request->all(),false);
         return Util::ajaxReturn(Util::SUCCESS,"可以正常添加",$data);
+    }
+
+
+    /**
+     * 添加一个新的QQ号
+     */
+    function add(Request $request){
+        $data = $request->all();
+        //防止并发时，重复提交量的问题
+        $resource = fopen("roster.lock","w+");
+        flock($resource,LOCK_EX);
+        DB::beginTransaction();
+        if($roster = RosterModel::addRoster(collect($data)->toArray(),true)){
+            DB::commit();
+            //发送添加成功的通知(此通知需要同步发送,先将其它学院置为灰色,通知后，当前量被重置为老量,且没有新活标识)
+            SendCreatedRosterNotification::dispatch($roster->toArray());
+            $roster->load("group");
+            $returnData['code'] = Util::SUCCESS;
+            $returnData['msg'] = "添加成功";
+            $returnData['data'] = $roster;
+        }else{
+            DB::rollback();
+            $returnData['code'] = Util::FAIL;
+            $returnData['msg'] = "添加失败";
+        }
+        flock($resource,LOCK_UN);
+        fclose($resource);
+        return response()->json($returnData);
     }
 }
