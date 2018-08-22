@@ -52,7 +52,7 @@ class RosterController extends BaseController
                 $roster['adviser_name'] = $roster->adviser->name;
                 $roster['adviser_mobile'] = $roster->adviser->mobile;
                 $roster['qq_group_url'] = $roster->group->qrc_link;
-                $roster['qq_group_qrc'] = $roster->group->qrc_url;
+                $roster['qq_group_qrc'] = $request->getSchemeAndHttpHost().$roster->group->qrc_url;
                 $result[Str::lower(Util::getSchoolName())] = $roster->toArray();
             }
         }
