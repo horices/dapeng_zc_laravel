@@ -134,6 +134,9 @@ $(function(){
                         </ul>
                     </li>
                     <li><a href="{{ \App\Utils\Util::getWebSiteConfig("PC_URL") }}/signin" class="" target="_blank">橱窗管理系统登录</a></li>
+                    @if(\App\Utils\Util::getSchoolName() == \App\Utils\Util::SCHOOL_NAME_MS)
+                        <li><a href="http://pay.dapengjiaoyu.com" class="" target="_blank">订单系统</a></li>
+                    @endif
                 </ul>
                 @endif
             </div>
