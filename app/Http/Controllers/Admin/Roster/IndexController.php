@@ -128,16 +128,6 @@ class IndexController extends BaseController
         if(!$request->has("startdate")){
             $request->merge(['startdate'=>date('Y-m-d 00:00:00')]);
         }
-        if($request->get("startdate")){
-            if(!strtotime($request->get("startdate"))){
-                $request->merge(['startdate'=>null]);
-            }
-        }
-        if($request->get("enddate")){
-            if(!strtotime($request->get("enddate"))){
-                $request->merge(['enddate'=>null]);
-            }
-        }
         //查询所有列表
         $query = RosterModel::query()->with(['group','adviser',"group_event_log"=>function($query){
             $query->select("roster_id","group_status",DB::raw("max(addtime) as addtime"))->where("group_status",">",0)->groupBy(["roster_id","group_status"])->orderBy("id","desc");
