@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\Utils\Util;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController
@@ -73,7 +74,10 @@ class UserController extends BaseController
             }else{
                 $input['password'] = md5($request->get("password"));
             }
+            Log::warning($this->getUserInfo()->name.":".$this->getUserInfo()->uid." 修改了用户 :");
+            Log::warning("原数据：".$user->toJson());
             $user->fill($input);
+            Log::warning("新数据：".collect($input)->toJson());
             if($user->save()){
                 $returnData['code'] = Util::SUCCESS ;
                 $returnData['msg'] = "修改成功";
@@ -88,6 +92,8 @@ class UserController extends BaseController
             if(!collect($input)->get('password')){
                 $input['password'] = '123456';
             }
+            Log::warning($this->getUserInfo()->name.":".$this->getUserInfo()->uid." 添加了新用户 :");
+            Log::warning("用户数据：".collect($input)->toJson());
             $input['password'] = md5($input['password']);
             if(UserModel::create($input)){
                 $returnData['code'] = Util::SUCCESS;
