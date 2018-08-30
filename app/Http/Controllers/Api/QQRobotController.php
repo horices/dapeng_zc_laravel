@@ -21,7 +21,7 @@ class QQRobotController extends BaseController
         ],[
             'uid.required'  =>  "请输入用户ID"
         ])->validate();
-        if(UserHeadMasterModel::whalere("robot_allow_login",1)->where("uid",$request->get("uid"))->count()> 0){
+        if(UserHeadMasterModel::where("robot_allow_login",1)->where("uid",$request->get("uid"))->count()> 0){
             return Util::ajaxReturn(Util::SUCCESS,"登陆成功");
         }
         return Util::ajaxReturn(Util::FAIL,"该用户不允许登陆使用");
