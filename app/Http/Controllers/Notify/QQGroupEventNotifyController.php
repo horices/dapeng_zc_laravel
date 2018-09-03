@@ -60,6 +60,10 @@ class QQGroupEventNotifyController extends BaseController
      *
      */
     function index(Request $request){
+        if(!isset($this->_GROUP_STATUS[$request->get("Event")])){
+            Log::error("发送未知事件:".$request->get("Event"));
+            return;
+        }
         $roster = RosterModel::where("qq",$request->get("Sender"))->orderBy("id","desc")->first();
         if(!$roster){
             throw new NotAcceptableHttpException("QQ号不存在");
