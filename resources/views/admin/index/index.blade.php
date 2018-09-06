@@ -7,7 +7,7 @@
             
             <style>
             .info-list{}
-			.info-list dt{ background:url(/admin/images//ico-1.gif) no-repeat 0 4px; padding-left:26px; line-height:30px; font-size:16px;}
+			.info-list dt{ background:url({{ env("IMG_BASE_URL") }}/admin/images//ico-1.gif) no-repeat 0 4px; padding-left:26px; line-height:30px; font-size:16px;}
 			.info-list dd{ color:#747474; line-height:24px; padding:6px 0 0 26px;}
             </style>
             

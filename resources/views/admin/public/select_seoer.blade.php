@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>无标题文档</title>
-	<link type="text/css" rel="stylesheet" href="/admin/css/page.css" />
-	<link type="text/css" rel="stylesheet" href="/admin/css/btn.css" />
+	<link type="text/css" rel="stylesheet" href="{{ env("CSS_BASE_URL") }}/admin/css/page.css" />
+	<link type="text/css" rel="stylesheet" href="{{ env("CSS_BASE_URL") }}/admin/css/btn.css" />
 	@include("admin.public.js")
 <style>
 a{ text-decoration:none;}

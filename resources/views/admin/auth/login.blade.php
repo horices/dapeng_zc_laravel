@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" type="text/css" href="/admin/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/admin/css/login.css">
+<link rel="stylesheet" type="text/css" href="{{ env("CSS_BASE_URL") }}/admin/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{{ env("CSS_BASE_URL") }}/admin/css/login.css">
 @include("admin.public.js")
 <title>登陆</title>
     <script>

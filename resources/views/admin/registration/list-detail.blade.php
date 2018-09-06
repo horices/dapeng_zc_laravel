@@ -14,7 +14,7 @@
             display: none;
         }
     </style>
-    <link rel="stylesheet" href="/js/datetimepicker/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="{{ env("JS_BASE_URL") }}/js/datetimepicker/jquery.datetimepicker.css">
 <script>
         var isAjax = 0;
         function loadInit() {

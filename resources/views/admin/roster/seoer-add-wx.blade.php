@@ -1,6 +1,6 @@
 @extends("admin.public.layout")
 @section("right_content")
-    <script src="/js/clipboard.min.js"></script>
+    <script src="{{ env("JS_BASE_URL") }}/js/clipboard.min.js"></script>
     <script>
         /**
          * 提交新量检查

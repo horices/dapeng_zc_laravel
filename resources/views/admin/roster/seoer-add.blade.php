@@ -1,6 +1,6 @@
 @extends("admin.public.layout")
 @section("right_content")
-<script src="/js/clipboard.min.js"></script>
+<script src="{{ env("JS_BASE_URL") }}/js/clipboard.min.js"></script>
 <script>
     /**
      * 提交新量检查
@@ -42,7 +42,7 @@
 </script>
 <style>
     .info-list{}
-    .info-list dt{ background:url(/admin/images/ico-1.gif) no-repeat 0 4px; padding-left:26px; line-height:30px; font-size:16px;}
+    .info-list dt{ background:url({{ env("IMG_BASE_URL") }}/admin/images/ico-1.gif) no-repeat 0 4px; padding-left:26px; line-height:30px; font-size:16px;}
     .info-list dd{ color:#747474; line-height:24px; padding:6px 0 0 26px;}
     </style>
 

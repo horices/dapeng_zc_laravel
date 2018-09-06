@@ -1,6 +1,6 @@
 @extends("admin.public.layout")
 @section("right_content")
-<link rel="stylesheet" href="/js/webuploader/webuploader.css" />
+<link rel="stylesheet" href="{{ env("JS_BASE_URL") }}/js/webuploader/webuploader.css" />
 <style>
 .grade {
     display: none;
@@ -19,14 +19,14 @@
     left:10px;
 }
 .flag_icon_1::before{
-    content:url(/admin/images/flag_icon_new.gif);
+    content:url({{ env("IMG_BASE_URL") }}/admin/images/flag_icon_new.gif);
 
 }
 .flag_icon_2::before{
-    content:url(/admin/images/flag_icon_active.gif);
+    content:url({{ env("IMG_BASE_URL") }}/admin/images/flag_icon_active.gif);
 }
 .flag_icon_both::before{
-    content:url(/admin/images/flag_icon_both.gif);
+    content:url({{ env("IMG_BASE_URL") }}/admin/images/flag_icon_both.gif);
 }
 </style>
 
@@ -69,7 +69,7 @@
         var uploader = WebUploader.create({
             auto: true,
             // swf文件路径
-            swf: '/js/webupload/Uploader.swf',
+            swf: '{{ env("JS_BASE_URL") }}/js/webupload/Uploader.swf',
             //默认值：'file'文件上传域的name
             fileVal: 'download',
             // 文件接收服务端。
@@ -320,7 +320,7 @@
         &nbsp;<a class="common-button combg1 ajaxSubmit" showLoading="1" method="post" url="{{route('admin.roster.index.open-course')}}">提交</a>
     </form>
 </div>
-<script src="/js/webuploader/webuploader.js"></script>
+<script src="{{ env("JS_BASE_URL") }}/js/webuploader/webuploader.js"></script>
 <script>
 
     //开通课程弹窗

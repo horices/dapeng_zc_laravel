@@ -6,14 +6,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>大鹏教育-高品质的设计师在线教育</title>
-<link href="/admin/css/bootstrap.min.css" rel="stylesheet">
-<link href="/admin/css/font-awesome.min.css" rel="stylesheet">
-<link href="/admin/css/plugins/toastr/toastr.min.css" rel="stylesheet">
-<link href="/admin/css/animate.css" rel="stylesheet">
-<link href="/admin/css/member.css" rel="stylesheet">
-<link href="/admin/css/btn.css" rel="stylesheet">
-<link href="/admin/css/status.css" rel="stylesheet">
-<link href="/admin/css/style.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/font-awesome.min.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/animate.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/member.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/btn.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/status.css" rel="stylesheet">
+<link href="{{ env("CSS_BASE_URL") }}/admin/css/style.css" rel="stylesheet">
 @include("admin.public.js")
 <style>
 a{ text-decoration:none;}
@@ -27,14 +27,14 @@ a:hover{text-decoration:none;}
 	left:10px;
 }
 .flag_icon_new::before{
-	content:url(/admin/images/flag_icon_new.gif);
+	content:url({{ env("IMG_BASE_URL") }}/admin/images/flag_icon_new.gif);
 	
 }
 .flag_icon_active::before{
-	content:url(/admin/images/flag_icon_active.gif);
+	content:url({{ env("IMG_BASE_URL") }}/admin/images/flag_icon_active.gif);
 }
 .flag_icon_both::before{
-	content:url(/admin/images/flag_icon_both.gif);
+	content:url({{ env("IMG_BASE_URL") }}/admin/images/flag_icon_both.gif);
 }
 </style>
 
@@ -119,7 +119,7 @@ $(function(){
         <div class="container-gap">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-                <a class="navbar-brand logo" href="/"> <img src="/admin/images/member_logo.png" alt="大鹏教育-高品质的设计师在线教育" /> </a>
+                <a class="navbar-brand logo" href="/"> <img src="{{ env("IMG_BASE_URL") }}/admin/images/member_logo.png" alt="大鹏教育-高品质的设计师在线教育" /> </a>
             </div>
             <div class="navbar-collapse collapse dp-collapse">
                 @if(session("userInfo.name"))
