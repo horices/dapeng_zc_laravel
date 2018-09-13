@@ -30,7 +30,7 @@ class RosterController extends BaseController
     function getInfo(Request $request){
         Validator::make($request->all(),[
             'schoolId'  =>  "nullable|in:SJ,MS,IT",
-            'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name",
+            'type'  =>  "required|in:id,dapeng_user_id,qq,mobile,name,wx",
             'keyword'   =>  'required'
         ],[
             'type.required' =>  "请输入要查询的类型",
